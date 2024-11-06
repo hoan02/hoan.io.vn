@@ -12,7 +12,6 @@ import { TypeIntro } from "./type-intro";
 import { NICKNAME, PATHS } from "@/constants";
 import { cn } from "@/lib/utils";
 
-
 export const HeroSection = () => {
   let delay = 0;
 
@@ -31,7 +30,7 @@ export const HeroSection = () => {
       <strong
         className={cn(
           `text-5xl pb-4 md:text-8xl md:pd-2 tracking-widest font-black bg-clip-text bg-gradient-to-r from-[#39ff14] to-[#013220]`,
-          "animate-fade-up animate-ease-in-out",
+          "animate-fade-up animate-ease-in-out"
         )}
         style={{
           WebkitTextFillColor: "transparent",
@@ -51,26 +50,27 @@ export const HeroSection = () => {
       <p
         className={cn(
           "text-2xl md:text-4xl tracking-widest",
-          "animate-fade-up animate-ease-in-out",
+          "animate-fade-up animate-ease-in-out"
         )}
         style={{
           animationDelay: `${getDelay()}ms`,
         }}
       >
         Thích
-        <span className={`font-semibold text-[#33da33]`}> React</span>,
-        <span className={`font-semibold text-[#2da528]`}> TypeScript</span>
+        <span className={`font-semibold text-[#279e27]`}> React</span>,
+        <span className={`font-semibold text-[#227e1f]`}> TypeScript</span>
       </p>
       <p
         className={cn(
           "text-base md:text-xl text-muted-foreground tracking-widest",
-          "animate-fade-up animate-ease-in-out",
+          "animate-fade-up animate-ease-in-out"
         )}
         style={{
           animationDelay: `${getDelay()}ms`,
         }}
       >
-        Tôi ghi lại sự trưởng thành của mình trên trang web này, nỗ lực 💪 trở thành một lập trình viên giỏi hơn
+        Tôi ghi lại sự trưởng thành của mình trên trang web này, nỗ lực 💪 trở
+        thành một lập trình viên giỏi hơn
       </p>
       <div
         className={cn("flex space-x-4", "animate-fade-up animate-ease-in-out")}
@@ -103,7 +103,7 @@ export const HeroSection = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button asChild variant="outline" size="icon">
-                  <Link href={el.link} target="_blank">
+                  <Link aria-label={el.label} href={el.link} target="_blank">
                     {el.icon}
                   </Link>
                 </Button>
