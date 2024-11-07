@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/providers";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { NICKNAME, SLOGAN, WEBSITE } from "@/constants";
 import "@/styles/global.css";
+import StarsCanvas from "@/components/stars-canvas/StarsCanvas";
 
 const geistSans = localFont({
   src: "../../public/fonts/GeistVF.woff",
@@ -42,6 +43,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <StarsCanvas />
           <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
