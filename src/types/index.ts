@@ -8,6 +8,16 @@ export interface Project {
   descriptionVi?: string;
   longDescription?: string;
   longDescriptionVi?: string;
+  problem?: string;
+  problemVi?: string;
+  architectureDiagram?: string;
+  architecture?: string[];
+  architectureVi?: string[];
+  contributionsDetailed?: string[];
+  contributionsDetailedVi?: string[];
+  results?: string[];
+  resultsVi?: string[];
+  relatedArticles?: string[]; // Slugs of related articles in /writing
   role: string;
   roleVi?: string;
   year: string;
@@ -16,13 +26,40 @@ export interface Project {
   categoryVi?: string;
   metrics?: string[];
   metricsVi?: string[];
-  architecture?: string[];
-  architectureVi?: string[];
   liveUrl?: string;
   githubUrl?: string;
   featured: boolean;
   image: string;
   accentColor?: string;
+}
+
+export interface Article {
+  slug: string;
+  title: string;
+  titleVi?: string;
+  summary: string;
+  summaryVi?: string;
+  date: string;
+  readTime: string;
+  tags: string[];
+  featured: boolean;
+  relatedProject?: string; // Project ID
+  architectureDiagram?: string;
+  content: {
+    problemStatement: string;
+    problemStatementVi?: string;
+    architectureDesign: string;
+    architectureDesignVi?: string;
+    technicalDecisions: string[];
+    technicalDecisionsVi?: string[];
+    keyTakeaways: string[];
+    keyTakeawaysVi?: string[];
+    codeSnippet?: {
+      language: string;
+      title: string;
+      code: string;
+    };
+  };
 }
 
 export interface ExperienceItem {
@@ -47,10 +84,9 @@ export interface ExperienceItem {
 
 export interface TechItem {
   name: string;
-  level: "Advanced" | "Proficient" | "Core";
   highlight?: boolean;
-  description: string;
-  descriptionVi?: string;
+  capabilities: string[];
+  capabilitiesVi?: string[];
   iconName?: string;
 }
 

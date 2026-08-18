@@ -42,7 +42,7 @@ export function AboutBento() {
               <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                 {t.about.storyTitle}
               </h3>
-              <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
+              <p className="text-sm text-zinc-400 leading-relaxed">
                 {t.about.storyDesc}
               </p>
             </div>
@@ -53,7 +53,7 @@ export function AboutBento() {
           </div>
         </MotionWrapper>
 
-        {/* Card 2: Current Focus & Availability */}
+        {/* Card 2: Current Focus */}
         <MotionWrapper delay={0.2} className="md:col-span-1 lg:col-span-2">
           <div className="h-full rounded-2xl bg-gradient-to-br from-zinc-950 via-zinc-900/50 to-zinc-950 border border-zinc-800/90 hover:border-emerald-500/30 p-6 sm:p-8 flex flex-col justify-between transition-colors">
             <div className="space-y-3">
@@ -90,7 +90,7 @@ export function AboutBento() {
           return (
             <MotionWrapper key={idx} delay={0.3 + idx * 0.05} className="col-span-1">
               <div className="h-full rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-emerald-500/30 p-5 sm:p-6 flex flex-col justify-between transition-all group">
-                <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono group-hover:text-emerald-400 transition-colors">
+                <div className="text-xl sm:text-2xl font-bold text-white font-mono group-hover:text-emerald-400 transition-colors">
                   {stat.value}
                 </div>
                 <div className="mt-4">

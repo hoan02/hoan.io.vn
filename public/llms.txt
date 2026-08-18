@@ -1,14 +1,15 @@
 # Le Cong Hoan — Full-stack Developer
 
-> Professional profile and technical dossier of Le Cong Hoan (Lê Công Hoan), Senior Full-stack Developer based in Hanoi, Vietnam. Specialized in Angular Micro-frontends, Next.js, Java Spring Boot microservices, high-scale database workflows (Oracle, PostgreSQL), and Kubernetes/CI-CD cloud-native infrastructure.
+> Technical profile and engineering dossier of Le Cong Hoan (Lê Công Hoan), Full-stack Engineer based in Hanoi, Vietnam. Specialized in Angular Micro-frontends, Next.js, Java Spring Boot microservices, high-scale database workflows (Oracle, PostgreSQL), automated CI/CD pipelines, and multi-node Kubernetes (K3s) Homelab infrastructure.
 
 ## Core Information
 - **Name**: Le Cong Hoan (Lê Công Hoan)
-- **Title**: Senior Full-stack Developer
+- **Title**: Full-stack Developer
 - **Location**: Hanoi, Vietnam (Available for Remote / Hybrid worldwide)
 - **Email**: lehoan.dev@gmail.com
 - **Phone**: (+84) 0358 069 992
 - **Website**: https://hoan.io.vn
+- **Writing & Notes**: https://hoan.io.vn/writing
 - **GitHub**: https://github.com/hoan02
 - **LinkedIn**: https://www.linkedin.com/in/hoan02
 - **Facebook**: https://web.facebook.com/hoanit02
@@ -17,75 +18,77 @@
 
 ---
 
-## Technical Expertise & Core Stack
+## Technical Capabilities & Core Stack
 
-### Frontend & Architecture
-- **Frameworks & Libraries**: Angular (Advanced, Micro-Frontend, NX Monorepo, RxJS, NgRx, Dynamic Forms), Next.js (App Router, SSR, SSG, SEO, Core Web Vitals), React, TypeScript (Strict Typing, Complex Generics), JavaScript (ES6+).
-- **Styling & UI**: Tailwind CSS, SCSS, CSS Modules, Responsive & Cross-Browser Design, Component Design Systems.
+### Frontend Engineering
+- **Angular**: Micro-frontends (Nx Monorepos), RxJS, Dynamic Forms, Shared UI Libraries.
+- **Next.js & React**: App Router, SSR/SSG, SEO & Core Web Vitals Optimization, Modular TypeScript Components.
+- **TypeScript & Web**: Strict typing, generic design systems, responsive Tailwind CSS layouts.
 
 ### Backend & Microservices
-- **Java / Spring Boot**: Spring Cloud, Microservices Architecture, Spring Security, RESTful APIs, Keycloak (OIDC/RBAC), BPM/CRM integrations.
-- **Node.js & Scripting**: Asynchronous services, REST API development, backend automation.
-- **Messaging & Cache**: Apache Kafka (Distributed event streaming), Redis (Distributed caching, session storage, distributed locking).
-- **Storage & Identity**: MinIO (Object Storage), Keycloak (IAM/OAuth2/OIDC).
+- **Java / Spring Boot**: Microservices architecture, Spring Security, RESTful APIs, JPA/Hibernate, Keycloak OIDC/RBAC, BPM/CRM integrations.
+- **Go (Golang)**: Concurrent goroutines, high-throughput microservices, developer CLI tooling.
+- **Event Streaming & Cache**: Apache Kafka (distributed event streams), Redis (in-memory caching, session store, distributed locking).
+- **Storage & IAM**: MinIO (Object Storage), Keycloak (Identity & Access Management).
 
-### Databases & Data Engineering
-- **Oracle Database**: Enterprise schema design, SQL tuning, stored procedures, high-throughput transaction processing.
-- **PostgreSQL**: Relational modeling, indexing strategies, connection pooling, complex query optimization.
-- **In-Memory**: Redis (In-memory key-value cache, pub/sub).
+### Databases & Query Tuning
+- **Oracle Database**: Enterprise schema design, SQL query tuning, stored procedures, execution plan analysis.
+- **PostgreSQL**: Relational modeling, composite indexing, connection pool optimization (HikariCP).
 
-### DevOps, Cloud-Native & Infrastructure
-- **Kubernetes (K8s)**: On-premises cluster orchestration, Deployments, Services, Ingress Controllers, ConfigMaps/Secrets, Health Probes, Rolling Updates.
-- **Containers & Build Tools**: Docker (Multi-stage builds, container packaging), Private Container Registries.
-- **CI/CD & Automation**: Jenkins Declarative Pipelines, Automated Multi-Environment Deployments, Git, Linux Server Administration, Postman.
+### DevOps, Kubernetes & Homelab Infrastructure
+- **Kubernetes & K3s**: Multi-node bare-metal/virtualized Homelab cluster, Longhorn distributed persistent block storage, Traefik Ingress, rolling zero-downtime releases.
+- **Containers & CI/CD**: Docker (multi-stage caching builds), private container registries, Jenkins declarative pipelines.
+- **Linux Administration**: Ubuntu Server, CoreDNS troubleshooting, networking, Cloudflare tunnels.
 
 ---
 
-## Key Enterprise Projects
+## Featured Systems & Technical Case Studies
 
 ### 1. EPAS — Enterprise Process Automation System (NGV Group, 12/2024 – Present)
-- **Role**: Full-stack Developer
-- **Tech Stack**: Angular Micro-Frontend (NX monorepo), Java Spring Boot, Oracle, PostgreSQL, Apache Kafka, Redis, Keycloak, Kubernetes, Docker, Jenkins.
-- **Key Contributions**:
-  - Architected Angular micro-frontends with shared component libraries, standardized routing, and reusable dynamic forms across multiple enterprise modules.
-  - Engineered CRM/BPM workflow automation including transaction inboxes, task dispatching, and audit trails.
-  - Integrated frontend clients with high-throughput Spring Boot microservices and Oracle/PostgreSQL data pipelines.
-  - Maintained automated Jenkins CI/CD pipelines deploying Docker containers to on-premises Kubernetes clusters with zero downtime.
+- **Problem**: Multiple enterprise business modules required independent release cycles with unified authentication, shared UI design systems, and automated BPM workflows.
+- **Architecture**: Angular Shell (Nx Monorepo) ──► Module Federation ──► CRM/BPM Remotes ──► Spring Boot Microservices ──► Oracle/PostgreSQL & Kafka/Redis.
+- **Deliverables**: Shared `@shared/ui-lib`, dynamic form engine, transaction inboxes, Jenkins declarative pipeline, zero-downtime Kubernetes deployments.
 
-### 2. Zalo Official Account (OA) Messaging & Communication Platform (NGV Group, 12/2024 – Present)
-- **Role**: Full-stack Developer
-- **Tech Stack**: Angular, Java Spring Boot, TypeScript, RESTful APIs, PostgreSQL, Redis.
-- **Key Contributions**:
-  - Developed conversation management interfaces, message templates, status tracking, dynamic filtering, and real-time interaction modules.
-  - Implemented high-performance pagination and instant search across large historical conversation archives.
-  - Synchronized Zalo OA webhooks and REST endpoints with Spring Boot backend services and Redis cache.
+### 2. Enterprise CI/CD & 3-Node Kubernetes (K3s) Homelab Infrastructure (2024 – Present)
+- **Problem**: Need for deterministic, automated container deployment pipelines and a resilient multi-node cluster with persistent distributed block storage.
+- **Architecture**: Internet/Cloudflare ──► Traefik Ingress ──► 3-Node K3s Cluster ──► Longhorn Storage Volume (2x replication) ──► Git Push to Jenkins to Registry to K8s Rollout.
+- **Deliverables**: Automated Docker layer caching, declarative Jenkinsfile, Longhorn distributed storage, cluster health monitoring and rolling updates.
 
-### 3. MochiMochi Language Learning Platform (MochiMochi, 03/2024 – 08/2024)
-- **Role**: Frontend Developer
-- **Tech Stack**: Next.js, React, TypeScript, Tailwind CSS, SSR/SSG, Core Web Vitals Optimization.
-- **Key Contributions**:
-  - Developed learner-facing web applications serving thousands of active Japanese and Chinese language learners.
-  - Optimized Server-Side Rendering (SSR), asset pipelines, and metadata structure, substantially increasing organic SEO traffic and Lighthouse scores.
-  - Refactored legacy code into standardized reusable UI modules, accelerating feature delivery lead time.
+### 3. Zalo OA Message Management Platform (NGV Group, 12/2024 – Present)
+- **Deliverables**: High-performance conversation management console, broadcast templates, webhook synchronization, Spring Boot & Redis session caching.
 
-### 4. Enterprise CI/CD & Kubernetes Multi-Environment Infrastructure (2024 – Present)
-- **Role**: DevOps & Infrastructure
-- **Tech Stack**: Kubernetes, Docker, Jenkins, Linux, Shell Scripting, Git.
-- **Key Contributions**:
-  - Built automated multi-stage build and container image publishing pipelines with Jenkins.
-  - Configured and operated on-premises Kubernetes clusters, ingress controllers, registries, and rolling zero-downtime release workflows.
+### 4. MochiMochi Language Learning Platform (MochiMochi, 03/2024 – 08/2024)
+- **Deliverables**: Next.js learner-facing web app, Core Web Vitals optimization, SSR pipeline, and modular TypeScript components.
 
 ---
 
-## Professional Work History
-- **NGV Group** | Fullstack Developer (12/2024 – Present) — Hanoi, Vietnam
-- **MochiMochi** | Frontend Developer (03/2024 – 08/2024) — Hanoi, Vietnam
+## Technical Articles & Engineering Notes (/writing)
+
+1. **Designing Angular Micro-Frontends for Enterprise Applications**
+   - URL: https://hoan.io.vn/writing/angular-microfrontend-architecture
+   - Topics: Angular, Nx, Module Federation, Shared UI Libraries.
+
+2. **Building a 3-Node Kubernetes (K3s) Homelab with Longhorn Storage**
+   - URL: https://hoan.io.vn/writing/kubernetes-homelab-k3s
+   - Topics: Kubernetes, K3s, Longhorn Distributed Storage, Traefik, Linux.
+
+3. **Building a Practical CI/CD Pipeline: From Git to Kubernetes**
+   - URL: https://hoan.io.vn/writing/practical-cicd-jenkins-k8s
+   - Topics: Jenkins, Docker, Kubernetes, CI/CD, Rolling Updates.
+
+4. **Preserving Complex Filter & Pagination State in Angular Applications**
+   - URL: https://hoan.io.vn/writing/angular-complex-list-state
+   - Topics: Angular, RxJS, State Streams, URL Sync.
+
+5. **PostgreSQL & Oracle in Enterprise Systems: Architecture & SQL Tuning**
+   - URL: https://hoan.io.vn/writing/postgresql-oracle-migration-lessons
+   - Topics: Database, PostgreSQL, Oracle, Spring Boot, SQL Tuning.
 
 ---
 
-## Contact & Inquiries
-- **Website**: [https://hoan.io.vn](https://hoan.io.vn)
-- **Direct Email**: [lehoan.dev@gmail.com](mailto:lehoan.dev@gmail.com)
+## Contact
+- **Website**: https://hoan.io.vn
+- **Direct Email**: lehoan.dev@gmail.com
 - **Phone / Zalo**: (+84) 0358 069 992
-- **GitHub**: [https://github.com/hoan02](https://github.com/hoan02)
-- **LinkedIn**: [https://www.linkedin.com/in/hoan02](https://www.linkedin.com/in/hoan02)
+- **GitHub**: https://github.com/hoan02
+- **LinkedIn**: https://www.linkedin.com/in/hoan02

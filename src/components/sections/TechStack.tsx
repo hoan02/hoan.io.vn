@@ -73,15 +73,15 @@ export function TechStack() {
                     {categoryTagline}
                   </p>
 
-                  {/* Items List */}
-                  <div className="space-y-3">
+                  {/* Items List with Concrete Capabilities */}
+                  <div className="space-y-3.5">
                     {category.items.map((item, itemIdx) => {
-                      const itemDesc = language === "vi" && item.descriptionVi ? item.descriptionVi : item.description;
+                      const capabilities = language === "vi" && item.capabilitiesVi ? item.capabilitiesVi : item.capabilities;
 
                       return (
                         <div
                           key={itemIdx}
-                          className="p-3 rounded-xl bg-zinc-900/50 hover:bg-zinc-900/90 border border-zinc-800/60 hover:border-zinc-700 transition-all flex flex-col gap-1"
+                          className="p-3.5 rounded-xl bg-zinc-900/50 hover:bg-zinc-900/90 border border-zinc-800/60 hover:border-zinc-700 transition-all flex flex-col gap-2"
                         >
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-sm font-semibold text-zinc-100 flex items-center gap-2">
@@ -92,13 +92,19 @@ export function TechStack() {
                                 </span>
                               )}
                             </span>
-                            <span className="text-[11px] font-mono text-zinc-500">
-                              {item.level}
-                            </span>
                           </div>
-                          <p className="text-xs text-zinc-400 leading-normal">
-                            {itemDesc}
-                          </p>
+
+                          {/* Capability bullets / tags */}
+                          <div className="flex flex-wrap gap-1.5">
+                            {capabilities.map((cap, capIdx) => (
+                              <span
+                                key={capIdx}
+                                className="px-2 py-0.5 text-[11px] font-mono rounded bg-zinc-800/80 text-zinc-300 border border-zinc-700/50"
+                              >
+                                {cap}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       );
                     })}

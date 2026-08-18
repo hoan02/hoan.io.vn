@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { SelectedWork } from "@/components/sections/SelectedWork";
+import { LatestWriting } from "@/components/sections/LatestWriting";
 import { AboutBento } from "@/components/sections/AboutBento";
 import { Experience } from "@/components/sections/Experience";
 import { TechStack } from "@/components/sections/TechStack";
@@ -35,6 +36,7 @@ function PortfolioContent() {
       {/* Main Portfolio Sections */}
       <Hero onOpenAI={handleOpenAI} />
       <SelectedWork />
+      <LatestWriting />
       <AboutBento />
       <Experience />
       <TechStack />

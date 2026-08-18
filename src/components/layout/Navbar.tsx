@@ -20,11 +20,12 @@ export function Navbar({ onOpenAI }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: t.nav.work, href: "#selected-work" },
-    { label: t.nav.about, href: "#about" },
-    { label: t.nav.experience, href: "#experience" },
-    { label: t.nav.techStack, href: "#tech-stack" },
-    { label: t.nav.contact, href: "#contact" },
+    { label: t.nav.work, href: "/#selected-work" },
+    { label: t.nav.writing, href: "/#writing" },
+    { label: t.nav.about, href: "/#about" },
+    { label: t.nav.experience, href: "/#experience" },
+    { label: t.nav.techStack, href: "/#tech-stack" },
+    { label: t.nav.contact, href: "/#contact" },
   ];
 
   useEffect(() => {
