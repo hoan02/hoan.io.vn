@@ -196,17 +196,17 @@ export const ENGINEERING_EVIDENCE: EngineeringEvidence[] = [
     id: "homelab-3node-longhorn",
     project: "infrastructure",
     category: "infrastructure",
-    claim: "Constructed a 3-node bare-metal K3s Homelab cluster with Longhorn distributed block storage, Traefik ingress, and automated local CI/CD pipelines.",
-    claimVi: "Xây dựng cụm máy chủ 3-node K3s Homelab bare-metal với lưu trữ phân tán Longhorn, Traefik ingress và CI/CD tự động.",
+    claim: "Built and operate a Proxmox-based K3s Homelab on one ThinkCentre host with three Ubuntu 26 VMs, Longhorn storage, Traefik ingress, and automated local CI/CD pipelines.",
+    claimVi: "Xây dựng và vận hành Homelab K3s trên Proxmox với một máy ThinkCentre, 3 VM Ubuntu 26, storage Longhorn, Traefik ingress và CI/CD tự động.",
     evidence: [
       {
         repository: "Self-Hosted Infrastructure Lab",
-        description: "3-node Ubuntu cluster running K3s v1.35, Longhorn 2x replication storage volumes, Traefik Ingress Controller, and automated container deployment pipelines."
+        description: "One ThinkCentre host with Intel Xeon E-2286M (8 cores / 16 threads) and 32 GB RAM, running Proxmox with three Ubuntu 26 VMs. The guests run K3s, Longhorn storage, Traefik Ingress Controller, and automated container deployment pipelines."
       }
     ],
     confidence: "direct",
-    relatedArticles: ["production-like-platform-three-node-k3s-cluster"],
-    technologies: ["Kubernetes", "K3s", "Longhorn", "Traefik", "Linux", "Ubuntu", "Docker"]
+    relatedArticles: ["homelab-thinkcentre-proxmox-k3s"],
+    technologies: ["ThinkCentre", "Xeon E-2286M", "Proxmox", "Kubernetes", "K3s", "Longhorn", "Traefik", "Ubuntu 26", "Docker"]
   },
 
   // --- IOT & SYSTEMS REVERSE ENGINEERING EVIDENCE ---

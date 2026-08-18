@@ -203,6 +203,37 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
           </MotionWrapper>
         )}
 
+        {/* Infrastructure profile: make the actual homelab topology concrete */}
+        {editorial?.infrastructureProfile && (
+          <MotionWrapper delay={0.082}>
+            <section className="mb-12 rounded-2xl bg-amber-500/[0.04] border border-amber-500/20 p-6 sm:p-8">
+              <div className="mb-5 max-w-3xl">
+                <h2 className="text-xs font-mono uppercase tracking-widest text-amber-400 mb-2">
+                  {language === "vi" ? "Cấu hình Homelab hiện tại" : "Current homelab profile"}
+                </h2>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  {language === "vi"
+                    ? "Đây là topology thực tế của lab hiện tại, tách biệt với các cụm bare-metal nhiều node dùng cho những hệ thống khác."
+                    : "This is the actual current lab topology, separate from the multi-node bare-metal clusters used by other systems."}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {[
+                  { label: language === "vi" ? "Host" : "Host", value: language === "vi" ? editorial.infrastructureProfile.hostVi : editorial.infrastructureProfile.host },
+                  { label: language === "vi" ? "Tài nguyên" : "Compute", value: language === "vi" ? editorial.infrastructureProfile.computeVi : editorial.infrastructureProfile.compute },
+                  { label: language === "vi" ? "Ảo hóa" : "Virtualization", value: language === "vi" ? editorial.infrastructureProfile.virtualizationVi : editorial.infrastructureProfile.virtualization },
+                  { label: language === "vi" ? "Guest nodes" : "Guest nodes", value: language === "vi" ? editorial.infrastructureProfile.guestsVi : editorial.infrastructureProfile.guests }
+                ].map((item) => (
+                  <div key={item.label} className="rounded-xl bg-zinc-950/70 border border-zinc-800/80 p-4">
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-amber-400/80 mb-2">{item.label}</div>
+                    <p className="text-sm text-zinc-200 leading-relaxed">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </MotionWrapper>
+        )}
+
         {/* Business workflow surface: explain the product before the implementation */}
         {editorial?.workflowAreas && editorial.workflowAreas.length > 0 && (
           <MotionWrapper delay={0.085}>

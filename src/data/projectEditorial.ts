@@ -205,28 +205,46 @@ export const PROJECT_EDITORIAL: Record<string, ProjectEditorial> = {
     groupLabelVi: "Hệ thống & hạ tầng",
     status: "Self-hosted and maintained",
     statusVi: "Tự vận hành và duy trì",
-    context: "A self-hosted infrastructure practice for learning what stateful workloads, ingress, storage, delivery, and failure recovery feel like on real nodes rather than only in managed cloud documentation.",
-    contextVi: "Một môi trường hạ tầng tự vận hành để hiểu workload có state, ingress, storage, delivery và khôi phục lỗi trên node thật thay vì chỉ đọc tài liệu cloud managed.",
-    roleScope: "Cluster design, K3s operations, Jenkins delivery, registry and ingress configuration, Longhorn storage, troubleshooting, and release discipline.",
-    roleScopeVi: "Thiết kế cluster, vận hành K3s, delivery qua Jenkins, registry/ingress, storage Longhorn, xử lý sự cố và kỷ luật release.",
+    context: "Hoan's current personal homelab is a small virtualized platform: one ThinkCentre host runs Proxmox, which provides three Ubuntu 26 virtual machines for the K3s cluster and self-hosted workloads. It is a hands-on environment for learning what stateful workloads, ingress, storage, delivery, and recovery feel like when the hardware, hypervisor, guest OS, and cluster all belong to one operator.",
+    contextVi: "Homelab hiện tại của Hoan là một platform ảo hóa nhỏ: một máy ThinkCentre chạy Proxmox, bên trên có 3 máy ảo Ubuntu 26 làm nền cho cụm K3s và các workload tự vận hành. Đây là môi trường thực hành trực tiếp về workload có state, ingress, storage, delivery và recovery khi phần cứng, hypervisor, guest OS và cluster đều do một người quản lý.",
+    roleScope: "Proxmox and VM topology, Ubuntu guest preparation, K3s operations, Jenkins delivery, registry and ingress configuration, Longhorn storage, troubleshooting, and release discipline.",
+    roleScopeVi: "Thiết kế topology Proxmox và VM, chuẩn bị Ubuntu guest, vận hành K3s, delivery qua Jenkins, registry/ingress, storage Longhorn, xử lý sự cố và kỷ luật release.",
     outcomes: [
-      "A practical environment for testing delivery and stateful workload behavior on owned infrastructure.",
-      "Operational habits grounded in node, storage, ingress, and recovery work.",
-      "A clearer distinction between a successful manifest apply and a healthy service."
+      "A compact Proxmox-based platform for testing delivery and stateful workload behavior on owned infrastructure.",
+      "A realistic view of the full stack: physical host, hypervisor, Ubuntu guests, K3s, storage, and ingress.",
+      "A clearer distinction between a successful manifest apply and a healthy service, while keeping the single-host failure boundary visible."
     ],
     outcomesVi: [
-      "Môi trường thực hành delivery và workload có state trên hạ tầng tự sở hữu.",
-      "Thói quen vận hành được hình thành từ công việc với node, storage, ingress và recovery.",
-      "Phân biệt rõ hơn giữa apply manifest thành công và service thực sự healthy."
+      "Platform Proxmox nhỏ gọn để thực hành delivery và workload có state trên hạ tầng tự sở hữu.",
+      "Nhìn rõ toàn bộ stack: máy vật lý, hypervisor, Ubuntu guest, K3s, storage và ingress.",
+      "Phân biệt rõ hơn giữa apply manifest thành công và service thực sự healthy, đồng thời không che giấu giới hạn single-host."
     ],
+    infrastructureProfile: {
+      host: "1 ThinkCentre physical host",
+      hostVi: "1 máy vật lý ThinkCentre",
+      compute: "Intel Xeon E-2286M · 8 cores / 16 threads · 32 GB RAM",
+      computeVi: "Intel Xeon E-2286M · 8 nhân / 16 luồng · 32 GB RAM",
+      virtualization: "Proxmox VE",
+      virtualizationVi: "Proxmox VE",
+      guests: "3 Ubuntu 26 virtual machines running the K3s nodes",
+      guestsVi: "3 máy ảo Ubuntu 26 chạy các node K3s"
+    },
     highlights: [
+      {
+        id: "homelab-topology",
+        title: "One host, three guests, one real operations boundary",
+        titleVi: "Một host, ba guest và một ranh giới vận hành thực tế",
+        summary: "Why the ThinkCentre → Proxmox → Ubuntu 26 VMs → K3s topology is useful for practicing cluster operations while making the single physical-host boundary explicit.",
+        summaryVi: "Vì sao topology ThinkCentre → Proxmox → VM Ubuntu 26 → K3s hữu ích để thực hành vận hành cluster, đồng thời phải nhìn rõ giới hạn của một host vật lý.",
+        articleSlugs: ["homelab-thinkcentre-proxmox-k3s"]
+      },
       {
         id: "self-hosted-operations",
         title: "Operating the stateful parts, not only deploying YAML",
         titleVi: "Vận hành phần có state, không chỉ apply YAML",
         summary: "The lessons from nodes, storage, ingress, registries, persistence, and recovery are more valuable than a list of Kubernetes objects.",
         summaryVi: "Bài học từ node, storage, ingress, registry, persistence và recovery quan trọng hơn một danh sách Kubernetes object.",
-        articleSlugs: ["production-like-platform-three-node-k3s-cluster"]
+        articleSlugs: ["homelab-thinkcentre-proxmox-k3s"]
       }
     ]
   },

@@ -53,6 +53,17 @@ export interface ProjectWorkflowArea {
   summaryVi?: string;
 }
 
+export interface InfrastructureProfile {
+  host: string;
+  hostVi?: string;
+  compute: string;
+  computeVi?: string;
+  virtualization: string;
+  virtualizationVi?: string;
+  guests: string;
+  guestsVi?: string;
+}
+
 export interface ProjectEditorial {
   group: ProjectGroup;
   groupLabel: string;
@@ -68,6 +79,7 @@ export interface ProjectEditorial {
   outcomes?: string[];
   outcomesVi?: string[];
   workflowAreas?: ProjectWorkflowArea[];
+  infrastructureProfile?: InfrastructureProfile;
   highlights: ProjectHighlight[];
 }
 

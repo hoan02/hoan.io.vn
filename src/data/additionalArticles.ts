@@ -284,5 +284,52 @@ export const ADDITIONAL_ARTICLES: Article[] = [
         "Privacy local là yêu cầu sản phẩm khi công cụ điều khiển phần cứng cá nhân."
       ]
     }
+  },
+  {
+    slug: "homelab-thinkcentre-proxmox-k3s",
+    title: "Inside Hoan's Homelab: ThinkCentre, Proxmox, and Three Ubuntu 26 VMs",
+    titleVi: "Bên trong Homelab của Hoan: ThinkCentre, Proxmox và 3 VM Ubuntu 26",
+    summary: "A field note on the current personal homelab topology: one ThinkCentre host, Proxmox virtualization, three Ubuntu 26 VMs, and the K3s platform running above them.",
+    summaryVi: "Ghi chép về topology homelab hiện tại: một máy ThinkCentre, Proxmox, 3 VM Ubuntu 26 và platform K3s chạy bên trên.",
+    date: "Mar 2026",
+    readTime: "7 min read",
+    tags: ["Homelab", "ThinkCentre", "Proxmox", "Ubuntu 26", "K3s", "Longhorn", "Infrastructure"],
+    featured: false,
+    project: "infrastructure",
+    relatedProject: "devops-k8s-infrastructure",
+    relatedHighlightId: "homelab-topology",
+    format: "field-note",
+    formatVi: "Field note",
+    series: "Homelab / Owned Infrastructure",
+    seriesVi: "Homelab / Hạ tầng tự sở hữu",
+    evidenceIds: ["homelab-3node-longhorn"],
+    content: {
+      problemStatement: "A homelab becomes more useful when it represents the complete operational path instead of only a Kubernetes manifest. Hoan's current lab starts with one ThinkCentre physical host running an Intel Xeon E-2286M (8 cores / 16 threads) and 32 GB RAM. Proxmox provides the virtualization layer, and three Ubuntu 26 VMs form the K3s environment.",
+      problemStatementVi: "Một homelab có giá trị hơn khi mô phỏng toàn bộ đường đi vận hành thay vì chỉ chạy một vài manifest Kubernetes. Lab hiện tại của Hoan bắt đầu từ một máy ThinkCentre vật lý chạy Intel Xeon E-2286M (8 nhân / 16 luồng) và 32 GB RAM. Proxmox cung cấp lớp ảo hóa, còn 3 VM Ubuntu 26 tạo thành môi trường K3s.",
+      architectureDesign: "The topology is intentionally compact: hardware at the bottom, Proxmox as the host boundary, three Ubuntu 26 guests as K3s nodes, and cluster services such as Traefik, Longhorn, registry, and self-hosted workloads above them. This makes it possible to practice node lifecycle, storage behavior, ingress, image delivery, and recovery without pretending that three VMs on one host provide the same fault domain as three physical machines.",
+      architectureDesignVi: "Topology được giữ ở mức nhỏ gọn có chủ đích: phần cứng ở dưới cùng, Proxmox làm ranh giới host, 3 guest Ubuntu 26 làm các node K3s, rồi đến Traefik, Longhorn, registry và các workload tự vận hành. Mô hình này cho phép thực hành vòng đời node, behavior của storage, ingress, delivery image và recovery, nhưng không giả định 3 VM trên một host có cùng failure domain như 3 máy vật lý độc lập.",
+      technicalDecisions: [
+        "Use Proxmox to keep the physical host boundary visible while making VM creation, replacement, and resource allocation repeatable.",
+        "Use three Ubuntu 26 guests to exercise multi-node K3s scheduling and cluster operations instead of learning only from a single-node setup.",
+        "Treat Longhorn, ingress, registry, and CI/CD as operational components that need observation and recovery practice, not just installation steps.",
+        "Describe the single-host limitation explicitly: the lab is excellent for systems practice, but the physical host remains a shared failure domain."
+      ],
+      technicalDecisionsVi: [
+        "Dùng Proxmox để giữ rõ ranh giới của máy vật lý nhưng vẫn có thể lặp lại việc tạo, thay thế và phân bổ tài nguyên cho VM.",
+        "Dùng 3 guest Ubuntu 26 để thực hành scheduling nhiều node và vận hành K3s thay vì chỉ học từ một cluster single-node.",
+        "Coi Longhorn, ingress, registry và CI/CD là các thành phần vận hành cần được quan sát và thực hành recovery, không chỉ là bước cài đặt.",
+        "Nói rõ giới hạn single-host: lab rất hữu ích cho thực hành hệ thống, nhưng host vật lý vẫn là một failure domain dùng chung."
+      ],
+      keyTakeaways: [
+        "The most educational infrastructure boundary is often the whole stack: hardware, hypervisor, guest OS, cluster, storage, and delivery.",
+        "Virtualized nodes are useful for practicing distributed-system behavior, as long as their shared physical failure domain is documented.",
+        "A small owned lab creates feedback that managed Kubernetes documentation cannot provide: disks fill, nodes drift, services fail, and recovery has to be performed."
+      ],
+      keyTakeawaysVi: [
+        "Ranh giới hạ tầng mang lại nhiều bài học nhất thường là toàn bộ stack: phần cứng, hypervisor, guest OS, cluster, storage và delivery.",
+        "Các node ảo rất hữu ích để thực hành behavior của hệ thống phân tán, miễn là failure domain vật lý dùng chung được ghi rõ.",
+        "Một lab nhỏ tự sở hữu tạo ra feedback mà tài liệu Kubernetes managed không thể thay thế: disk đầy, node lệch trạng thái, service lỗi và recovery phải được thực hiện thật."
+      ]
+    }
   }
 ];

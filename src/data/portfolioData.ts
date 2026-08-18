@@ -126,78 +126,88 @@ export const PROJECTS_DATA: Project[] = [
   },
   {
     id: "devops-k8s-infrastructure",
-    title: "Enterprise CI/CD & Multi-Node Kubernetes (K3s) Homelab Infrastructure",
-    titleVi: "Hạ tầng CI/CD & Cụm Kubernetes (K3s) Homelab Đa Môi trường",
-    subtitle: "Automated container pipelines, private registry, Longhorn storage, and production cluster orchestration",
-    subtitleVi: "Tự động hóa build container, registry nội bộ, lưu trữ phân tán Longhorn và điều phối cụm máy chủ",
-    description: "Configured and maintained on-premises Kubernetes/K3s clusters, Jenkins pipelines, Docker builds, image publishing, Longhorn distributed storage, ingress routing, registries, and observability.",
-    descriptionVi: "Cấu hình và vận hành cụm Kubernetes/K3s (bao gồm cụm Homelab 3-node), pipeline Jenkins, đóng gói Docker, lưu trữ phân tán Longhorn, ingress routing và giám sát sản xuất.",
-    problem: "Delivering software to isolated on-premises and staging environments requires deterministic, repeatable container build pipelines, persistent distributed block storage, and automated routing without vendor lock-in.",
-    problemVi: "Triển khai phần mềm lên hạ tầng on-premises và môi trường thử nghiệm đòi hỏi quy trình build container tự động, lưu trữ dữ liệu phân tán bền bỉ và định tuyến Ingress linh hoạt không bị phụ thuộc vào cloud vendor.",
-    architectureDiagram: `Internet / Cloudflare Tunnel
+    title: "ThinkCentre Proxmox Homelab & Three-VM K3s Platform",
+    titleVi: "Homelab ThinkCentre Proxmox & Platform K3s trên 3 máy ảo",
+    subtitle: "A compact self-hosted lab for Kubernetes, CI/CD, storage, ingress, and recovery practice",
+    subtitleVi: "Môi trường tự vận hành nhỏ gọn để thực hành Kubernetes, CI/CD, storage, ingress và recovery",
+    description: "A ThinkCentre host running Proxmox with three Ubuntu 26 virtual machines forming a K3s platform for self-hosted workloads, Jenkins delivery, Longhorn storage, registry, ingress routing, and operational experiments.",
+    descriptionVi: "Một máy ThinkCentre chạy Proxmox với 3 máy ảo Ubuntu 26 tạo thành platform K3s cho workload tự vận hành, delivery qua Jenkins, storage Longhorn, registry, ingress và các thử nghiệm vận hành.",
+    problem: "A single physical host is a constrained but useful platform for learning the entire path from hardware and virtualization to guest operating systems, cluster scheduling, persistent storage, ingress, and application delivery.",
+    problemVi: "Một máy vật lý duy nhất có giới hạn, nhưng rất hữu ích để thực hành toàn bộ đường đi từ phần cứng, ảo hóa, guest operating system đến scheduling của cluster, persistent storage, ingress và delivery ứng dụng.",
+    architectureDiagram: `┌─────────────────────────────────────────────────────────────┐
+│ ThinkCentre · Intel Xeon E-2286M · 8C/16T · 32GB RAM       │
+│                         Proxmox VE                         │
+└──────────────┬────────────────┬────────────────────────────┘
+               │                │
+      ┌────────▼───────┐ ┌──────▼────────┐ ┌────────▼────────┐
+      │ Ubuntu 26 VM 1 │ │ Ubuntu 26 VM 2│ │ Ubuntu 26 VM 3  │
+      │ K3s node       │ │ K3s node      │ │ K3s node        │
+      └────────┬───────┘ └──────┬────────┘ └────────┬────────┘
+               └────────────────┴───────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────┐
+│ K3s · Traefik · Longhorn · Registry · Self-hosted Workloads │
+└──────────────────────────────┬──────────────────────────────┘
+                               ▲
+                               │ (Automated CI/CD Delivery)
+Git Push ──► Jenkins Pipeline ──► Docker Image ──► K3s Rollout
+
+Internet / Cloudflare Tunnel
             │
             ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  Traefik / Ingress Controller               │
-└───────────┬─────────────────────────────────────┬───────────┘
-            │                                     │
-┌───────────▼─────────────────────────────────────▼───────────┐
-│              Multi-Node Kubernetes / K3s Cluster            │
-│  ┌───────────────────────┐       ┌───────────────────────┐  │
-│  │   Frontend / Shell    │       │ Spring Boot / Backend │  │
-│  └───────────────────────┘       └───────────────────────┘  │
-│  ┌───────────────────────┐       ┌───────────────────────┐  │
-│  │     PostgreSQL HA     │       │     Redis / Kafka     │  │
-│  └───────────────────────┘       └───────────────────────┘  │
-│  Storage Layer: Longhorn Distributed Block Storage Volume   │
-└─────────────────────────────────────────────────────────────┘
-            ▲
-            │ (Automated CI/CD Delivery)
-Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Registry ──► K8s Rollout`,
+            ▼
+      Traefik / Ingress`,
     contributionsDetailed: [
       "Built multi-stage Docker build files with layer caching, reducing image footprint and build times significantly.",
       "Configured Jenkins declarative pipelines for automated linting, test execution, image packaging, version tagging, and automated Kubernetes manifests deployment.",
-      "Deployed a 3-node bare-metal/virtualized K3s Homelab cluster with Longhorn distributed block storage for persistent workloads and automated backups.",
+      "Built the current lab topology on one ThinkCentre host running Proxmox with three Ubuntu 26 VMs for the K3s nodes.",
+      "Deployed Longhorn distributed block storage across the virtualized K3s nodes for persistent workloads and snapshots.",
       "Configured Traefik Ingress with TLS certificate automation, namespace isolation, ConfigMaps/Secrets, and health check probes (liveness/readiness).",
       "Handled cluster maintenance, CoreDNS troubleshooting, node draining, and rolling application releases."
     ],
     contributionsDetailedVi: [
       "Thiết kế Dockerfile đa tầng (multi-stage) tối ưu bộ nhớ đệm layer, giảm dung lượng image và rút ngắn thời gian đóng gói.",
       "Xây dựng pipeline Jenkins declarative tự động kiểm tra cú pháp, chạy test, đóng gói image, gắn tag phiên bản và cập nhật manifest Kubernetes.",
-      "Thiết lập cụm Homelab K3s 3-node với hệ thống lưu trữ phân tán Longhorn cho các dịch vụ đòi hỏi lưu trữ dữ liệu bền bỉ và sao lưu tự động.",
+      "Xây dựng topology homelab hiện tại trên một máy ThinkCentre chạy Proxmox với 3 VM Ubuntu 26 làm các node K3s.",
+      "Triển khai storage phân tán Longhorn trên các node K3s ảo hóa cho workload cần dữ liệu bền bỉ và snapshot.",
       "Cấu hình Traefik Ingress tự động hóa chứng chỉ TLS, phân tách namespace, quản lý ConfigMaps/Secrets và cấu hình probe kiểm tra sức khỏe pod.",
       "Vận hành bảo trì cụm, xử lý sự cố mạng CoreDNS, bảo dưỡng node và triển khai rolling update không gián đoạn dịch vụ."
     ],
     results: [
       "Fully automated code-to-cluster delivery pipeline eliminating manual server interventions.",
-      "High-availability local and enterprise testing ground with persistent distributed storage via Longhorn.",
-      "A predictable rolling update strategy across multiple environments."
+      "A compact, reproducible lab for testing self-hosted workloads and delivery paths.",
+      "Persistent storage and cluster operations can be practiced on VMs while the single physical-host boundary remains explicit.",
+      "A predictable rolling update strategy across the three-VM K3s environment."
     ],
     resultsVi: [
       "Tự động hóa hoàn toàn quy trình từ commit mã nguồn đến triển khai trên cụm K8s, loại bỏ thao tác thủ công.",
-      "Môi trường thử nghiệm và vận hành độ sẵn sàng cao với hệ thống lưu trữ phân tán Longhorn.",
-      "Chiến lược cập nhật rolling update an toàn, đảm bảo dịch vụ luôn khả dụng liên tục."
+      "Môi trường lab nhỏ gọn, có thể tái tạo để thử nghiệm workload tự vận hành và delivery.",
+      "Có thể thực hành storage bền bỉ và vận hành cluster trên VM, đồng thời nhìn rõ giới hạn của một host vật lý.",
+      "Chiến lược rolling update có thể dự đoán trong môi trường K3s 3 VM."
     ],
-    relatedArticles: ["production-like-platform-three-node-k3s-cluster"],
+    relatedArticles: ["homelab-thinkcentre-proxmox-k3s"],
     role: "DevOps & Infrastructure",
     roleVi: "DevOps & Hạ tầng Kỹ thuật",
     year: "2024 – Present",
-    techStack: ["Kubernetes", "K3s", "Longhorn", "Docker", "Jenkins", "Traefik", "Linux", "Git", "CI/CD"],
+    techStack: ["ThinkCentre", "Xeon E-2286M", "Proxmox", "Ubuntu 26", "Kubernetes", "K3s", "Longhorn", "Docker", "Jenkins", "Traefik", "Linux", "Git", "CI/CD"],
     category: "DevOps & Cloud",
     categoryVi: "DevOps & Cloud",
     metrics: [
-      "3-node K3s Homelab cluster with Longhorn distributed persistent storage",
+      "1 ThinkCentre / Proxmox host with 3 Ubuntu 26 K3s VMs",
+      "Longhorn distributed persistent storage across the virtualized cluster",
       "Automated declarative Jenkins pipelines for Docker image builds & K8s rollouts",
       "Rolling deployments and self-healing container infrastructure"
     ],
     metricsVi: [
-      "Cụm Homelab K3s 3-node tích hợp lưu trữ phân tán Longhorn",
+      "1 host ThinkCentre / Proxmox với 3 VM Ubuntu 26 chạy K3s",
+      "Lưu trữ persistent phân tán Longhorn trên cụm ảo hóa",
       "Pipeline Jenkins declarative tự động build Docker image và rollout K8s",
       "Triển khai rolling update và hạ tầng container tự phục hồi"
     ],
     architecture: [
       "Jenkins declarative pipelines with multi-stage Docker caching",
-      "Multi-node K3s homelab & enterprise Kubernetes deployments, services, and ingress",
+      "Proxmox VM topology with multi-node K3s deployments, services, and ingress",
       "Longhorn distributed block storage volumes with automated snapshots",
       "On-premises container registry, Traefik ingress, and health check probes"
     ],
@@ -1257,7 +1267,7 @@ export function AppRoutes() {
     tags: ["Arda Labs", "K3s", "Kubernetes", "CloudNativePG", "DevOps", "GitOps", "Homelab", "Infrastructure"],
     featured: false,
     project: "infrastructure",
-    relatedProject: "devops-k8s-infrastructure",
+    relatedProject: "arda-finops-platform",
     diagramKey: "production-like-platform-three-node-k3s-cluster",
     evidenceIds: ["arda-k3s-gitops-infra", "homelab-3node-longhorn"],
     repositoryUrl: "https://github.com/arda-labs/arda-infra",

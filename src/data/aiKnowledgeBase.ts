@@ -27,12 +27,12 @@ export const CATEGORIZED_PROMPTS: PromptCategory[] = [
     promptsEn: [
       { badge: "EPAS System", text: "What does Hoan work on in EPAS, and what kind of enterprise workflows does it support?" },
       { badge: "Puchi Platform", text: "How did Hoan architect Puchidemy with 5 Go microservices?" },
-      { badge: "K8s Homelab", text: "Tell me about his 3-Node Kubernetes Homelab cluster." }
+      { badge: "Proxmox Homelab", text: "Tell me about his ThinkCentre Proxmox homelab and three Ubuntu 26 K3s VMs." }
     ],
     promptsVi: [
       { badge: "Hệ thống EPAS", text: "Hoan làm gì trong EPAS và hệ thống này hỗ trợ những quy trình enterprise nào?" },
       { badge: "Nền tảng Puchi", text: "Hoan đã thiết kế hệ thống Puchidemy với 5 Go microservices ra sao?" },
-      { badge: "Homelab K8s", text: "Hạ tầng cụm 3-Node Kubernetes Homelab của Hoan ra sao?" }
+      { badge: "Homelab Proxmox", text: "Homelab ThinkCentre Proxmox và 3 VM Ubuntu 26 chạy K3s của Hoan ra sao?" }
     ]
   },
   {
@@ -144,7 +144,7 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
     responseEn: {
       answer: `Hoan possesses solid hands-on DevOps & Cloud-Native skills:
 • **CI/CD Automation**: Designed Jenkins declarative pipelines for automated container builds, testing, and multi-environment publishing.
-• **Kubernetes Infrastructure**: Configured on-premises Kubernetes clusters, Ingress routing, container registries, deployments, and production troubleshooting.
+• **Kubernetes Infrastructure**: Runs a current personal lab with one ThinkCentre host, Proxmox, three Ubuntu 26 VMs, K3s, Ingress routing, Longhorn storage, container registries, and delivery troubleshooting.
 • **Docker**: Multi-stage production container image optimization.`,
       relatedTopic: "DevOps & Cloud-Native",
       tags: ["Kubernetes", "Docker", "Jenkins", "CI/CD", "Linux"],
@@ -155,7 +155,7 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
     responseVi: {
       answer: `Hoan có kinh nghiệm thực chiến vững chắc về DevOps & Cloud-Native:
 • **Tự động hóa CI/CD**: Xây dựng pipeline Jenkins declarative tự động build, kiểm thử và xuất bản image cho nhiều môi trường.
-• **Hạ tầng Kubernetes**: Cấu hình và vận hành cụm Kubernetes on-premises, Ingress routing, container registry nội bộ, giám sát và xử lý sự cố.
+• **Hạ tầng Kubernetes**: Vận hành homelab gồm một máy ThinkCentre chạy Proxmox, 3 VM Ubuntu 26, K3s, Ingress, Longhorn, registry nội bộ, giám sát và xử lý sự cố.
 • **Docker**: Đóng gói Docker build đa giai đoạn (multi-stage) tối ưu dung lượng và bảo mật.`,
       relatedTopic: "DevOps & Cloud-Native",
       tags: ["Kubernetes", "Docker", "Jenkins", "CI/CD", "Linux"],
@@ -196,7 +196,7 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
       relatedTopic: "Hobbies & Interests",
       tags: ["Homelab", "Self-hosting", "Side Projects", "System Architecture"],
       relevantLinks: [
-        { label: "Read Homelab Note", url: "/writing/production-like-platform-three-node-k3s-cluster" },
+        { label: "Read Homelab Note", url: "/writing/homelab-thinkcentre-proxmox-k3s" },
         { label: "Engineering Notes", url: "/writing" }
       ]
     },
@@ -205,7 +205,7 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
       relatedTopic: "Sở thích Cá nhân",
       tags: ["Homelab", "Self-hosting", "Side Projects", "Kiến trúc Hệ thống"],
       relevantLinks: [
-        { label: "Xem Bài viết Homelab", url: "/writing/production-like-platform-three-node-k3s-cluster" },
+        { label: "Xem Bài viết Homelab", url: "/writing/homelab-thinkcentre-proxmox-k3s" },
         { label: "Engineering Notes", url: "/writing" }
       ]
     }
