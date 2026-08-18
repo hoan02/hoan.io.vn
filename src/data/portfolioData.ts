@@ -1,11 +1,12 @@
 import { Project, ExperienceItem, TechCategory, BentoStat, Article } from "@/types";
+import { ADDITIONAL_ARTICLES } from "./additionalArticles";
 
 export const PERSONAL_INFO = {
   name: "Le Cong Hoan",
   nameVi: "Lê Công Hoan",
   dateOfBirth: "02/04/2002",
-  title: "Full-stack Developer",
-  titleVi: "Full-stack Developer",
+  title: "Full-stack Engineer & System Builder",
+  titleVi: "Full-stack Engineer & System Builder",
   phone: "0358 069 992",
   email: "lehoan.dev@gmail.com",
   github: "https://github.com/hoan02",
@@ -14,12 +15,12 @@ export const PERSONAL_INFO = {
   cvUrl: "/cv/Le_Cong_Hoan_CV.pdf",
   location: "Hanoi, Vietnam • Available for Remote / Hybrid",
   locationVi: "Hà Nội, Việt Nam • Sẵn sàng làm việc Remote / Hybrid",
-  status: "Building scalable web platforms & developer infrastructure",
-  statusVi: "Xây dựng nền tảng web & hạ tầng kỹ thuật thực chiến",
-  roleTagline: "Angular micro-frontends, Spring Boot microservices & Kubernetes deployments.",
-  roleTaglineVi: "Angular micro-frontends, Spring Boot microservices & hạ tầng Kubernetes.",
-  bio: "Full-stack Engineer with practical experience building enterprise process automation systems and EdTech web applications using Angular, Next.js, TypeScript, and Java Spring Boot. Focused on micro-frontend architecture, high-scale database workflows (Oracle, PostgreSQL), automated CI/CD pipelines, and Kubernetes deployment.",
-  bioVi: "Kỹ sư Full-stack Developer với kinh nghiệm thực chiến phát triển các hệ thống tự động hóa doanh nghiệp và nền tảng EdTech trên nền tảng Angular, Next.js, TypeScript và Java Spring Boot. Chuyên sâu về kiến trúc Micro-Frontend, xử lý dữ liệu Oracle/PostgreSQL, CI/CD và Kubernetes.",
+  status: "Building enterprise workflows, products, and self-hosted systems",
+  statusVi: "Xây dựng workflow enterprise, sản phẩm và hệ thống tự vận hành",
+  roleTagline: "Enterprise workflow platforms, product engineering, distributed systems, and private infrastructure.",
+  roleTaglineVi: "Nền tảng workflow enterprise, product engineering, hệ thống phân tán và hạ tầng private.",
+  bio: "Full-stack Engineer building systems where business workflows, data, and operations meet. My work spans EPAS process automation for multiple credit institutions, product platforms such as ARDA and Puchi, and lower-level systems including self-hosted infrastructure, camera relays, and local Bluetooth tooling.",
+  bioVi: "Full-stack Engineer xây dựng những hệ thống nơi quy trình nghiệp vụ, dữ liệu và vận hành phải hoạt động cùng nhau. Công việc của tôi trải rộng từ EPAS — nền tảng tự động hóa quy trình cho nhiều tổ chức tín dụng — đến ARDA, Puchi và các hệ thống cấp thấp như hạ tầng tự vận hành, camera relay và công cụ Bluetooth local.",
   education: {
     school: "University of Transport and Communications",
     schoolVi: "Trường Đại học Giao thông Vận tải",
@@ -36,78 +37,83 @@ export const PROJECTS_DATA: Project[] = [
     id: "epas-enterprise-process-automation",
     title: "EPAS — Enterprise Process Automation System",
     titleVi: "EPAS — Hệ thống Tự động hóa Quy trình Doanh nghiệp",
-    subtitle: "Enterprise-scale micro-frontend and microservice platform with CRM/BPM workflow automation",
-    subtitleVi: "Nền tảng tự động hóa quy trình nghiệp vụ & CRM/BPM trên kiến trúc Micro-Frontend và Spring Boot",
-    description: "Designed and maintained Angular micro-frontend architecture, shared libraries, dynamic forms, and transaction inboxes integrated with Java Spring Boot, Oracle, PostgreSQL, Redis, Kafka, and Keycloak on Kubernetes.",
-    descriptionVi: "Thiết kế và duy trì kiến trúc Angular Micro-Frontend, thư viện dùng chung, biểu mẫu động và hộp thư giao dịch tích hợp với Java Spring Boot, Oracle, PostgreSQL, Redis, Kafka, Keycloak trên Kubernetes.",
-    problem: "Multiple enterprise business modules (CRM, BPM, Operations) required independent release cycles while maintaining consistent design systems, single sign-on authentication, synchronized routing, and unified workflow state across dozens of concurrent users.",
-    problemVi: "Nhiều phân hệ nghiệp vụ doanh nghiệp (CRM, BPM, Quản trị) cần chu kỳ release độc lập nhưng phải đồng nhất hệ thống thiết kế UI, xác thực SSO, đồng bộ định tuyến và trạng thái luồng công việc xuyên suốt.",
+    subtitle: "Configurable workflow platform for lending, disbursement, operations, and reporting across credit institutions",
+    subtitleVi: "Nền tảng workflow có thể cấu hình cho nghiệp vụ cho vay, giải ngân, vận hành và báo cáo tại nhiều tổ chức tín dụng",
+    description: "A private enterprise process platform used across multiple credit institutions, including central-level organizations and People's Credit Funds, covering lending workflows, appraisal and approval, disbursement, post-disbursement operations, transaction handling, and operational or compliance reporting.",
+    descriptionVi: "Nền tảng tự động hóa quy trình enterprise được sử dụng tại nhiều tổ chức tín dụng, gồm các đơn vị cấp trung ương và quỹ tín dụng nhân dân, bao phủ quy trình cho vay, thẩm định/phê duyệt, giải ngân, nghiệp vụ sau giải ngân, xử lý giao dịch và báo cáo vận hành hoặc tuân thủ.",
+    problem: "The product had to express different institutions' business rules through configurable workflows while keeping forms, documents, approvals, transaction queues, audit history, and reporting facts consistent across business modules.",
+    problemVi: "Sản phẩm phải thể hiện các rule nghiệp vụ khác nhau giữa nhiều tổ chức thông qua workflow có thể cấu hình, đồng thời giữ tính nhất quán cho biểu mẫu, hồ sơ, phê duyệt, hàng đợi giao dịch, lịch sử audit và dữ kiện báo cáo giữa các phân hệ.",
     architectureDiagram: `┌─────────────────────────────────────────────────────────────┐
-│                 Angular Shell (Nx Monorepo)                 │
+│          Angular Host / Shared Frontend Contracts           │
+│   Auth • Navigation • Forms • Tables • Transaction State    │
 └──────────────┬───────────────────────────────┬──────────────┘
-               │ (Module Federation / Routing) │
+               │       Independently delivered modules        │
         ┌──────▼──────┐                 ┌──────▼──────┐
-        │   CRM MFE   │                 │   BPM MFE   │
+        │ CRM / Core  │                 │ BPM / Credit│
+        │ Workflows   │                 │ Workflows   │
         └──────┬──────┘                 └──────┬──────┘
                │                               │
                └───────────────┬───────────────┘
                                ▼
         ┌─────────────────────────────────────────────┐
-        │        Java Spring Boot Microservices       │
+        │        Java Spring Boot Business Services   │
+        │ Lending • Approval • Disbursement • Reports │
         └──────────────┬───────────────┬──────────────┘
                        │               │
         ┌──────────────▼──────┐ ┌──────▼──────────────┐
-        │ Oracle / PostgreSQL │ │ Apache Kafka & Redis│
+        │ Oracle / PostgreSQL │ │ Kafka • Redis • IAM  │
         └─────────────────────┘ └─────────────────────┘`,
     contributionsDetailed: [
-      "Architected Angular Micro-Frontend foundation using Nx monorepo with standardized routing and shell-to-remote state synchronization.",
+      "Started the Angular Micro-Frontend foundation with Nx to establish shared conventions, routing, and shell-to-remote coordination.",
+      "Reworked the frontend structure later and removed Nx when a more flexible delivery model better matched the product's independent business modules.",
       "Engineered shared component libraries for dynamic forms, custom data grids with virtual scrolling, pagination, and multi-file attachments.",
-      "Implemented CRM/BPM transaction inboxes with real-time task dispatching, audit trails, and multi-tier approval flows.",
+      "Implemented lending and disbursement transaction inboxes with task dispatching, audit trails, and multi-tier approval flows.",
       "Integrated frontend clients with Spring Boot REST services, Keycloak OIDC authentication, and Kafka event streaming.",
-      "Authored Jenkins declarative CI/CD pipelines to automate multi-stage Docker builds and rolling Kubernetes updates."
+      "Supported operational and compliance-facing reporting surfaces, then authored Jenkins declarative CI/CD pipelines for private Kubernetes delivery."
     ],
     contributionsDetailedVi: [
-      "Thiết kế kiến trúc Angular Micro-Frontend với Nx monorepo, chuẩn hóa định tuyến và đồng bộ trạng thái giữa Shell và các Remote.",
+      "Bắt đầu với nền tảng Angular Micro-Frontend dùng Nx để chuẩn hóa convention, routing và phối hợp giữa Shell với các Remote.",
+      "Sau đó tái cấu trúc và loại bỏ Nx khi mô hình delivery linh động hơn phù hợp với các phân hệ nghiệp vụ độc lập của sản phẩm.",
       "Xây dựng thư viện component dùng chung: biểu mẫu động (dynamic forms), bảng dữ liệu hỗ trợ lọc và phân trang, xử lý tệp đính kèm.",
-      "Phát triển hộp thư giao dịch CRM/BPM xử lý luồng phê duyệt đa cấp, quản lý tác vụ và lưu vết lịch sử kiểm toán (audit trail).",
+      "Phát triển hộp thư giao dịch cho vay và giải ngân, xử lý task, luồng phê duyệt đa cấp và lưu vết lịch sử kiểm toán (audit trail).",
       "Tích hợp các module frontend với API Java Spring Boot, cơ chế bảo mật Keycloak OIDC và luồng sự kiện Kafka.",
-      "Thiết lập pipeline Jenkins CI/CD tự động hóa build Docker đa tầng và phát hành rolling update trên cụm Kubernetes."
+      "Hỗ trợ các màn hình phục vụ báo cáo vận hành/tuân thủ và pipeline Jenkins CI/CD cho delivery trên Kubernetes private."
     ],
     results: [
-      "Standardized UI foundation and dynamic form engine, cutting feature development lead time across enterprise modules.",
-      "Zero-downtime rolling deployments on on-premises Kubernetes clusters via automated Jenkins pipelines.",
-      "Consistent single-sign-on (SSO) and role-based access control (RBAC) enforced across all remote applications."
+      "Connected configurable lending, approval, disbursement, and reporting workflows through a consistent product surface.",
+      "Reduced architectural coupling by replacing the initial Nx-centered structure with a more flexible frontend delivery model.",
+      "Kept SSO, RBAC, audit context, and repeatable private delivery as shared platform concerns."
     ],
     resultsVi: [
-      "Chuẩn hóa nền tảng giao diện và engine biểu mẫu động, rút ngắn thời gian phát triển tính năng mới giữa các nhóm nghiệp vụ.",
-      "Phát hành cập nhật zero-downtime trên cụm Kubernetes on-premises thông qua pipeline CI/CD tự động.",
-      "Đồng bộ xác thực đăng nhập một lần (SSO) và phân quyền RBAC chặt chẽ xuyên suốt toàn bộ các ứng dụng remote."
+      "Kết nối các quy trình cho vay, phê duyệt, giải ngân và báo cáo trong một mặt phẳng sản phẩm nhất quán.",
+      "Giảm coupling kiến trúc bằng cách thay cấu trúc ban đầu xoay quanh Nx bằng mô hình frontend delivery linh động hơn.",
+      "Giữ SSO, RBAC, ngữ cảnh audit và delivery private có thể lặp lại như các concern dùng chung của platform."
     ],
-    relatedArticles: ["angular-microfrontend-architecture", "practical-cicd-jenkins-k8s", "angular-complex-list-state"],
+    relatedArticles: ["angular-microfrontend-architecture", "epas-transaction-inbox-and-compliance-boundaries", "epas-private-enterprise-delivery"],
     role: "Fullstack Developer (NGV Group)",
     roleVi: "Kỹ sư Fullstack (NGV Group)",
     year: "12/2024 – Present",
-    techStack: ["Angular", "Micro-Frontend", "Nx", "Java Spring Boot", "Oracle", "PostgreSQL", "Kafka", "Redis", "Keycloak", "Kubernetes", "Jenkins"],
+    techStack: ["Angular", "Micro-Frontend", "Java Spring Boot", "Oracle", "PostgreSQL", "Kafka", "Redis", "Keycloak", "Kubernetes", "Jenkins"],
     category: "Full-stack",
     categoryVi: "Full-stack",
     metrics: [
-      "Standardized UI libraries & routing across multiple enterprise modules",
-      "End-to-end CI/CD build & image publishing with Jenkins & Kubernetes",
-      "Production-ready RBAC security with Keycloak & Zero-downtime rollouts"
+      "Configurable lending, disbursement & reporting workflow surface",
+      "Flexible frontend delivery across independent business modules",
+      "RBAC security with Keycloak and a repeatable private rollout path"
     ],
     metricsVi: [
-      "Chuẩn hóa thư viện giao diện và định tuyến xuyên suốt các phân hệ",
-      "Tự động hóa toàn diện quy trình build & đóng gói image với Jenkins & K8s",
-      "Bảo mật phân quyền RBAC qua Keycloak & triển khai zero-downtime"
+      "Mặt phẳng workflow có thể cấu hình cho cho vay, giải ngân và báo cáo",
+      "Frontend delivery linh động giữa các phân hệ nghiệp vụ độc lập",
+      "Bảo mật phân quyền RBAC qua Keycloak và quy trình rollout private lặp lại được"
     ],
     architecture: [
-      "Angular Micro-Frontend architecture with shared design libraries and NX monorepo",
+      "Angular Micro-Frontend architecture with shared design libraries and flexible module delivery",
       "Event-driven messaging with Apache Kafka and distributed cache with Redis",
       "Oracle and PostgreSQL dual persistence with Keycloak OIDC authentication",
       "On-premises Kubernetes cluster orchestration with ingress and health monitoring"
     ],
     architectureVi: [
-      "Kiến trúc Angular Micro-Frontend với thư viện dùng chung và NX monorepo",
+      "Kiến trúc Angular Micro-Frontend với thư viện dùng chung và mô hình delivery module linh động",
       "Luồng xử lý sự kiện qua Apache Kafka và bộ nhớ đệm phân tán Redis",
       "Tương thích dữ liệu Oracle & PostgreSQL, tích hợp xác thực OIDC Keycloak",
       "Quản trị cụm Kubernetes on-premises, cấu hình Ingress và giám sát hạ tầng"
@@ -153,7 +159,7 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
       "Configured Jenkins declarative pipelines for automated linting, test execution, image packaging, version tagging, and automated Kubernetes manifests deployment.",
       "Deployed a 3-node bare-metal/virtualized K3s Homelab cluster with Longhorn distributed block storage for persistent workloads and automated backups.",
       "Configured Traefik Ingress with TLS certificate automation, namespace isolation, ConfigMaps/Secrets, and health check probes (liveness/readiness).",
-      "Handled cluster maintenance, CoreDNS troubleshooting, node draining, and rolling zero-downtime application releases."
+      "Handled cluster maintenance, CoreDNS troubleshooting, node draining, and rolling application releases."
     ],
     contributionsDetailedVi: [
       "Thiết kế Dockerfile đa tầng (multi-stage) tối ưu bộ nhớ đệm layer, giảm dung lượng image và rút ngắn thời gian đóng gói.",
@@ -165,14 +171,14 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     results: [
       "Fully automated code-to-cluster delivery pipeline eliminating manual server interventions.",
       "High-availability local and enterprise testing ground with persistent distributed storage via Longhorn.",
-      "Predictable zero-downtime rolling update rollout strategy across multiple environments."
+      "A predictable rolling update strategy across multiple environments."
     ],
     resultsVi: [
       "Tự động hóa hoàn toàn quy trình từ commit mã nguồn đến triển khai trên cụm K8s, loại bỏ thao tác thủ công.",
       "Môi trường thử nghiệm và vận hành độ sẵn sàng cao với hệ thống lưu trữ phân tán Longhorn.",
       "Chiến lược cập nhật rolling update an toàn, đảm bảo dịch vụ luôn khả dụng liên tục."
     ],
-    relatedArticles: ["kubernetes-homelab-k3s", "practical-cicd-jenkins-k8s"],
+    relatedArticles: ["production-like-platform-three-node-k3s-cluster"],
     role: "DevOps & Infrastructure",
     roleVi: "DevOps & Hạ tầng Kỹ thuật",
     year: "2024 – Present",
@@ -182,12 +188,12 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     metrics: [
       "3-node K3s Homelab cluster with Longhorn distributed persistent storage",
       "Automated declarative Jenkins pipelines for Docker image builds & K8s rollouts",
-      "Zero-downtime rolling deployments and self-healing container infrastructure"
+      "Rolling deployments and self-healing container infrastructure"
     ],
     metricsVi: [
       "Cụm Homelab K3s 3-node tích hợp lưu trữ phân tán Longhorn",
       "Pipeline Jenkins declarative tự động build Docker image và rollout K8s",
-      "Triển khai rolling update zero-downtime và hạ tầng container tự phục hồi"
+      "Triển khai rolling update và hạ tầng container tự phục hồi"
     ],
     architecture: [
       "Jenkins declarative pipelines with multi-stage Docker caching",
@@ -229,15 +235,15 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     ],
     results: [
       "Automated message template management and real-time conversation tracking.",
-      "High performance pagination and instant filter across large message histories.",
+      "Explicit pagination and responsive filtering across large message histories.",
       "Seamless Zalo OA API synchronization and webhook delivery."
     ],
     resultsVi: [
       "Tự động hóa quản trị mẫu tin nhắn và theo dõi hội thoại thời gian thực.",
-      "Phân trang và tìm kiếm lọc siêu tốc trên lượng lớn lịch sử tin nhắn.",
+      "Phân trang và lọc phản hồi tốt trên lượng lớn lịch sử tin nhắn.",
       "Đồng bộ API Zalo OA và xử lý webhook ổn định."
     ],
-    relatedArticles: ["angular-complex-list-state"],
+    relatedArticles: ["zalo-oa-conversation-operations"],
     role: "Fullstack Developer (NGV Group)",
     roleVi: "Kỹ sư Fullstack (NGV Group)",
     year: "12/2024 – Present",
@@ -246,12 +252,12 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     categoryVi: "Full-stack",
     metrics: [
       "Automated message template management and real-time conversation tracking",
-      "High performance pagination and instant filter across large message histories",
+      "Explicit pagination and responsive filtering across large message histories",
       "Seamless Zalo OA API synchronization and webhook delivery"
     ],
     metricsVi: [
       "Tự động hóa quản trị mẫu tin nhắn và theo dõi hội thoại thời gian thực",
-      "Phân trang và tìm kiếm lọc siêu tốc trên lượng lớn lịch sử tin nhắn",
+      "Phân trang và lọc phản hồi tốt trên lượng lớn lịch sử tin nhắn",
       "Đồng bộ API Zalo OA và xử lý webhook mượt mà"
     ],
     architecture: [
@@ -355,13 +361,13 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
            ▼
     CloudNativePG (HA Postgres) · Valkey · Garage S3 · Zeebe 8.5 BPMN`,
     contributionsDetailed: [
-      "Engineered 9 Go microservices sharing common libraries (arda-auth, arda-grpc, arda-events, arda-postgres) with sub-10ms inter-service latency via gRPC.",
+      "Engineered 9 Go microservices sharing common libraries (arda-auth, arda-grpc, arda-events, arda-postgres) with standardized gRPC contracts.",
       "Architected React Module Federation with a central shell and 7 remotes (mfe-iam, platform, finance, account, hrm, workflow, crm) using shared workspace packages.",
       "Built zero-trust identity flow with Ory Kratos, Ory Hydra, Traefik ForwardAuth, and BFF session cookies.",
       "Orchestrated HA PostgreSQL with CloudNativePG, Valkey distributed cache, and Zeebe 8.5 BPMN workflow on a 3-node K3s cluster."
     ],
     contributionsDetailedVi: [
-      "Xây dựng 9 Go microservices sử dụng thư viện dùng chung (arda-auth, arda-grpc, arda-events) giao tiếp gRPC độ trễ dưới 10ms.",
+      "Xây dựng 9 Go microservices sử dụng thư viện dùng chung (arda-auth, arda-grpc, arda-events) với contract gRPC được chuẩn hóa.",
       "Thiết kế kiến trúc React Module Federation gồm Shell trung tâm và 7 remote apps dùng chung gói @workspace/* (shadcn UI, auth, API).",
       "Thiết lập cơ chế bảo mật zero-trust với Ory Kratos, Ory Hydra, Traefik ForwardAuth và BFF session cookies.",
       "Vận hành CloudNativePG (PostgreSQL HA), Valkey cache và Zeebe 8.5 BPMN workflow trên cụm 3-node K3s."
@@ -376,7 +382,7 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
       "Bảo mật zero-trust với định danh tập trung và chính sách phân quyền RBAC cấp route.",
       "Hạ tầng sẵn sàng cao (HA) tự vận hành ổn định trên cụm bare-metal 3-node K3s."
     ],
-    relatedArticles: ["arda-finops-microservices-module-federation", "kubernetes-homelab-k3s"],
+    relatedArticles: ["designing-arda-cloud-native-finops-platform", "production-like-platform-three-node-k3s-cluster"],
     role: "Lead Architect & Open Source Maintainer",
     roleVi: "Kiến trúc sư & Maintainer Dự án",
     year: "2025 – Present",
@@ -420,7 +426,7 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     description: "Developed a modern Vietnamese learning web platform featuring a responsive Next.js PWA frontend, 5 Go microservices monorepo built on Kratos v3, Limen auth session exchange, NATS event bus, and automated ArgoCD GitOps deployments on K3s.",
     descriptionVi: "Phát triển nền tảng học tiếng Việt hiện đại gồm Next.js PWA frontend, monorepo 5 Go microservices trên nền Kratos v3, xác thực Limen Auth, NATS event bus và CI/CD GitOps qua ArgoCD trên K3s.",
     problem: "Online language learners need fast, offline-capable PWA experiences with instant lesson progress synchronization, audio pronunciation streaming, and resilient microservice APIs under traffic spikes.",
-    problemVi: "Học viên học ngoại ngữ cần trải nghiệm PWA mượt mà hỗ trợ offline, đồng bộ tiến độ học tức thì, phát âm thanh bài học nhanh và hạ tầng microservice ổn định dưới tải cao.",
+    problemVi: "Học viên học ngoại ngữ cần trải nghiệm PWA mượt mà hỗ trợ offline, đồng bộ tiến độ học, phát âm thanh bài học và hạ tầng microservice ổn định.",
     architectureDiagram: `User ──► Cloudflare CDN ──► Next.js PWA (Limen Auth) ──► Envoy Gateway
                 │
                 ▼
@@ -442,14 +448,14 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
       "Tự động hóa triển khai GitOps với ArgoCD trên cụm K3s v1.35 kết hợp Traefik và Cloudflare Tunnel."
     ],
     results: [
-      "Sub-second PWA initial load and instant interactive exercise feedback for language learners.",
+      "A responsive PWA experience and immediate local feedback for interactive exercises.",
       "Event-driven decoupling of learning progress tracking and notification dispatching.",
-      "Zero-downtime automated deployments with declarative ArgoCD GitOps."
+      "Declarative automated deployments with ArgoCD GitOps."
     ],
     resultsVi: [
-      "Tốc độ tải trang PWA dưới 1 giây và phản hồi bài tập trắc nghiệm tức thì cho học viên.",
+      "Trải nghiệm PWA phản hồi tốt và feedback cục bộ ngay cho các bài tập tương tác.",
       "Phân tách kiến trúc theo hướng sự kiện (Event-Driven) tối ưu tải hệ thống.",
-      "Triển khai zero-downtime hoàn toàn tự động qua mô hình ArgoCD GitOps."
+      "Triển khai tự động theo mô hình khai báo qua ArgoCD GitOps."
     ],
     relatedArticles: ["building-puchi-product-idea-to-service-architecture", "why-puchi-uses-opaque-sessions-over-jwt", "git-push-to-k3s-puchi-gitops-pipeline", "designing-story-based-language-learning-engine"],
     role: "Fullstack Architect & Creator",
@@ -515,16 +521,16 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
       "Xây dựng dashboard quản trị web nhúng gọn nhẹ để cấu hình camera, theo dõi trạng thái tunnel thời gian thực và quản lý token API."
     ],
     results: [
-      "Sub-second video latency relaying 1080p/2K camera streams to local NVR instances.",
-      "Zero monthly cloud subscription costs for continuous P2P streaming and recording.",
-      "Automated off-site Google Drive backup pipeline with configurable retention policies."
+      "A local relay path for supported camera streams and NVR consumers.",
+      "A self-hosted alternative to depending on a vendor viewing workflow.",
+      "Optional off-site Google Drive archive synchronization with configurable retention policies."
     ],
     resultsVi: [
-      "Độ trễ truyền hình ảnh dưới 1 giây với chất lượng 1080p/2K truyền thẳng vào NVR nội bộ.",
-      "Triệt tiêu 100% chi phí thuê bao đám mây định kỳ cho việc xem và lưu trữ video camera.",
-      "Tự động hóa sao lưu an toàn lên Google Drive với chính sách xoay vòng dữ liệu linh hoạt."
+      "Một relay nội bộ cho camera path được hỗ trợ và các consumer NVR.",
+      "Giảm phụ thuộc vào workflow xem camera của vendor bằng một relay tự vận hành.",
+      "Đồng bộ archive tùy chọn lên Google Drive với chính sách xoay vòng dữ liệu cấu hình được."
     ],
-    relatedArticles: ["production-like-platform-three-node-k3s-cluster"],
+    relatedArticles: ["camrelay-from-proprietary-p2p-to-private-rtsp"],
     role: "Sole Creator & Systems Engineer",
     roleVi: "Tác giả & Kỹ sư Hệ thống",
     year: "2025 – Present",
@@ -532,12 +538,12 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     category: "Systems & IoT",
     categoryVi: "Hệ thống & IoT",
     metrics: [
-      "Rust Async Tokio Core with Sub-10ms Relay Latency",
+      "Rust Async Tokio relay core",
       "Native Ingestion for Frigate NVR & Home Assistant",
       "Automated FFmpeg Segments & Google Drive Sync"
     ],
     metricsVi: [
-      "Nhân Rust Tokio bất đồng bộ độ trễ chuyển tiếp dưới 10ms",
+      "Nhân relay Rust Tokio bất đồng bộ",
       "Tích hợp trực tiếp Frigate NVR & Home Assistant",
       "Ghi hình phân đoạn FFmpeg và đồng bộ Google Drive"
     ],
@@ -578,26 +584,26 @@ Baseus Headphones (BLE) ◄─── GATT Frames ─── [ Rust Core (btleplug
       "Implemented asynchronous Bluetooth Low Energy (BLE) scanning, GATT connection lifecycle, and event handling via btleplug.",
       "Reverse-engineered proprietary Baseus protocol packet frames for reading battery levels, switching ANC/Transparency modes, and applying 10-band EQ curves.",
       "Designed a responsive, modern dark-mode user interface using SolidJS, TypeScript, and Tailwind CSS.",
-      "Ensured zero-tracking, 100% offline local operation without requiring user registration or external network calls."
+      "Designed the core control flow for local operation without requiring user registration."
     ],
     contributionsDetailedVi: [
-      "Phát triển ứng dụng desktop siêu nhẹ trên nền Tauri v2 và Rust, tiêu thụ dưới 30MB RAM khi chạy nền.",
+      "Phát triển ứng dụng desktop gọn nhẹ trên nền Tauri v2 và Rust, ưu tiên vòng đời native rõ ràng.",
       "Hiện thực hóa quá trình quét Bluetooth Low Energy (BLE), quản lý kết nối GATT và sự kiện qua thư viện btleplug.",
       "Giải mã cấu trúc gói tin (GATT packet frames) của tai nghe Baseus để đọc dung lượng pin, chuyển chế độ ANC/Xuyên âm và nạp EQ 10 dải.",
       "Thiết kế giao diện Dark Mode hiện đại, mượt mà với SolidJS, TypeScript và Tailwind CSS.",
-      "Đảm bảo hoạt động offline 100% không thu thập dữ liệu và không yêu cầu đăng ký tài khoản."
+      "Thiết kế luồng điều khiển local, không yêu cầu đăng ký tài khoản cho các tính năng cốt lõi."
     ],
     results: [
       "Native desktop control for Baseus headphone features previously exclusive to mobile apps.",
-      "Sub-30MB memory footprint and near-instant application startup on Windows, macOS, and Linux.",
-      "100% privacy-preserving local Bluetooth LE communication with zero telemetry."
+      "A lightweight desktop footprint and a clear native/local control path.",
+      "Local Bluetooth LE communication without unnecessary telemetry."
     ],
     resultsVi: [
       "Điều khiển trực tiếp các tính năng tai nghe Baseus trên desktop mà trước đây chỉ có trên mobile.",
-      "Mức chiếm dụng RAM dưới 30MB và thời gian khởi động tức thì trên Windows, macOS, Linux.",
-      "Bảo mật quyền riêng tư tuyệt đối với giao tiếp Bluetooth LE thuần cục bộ không gửi dữ liệu ra ngoài."
+      "Ứng dụng desktop gọn nhẹ với luồng điều khiển native/local rõ ràng.",
+      "Giao tiếp Bluetooth LE local, không thêm telemetry không cần thiết."
     ],
-    relatedArticles: ["from-utc-engineer-to-production-systems"],
+    relatedArticles: ["b4s-reverse-engineering-a-local-ble-companion"],
     role: "Creator & Systems Developer",
     roleVi: "Tác giả & Lập trình viên Hệ thống",
     year: "2025 – Present",
@@ -739,7 +745,7 @@ export const ARTICLES_DATA: Article[] = [
       }
     ],
     content: {
-      problemStatement: "Financial operations platforms must provide strict multi-tenant isolation, unified auditability, sub-10ms inter-service latency, and independent release cycles across domain modules (Finance, IAM, CRM, HRM, Workflow). A traditional monolith suffers from release lockstep, while uncontrolled microservices lead to distributed transaction chaos.",
+      problemStatement: "Financial operations platforms must provide strict multi-tenant isolation, unified auditability, dependable service communication, and independent release cycles across domain modules (Finance, IAM, CRM, HRM, Workflow). A traditional monolith suffers from release lockstep, while uncontrolled microservices lead to distributed transaction chaos.",
       problemStatementVi: "Nền tảng vận hành tài chính đòi hỏi cách ly dữ liệu đa khách thuê nghiêm ngặt, kiểm toán thống nhất, giao tiếp microservice dưới 10ms và chu kỳ release độc lập giữa các phân hệ (Finance, IAM, CRM, HRM, Workflow). Kiến trúc monolith nguyên khối gây nghẽn phát hành, trong khi chia nhỏ microservices thiếu kỷ luật sẽ dẫn tới hỗn loạn transaction.",
       architectureDesign: "Arda isolates concerns across 3 Git repositories: arda-be (9 Go microservices + shared libs/go), arda-mfe (React Module Federation 7 remotes), and arda-infra (3-node K3s GitOps). Client traffic routes through Cloudflare Tunnels to Traefik Ingress with ForwardAuth. The auth-gateway BFF validates sessions via Ory Kratos/Hydra and injects trusted identity headers. Go domain services communicate via gRPC for synchronous data and NATS JetStream for asynchronous domain events, backed by CloudNativePG HA PostgreSQL, Valkey cache, and Zeebe 8.5 BPMN.",
       architectureDesignVi: "Arda phân tách ranh giới qua 3 repository: arda-be (9 Go microservices và libs/go), arda-mfe (React Module Federation 7 remotes) và arda-infra (K3s GitOps). Client kết nối qua Cloudflare Tunnel tới Traefik Ingress tích hợp ForwardAuth. auth-gateway BFF xác thực phiên qua Ory Kratos/Hydra và đính kèm identity header. Các Go microservices giao tiếp qua gRPC cho truy vấn đồng bộ và NATS JetStream cho sự kiện nghiệp vụ, lưu trữ trên CloudNativePG HA Postgres, Valkey cache và Zeebe 8.5 BPMN.",
@@ -946,7 +952,7 @@ func TenantContextUnaryServerInterceptor() grpc.UnaryServerInterceptor {
     repositoryUrl: "https://github.com/arda-labs/arda-be",
     highlights: [
       {
-        value: "100% Atomic",
+        value: "Atomic",
         label: "Zero Dual-Write",
         labelVi: "Không Lỗi Dual-Write",
         detail: "Co-located outbox table",
@@ -990,12 +996,12 @@ func TenantContextUnaryServerInterceptor() grpc.UnaryServerInterceptor {
       solutionTitle: "Transactional Outbox + NATS JetStream",
       solutionTitleVi: "Transactional Outbox kết hợp NATS JetStream",
       solutionPoints: [
-        "Outbox record written in the exact same SQL transaction as domain state — 100% atomic.",
+        "Outbox record is written in the same SQL transaction as the domain state.",
         "Relay worker continuously sweeps unpublished events and acknowledges upon JetStream disk write.",
         "Envelope[T] enforces UUIDv7 event IDs, schema versions, and consumer idempotency tables."
       ],
       solutionPointsVi: [
-        "Bản ghi outbox được ghi trong cùng một transaction SQL với dữ liệu miền — 100% nguyên tử.",
+        "Bản ghi outbox được ghi trong cùng transaction SQL với dữ liệu miền.",
         "Worker quét sự kiện chưa gửi và chỉ xác nhận xóa khi NATS JetStream đã ghi đĩa an toàn.",
         "Schema Envelope[T] chuẩn hóa UUIDv7, version và bảng log khử trùng lặp ở consumer."
       ]
@@ -1006,13 +1012,13 @@ func TenantContextUnaryServerInterceptor() grpc.UnaryServerInterceptor {
       architectureDesign: "Arda implements the Transactional Outbox pattern in `libs/go/arda-events`: Business data and a structured outbox record are committed within a single atomic PostgreSQL transaction. A background outbox worker polls unpublished records, wraps them into versioned `Envelope[T]` schemas with tenant and actor metadata, and publishes them to NATS JetStream. Downstream consumers maintain an idempotent processing log to discard duplicate deliveries.",
       architectureDesignVi: "Arda áp dụng mẫu Transactional Outbox trong thư viện `libs/go/arda-events`: Dữ liệu nghiệp vụ và bản ghi outbox được ghi đồng thời trong cùng một transaction PostgreSQL nguyên tử. Một worker chạy ngầm sẽ quét các bản ghi chưa xuất bản, đóng gói vào schema `Envelope[T]` có version, tenant và actor metadata, rồi publish lên NATS JetStream. Phía consumer duy trì bảng log xử lý để loại bỏ các message trùng lặp.",
       technicalDecisions: [
-        "Atomic Outbox Table: `outbox_events` table co-located in every service's PostgreSQL schema, ensuring 100% atomic writes with business data.",
+        "Atomic Outbox Table: the `outbox_events` table is co-located in the service's PostgreSQL schema so the event write shares the business transaction.",
         "Structured Event Envelope: `Envelope[T]` includes `event_id` (UUIDv7), `schema_version`, `tenant_id`, `actor_id`, `timestamp`, and strongly-typed JSON payload.",
         "NATS JetStream Stream Persistence: JetStream stores messages on disk with file-based retention, ack policy, and consumer replay capabilities.",
         "Idempotent Consumer Deduplication: consumers store processed `event_id` in a dedicated processed_events table inside their own local transaction."
       ],
       technicalDecisionsVi: [
-        "Bảng Outbox nguyên tử: bảng `outbox_events` nằm ngay trong schema PostgreSQL của từng service, đảm bảo ghi 100% nguyên tử cùng dữ liệu nghiệp vụ.",
+        "Bảng Outbox nguyên tử: bảng `outbox_events` nằm trong schema PostgreSQL của service để việc ghi sự kiện dùng chung transaction với dữ liệu nghiệp vụ.",
         "Chuẩn hóa Envelope sự kiện: `Envelope[T]` chứa `event_id` (UUIDv7), `schema_version`, `tenant_id`, `actor_id`, `timestamp` và payload JSON.",
         "Lưu trữ bền vững với NATS JetStream: JetStream lưu trữ message xuống đĩa với chính sách ACK rõ ràng và khả năng replay sự kiện.",
         "Cơ chế Idempotent Consumer: consumer lưu `event_id` đã xử lý vào bảng deduplication nội bộ trong transaction riêng."
@@ -1256,8 +1262,8 @@ export function AppRoutes() {
     evidenceIds: ["arda-k3s-gitops-infra", "homelab-3node-longhorn"],
     repositoryUrl: "https://github.com/arda-labs/arda-infra",
     content: {
-      problemStatement: "Testing real distributed microservice patterns (HA failover, zero-downtime rolling rollouts, outbox consumers, ingress security) on public cloud managed Kubernetes (EKS/GKE) quickly becomes prohibitively expensive for independent research and development.",
-      problemStatementVi: "Thử nghiệm các kiến trúc phân tán thực tế (HA failover, zero-downtime rollout, outbox worker, bảo mật ingress) trên các dịch vụ đám mây công cộng (EKS/GKE) thường rất đắt đỏ đối với các dự án nghiên cứu và phát triển độc lập.",
+      problemStatement: "Testing distributed microservice patterns such as failover, rolling rollouts, outbox consumers, and ingress security on managed public Kubernetes can become expensive for independent research and development.",
+      problemStatementVi: "Thử nghiệm các kiến trúc phân tán như failover, rolling rollout, outbox worker và bảo mật ingress trên Kubernetes public managed có thể tốn kém đối với nghiên cứu và phát triển độc lập.",
       architectureDesign: "We constructed a production-like 3-node bare-metal K3s cluster (nodes 192.168.100.201-203) using embedded etcd for high availability. Ingress traffic enters via Cloudflare Tunnels (eliminating public IP exposure) into Traefik Ingress. State is managed by CloudNativePG (HA PostgreSQL with automatic leader election) and Valkey. Workload delivery is fully automated via declarative ArgoCD GitOps syncing manifests directly from GitHub.",
       architectureDesignVi: "Chúng tôi thiết lập cụm 3-node K3s bare-metal (IP 192.168.100.201-203) sử dụng etcd nhúng để đạt tính sẵn sàng cao (HA). Luồng truy cập đi qua Cloudflare Tunnel (không cần mở IP tĩnh công khai) vào Traefik Ingress. Dữ liệu được quản lý bởi CloudNativePG (PostgreSQL HA tự động bầu chọn leader) và Valkey. Triển khai ứng dụng hoàn toàn tự động qua ArgoCD GitOps đồng bộ từ GitHub.",
       technicalDecisions: [
@@ -1371,12 +1377,12 @@ spec:
       solutionTitle: "Puchi Cloud-Native EdTech Architecture",
       solutionTitleVi: "Kiến trúc Nền tảng Học Ngoại ngữ Puchi Đám Mây",
       solutionPoints: [
-        "Cloudflare R2 edge audio streaming offloads 100% of media traffic from backend instances.",
+        "Cloudflare R2 edge audio streaming keeps media delivery separate from backend request handling.",
         "NATS event stream processes gamification in background, returning quiz results in <10ms.",
         "Domain separation: immutable curriculum tree decoupled from append-only learner progress logs."
       ],
       solutionPointsVi: [
-        "Stream audio qua Cloudflare R2 giải phóng 100% lưu lượng media khỏi backend.",
+        "Stream audio qua Cloudflare R2 giúp tách việc phân phối media khỏi request handling của backend.",
         "Sự kiện NATS xử lý tính XP ngầm, trả kết quả trắc nghiệm tức thì dưới 10ms.",
         "Phân tách nghiệp vụ: cây bài học tĩnh bất biến tách khỏi lịch sử làm bài append-only."
       ]
@@ -1531,7 +1537,7 @@ spec:
       problemStatement: "Manual SSH deployments and imperative deployment scripts are error-prone, lack auditability, risk environment drift, and require opening direct SSH/Kubeconfig access into internal cluster networks.",
       problemStatementVi: "Việc deploy thủ công qua SSH hay chạy script dòng lệnh rất dễ xảy ra sai sót, thiếu khả năng kiểm toán lịch sử, dễ bị lệch cấu hình giữa các môi trường và đòi hỏi phải mở quyền truy cập trực tiếp vào mạng cụm máy chủ.",
       architectureDesign: "Puchi establishes a declarative GitOps workflow: When code is pushed to GitHub, GitHub Actions runs tests, builds multi-stage Docker images, and publishes them to GitHub Container Registry (GHCR). A Git commit updates image tags in `puchi-infra`. ArgoCD running inside the K3s cluster detects repository changes and performs an automated rolling update with zero downtime.",
-      architectureDesignVi: "Puchi thiết lập quy trình GitOps khai báo: Khi commit mã nguồn lên GitHub, GitHub Actions chạy test, build Docker image đa tầng và xuất bản lên GHCR. Commit tiếp theo cập nhật tag image trong `puchi-infra`. ArgoCD chạy bên trong cụm K3s phát hiện thay đổi và tự động thực hiện rolling update zero-downtime.",
+      architectureDesignVi: "Puchi thiết lập quy trình GitOps khai báo: Khi commit mã nguồn lên GitHub, GitHub Actions chạy test, build Docker image đa tầng và xuất bản lên GHCR. Commit tiếp theo cập nhật tag image trong `puchi-infra`. ArgoCD chạy bên trong cụm K3s phát hiện thay đổi và đồng bộ deployment theo manifest.",
       technicalDecisions: [
         "ArgoCD App of Apps Pattern: single root manifest manages individual microservice deployments, services, ingress, and configmaps.",
         "GitHub Actions Multi-Stage Builds: slim scratch/alpine base images minimize container image size and reduce attack surface.",
@@ -1650,13 +1656,13 @@ spec:
   // ==========================================
   {
     slug: "angular-microfrontend-architecture",
-    title: "Designing Angular Micro-Frontends for Enterprise Applications",
-    titleVi: "Thiết kế Kiến trúc Angular Micro-Frontend cho Ứng dụng Doanh nghiệp",
-    summary: "How to structure Nx monorepos, module federation, shared UI libraries, dynamic forms, and synchronized routing across independent enterprise teams at NGV Group.",
-    summaryVi: "Cách tổ chức Nx monorepo, Module Federation, thư viện dùng chung, dynamic forms và đồng bộ routing giữa các nhóm phát triển độc lập tại NGV Group.",
+    title: "EPAS Frontend Architecture: From Nx Foundations to Flexible Module Delivery",
+    titleVi: "Kiến trúc frontend EPAS: Từ nền tảng Nx đến mô hình delivery linh động",
+    summary: "A practical account of how EPAS started with Nx and evolved toward a more flexible Angular micro-frontend structure as lending, disbursement, operations, and reporting modules grew.",
+    summaryVi: "Ghi chép thực tế về cách EPAS bắt đầu với Nx rồi chuyển sang cấu trúc Angular Micro-Frontend linh động hơn khi các phân hệ cho vay, giải ngân, vận hành và báo cáo phát triển.",
     date: "Feb 2026",
     readTime: "8 min read",
-    tags: ["Angular", "Architecture", "Micro-Frontend", "Nx", "Enterprise"],
+    tags: ["Angular", "Architecture", "Micro-Frontend", "EPAS", "Enterprise"],
     featured: false,
     project: "epas",
     relatedProject: "epas-enterprise-process-automation",
@@ -1678,55 +1684,56 @@ spec:
         │ • Dynamic Forms • Data Grid • Event Bus API │
         └─────────────────────────────────────────────┘`,
     content: {
-      problemStatement: "In large enterprise systems, multiple functional teams frequently encounter merge conflicts, deployment bottlenecks, and tightly-coupled dependencies when contributing to a single monolithic Angular frontend.",
-      problemStatementVi: "Trong các hệ thống doanh nghiệp lớn, nhiều nhóm phát triển thường xuyên gặp xung đột mã nguồn, nghẽn chu kỳ phát hành và phụ thuộc chéo khi cùng phát triển trên một ứng dụng Angular nguyên khối (monolith).",
-      architectureDesign: "By adopting an Nx monorepo with Module Federation, we separate the system into a lightweight Shell (Host) application and isolated Remote micro-frontends (CRM, BPM, Operations). Shared components and data access patterns are distributed via local workspace libraries (`@shared/ui-lib`).",
-      architectureDesignVi: "Bằng cách áp dụng Nx monorepo kết hợp Module Federation, hệ thống được tách thành một ứng dụng Shell (Host) gọn nhẹ và các Remote độc lập (CRM, BPM, Vận hành). Các thành phần dùng chung được đóng gói thành các thư viện nội bộ (@shared/ui-lib).",
+      problemStatement: "EPAS had to support different institutions and configurable credit workflows without turning every change in lending, appraisal, disbursement, operations, or reporting into a coordinated rewrite of one frontend. The architecture also needed consistent authentication, navigation, form behavior, transaction state, and shared UI across business modules.",
+      problemStatementVi: "EPAS phải hỗ trợ nhiều tổ chức và các workflow tín dụng có thể cấu hình, nhưng không được biến mỗi thay đổi ở cho vay, thẩm định, giải ngân, vận hành hay báo cáo thành một lần sửa chữa đồng bộ trên một frontend duy nhất. Kiến trúc vẫn cần giữ nhất quán về xác thực, điều hướng, hành vi biểu mẫu, state giao dịch và UI dùng chung giữa các phân hệ.",
+      architectureDesign: "The first foundation used an Nx monorepo with Module Federation because it gave the team a clear workspace, shared libraries, and a consistent way to coordinate the Shell and Remote applications. As the product and delivery model became more flexible, that structure was redesigned and Nx was removed. The durable part was not the tool: it was the boundary between a host, independently delivered business modules, shared frontend contracts, and backend-owned workflow rules.",
+      architectureDesignVi: "Nền tảng ban đầu sử dụng Nx monorepo kết hợp Module Federation vì nó giúp team có workspace rõ ràng, thư viện dùng chung và cách phối hợp nhất quán giữa Shell với các ứng dụng Remote. Khi sản phẩm và mô hình delivery cần linh động hơn, cấu trúc này được thiết kế lại và loại bỏ Nx. Phần bền vững không nằm ở tool, mà ở ranh giới giữa host, các phân hệ nghiệp vụ được delivery độc lập, contract frontend dùng chung và rule workflow do backend làm chủ.",
       technicalDecisions: [
-        "Use Nx Monorepo for unified dependency management, version alignment, and affected-build caching.",
-        "Module Federation with dynamic remote manifest configuration, allowing remotes to be deployed independently without rebuilding the host.",
-        "Custom Event Bus and URL query synchronization for inter-MFE communication without polluting the global window object.",
-        "Shared singleton dependencies (RxJS, @angular/core, Keycloak-js) configured with strict version constraints to avoid bundle duplication."
+        "Use Nx initially as a coordination and standardization tool, then remove it when its workspace conventions created more coupling than the product needed.",
+        "Keep Module Federation and host/remote boundaries focused on independently delivered business modules rather than on a specific monorepo tool.",
+        "Treat dynamic forms, task inboxes, transaction state, permissions, and reporting facts as explicit contracts between the frontend and backend.",
+        "Keep shared UI and authentication behavior consistent while allowing lending, disbursement, operations, and reporting modules to evolve at their own pace."
       ],
       technicalDecisionsVi: [
-        "Sử dụng Nx monorepo để quản lý phiên bản phụ thuộc tập trung và tận dụng tính năng build caching cho các package bị ảnh hưởng.",
-        "Áp dụng Module Federation với cơ chế dynamic remote manifest, cho phép release các app remote độc lập mà không cần build lại Host.",
-        "Thiết lập Event Bus và cơ chế đồng bộ qua URL query parameters để các MFE trao đổi dữ liệu an toàn.",
-        "Cấu hình singleton dependencies (RxJS, @angular/core) nhằm tránh việc nạp trùng lặp thư viện gây nặng bundle."
+        "Ban đầu dùng Nx như công cụ phối hợp và chuẩn hóa, sau đó loại bỏ khi convention của workspace tạo ra nhiều coupling hơn nhu cầu thực tế của sản phẩm.",
+        "Giữ ranh giới Module Federation và host/remote xoay quanh các phân hệ được delivery độc lập, không phụ thuộc vào một monorepo tool cụ thể.",
+        "Định nghĩa rõ contract giữa frontend và backend cho dynamic forms, task inbox, state giao dịch, phân quyền và các dữ kiện báo cáo.",
+        "Giữ UI dùng chung và hành vi xác thực nhất quán, đồng thời cho phép module cho vay, giải ngân, vận hành và báo cáo phát triển theo nhịp riêng."
       ],
       keyTakeaways: [
-        "Independent release pipelines for individual feature teams.",
-        "Standardized dynamic form schema and UI component reuse.",
-        "Zero-downtime rolling updates for remote modules without restarting the host shell."
+        "Architecture should preserve the useful boundary and be willing to discard the tool that no longer serves it.",
+        "A workflow platform is shaped by business contracts—forms, tasks, approvals, transactions, and reports—not only by frontend composition.",
+        "The best micro-frontend structure is the one that matches the product's actual ownership and delivery model."
       ],
       keyTakeawaysVi: [
-        "Phân tách độc lập quy trình release cho từng nhóm chức năng.",
-        "Chuẩn hóa engine biểu mẫu động và tái sử dụng component giao diện.",
-        "Triển khai cập nhật remote module mượt mà không làm gián đoạn người dùng đang thao tác trên Shell."
+        "Kiến trúc nên giữ lại ranh giới có giá trị và sẵn sàng loại bỏ tool không còn phục vụ ranh giới đó.",
+        "Một nền tảng workflow được định hình bởi contract nghiệp vụ—biểu mẫu, task, phê duyệt, giao dịch và báo cáo—không chỉ bởi frontend composition.",
+        "Mô hình micro-frontend tốt nhất là mô hình khớp với cách sản phẩm thực sự được sở hữu và delivery."
       ],
       codeSnippet: {
         language: "typescript",
-        title: "module-federation.config.ts (Remote Configuration)",
-        code: `import { ModuleFederationConfig } from '@nx/module-federation';
+        title: "remote-manifest.ts (Flexible Module Boundary)",
+        code: `export interface RemoteDefinition {
+  name: string;
+  entry: string;
+  exposedRoute: string;
+  capabilities: string[];
+}
 
-const config: ModuleFederationConfig = {
-  name: 'crm-mfe',
-  exposes: {
-    './Routes': './src/app/remote-entry/entry.routes.ts',
+export const businessModules: RemoteDefinition[] = [
+  {
+    name: "credit-workflows",
+    entry: "/remotes/credit/remoteEntry.js",
+    exposedRoute: "/credit",
+    capabilities: ["forms", "approval", "disbursement"],
   },
-  shared: (libraryName, defaultConfig) => {
-    if (['@angular/core', '@angular/common', '@angular/router', 'rxjs'].includes(libraryName)) {
-      return {
-        singleton: true,
-        strictVersion: true,
-        requiredVersion: 'auto',
-      };
-    }
-    return defaultConfig;
+  {
+    name: "operations-and-reports",
+    entry: "/remotes/operations/remoteEntry.js",
+    exposedRoute: "/operations",
+    capabilities: ["transactions", "audit", "reporting"],
   },
-};
-
-export default config;`
+];`
       }
     }
   },
@@ -1878,7 +1885,8 @@ export default config;`
         "Thực tế luôn ưu tiên tính thực dụng, kiến trúc tin cậy và tinh thần không ngừng học hỏi."
       ]
     }
-  }
+  },
+  ...ADDITIONAL_ARTICLES
 ];
 
 export const EXPERIENCES_DATA: ExperienceItem[] = [
@@ -1906,15 +1914,17 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
         roleVi: "Kỹ sư Frontend & Micro-Frontend",
         period: "12/2024 — Present",
         periodVi: "12/2024 — Hiện tại",
-        description: "Large-scale enterprise workflow automation platform integrating BPM engines, dynamic task inboxes, and complex financial/operational transaction processing.",
-        descriptionVi: "Nền tảng tự động hóa quy trình doanh nghiệp quy mô lớn tích hợp BPM engine, hộp thư tác vụ động và xử lý giao dịch tài chính/vận hành phức tạp.",
+        description: "Enterprise workflow automation platform used across credit institutions, covering lending, appraisal, approval, disbursement, post-disbursement operations, transaction handling, and operational or compliance reporting.",
+        descriptionVi: "Nền tảng tự động hóa quy trình enterprise được sử dụng tại nhiều tổ chức tín dụng, bao phủ cho vay, thẩm định, phê duyệt, giải ngân, nghiệp vụ sau giải ngân, xử lý giao dịch và báo cáo vận hành/tuân thủ.",
         highlights: [
-          "Designed Angular Micro-Frontend architecture (1 Shell + multiple Remotes) managed via Nx monorepo with seamless cross-module routing.",
+          "Started the Angular Micro-Frontend foundation with Nx, then redesigned the structure and removed Nx when more flexible module delivery became the better fit.",
+          "Mapped lending, approval, disbursement, and reporting workflows into dynamic forms, task inboxes, transaction screens, and shared UI contracts.",
           "Built shared enterprise component libraries (@workspace/ui, dynamic reactive forms, high-performance data tables with virtual scroll).",
           "Integrated frontend flows with Java Spring Boot microservices, Oracle/PostgreSQL schemas, and Redis cache."
         ],
         highlightsVi: [
-          "Thiết kế kiến trúc Angular Micro-Frontend (1 Shell + các Remote apps) quản lý theo Nx monorepo với cơ chế định tuyến linh hoạt.",
+          "Bắt đầu với nền tảng Angular Micro-Frontend dùng Nx, sau đó thiết kế lại và loại bỏ Nx khi mô hình delivery module linh động hơn phù hợp với sản phẩm.",
+          "Chuyển hóa workflow cho vay, phê duyệt, giải ngân và báo cáo thành dynamic forms, task inbox, màn hình giao dịch và contract UI dùng chung.",
           "Xây dựng thư viện component doanh nghiệp dùng chung (biểu mẫu phản ứng động, bảng dữ liệu hiệu năng cao với virtual scroll).",
           "Tích hợp luồng frontend với microservices Java Spring Boot, cơ sở dữ liệu Oracle/PostgreSQL và bộ nhớ đệm Redis."
         ],
@@ -1927,12 +1937,12 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
         roleVi: "Kỹ sư Frontend Core",
         period: "12/2024 — Present",
         periodVi: "12/2024 — Hiện tại",
-        description: "Standardized reusable UI foundation, dynamic reactive form engine, complex validation pipelines, and cross-micro-frontend state synchronization.",
+        description: "Standardized reusable UI foundation, dynamic reactive form engine, complex validation pipelines, and cross-micro-frontend state synchronization for credit and operational workflows.",
         descriptionVi: "Chuẩn hóa nền tảng UI dùng chung, engine biểu mẫu phản ứng động (dynamic form), pipeline kiểm tra dữ liệu phức tạp và cơ chế đồng bộ state giữa các remote app.",
         highlights: [
           "Developed schema-driven dynamic form generators rendering complex multi-step transaction approval workflows.",
           "Implemented high-performance virtualized data tables supporting sorting, multi-column filters, and large dataset streaming.",
-          "Integrated state bridges and shared authentication contexts across micro-frontend boundaries with zero memory leaks."
+          "Integrated state bridges and shared authentication contexts across micro-frontend boundaries with explicit lifecycle ownership."
         ],
         highlightsVi: [
           "Phát triển bộ sinh biểu mẫu động theo schema cấu hình cho các quy trình phê duyệt giao dịch đa bước phức tạp.",
@@ -1956,7 +1966,7 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
         ],
         highlightsVi: [
           "Xây dựng pipeline Jenkins declarative tự động hóa build Docker đa tầng, gắn tag phiên bản và đẩy lên registry nội bộ.",
-          "Vận hành triển khai trên cụm Kubernetes on-premises, cấu hình Traefik ingress, kiểm tra sức khỏe container và rolling update zero-downtime."
+          "Vận hành triển khai trên cụm Kubernetes on-premises, cấu hình Traefik ingress, kiểm tra sức khỏe container và rolling update."
         ],
         techStack: ["Kubernetes", "Docker", "Jenkins", "Traefik", "Linux", "Shell"]
       }
@@ -2003,8 +2013,8 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
         roleVi: "Kỹ sư Frontend",
         period: "03/2024 — 08/2024",
         periodVi: "03/2024 — 08/2024",
-        description: "High-traffic learner portal delivering interactive lessons, spaced-repetition flashcards, and pronunciation practice across mobile and desktop browsers.",
-        descriptionVi: "Cổng học tập trực tuyến tải cao cung cấp bài học tương tác, flashcard ôn tập ngắt quãng và luyện phát âm trên cả trình duyệt di động lẫn máy tính.",
+        description: "Learner-facing portal delivering interactive lessons, spaced-repetition flashcards, and pronunciation practice across mobile and desktop browsers.",
+        descriptionVi: "Cổng học tập trực tuyến cung cấp bài học tương tác, flashcard ôn tập ngắt quãng và luyện phát âm trên cả trình duyệt di động lẫn máy tính.",
         highlights: [
           "Engineered responsive UI using Next.js App & Pages router, React, and TypeScript with smooth micro-interactions.",
           "Refactored legacy UI components into clean, strictly-typed reusable component packages.",
@@ -2027,11 +2037,11 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
         description: "Audited and restructured web rendering pipelines to maximize organic search engine visibility and pass all Core Web Vitals thresholds.",
         descriptionVi: "Khảo sát và tái cấu trúc pipeline rendering của trang web nhằm tối đa hóa khả năng tìm kiếm tự nhiên và đạt chuẩn các chỉ số Core Web Vitals.",
         highlights: [
-          "Achieved green Core Web Vitals (LCP < 1.8s, CLS ~ 0) via Server-Side Rendering (SSR) and next/font optimizations.",
+          "Improved Core Web Vitals through Server-Side Rendering (SSR), asset delivery, and next/font optimisation.",
           "Implemented structured JSON-LD schema, dynamic OpenGraph metadata, and canonical URL handling across thousands of course pages."
         ],
         highlightsVi: [
-          "Đạt chỉ số Core Web Vitals xanh (LCP < 1.8s, CLS ~ 0) thông qua cơ chế SSR và tối ưu hóa font chữ next/font.",
+          "Cải thiện Core Web Vitals thông qua SSR, phân phối tài nguyên và tối ưu font chữ next/font.",
           "Triển khai cấu trúc dữ liệu JSON-LD schema, metadata OpenGraph động và canonical URL cho hàng nghìn trang khóa học."
         ],
         techStack: ["Next.js", "SSR / SSG", "SEO Optimization", "Web Vitals", "TypeScript"]
@@ -2061,8 +2071,8 @@ export const TECH_CATEGORIES: TechCategory[] = [
       {
         name: "Angular",
         highlight: true,
-        capabilities: ["Micro-frontends", "Nx Monorepos", "RxJS", "Dynamic Forms", "Shared UI Libs"],
-        capabilitiesVi: ["Micro-frontends", "Nx Monorepo", "RxJS", "Biểu mẫu động", "Thư viện UI dùng chung"]
+        capabilities: ["Micro-frontends", "Flexible Module Delivery", "RxJS", "Dynamic Forms", "Shared UI Libs"],
+        capabilitiesVi: ["Micro-frontends", "Module Delivery linh động", "RxJS", "Biểu mẫu động", "Thư viện UI dùng chung"]
       },
       {
         name: "Next.js",
@@ -2088,7 +2098,7 @@ export const TECH_CATEGORIES: TechCategory[] = [
     title: "Backend & Microservices",
     titleVi: "Backend & Dịch vụ Microservices",
     tagline: "High-throughput APIs, distributed messaging, and enterprise security",
-    taglineVi: "API tải cao, kết nối luồng sự kiện và tích hợp doanh nghiệp",
+    taglineVi: "API ổn định, kết nối luồng sự kiện và tích hợp doanh nghiệp",
     items: [
       {
         name: "Java / Spring Boot",
@@ -2202,7 +2212,7 @@ export const BENTO_STATS: BentoStat[] = [
     label: "Delivery & Engineering",
     labelVi: "Vận hành Kỹ thuật",
     value: "CI/CD & MFE",
-    description: "Nx Monorepos, Declarative Pipelines & K8s",
-    descriptionVi: "Nx Monorepo, Pipeline tự động & K8s"
+    description: "Flexible MFE Delivery, Declarative Pipelines & K8s",
+    descriptionVi: "MFE Delivery linh động, Pipeline tự động & K8s"
   }
 ];

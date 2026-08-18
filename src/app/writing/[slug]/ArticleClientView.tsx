@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Article } from "@/types";
@@ -9,6 +9,7 @@ import { Footer } from "@/components/layout/Footer";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { PROJECTS_DATA, ARTICLES_DATA, PERSONAL_INFO } from "@/data/portfolioData";
 import { ENGINEERING_EVIDENCE } from "@/data/engineeringEvidence";
+import { getArticleEditorial } from "@/data/articleEditorial";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { CustomCursor } from "@/components/common/CustomCursor";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
@@ -39,10 +40,7 @@ import {
   Video,
   Play,
   Share2,
-  ChevronRight,
-  Terminal,
-  Cpu,
-  Flame
+  Terminal
 } from "lucide-react";
 
 import { LanguageProvider, useLanguage } from "@/context/LanguageContext";
@@ -70,6 +68,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
   const architectureDesign = language === "vi" && article.content.architectureDesignVi ? article.content.architectureDesignVi : article.content.architectureDesign;
   const technicalDecisions = language === "vi" && article.content.technicalDecisionsVi ? article.content.technicalDecisionsVi : article.content.technicalDecisions;
   const keyTakeaways = language === "vi" && article.content.keyTakeawaysVi ? article.content.keyTakeawaysVi : article.content.keyTakeaways;
+  const editorial = getArticleEditorial(article);
 
   // Find related project if exists
   const relatedProject = article.relatedProject
@@ -100,12 +99,13 @@ function ArticleReader({ article }: ArticleClientViewProps) {
   };
 
   const DiagramComponent = DIAGRAM_MAP[article.slug] || (article.diagramKey ? DIAGRAM_MAP[article.diagramKey] : null);
+  const hasDiagram = Boolean(DiagramComponent);
 
-  const tocItems = [
+  const tocItems = useMemo(() => [
     ...(article.highlights && article.highlights.length > 0 ? [{ id: "highlights", label: language === "vi" ? "Chỉ số kiến trúc" : "Key Highlights" }] : []),
     { id: "context", label: t.writing.problemContext },
     ...(article.comparison ? [{ id: "comparison", label: language === "vi" ? "So sánh giải pháp" : "Architecture Comparison" }] : []),
-    ...(Boolean(DiagramComponent) || article.architectureDiagram ? [{ id: "architecture-diagram", label: language === "vi" ? "Sơ đồ hệ thống" : "Architecture Topology" }] : []),
+    ...(hasDiagram || article.architectureDiagram ? [{ id: "architecture-diagram", label: language === "vi" ? "Sơ đồ hệ thống" : "Architecture Topology" }] : []),
     { id: "design", label: t.writing.architecturalSolution },
     { id: "decisions", label: t.writing.technicalDecisions },
     ...(article.sections && article.sections.length > 0 ? article.sections.map((s) => ({ id: s.id, label: language === "vi" && s.titleVi ? s.titleVi : s.title })) : []),
@@ -113,7 +113,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
     ...(verifiedEvidence.length > 0 ? [{ id: "evidence", label: language === "vi" ? "Bằng chứng Repository" : "Verified Evidence" }] : []),
     ...(article.embeds && article.embeds.length > 0 ? [{ id: "media-embeds", label: language === "vi" ? "Tư liệu & Video thực tế" : "Media & Video Records" }] : []),
     { id: "takeaways", label: t.writing.keyTakeaways },
-  ];
+  ], [article, language, verifiedEvidence.length, hasDiagram, t.writing.architecturalSolution, t.writing.codeImplementation, t.writing.keyTakeaways, t.writing.problemContext, t.writing.technicalDecisions]);
 
   // Track Reading Progress & Scroll Spy
   useEffect(() => {
@@ -216,6 +216,9 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                     </span>
                   </>
                 )}
+                <span className="text-emerald-400/80 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+                  {language === "vi" ? editorial.formatVi : editorial.format}
+                </span>
               </div>
 
               {article.repositoryUrl && (
@@ -253,6 +256,9 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                 </span>
               ))}
             </div>
+            <div className="mt-4 text-xs font-mono text-zinc-500">
+              {language === "vi" ? editorial.seriesVi : editorial.series}
+            </div>
           </div>
         </MotionWrapper>
 
@@ -265,8 +271,8 @@ function ArticleReader({ article }: ArticleClientViewProps) {
             </div>
             <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
               {language === "vi"
-                ? "Bản ghi chép này đúc kết các quyết định thiết kế kiến trúc thực chiến, cách xử lý sự cố ranh giới phân tán và các bài học tối ưu hiệu năng đã được kiểm chứng qua mã nguồn sản phẩm."
-                : "This technical note distills real-world architectural design trade-offs, boundary isolation techniques, and verified production benchmarks proven in active repository codebases."}
+                ? `${editorial.formatVi}: ${article.summaryVi || article.summary}`
+                : `${editorial.format}: ${article.summary}`}
             </p>
           </div>
         </MotionWrapper>

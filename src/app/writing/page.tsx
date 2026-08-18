@@ -6,6 +6,7 @@ import { LanguageProvider, useLanguage } from "@/context/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ARTICLES_DATA } from "@/data/portfolioData";
+import { getArticleEditorial } from "@/data/articleEditorial";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { CustomCursor } from "@/components/common/CustomCursor";
@@ -19,10 +20,8 @@ import {
   ArrowRight,
   ArrowLeft,
   Search,
-  Sparkles,
   Layers,
-  Flame,
-  Tag
+  Flame
 } from "lucide-react";
 
 function WritingContent() {
@@ -61,7 +60,9 @@ function WritingContent() {
 
   // Featured hero article (first featured post when not searching)
   const isDefaultView = selectedTag === "All" && !searchQuery;
-  const heroArticle = isDefaultView ? ARTICLES_DATA.find((a) => a.featured) || ARTICLES_DATA[0] : null;
+  const heroArticle = isDefaultView
+    ? ARTICLES_DATA.find((a) => a.slug === "epas-transaction-inbox-and-compliance-boundaries") || ARTICLES_DATA.find((a) => a.featured) || ARTICLES_DATA[0]
+    : null;
   const gridArticles = isDefaultView && heroArticle
     ? filteredArticles.filter((a) => a.slug !== heroArticle.slug)
     : filteredArticles;
@@ -150,10 +151,15 @@ function WritingContent() {
         {heroArticle && (
           <MotionWrapper delay={0.2}>
             <div className="mb-12">
+              {(() => {
+                const editorial = getArticleEditorial(heroArticle);
+                return (
               <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono uppercase tracking-wider mb-3">
                 <Flame className="w-4 h-4 text-emerald-400 animate-pulse" />
-                <span>{t.writing.featuredArticle}</span>
+                <span>{language === "vi" ? `${editorial.seriesVi} · ${editorial.formatVi}` : `${editorial.series} · ${editorial.format}`}</span>
               </div>
+                );
+              })()}
 
               <Link
                 href={`/writing/${heroArticle.slug}`}
@@ -236,6 +242,7 @@ function WritingContent() {
           {gridArticles.map((article, idx) => {
             const articleTitle = language === "vi" && article.titleVi ? article.titleVi : article.title;
             const articleSummary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
+            const editorial = getArticleEditorial(article);
 
             return (
               <MotionWrapper key={article.slug} delay={0.1 + idx * 0.05}>
@@ -251,6 +258,8 @@ function WritingContent() {
                         {article.date}
                       </span>
                       <span>•</span>
+                      <span className="text-emerald-400/80">{language === "vi" ? editorial.formatVi : editorial.format}</span>
+                      <span>•</span>
                       <span className="flex items-center gap-1.5 text-zinc-400">
                         <Clock className="w-3.5 h-3.5 text-emerald-400" />
                         {article.readTime}
@@ -265,6 +274,9 @@ function WritingContent() {
                     {/* Summary */}
                     <p className="text-sm text-zinc-400 leading-relaxed mb-6 font-normal">
                       {articleSummary}
+                    </p>
+                    <p className="text-[11px] font-mono text-zinc-500 mb-5">
+                      {language === "vi" ? editorial.seriesVi : editorial.series}
                     </p>
                   </div>
 

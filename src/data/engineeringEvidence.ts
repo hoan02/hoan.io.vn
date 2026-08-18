@@ -180,17 +180,17 @@ export const ENGINEERING_EVIDENCE: EngineeringEvidence[] = [
     id: "epas-enterprise-mfe-k8s",
     project: "epas",
     category: "architecture",
-    claim: "Designed and maintained enterprise Angular Micro-Frontend architecture with shared design systems, Spring Boot microservices, and Kubernetes rollouts at NGV Group.",
-    claimVi: "Thiết kế và duy trì kiến trúc Angular Micro-Frontend với hệ thống UI dùng chung, Spring Boot microservices và triển khai Kubernetes tại NGV Group.",
+    claim: "Built and evolved the Angular Micro-Frontend foundation for EPAS at NGV Group, including shared UI, lending and disbursement forms, transaction inboxes, workflow-facing screens, reporting surfaces, and private Kubernetes delivery.",
+    claimVi: "Xây dựng và tái cấu trúc nền tảng Angular Micro-Frontend cho EPAS tại NGV Group, gồm UI dùng chung, biểu mẫu cho vay và giải ngân, hộp thư giao dịch, màn hình gắn với workflow, bề mặt báo cáo và delivery trên Kubernetes private.",
     evidence: [
       {
         repository: "Private Enterprise Work (NGV Group)",
-        description: "Nx monorepo Angular shell with CRM/BPM remotes, dynamic forms, transaction inboxes, Kafka event streaming, and Jenkins CI/CD on on-premises Kubernetes."
+        description: "Private enterprise work: an Angular host with independently delivered CRM/BPM and credit-workflow modules. The early foundation used Nx, then the frontend structure was redesigned without Nx; the system includes dynamic forms, transaction inboxes, workflow and audit-facing UI, Kafka integration, and Jenkins CI/CD on on-premises Kubernetes."
       }
     ],
     confidence: "direct",
-    relatedArticles: ["angular-microfrontend-architecture", "practical-cicd-jenkins-k8s", "angular-complex-list-state"],
-    technologies: ["Angular", "Micro-Frontend", "Nx", "Java Spring Boot", "Oracle", "PostgreSQL", "Kafka", "Keycloak", "Kubernetes", "Jenkins"]
+    relatedArticles: ["angular-microfrontend-architecture", "epas-transaction-inbox-and-compliance-boundaries", "epas-private-enterprise-delivery"],
+    technologies: ["Angular", "Micro-Frontend", "Java Spring Boot", "Oracle", "PostgreSQL", "Kafka", "Keycloak", "Kubernetes", "Jenkins"]
   },
   {
     id: "homelab-3node-longhorn",
@@ -205,7 +205,7 @@ export const ENGINEERING_EVIDENCE: EngineeringEvidence[] = [
       }
     ],
     confidence: "direct",
-    relatedArticles: ["kubernetes-homelab-k3s", "production-like-platform-three-node-k3s-cluster"],
+    relatedArticles: ["production-like-platform-three-node-k3s-cluster"],
     technologies: ["Kubernetes", "K3s", "Longhorn", "Traefik", "Linux", "Ubuntu", "Docker"]
   },
 

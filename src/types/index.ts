@@ -31,6 +31,44 @@ export interface Project {
   featured: boolean;
   image: string;
   accentColor?: string;
+  editorial?: ProjectEditorial;
+}
+
+export type ProjectGroup = "professional" | "products" | "systems";
+
+export interface ProjectHighlight {
+  id: string;
+  title: string;
+  titleVi?: string;
+  summary: string;
+  summaryVi?: string;
+  articleSlugs: string[];
+}
+
+export interface ProjectWorkflowArea {
+  id: string;
+  title: string;
+  titleVi?: string;
+  summary: string;
+  summaryVi?: string;
+}
+
+export interface ProjectEditorial {
+  group: ProjectGroup;
+  groupLabel: string;
+  groupLabelVi: string;
+  status: string;
+  statusVi: string;
+  context: string;
+  contextVi: string;
+  roleScope: string;
+  roleScopeVi: string;
+  publicNote?: string;
+  publicNoteVi?: string;
+  outcomes?: string[];
+  outcomesVi?: string[];
+  workflowAreas?: ProjectWorkflowArea[];
+  highlights: ProjectHighlight[];
 }
 
 export interface ArticleHighlight {
@@ -96,6 +134,11 @@ export interface Article {
   heroImageCaption?: string;
   heroImageCaptionVi?: string;
   embeds?: ArticleEmbed[];
+  format?: "case-study" | "architecture-note" | "decision-record" | "build-log" | "field-note" | "personal-essay";
+  formatVi?: string;
+  series?: string;
+  seriesVi?: string;
+  relatedHighlightId?: string;
   highlights?: ArticleHighlight[];
   comparison?: ArticleComparison;
   architectureDiagram?: string;

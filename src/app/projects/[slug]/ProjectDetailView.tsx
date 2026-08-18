@@ -8,6 +8,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { PROJECTS_DATA, ARTICLES_DATA } from "@/data/portfolioData";
+import { getProjectEditorial } from "@/data/projectEditorial";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { CustomCursor } from "@/components/common/CustomCursor";
 import { GithubIcon } from "@/components/common/Icons";
@@ -19,18 +20,14 @@ import {
   ArrowLeft,
   ArrowRight,
   ExternalLink,
-  Calendar,
-  Layers,
   CheckCircle2,
   AlertCircle,
   Cpu,
-  Server,
   Activity,
   Sparkles,
   BookOpen,
   Share2,
-  Check,
-  Code2
+  Check
 } from "lucide-react";
 
 interface ProjectDetailViewProps {
@@ -53,16 +50,22 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
   const projectRole = language === "vi" && project.roleVi ? project.roleVi : project.role;
   const projectArchitecture = language === "vi" && project.architectureVi ? project.architectureVi : project.architecture;
   const projectContributions = language === "vi" && project.contributionsDetailedVi ? project.contributionsDetailedVi : project.contributionsDetailed;
-  const projectResults = language === "vi" && project.resultsVi ? project.resultsVi : project.results;
   const projectMetrics = language === "vi" && project.metricsVi ? project.metricsVi : project.metrics;
+  const editorial = getProjectEditorial(project);
+  const projectOverview = language === "vi" ? editorial?.contextVi : editorial?.context;
+  const projectResults = editorial
+    ? (language === "vi" ? editorial.outcomesVi : editorial.outcomes)
+    : (language === "vi" && project.resultsVi ? project.resultsVi : project.results);
+  const editorialArticleSlugs = editorial
+    ? editorial.highlights.flatMap((highlight) => highlight.articleSlugs)
+    : [];
 
   // Diagram Component mapping
   const DiagramComponent = DIAGRAM_MAP[project.id];
 
   // Related Articles
-  const relatedArticles = project.relatedArticles
-    ? ARTICLES_DATA.filter((a) => project.relatedArticles?.includes(a.slug))
-    : [];
+  const relatedArticleSlugs = Array.from(new Set([...(project.relatedArticles || []), ...editorialArticleSlugs]));
+  const relatedArticles = ARTICLES_DATA.filter((a) => relatedArticleSlugs.includes(a.slug));
 
   // Next & Prev Project
   const currentIndex = PROJECTS_DATA.findIndex((p) => p.id === project.id);
@@ -163,6 +166,115 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
           </div>
         </MotionWrapper>
 
+        {/* Editorial context: why this project exists and what Hoan owned */}
+        {editorial && (
+          <MotionWrapper delay={0.08}>
+            <section className="mb-12 rounded-2xl bg-emerald-500/[0.05] border border-emerald-500/20 p-6 sm:p-8">
+              <div className="flex flex-wrap items-center gap-2 mb-5">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-mono uppercase tracking-wider text-emerald-400">
+                  {language === "vi" ? editorial.groupLabelVi : editorial.groupLabel}
+                </span>
+                <span className="text-xs font-mono text-zinc-400">{language === "vi" ? editorial.statusVi : editorial.status}</span>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-3">
+                    {language === "vi" ? "Hệ thống này phục vụ điều gì" : "What this system is for"}
+                  </h2>
+                  <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
+                    {language === "vi" ? editorial.contextVi : editorial.context}
+                  </p>
+                </div>
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-3">
+                    {language === "vi" ? "Phạm vi Hoan trực tiếp phụ trách" : "What I owned"}
+                  </h2>
+                  <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
+                    {language === "vi" ? editorial.roleScopeVi : editorial.roleScope}
+                  </p>
+                </div>
+              </div>
+              {editorial.publicNote && (
+                <p className="mt-6 pt-5 border-t border-emerald-500/15 text-xs text-zinc-400 leading-relaxed">
+                  {language === "vi" ? editorial.publicNoteVi : editorial.publicNote}
+                </p>
+              )}
+            </section>
+          </MotionWrapper>
+        )}
+
+        {/* Business workflow surface: explain the product before the implementation */}
+        {editorial?.workflowAreas && editorial.workflowAreas.length > 0 && (
+          <MotionWrapper delay={0.085}>
+            <section className="mb-12">
+              <div className="mb-5 max-w-3xl">
+                <h2 className="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-2">
+                  {language === "vi" ? "Phạm vi nghiệp vụ" : "Business workflow surface"}
+                </h2>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  {language === "vi"
+                    ? "EPAS không phải một bộ màn hình rời rạc: mỗi phân hệ là một phần của chuỗi nghiệp vụ có dữ liệu, trạng thái, người xử lý và đầu ra báo cáo."
+                    : "EPAS is not a collection of isolated screens: each module is part of a business chain with data, state, responsible actors, and reporting outputs."}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {editorial.workflowAreas.map((area, index) => (
+                  <div key={area.id} className="rounded-xl bg-zinc-950/70 border border-zinc-800/80 p-5">
+                    <div className="text-[11px] font-mono text-emerald-400/80 mb-4">0{index + 1}</div>
+                    <h3 className="text-base font-bold text-white mb-2">
+                      {language === "vi" && area.titleVi ? area.titleVi : area.title}
+                    </h3>
+                    <p className="text-sm text-zinc-400 leading-relaxed">
+                      {language === "vi" && area.summaryVi ? area.summaryVi : area.summary}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </MotionWrapper>
+        )}
+
+        {/* Highlight threads are the bridge between a project and its writing */}
+        {editorial && editorial.highlights.length > 0 && (
+          <MotionWrapper delay={0.09}>
+            <section className="mb-12">
+              <div className="flex items-end justify-between gap-4 mb-5">
+                <div>
+                  <h2 className="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-2">
+                    {language === "vi" ? "Các điểm nổi bật được đào sâu" : "Engineering threads behind the project"}
+                  </h2>
+                  <p className="text-sm text-zinc-400">
+                    {language === "vi" ? "Mỗi điểm dưới đây dẫn tới những ghi chép tập trung vào một quyết định hoặc bài toán cụ thể." : "Each thread links to notes focused on one concrete decision or engineering problem."}
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {editorial.highlights.map((highlight) => {
+                  const highlightTitle = language === "vi" && highlight.titleVi ? highlight.titleVi : highlight.title;
+                  const highlightSummary = language === "vi" && highlight.summaryVi ? highlight.summaryVi : highlight.summary;
+                  const highlightArticles = ARTICLES_DATA.filter((article) => highlight.articleSlugs.includes(article.slug));
+                  return (
+                    <div key={highlight.id} className="rounded-xl bg-zinc-950/70 border border-zinc-800/80 p-5">
+                      <h3 className="text-base font-bold text-white mb-2">{highlightTitle}</h3>
+                      <p className="text-sm text-zinc-400 leading-relaxed mb-4">{highlightSummary}</p>
+                      {highlightArticles.length > 0 && (
+                        <div className="space-y-2 pt-3 border-t border-zinc-800/80">
+                          {highlightArticles.map((article) => (
+                            <Link key={article.slug} href={`/writing/${article.slug}`} className="flex items-start gap-2 text-xs text-emerald-400 hover:text-emerald-300 transition-colors">
+                              <BookOpen className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                              <span>{language === "vi" && article.titleVi ? article.titleVi : article.title}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          </MotionWrapper>
+        )}
+
         {/* Tech Stack Pills Bar */}
         <MotionWrapper delay={0.1}>
           <div className="mb-12 p-6 sm:p-7 rounded-2xl bg-zinc-950/70 border border-zinc-800/80">
@@ -211,7 +323,7 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
                 <span>{t.selectedWork.overview}</span>
               </h2>
               <p className="text-base text-zinc-300 leading-relaxed font-normal">
-                {projectDesc}
+                {projectOverview || projectDesc}
               </p>
             </div>
 

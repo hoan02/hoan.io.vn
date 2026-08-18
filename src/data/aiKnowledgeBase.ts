@@ -25,12 +25,12 @@ export const CATEGORIZED_PROMPTS: PromptCategory[] = [
     categoryEn: "Featured Work",
     categoryVi: "Dự án Tiêu biểu",
     promptsEn: [
-      { badge: "EPAS System", text: "What is Hoan's main enterprise project (EPAS)?" },
+      { badge: "EPAS System", text: "What does Hoan work on in EPAS, and what kind of enterprise workflows does it support?" },
       { badge: "Puchi Platform", text: "How did Hoan architect Puchidemy with 5 Go microservices?" },
       { badge: "K8s Homelab", text: "Tell me about his 3-Node Kubernetes Homelab cluster." }
     ],
     promptsVi: [
-      { badge: "Hệ thống EPAS", text: "Dự án EPAS tại NGV Group của Hoan làm những gì?" },
+      { badge: "Hệ thống EPAS", text: "Hoan làm gì trong EPAS và hệ thống này hỗ trợ những quy trình enterprise nào?" },
       { badge: "Nền tảng Puchi", text: "Hoan đã thiết kế hệ thống Puchidemy với 5 Go microservices ra sao?" },
       { badge: "Homelab K8s", text: "Hạ tầng cụm 3-Node Kubernetes Homelab của Hoan ra sao?" }
     ]
@@ -84,10 +84,10 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
     keywords: ["epas", "ngv", "ngv group", "strongest", "best", "highlight", "main project", "top project", "dự án tốt nhất", "dự án nổi bật", "tự động hóa", "bpm", "crm"],
     patterns: [/epas/i, /ngv\s*group/i, /strongest/i, /best\s+project/i, /dự\s*án\s*nổi\s*bật/i, /dự\s*án\s*chính/i],
     responseEn: {
-      answer: `Hoan's flagship enterprise project is **EPAS (Enterprise Process Automation System)** at NGV Group:
-• **Frontend Architecture**: Designed & maintained Angular Micro-Frontend architecture with shared design libraries, dynamic forms, data tables, pagination, and transaction inboxes.
-• **Backend & Integrations**: Integrated with Java Spring Boot microservices, Oracle, PostgreSQL, Redis, Kafka, and Keycloak OIDC.
-• **DevOps & Cloud**: Implemented automated CI/CD with Jenkins, Docker, and deployed on on-premises Kubernetes clusters.`,
+      answer: `Hoan's flagship enterprise project is **EPAS (Enterprise Process Automation System)** at NGV Group. It is used across multiple credit institutions, including central-level organizations and People's Credit Funds, to coordinate lending, appraisal and approval, disbursement, post-disbursement operations, transaction handling, and operational or compliance reporting.
+• **Frontend Architecture**: Built Angular Micro-Frontend foundations, shared UI libraries, dynamic forms, data tables, pagination, and transaction inboxes. The project started with Nx and later moved away from it after the frontend structure was redesigned for more flexibility.
+• **Enterprise Contracts**: Integrated frontend flows with Java Spring Boot services, Oracle/PostgreSQL data contracts, Redis/Kafka infrastructure, and Keycloak-based access control.
+• **Delivery**: Supported Jenkins, Docker, and private Kubernetes delivery without exposing customer data or regulated figures publicly.`,
       relatedTopic: "Projects & Architecture",
       tags: ["Angular", "Micro-Frontend", "Spring Boot", "Kafka", "Oracle", "Kubernetes", "Jenkins"],
       relevantLinks: [
@@ -96,10 +96,10 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
       ]
     },
     responseVi: {
-      answer: `Dự án tiêu biểu nhất của Hoan là **EPAS (Enterprise Process Automation System)** tại NGV Group:
-• **Kiến trúc Frontend**: Thiết kế và duy trì kiến trúc Angular Micro-Frontend, thư viện UI dùng chung, biểu mẫu động (dynamic forms), bảng dữ liệu, phân trang và hộp thư giao dịch.
-• **Backend & Tích hợp**: Tích hợp với Java Spring Boot microservices, CSDL Oracle & PostgreSQL, luồng sự kiện Kafka, Redis cache và bảo mật Keycloak.
-• **DevOps & Triển khai**: Xây dựng CI/CD tự động qua Jenkins, đóng gói Docker và vận hành trên cụm Kubernetes on-premises.`,
+      answer: `Dự án enterprise tiêu biểu nhất của Hoan là **EPAS (Enterprise Process Automation System)** tại NGV Group. Hệ thống được sử dụng tại nhiều tổ chức tín dụng, gồm các đơn vị cấp trung ương và quỹ tín dụng nhân dân, để điều phối quy trình cho vay, thẩm định/phê duyệt, giải ngân, nghiệp vụ sau giải ngân, xử lý giao dịch và báo cáo vận hành/tuân thủ.
+• **Kiến trúc Frontend**: Xây dựng Angular Micro-Frontend, thư viện UI dùng chung, dynamic forms, bảng dữ liệu, phân trang và transaction inbox. Dự án ban đầu dùng Nx, sau đó được tái cấu trúc và loại bỏ Nx để frontend linh động hơn.
+• **Contract Enterprise**: Tích hợp luồng frontend với Java Spring Boot, dữ liệu Oracle/PostgreSQL, Redis/Kafka và phân quyền qua Keycloak.
+• **Delivery**: Hỗ trợ Jenkins, Docker và Kubernetes private; không công khai dữ liệu khách hàng hoặc số liệu tuân thủ nhạy cảm.`,
       relatedTopic: "Dự án Nổi bật",
       tags: ["Angular", "Micro-Frontend", "Spring Boot", "Kafka", "Oracle", "Kubernetes", "Jenkins"],
       relevantLinks: [
@@ -116,9 +116,9 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
       answer: `Hoan has deep production experience with **Angular & Micro-Frontend architecture**:
 • Standardized shared design libraries, routing, dynamic forms, data tables, and pagination for enterprise systems.
 • Built Zalo Official Account message management and CRM/BPM workflow interfaces.
-• Developed with TypeScript, reactive RxJS streams, and NX monorepo foundations.`,
+• Developed with TypeScript, reactive RxJS streams, and a flexible module delivery structure; Nx was used during the early EPAS foundation and later removed.`,
       relatedTopic: "Frontend Tech Stack",
-      tags: ["Angular", "Micro-Frontend", "TypeScript", "NX", "RxJS"],
+      tags: ["Angular", "Micro-Frontend", "TypeScript", "RxJS", "EPAS"],
       relevantLinks: [
         { label: "Inspect Tech Stack", url: "#tech-stack" },
         { label: "View EPAS Project", url: "#selected-work" }
@@ -128,9 +128,9 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
       answer: `Hoan có kinh nghiệm chuyên sâu với **Angular & Kiến trúc Micro-Frontend**:
 • Chuẩn hóa thư viện giao diện dùng chung, cơ chế định tuyến, biểu mẫu động (dynamic forms) và bảng dữ liệu cho hệ thống doanh nghiệp.
 • Xây dựng phân hệ quản lý hội thoại Zalo Official Account và luồng quy trình CRM/BPM.
-• Sử dụng thành thạo TypeScript, RxJS reactive patterns và nền tảng NX monorepo.`,
+• Sử dụng TypeScript, RxJS reactive patterns và đã tham gia tái cấu trúc từ nền tảng Nx ban đầu sang mô hình module delivery linh động hơn.`,
       relatedTopic: "Kỹ năng Frontend",
-      tags: ["Angular", "Micro-Frontend", "TypeScript", "NX", "RxJS"],
+      tags: ["Angular", "Micro-Frontend", "TypeScript", "RxJS", "EPAS"],
       relevantLinks: [
         { label: "Xem Tech Stack", url: "#tech-stack" },
         { label: "Xem Dự án EPAS", url: "#selected-work" }
@@ -196,7 +196,7 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
       relatedTopic: "Hobbies & Interests",
       tags: ["Homelab", "Self-hosting", "Side Projects", "System Architecture"],
       relevantLinks: [
-        { label: "Read Homelab Note", url: "/writing/kubernetes-homelab-k3s" },
+        { label: "Read Homelab Note", url: "/writing/production-like-platform-three-node-k3s-cluster" },
         { label: "Engineering Notes", url: "/writing" }
       ]
     },
@@ -205,7 +205,7 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
       relatedTopic: "Sở thích Cá nhân",
       tags: ["Homelab", "Self-hosting", "Side Projects", "Kiến trúc Hệ thống"],
       relevantLinks: [
-        { label: "Xem Bài viết Homelab", url: "/writing/kubernetes-homelab-k3s" },
+        { label: "Xem Bài viết Homelab", url: "/writing/production-like-platform-three-node-k3s-cluster" },
         { label: "Engineering Notes", url: "/writing" }
       ]
     }
@@ -339,8 +339,8 @@ export function queryAIKnowledgeBase(query: string, lang: "en" | "vi" = "en"): A
 
   if (isVi) {
     return {
-      answer: `Lê Công Hoan là Kỹ sư Full-stack Developer (Tốt nghiệp loại Giỏi ĐH Giao thông Vận tải) chuyên sâu về **Angular Micro-Frontend, Next.js, Java Spring Boot, Oracle, PostgreSQL, Kafka, Docker và Kubernetes**.
-Hoan hiện đang phát triển hệ thống EPAS tại **NGV Group** và từng phát triển nền tảng học ngoại ngữ tại **MochiMochi**.`,
+      answer: `Lê Công Hoan là Full-stack Engineer & System Builder (Tốt nghiệp loại Giỏi ĐH Giao thông Vận tải), chuyên về **nền tảng workflow enterprise, Angular Micro-Frontend, Next.js, Java Spring Boot, Go, hệ thống phân tán, Docker và Kubernetes**.
+Hoan hiện phát triển EPAS tại **NGV Group** — nền tảng tự động hóa quy trình cho nhiều tổ chức tín dụng, bao gồm quy trình cho vay, giải ngân, vận hành và báo cáo — đồng thời xây dựng ARDA, Puchi và các dự án hệ thống cá nhân.`,
       relatedTopic: "Hồ sơ Tổng quan",
       tags: ["Full-stack", "NGV Group", "EPAS", "Angular", "Spring Boot", "Kubernetes"],
       relevantLinks: [
@@ -352,8 +352,8 @@ Hoan hiện đang phát triển hệ thống EPAS tại **NGV Group** và từng
   }
 
   return {
-    answer: `Le Cong Hoan is a Full-stack Developer (Graduated with Distinction from UTC) specializing in **Angular Micro-Frontends, Next.js, Java Spring Boot, Oracle, PostgreSQL, Kafka, Docker, and Kubernetes**.
-He currently develops the EPAS automation platform at **NGV Group** and previously worked at **MochiMochi**.`,
+      answer: `Le Cong Hoan is a Full-stack Engineer & System Builder (Graduated with Distinction from UTC) specializing in **enterprise workflow platforms, Angular Micro-Frontends, Next.js, Java Spring Boot, Go, distributed systems, Docker, and Kubernetes**.
+He currently develops EPAS at **NGV Group**, a private enterprise process platform supporting complex financial and operational workflows, and builds ARDA, Puchi, and systems projects in parallel.`,
     relatedTopic: "General Profile",
     tags: ["Full-stack", "NGV Group", "EPAS", "Angular", "Spring Boot", "Kubernetes"],
     relevantLinks: [

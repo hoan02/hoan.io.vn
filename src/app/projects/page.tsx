@@ -2,11 +2,11 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { LanguageProvider, useLanguage } from "@/context/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PROJECTS_DATA } from "@/data/portfolioData";
+import { getProjectEditorial } from "@/data/projectEditorial";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { CustomCursor } from "@/components/common/CustomCursor";
@@ -21,12 +21,7 @@ import {
   ArrowLeft,
   Search,
   ExternalLink,
-  Sparkles,
   Layers,
-  CheckCircle2,
-  Cpu,
-  Server,
-  Terminal,
   Activity
 } from "lucide-react";
 
@@ -40,7 +35,7 @@ function ProjectsContent() {
   const handleOpenAI = () => setAiModalOpen(true);
   const handleCloseAI = () => setAiModalOpen(false);
 
-  const categories = ["All", "Full-stack", "Backend", "Frontend", "DevOps & Cloud", "Systems & IoT"];
+  const categories = ["All", "Full-stack", "Backend", "Frontend", "DevOps & Cloud", "Systems & IoT", "Desktop & IoT"];
 
   const filteredProjects = useMemo(() => {
     return PROJECTS_DATA.filter((project) => {
@@ -98,8 +93,8 @@ function ProjectsContent() {
             </h1>
             <p className="text-base sm:text-lg text-zinc-400 max-w-3xl font-normal leading-relaxed">
               {language === "vi"
-                ? "Tổng hợp các dự án hệ thống phân tán, vi kiến trúc microservices, micro-frontend và công cụ IoT. Mỗi dự án đều đi kèm sơ đồ kiến trúc, phân tích trade-offs và số liệu thực tế."
-                : "A collection of distributed systems, microservices architectures, micro-frontends, and IoT runtime bridges. Every project includes architectural topology, design trade-offs, and production metrics."}
+                ? "Các dự án được chia theo hệ thống chuyên nghiệp, sản phẩm tự xây dựng và các thử nghiệm hệ thống. Mỗi case study bắt đầu từ bối cảnh, phạm vi đóng góp và những điểm kỹ thuật được đào sâu trong phần Writing."
+                : "Professional systems, self-owned products, and systems experiments. Each case study starts with context, ownership, and the engineering threads explored in Writing."}
             </p>
           </div>
         </MotionWrapper>
@@ -170,6 +165,13 @@ function ProjectsContent() {
               const projectTitle = language === "vi" && project.titleVi ? project.titleVi : project.title;
               const projectDesc = language === "vi" && project.descriptionVi ? project.descriptionVi : project.description;
               const projectRole = language === "vi" && project.roleVi ? project.roleVi : project.role;
+              const editorial = getProjectEditorial(project);
+              const primaryHighlight = editorial?.highlights[0];
+              const projectContext = language === "vi" ? editorial?.contextVi : editorial?.context;
+              const projectGroup = language === "vi" ? editorial?.groupLabelVi : editorial?.groupLabel;
+              const projectStatus = language === "vi" ? editorial?.statusVi : editorial?.status;
+              const highlightTitle = language === "vi" && primaryHighlight?.titleVi ? primaryHighlight.titleVi : primaryHighlight?.title;
+              const highlightSummary = language === "vi" && primaryHighlight?.summaryVi ? primaryHighlight.summaryVi : primaryHighlight?.summary;
 
               return (
                 <MotionWrapper key={project.id} delay={0.1 + (idx % 6) * 0.05}>
@@ -182,7 +184,7 @@ function ProjectsContent() {
                       <div className="flex items-center justify-between gap-3 mb-4">
                         <div className="flex items-center gap-2">
                           <span className="text-[11px] font-mono px-2.5 py-1 rounded bg-zinc-900 text-emerald-400 border border-zinc-800">
-                            {project.category}
+                            {projectGroup || project.category}
                           </span>
                           <span className="text-xs font-mono text-zinc-500">
                             {project.year}
@@ -226,24 +228,24 @@ function ProjectsContent() {
 
                       {/* Subtitle / Role */}
                       <p className="text-xs font-mono text-emerald-400/80 mb-4">
-                        {projectRole}
+                        {projectStatus || projectRole}
                       </p>
 
                       {/* Description */}
-                      <p className="text-sm text-zinc-400 leading-relaxed line-clamp-3 mb-6">
-                        {projectDesc}
+                      <p className="text-sm text-zinc-300 leading-relaxed line-clamp-4 mb-6">
+                        {projectContext || projectDesc}
                       </p>
 
-                      {/* Key Metric Highlights (if available) */}
-                      {project.metrics && project.metrics.length > 0 && (
-                        <div className="mb-6 p-3.5 rounded-xl bg-zinc-900/50 border border-zinc-800/60 space-y-1.5">
-                          <div className="flex items-center gap-1.5 text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-1">
+                      {/* Project highlight connected to the writing archive */}
+                      {primaryHighlight && (
+                        <div className="mb-6 p-4 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/20 space-y-1.5">
+                          <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 uppercase tracking-wider mb-1">
                             <Activity className="w-3 h-3 text-emerald-400" />
-                            <span>Highlights</span>
+                            <span>{language === "vi" ? "Điểm nổi bật" : "Engineering thread"}</span>
                           </div>
-                          <div className="text-xs text-zinc-300 line-clamp-2">
-                            • {language === "vi" && project.metricsVi ? project.metricsVi[0] : project.metrics[0]}
-                          </div>
+                          <p className="text-sm font-semibold text-zinc-100">{highlightTitle}</p>
+                          <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2">{highlightSummary}</p>
+                          <p className="text-[11px] text-emerald-400 font-mono pt-1">{primaryHighlight.articleSlugs.length} {language === "vi" ? "bài viết đào sâu" : "deep-dive notes"}</p>
                         </div>
                       )}
                     </div>

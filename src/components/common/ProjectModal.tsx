@@ -7,9 +7,10 @@ import { Project } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { ARTICLES_DATA } from "@/data/portfolioData";
+import { getProjectEditorial } from "@/data/projectEditorial";
 import { GithubIcon } from "@/components/common/Icons";
 import { TechBadge } from "@/components/common/TechIcon";
-import { X, ExternalLink, CheckCircle2, Layers, Cpu, AlertCircle, Wrench, BookOpen, ArrowRight } from "lucide-react";
+import { X, CheckCircle2, Layers, Cpu, AlertCircle, Wrench, BookOpen, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ProjectModalProps {
@@ -39,16 +40,19 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   const projectTitle = language === "vi" && project.titleVi ? project.titleVi : project.title;
   const projectSubtitle = language === "vi" && project.subtitleVi ? project.subtitleVi : project.subtitle;
-  const projectLongDesc = language === "vi" && project.longDescriptionVi ? project.longDescriptionVi : (project.longDescription || project.description);
   const projectProblem = language === "vi" && project.problemVi ? project.problemVi : project.problem;
   const projectContributions = language === "vi" && project.contributionsDetailedVi ? project.contributionsDetailedVi : project.contributionsDetailed;
-  const projectResults = language === "vi" && project.resultsVi ? project.resultsVi : (project.results || project.metrics);
   const projectRole = language === "vi" && project.roleVi ? project.roleVi : project.role;
+  const editorial = getProjectEditorial(project);
+  const projectResults = editorial
+    ? (language === "vi" ? editorial.outcomesVi : editorial.outcomes)
+    : (language === "vi" && project.resultsVi ? project.resultsVi : (project.results || project.metrics));
+  const projectContext = language === "vi" ? editorial?.contextVi : editorial?.context;
+  const projectHighlight = editorial?.highlights[0];
 
   // Find related articles
-  const relatedArticles = project.relatedArticles
-    ? ARTICLES_DATA.filter((a) => project.relatedArticles?.includes(a.slug))
-    : [];
+  const relatedArticleSlugs = Array.from(new Set([...(project.relatedArticles || []), ...(editorial?.highlights.flatMap((highlight) => highlight.articleSlugs) || [])]));
+  const relatedArticles = ARTICLES_DATA.filter((a) => relatedArticleSlugs.includes(a.slug));
 
   return (
     <AnimatePresence>
@@ -96,6 +100,25 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           <p className="text-sm sm:text-base text-zinc-400 mb-6 leading-relaxed">
             {projectSubtitle}
           </p>
+
+          {editorial && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+              <div className="rounded-xl bg-emerald-500/[0.05] border border-emerald-500/20 p-4">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block mb-2">
+                  {language === "vi" ? "Bối cảnh" : "Context"}
+                </span>
+                <p className="text-xs text-zinc-300 leading-relaxed">{projectContext}</p>
+              </div>
+              {projectHighlight && (
+                <div className="rounded-xl bg-zinc-900/70 border border-zinc-800 p-4">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block mb-2">
+                    {language === "vi" ? "Điểm nổi bật" : "Engineering thread"}
+                  </span>
+                  <p className="text-xs font-semibold text-white">{language === "vi" && projectHighlight.titleVi ? projectHighlight.titleVi : projectHighlight.title}</p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Visual Banner */}
           <div className="relative w-full aspect-[21/9] sm:aspect-[24/9] rounded-xl overflow-hidden mb-8 border border-zinc-800 bg-zinc-900">

@@ -302,7 +302,7 @@ async function callGeminiAPI(
   const relevantLinks: { label: string; url: string }[] = [];
 
   if (lowerQuery.includes("arda") || lowerQuery.includes("finops")) {
-    relevantLinks.push({ label: "Read Arda Architecture Note", url: "/writing/arda-finops-microservices-module-federation" });
+    relevantLinks.push({ label: "Read Arda Architecture Note", url: "/writing/designing-arda-cloud-native-finops-platform" });
     relevantLinks.push({ label: "Arda GitHub", url: "https://github.com/arda-labs" });
   }
   if (lowerQuery.includes("puchi") || lowerQuery.includes("học tiếng việt")) {

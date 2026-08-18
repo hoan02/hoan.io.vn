@@ -2,6 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PROJECTS_DATA } from "@/data/portfolioData";
+import { getProjectEditorial } from "@/data/projectEditorial";
 import ProjectDetailView from "./ProjectDetailView";
 
 interface PageProps {
@@ -24,13 +25,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  const editorial = getProjectEditorial(project);
+  const description = editorial?.context || project.description;
+
   return {
     title: `${project.title} — Architecture Case Study | Le Cong Hoan`,
-    description: project.description,
+    description,
     keywords: [...project.techStack, project.category, "Software Architecture", "Le Cong Hoan"],
     openGraph: {
       title: `${project.title} — System Architecture Case Study`,
-      description: project.description,
+      description,
       type: "website",
       url: `https://hoan.io.vn/projects/${project.id}`,
     },

@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ARTICLES_DATA } from "@/data/portfolioData";
+import { getArticleEditorial } from "@/data/articleEditorial";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
@@ -14,11 +15,7 @@ import {
   Sparkles,
   Clock,
   Calendar,
-  Layers,
-  Terminal,
-  Zap,
-  CheckCircle2,
-  Cpu
+  Terminal
 } from "lucide-react";
 
 export function LatestWriting() {
@@ -27,18 +24,19 @@ export function LatestWriting() {
 
   // 1. Primary Spotlight Flagship Article
   const flagshipArticle = ARTICLES_DATA.find(
-    (a) => a.slug === "designing-arda-cloud-native-finops-platform"
+    (a) => a.slug === "epas-transaction-inbox-and-compliance-boundaries"
   ) || ARTICLES_DATA[0];
 
   // 2. Secondary Companion Articles (2 selected deep-dives)
   const secondaryArticles = ARTICLES_DATA.filter(
     (a) =>
-      a.slug === "production-like-platform-three-node-k3s-cluster" ||
-      a.slug === "why-puchi-uses-opaque-sessions-over-jwt"
+      a.slug === "designing-arda-cloud-native-finops-platform" ||
+      a.slug === "building-puchi-product-idea-to-service-architecture"
   ).slice(0, 2);
 
   const flagshipTitle = language === "vi" && flagshipArticle.titleVi ? flagshipArticle.titleVi : flagshipArticle.title;
   const flagshipSummary = language === "vi" && flagshipArticle.summaryVi ? flagshipArticle.summaryVi : flagshipArticle.summary;
+  const flagshipEditorial = getArticleEditorial(flagshipArticle);
 
   return (
     <section id="writing" className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
@@ -73,7 +71,7 @@ export function LatestWriting() {
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Flagship Architecture Deep Dive</span>
+                  <span>{language === "vi" ? flagshipEditorial.formatVi : flagshipEditorial.format}</span>
                 </span>
                 <span className="flex items-center gap-1 text-xs font-mono text-zinc-400">
                   <Calendar className="w-3 h-3 text-zinc-500" />
@@ -122,7 +120,7 @@ export function LatestWriting() {
 
               {/* Tech Stack Badges */}
               <div className="flex flex-wrap gap-2 pt-2">
-                {flagshipArticle.tags.slice(0, 5).map((tech, idx) => (
+                  {flagshipArticle.tags.slice(0, 5).map((tech, idx) => (
                   <TechBadge key={idx} name={tech} size="xs" />
                 ))}
               </div>
@@ -139,43 +137,35 @@ export function LatestWriting() {
               </div>
             </div>
 
-            {/* Right Column: Visual Architecture Flow Box */}
+            {/* Right Column: The engineering thread behind the note */}
             <div className="lg:col-span-5 bg-zinc-900/60 rounded-2xl p-5 sm:p-6 border border-zinc-800/80 space-y-4 shadow-inner">
               <div className="flex items-center justify-between pb-3 border-b border-zinc-800/80 text-xs font-mono text-zinc-400">
                 <div className="flex items-center gap-2">
                   <Terminal className="w-4 h-4 text-emerald-400" />
-                  <span className="text-zinc-200 font-semibold">Architecture Topology</span>
+                  <span className="text-zinc-200 font-semibold">{language === "vi" ? "Bài viết này đào sâu" : "This note goes deeper into"}</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                  CloudNativePG & NATS
-                </span>
+                <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">{language === "vi" ? flagshipEditorial.seriesVi : flagshipEditorial.series}</span>
               </div>
 
-              {/* Visual Architecture Flow */}
-              <div className="space-y-2.5 text-xs font-mono text-zinc-300">
-                <div className="p-2.5 rounded-lg bg-zinc-950/80 border border-zinc-800/60 flex items-center justify-between">
-                  <span className="text-zinc-400">Edge Ingress:</span>
-                  <span className="text-emerald-400 font-semibold">Traefik + ForwardAuth</span>
+              <div className="space-y-3 text-sm text-zinc-300 leading-relaxed">
+                <div className="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800/60">
+                  {language === "vi"
+                    ? "Một quyết định kỹ thuật cụ thể và bối cảnh nghiệp vụ phía sau nó — thay vì một danh sách công nghệ độc lập."
+                    : "One concrete engineering decision and the business context around it—instead of a disconnected technology list."}
                 </div>
-                <div className="p-2.5 rounded-lg bg-zinc-950/80 border border-zinc-800/60 flex items-center justify-between">
-                  <span className="text-zinc-400">Frontend Layer:</span>
-                  <span className="text-zinc-200 font-semibold">React MFE (7 Remotes)</span>
-                </div>
-                <div className="p-2.5 rounded-lg bg-zinc-950/80 border border-zinc-800/60 flex items-center justify-between">
-                  <span className="text-zinc-400">Core Services:</span>
-                  <span className="text-zinc-200 font-semibold">9 Go Services via gRPC</span>
-                </div>
-                <div className="p-2.5 rounded-lg bg-zinc-950/80 border border-zinc-800/60 flex items-center justify-between">
-                  <span className="text-zinc-400">Event Bus:</span>
-                  <span className="text-emerald-400 font-semibold">NATS JetStream Outbox</span>
-                </div>
+                {flagshipArticle.tags.slice(0, 4).map((tag) => (
+                  <div key={tag} className="flex items-center gap-2 text-xs font-mono text-zinc-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                    <span>{tag}</span>
+                  </div>
+                ))}
               </div>
 
               {/* Naive vs Solution Quote */}
               <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/20 text-xs text-zinc-300 leading-relaxed italic">
                 {language === "vi"
-                  ? "💡 Phân định ranh giới miền DDD, loại bỏ triệt để việc truy vấn chéo database và áp dụng Transactional Outbox nguyên tử."
-                  : "💡 Strict DDD domain partitioning with atomic Transactional Outbox publishing over NATS JetStream."}
+                  ? "💡 Các bài viết ở đây được viết từ những điểm nổi bật cụ thể trong dự án, không phải để lặp lại toàn bộ README kiến trúc."
+                  : "💡 Each note starts from a concrete project highlight rather than repeating the whole architecture README."}
               </div>
             </div>
           </div>
