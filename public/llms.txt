@@ -1,99 +1,35 @@
-# Le Cong Hoan — Full-stack Developer
+# Le Cong Hoan
 
-> Technical profile and engineering dossier of Le Cong Hoan (Lê Công Hoan), Full-stack Engineer based in Hanoi, Vietnam. Specialized in Angular Micro-frontends, Next.js, Java Spring Boot microservices, high-scale database workflows (Oracle, PostgreSQL), automated CI/CD pipelines, and multi-node Kubernetes (K3s) Homelab infrastructure.
+> Full-stack Engineer based in Hanoi, Vietnam, specializing in Angular Micro-frontends, Next.js, Java Spring Boot microservices, high-scale database workflows (Oracle, PostgreSQL), automated CI/CD pipelines, and multi-node Kubernetes (K3s) Homelab infrastructure. Born April 2, 2002. Graduated with an Engineer Degree in Information Technology with Distinction from the University of Transport and Communications (UTC).
 
-## Core Information
-- **Name**: Le Cong Hoan (Lê Công Hoan)
-- **Date of Birth**: 02/04/2002 (April 2, 2002)
-- **Title**: Full-stack Developer
-- **Location**: Hanoi, Vietnam (Available for Remote / Hybrid worldwide)
-- **Email**: lehoan.dev@gmail.com
-- **Phone**: (+84) 0358 069 992
-- **Website**: https://hoan.io.vn
-- **Writing & Notes**: https://hoan.io.vn/writing
-- **GitHub**: https://github.com/hoan02
-- **LinkedIn**: https://www.linkedin.com/in/hoan02
-- **Facebook**: https://web.facebook.com/hoanit02
-- **Resume / CV**: https://hoan.io.vn/cv/Le_Cong_Hoan_CV.pdf
-- **Education**: Degree of Engineer in Information Technology (Graduated with Distinction / Bằng Kỹ sư CNTT Loại Giỏi) — University of Transport and Communications (2020 – 2024).
+Le Cong Hoan is a Full-stack Engineer and System Builder experienced in developing enterprise process automation systems (EPAS) and high-performance web applications.
 
----
+## Technical Notes & Articles
 
-## Technical Capabilities & Core Stack
+- [Designing Angular Micro-Frontends for Enterprise Applications](https://hoan.io.vn/writing/angular-microfrontend-architecture): How to structure Nx monorepos, module federation, shared UI libraries, and synchronized routing across independent enterprise teams.
+- [Building a 3-Node Kubernetes (K3s) Homelab with Longhorn Storage](https://hoan.io.vn/writing/kubernetes-homelab-k3s): Hands-on architectural setup for bare-metal multi-node K3s, Longhorn distributed block storage, Traefik ingress, and local deployment pipelines.
+- [Building a Practical CI/CD Pipeline: From Git to Kubernetes](https://hoan.io.vn/writing/practical-cicd-jenkins-k8s): A battle-tested Jenkins declarative pipeline featuring multi-stage Docker builds, layer caching, automated versioning, and zero-downtime rolling updates.
+- [Preserving Complex Filter & Pagination State in Angular Applications](https://hoan.io.vn/writing/angular-complex-list-state): Managing enterprise data grid states with RxJS declarative streams, bi-directional URL query sync, and seamless browser history navigation.
+- [PostgreSQL & Oracle in Enterprise Systems: Architecture & SQL Tuning](https://hoan.io.vn/writing/postgresql-oracle-migration-lessons): Architectural insights on dual-persistence patterns, indexing strategies, connection pooling, and optimizing high-throughput SQL queries with Spring Boot.
+- [Reflections on Graduating as an IT Engineer (Distinction) & Transitioning to Production Systems](https://hoan.io.vn/writing/from-utc-engineer-to-production-systems): Personal and technical reflections on graduating with distinction from UTC, computer science fundamentals, and stepping into enterprise engineering.
 
-### Frontend Engineering
-- **Angular**: Micro-frontends (Nx Monorepos), RxJS, Dynamic Forms, Shared UI Libraries.
-- **Next.js & React**: App Router, SSR/SSG, SEO & Core Web Vitals Optimization, Modular TypeScript Components.
-- **TypeScript & Web**: Strict typing, generic design systems, responsive Tailwind CSS layouts.
+## Featured Systems & Projects
 
-### Backend & Microservices
-- **Java / Spring Boot**: Microservices architecture, Spring Security, RESTful APIs, JPA/Hibernate, Keycloak OIDC/RBAC, BPM/CRM integrations.
-- **Go (Golang)**: Concurrent goroutines, high-throughput microservices, developer CLI tooling.
-- **Event Streaming & Cache**: Apache Kafka (distributed event streams), Redis (in-memory caching, session store, distributed locking).
-- **Storage & IAM**: MinIO (Object Storage), Keycloak (Identity & Access Management).
+- [EPAS — Enterprise Process Automation System](https://hoan.io.vn/#selected-work): Enterprise-scale micro-frontend and microservice platform with CRM/BPM workflow automation built on Angular, Nx, Spring Boot, Kafka, Keycloak, and Kubernetes.
+- [Enterprise CI/CD & Kubernetes Homelab Infrastructure](https://hoan.io.vn/#selected-work): Automated container pipelines, private registry, Longhorn distributed storage, and multi-node K3s cluster orchestration.
+- [Zalo OA Integration & Message Management Platform](https://hoan.io.vn/#selected-work): Enterprise communication console for conversation filtering, broadcast template administration, and Spring Boot REST integration.
+- [MochiMochi Language Learning Platform](https://hoan.io.vn/#selected-work): Learner-facing web applications with Next.js App Router, Core Web Vitals optimization, and modular TypeScript components.
 
-### Databases & Query Tuning
-- **Oracle Database**: Enterprise schema design, SQL query tuning, stored procedures, execution plan analysis.
-- **PostgreSQL**: Relational modeling, composite indexing, connection pool optimization (HikariCP).
+## Links & Profiles
 
-### DevOps, Kubernetes & Homelab Infrastructure
-- **Kubernetes & K3s**: Multi-node bare-metal/virtualized Homelab cluster, Longhorn distributed persistent block storage, Traefik Ingress, rolling zero-downtime releases.
-- **Containers & CI/CD**: Docker (multi-stage caching builds), private container registries, Jenkins declarative pipelines.
-- **Linux Administration**: Ubuntu Server, CoreDNS troubleshooting, networking, Cloudflare tunnels.
+- [Portfolio Website](https://hoan.io.vn): Official personal portfolio and interactive engineering showcase.
+- [Engineering Notes](https://hoan.io.vn/writing): Technical blog, architecture deep dives, and system notes.
+- [Curriculum Vitae / Resume](https://hoan.io.vn/cv/Le_Cong_Hoan_CV.pdf): Downloadable CV of Le Cong Hoan.
+- [GitHub Profile](https://github.com/hoan02): Open source repositories, side projects, and code samples.
+- [LinkedIn Profile](https://www.linkedin.com/in/hoan02): Professional experience, career updates, and networking.
+- [Facebook Profile](https://web.facebook.com/hoanit02): Personal social profile.
+- [Direct Email](mailto:lehoan.dev@gmail.com): Contact email for project inquiries and engineering collaborations.
 
----
+## Optional
 
-## Featured Systems & Technical Case Studies
-
-### 1. EPAS — Enterprise Process Automation System (NGV Group, 12/2024 – Present)
-- **Problem**: Multiple enterprise business modules required independent release cycles with unified authentication, shared UI design systems, and automated BPM workflows.
-- **Architecture**: Angular Shell (Nx Monorepo) ──► Module Federation ──► CRM/BPM Remotes ──► Spring Boot Microservices ──► Oracle/PostgreSQL & Kafka/Redis.
-- **Deliverables**: Shared `@shared/ui-lib`, dynamic form engine, transaction inboxes, Jenkins declarative pipeline, zero-downtime Kubernetes deployments.
-
-### 2. Enterprise CI/CD & 3-Node Kubernetes (K3s) Homelab Infrastructure (2024 – Present)
-- **Problem**: Need for deterministic, automated container deployment pipelines and a resilient multi-node cluster with persistent distributed block storage.
-- **Architecture**: Internet/Cloudflare ──► Traefik Ingress ──► 3-Node K3s Cluster ──► Longhorn Storage Volume (2x replication) ──► Git Push to Jenkins to Registry to K8s Rollout.
-- **Deliverables**: Automated Docker layer caching, declarative Jenkinsfile, Longhorn distributed storage, cluster health monitoring and rolling updates.
-
-### 3. Zalo OA Message Management Platform (NGV Group, 12/2024 – Present)
-- **Deliverables**: High-performance conversation management console, broadcast templates, webhook synchronization, Spring Boot & Redis session caching.
-
-### 4. MochiMochi Language Learning Platform (MochiMochi, 03/2024 – 08/2024)
-- **Deliverables**: Next.js learner-facing web app, Core Web Vitals optimization, SSR pipeline, and modular TypeScript components.
-
----
-
-## Technical Articles & Engineering Notes (/writing)
-
-1. **Designing Angular Micro-Frontends for Enterprise Applications**
-   - URL: https://hoan.io.vn/writing/angular-microfrontend-architecture
-   - Topics: Angular, Nx, Module Federation, Shared UI Libraries.
-
-2. **Building a 3-Node Kubernetes (K3s) Homelab with Longhorn Storage**
-   - URL: https://hoan.io.vn/writing/kubernetes-homelab-k3s
-   - Topics: Kubernetes, K3s, Longhorn Distributed Storage, Traefik, Linux.
-
-3. **Building a Practical CI/CD Pipeline: From Git to Kubernetes**
-   - URL: https://hoan.io.vn/writing/practical-cicd-jenkins-k8s
-   - Topics: Jenkins, Docker, Kubernetes, CI/CD, Rolling Updates.
-
-4. **Preserving Complex Filter & Pagination State in Angular Applications**
-   - URL: https://hoan.io.vn/writing/angular-complex-list-state
-   - Topics: Angular, RxJS, State Streams, URL Sync.
-
-5. **PostgreSQL & Oracle in Enterprise Systems: Architecture & SQL Tuning**
-   - URL: https://hoan.io.vn/writing/postgresql-oracle-migration-lessons
-   - Topics: Database, PostgreSQL, Oracle, Spring Boot, SQL Tuning.
-
-6. **Reflections on Graduating as an IT Engineer (Distinction) & Transitioning to Production Systems**
-   - URL: https://hoan.io.vn/writing/from-utc-engineer-to-production-systems
-   - Topics: Career, Education, UTC, Engineering, Personal Journey.
-
----
-
-## Contact
-- **Website**: https://hoan.io.vn
-- **Direct Email**: lehoan.dev@gmail.com
-- **Phone / Zalo**: (+84) 0358 069 992
-- **GitHub**: https://github.com/hoan02
-- **LinkedIn**: https://www.linkedin.com/in/hoan02
+- [Full Profile JSON](https://hoan.io.vn/api/ask-ai): API endpoint for AI assistant interactions.

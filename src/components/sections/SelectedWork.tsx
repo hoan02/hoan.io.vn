@@ -7,8 +7,13 @@ import { Project } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
-import { ProjectModal } from "@/components/common/ProjectModal";
+import dynamic from "next/dynamic";
 import { ArrowUpRight, CheckCircle2, Eye, Sparkles } from "lucide-react";
+
+const ProjectModal = dynamic(
+  () => import("@/components/common/ProjectModal").then((mod) => mod.ProjectModal),
+  { ssr: false }
+);
 
 export function SelectedWork() {
   const { language } = useLanguage();
@@ -147,6 +152,8 @@ export function SelectedWork() {
                       src={project.image}
                       alt={projectTitle}
                       fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      loading="lazy"
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/40 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity" />

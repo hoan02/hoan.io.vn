@@ -7,7 +7,6 @@ import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { GithubIcon, LinkedinIcon, FacebookIcon } from "@/components/common/Icons";
 import { Mail, Copy, Check, ArrowUpRight, Phone } from "lucide-react";
-import confetti from "canvas-confetti";
 
 export function Contact() {
   const { language } = useLanguage();
@@ -15,15 +14,20 @@ export function Contact() {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
 
-  const handleCopyEmail = () => {
+  const handleCopyEmail = async () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
     setCopiedEmail(true);
-    confetti({
-      particleCount: 30,
-      spread: 50,
-      origin: { y: 0.9 },
-      colors: ["#10b981", "#34d399", "#ffffff"]
-    });
+    try {
+      const confetti = (await import("canvas-confetti")).default;
+      confetti({
+        particleCount: 30,
+        spread: 50,
+        origin: { y: 0.9 },
+        colors: ["#10b981", "#34d399", "#ffffff"]
+      });
+    } catch {
+      // ignore
+    }
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 

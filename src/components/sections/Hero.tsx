@@ -8,7 +8,6 @@ import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { GithubIcon, LinkedinIcon, FacebookIcon } from "@/components/common/Icons";
 import { ArrowDown, Mail, MapPin, FileText, Check, Sparkles } from "lucide-react";
-import confetti from "canvas-confetti";
 
 interface HeroProps {
   onOpenAI: () => void;
@@ -19,13 +18,18 @@ export function Hero({ onOpenAI }: HeroProps) {
   const t = UI_TRANSLATIONS[language];
   const [copied, setCopied] = useState(false);
 
-  const handleDownloadCV = () => {
-    confetti({
-      particleCount: 40,
-      spread: 60,
-      origin: { y: 0.8 },
-      colors: ["#10b981", "#34d399", "#ffffff"]
-    });
+  const handleDownloadCV = async () => {
+    try {
+      const confetti = (await import("canvas-confetti")).default;
+      confetti({
+        particleCount: 40,
+        spread: 60,
+        origin: { y: 0.8 },
+        colors: ["#10b981", "#34d399", "#ffffff"]
+      });
+    } catch {
+      // ignore
+    }
     window.open(PERSONAL_INFO.cvUrl, "_blank");
   };
 
