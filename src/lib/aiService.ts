@@ -228,13 +228,8 @@ async function callGeminiAPI(
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    "x-goog-api-key": apiKey,
   };
-
-  if (apiKey.startsWith("AQ.") || apiKey.startsWith("ya29.")) {
-    headers["Authorization"] = `Bearer ${apiKey}`;
-  } else {
-    headers["x-goog-api-key"] = apiKey;
-  }
 
   // Build conversation contents
   const contents = [

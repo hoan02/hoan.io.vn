@@ -8,23 +8,75 @@ export interface AIKnowledgeEntry {
   responseVi: AIResponse;
 }
 
-export const SUGGESTED_PROMPTS_EN = [
-  "What is his main enterprise project (EPAS)?",
-  "Show me his Angular Micro-Frontend experience.",
-  "What Kubernetes & Jenkins CI/CD skills does he have?",
-  "Tell me about his work at NGV Group & MochiMochi.",
-  "What is his educational background?",
-  "How can I contact or hire Hoan?"
+export interface PromptItem {
+  badge: string;
+  text: string;
+}
+
+export interface PromptCategory {
+  categoryEn: string;
+  categoryVi: string;
+  promptsEn: PromptItem[];
+  promptsVi: PromptItem[];
+}
+
+export const CATEGORIZED_PROMPTS: PromptCategory[] = [
+  {
+    categoryEn: "Featured Work",
+    categoryVi: "Dự án Tiêu biểu",
+    promptsEn: [
+      { badge: "EPAS System", text: "What is Hoan's main enterprise project (EPAS)?" },
+      { badge: "K8s Homelab", text: "Tell me about his 3-Node Kubernetes Homelab cluster." },
+      { badge: "Zalo OA", text: "How did Hoan build the Zalo OA messaging platform?" }
+    ],
+    promptsVi: [
+      { badge: "Hệ thống EPAS", text: "Dự án EPAS tại NGV Group của Hoan làm những gì?" },
+      { badge: "Homelab K8s", text: "Hạ tầng cụm 3-Node Kubernetes Homelab của Hoan ra sao?" },
+      { badge: "Zalo OA", text: "Hoan đã phát triển phân hệ Zalo OA như thế nào?" }
+    ]
+  },
+  {
+    categoryEn: "Tech Stack",
+    categoryVi: "Kỹ năng Chuyên môn",
+    promptsEn: [
+      { badge: "Angular & RxJS", text: "Show me his Angular Micro-Frontend experience." },
+      { badge: "Spring Boot & DB", text: "What are his Java Spring Boot & Oracle/PostgreSQL skills?" },
+      { badge: "CI/CD & Jenkins", text: "How does Hoan build automated CI/CD pipelines?" }
+    ],
+    promptsVi: [
+      { badge: "Angular & RxJS", text: "Kinh nghiệm Angular Micro-Frontend & RxJS của Hoan?" },
+      { badge: "Spring Boot & DB", text: "Kinh nghiệm Java Spring Boot và tối ưu Oracle/PostgreSQL?" },
+      { badge: "CI/CD Jenkins", text: "Hoan xây dựng pipeline CI/CD tự động như thế nào?" }
+    ]
+  },
+  {
+    categoryEn: "Education & Notes",
+    categoryVi: "Học vấn & Bài viết",
+    promptsEn: [
+      { badge: "UTC Engineer", text: "What is his educational background and degree honors?" },
+      { badge: "Tech Notes", text: "What engineering notes has Hoan published on /writing?" }
+    ],
+    promptsVi: [
+      { badge: "Kỹ sư UTC", text: "Học vấn và bằng tốt nghiệp loại Giỏi của Hoan tại UTC?" },
+      { badge: "Bài viết /writing", text: "Hoan đã chia sẻ những bài viết kỹ thuật nào trên /writing?" }
+    ]
+  },
+  {
+    categoryEn: "Personal & Contact",
+    categoryVi: "Cá nhân & Liên hệ",
+    promptsEn: [
+      { badge: "Birthday & Age", text: "When was Hoan born and what are his hobbies?" },
+      { badge: "Download CV", text: "How can I download his CV or contact him directly?" }
+    ],
+    promptsVi: [
+      { badge: "Ngày sinh & Tuổi", text: "Hoan sinh ngày bao nhiêu và có sở thích gì?" },
+      { badge: "Tải CV / Liên hệ", text: "Làm sao để tải CV hoặc liên hệ trực tiếp với Hoan?" }
+    ]
+  }
 ];
 
-export const SUGGESTED_PROMPTS_VI = [
-  "Dự án EPAS tại NGV Group của Hoan làm những gì?",
-  "Kinh nghiệm Angular Micro-Frontend & Spring Boot của Hoan?",
-  "Hoan có kinh nghiệm Kubernetes & CI/CD ra sao?",
-  "Kinh nghiệm làm việc tại NGV Group và MochiMochi?",
-  "Học vấn và bằng cấp của Hoan?",
-  "Làm sao để tải CV hoặc liên hệ trực tiếp với Hoan?"
-];
+export const SUGGESTED_PROMPTS_EN = CATEGORIZED_PROMPTS.flatMap((c) => c.promptsEn.map((p) => p.text));
+export const SUGGESTED_PROMPTS_VI = CATEGORIZED_PROMPTS.flatMap((c) => c.promptsVi.map((p) => p.text));
 
 export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
   {
@@ -109,6 +161,52 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
       tags: ["Kubernetes", "Docker", "Jenkins", "CI/CD", "Linux"],
       relevantLinks: [
         { label: "Xem Năng lực DevOps", url: "#tech-stack" }
+      ]
+    }
+  },
+  {
+    id: "age-birthday",
+    keywords: ["age", "birthday", "birth", "year", "born", "tuổi", "sinh", "sinh năm", "ngày sinh", "bao nhiêu tuổi", "sinh ngày"],
+    patterns: [/tuổi/i, /sinh\s*ngày/i, /sinh\s*năm/i, /ngày\s*sinh/i, /bao\s*nhiêu\s*tuổi/i, /birthday/i, /born/i, /age/i],
+    responseEn: {
+      answer: `Hoan was born on **April 2, 2002 (02/04/2002)** and is currently **24 years old**. He is based in Hanoi, Vietnam.`,
+      relatedTopic: "Personal Info",
+      tags: ["Age", "Birthday", "Hanoi, Vietnam"],
+      relevantLinks: [
+        { label: "View About", url: "/#about" },
+        { label: "Get in Touch", url: "/#contact" }
+      ]
+    },
+    responseVi: {
+      answer: `Hoan sinh ngày **02/04/2002**, hiện **24 tuổi**. Hoan đang sinh sống và làm việc tại Hà Nội, Việt Nam.`,
+      relatedTopic: "Thông tin Cá nhân",
+      tags: ["Tuổi", "Ngày sinh", "Hà Nội"],
+      relevantLinks: [
+        { label: "Xem Giới thiệu", url: "/#about" },
+        { label: "Liên hệ Hoan", url: "/#contact" }
+      ]
+    }
+  },
+  {
+    id: "hobbies-interests",
+    keywords: ["hobby", "hobbies", "interest", "interests", "free time", "thích", "sở thích", "làm gì khi rảnh", "đam mê"],
+    patterns: [/sở\s*thích/i, /thích\s*làm\s*gì/i, /rảnh/i, /hobb/i, /interest/i, /đam\s*mê/i],
+    responseEn: {
+      answer: `Outside of commercial development, Hoan enjoys **homelab tinkering & self-hosting**, building side projects, exploring new cloud/web tech stacks, and system architecture experiments.`,
+      relatedTopic: "Hobbies & Interests",
+      tags: ["Homelab", "Self-hosting", "Side Projects", "System Architecture"],
+      relevantLinks: [
+        { label: "Read Homelab Note", url: "/writing/kubernetes-homelab-k3s" },
+        { label: "Engineering Notes", url: "/writing" }
+      ]
+    },
+    responseVi: {
+      answer: `Ngoài công việc phát triển dự án, Hoan khá thích **mày mò dựng Homelab & self-hosting**, xây dựng các side project, thử nghiệm các công nghệ web/cloud mới và tối ưu kiến trúc hệ thống.`,
+      relatedTopic: "Sở thích Cá nhân",
+      tags: ["Homelab", "Self-hosting", "Side Projects", "Kiến trúc Hệ thống"],
+      relevantLinks: [
+        { label: "Xem Bài viết Homelab", url: "/writing/kubernetes-homelab-k3s" },
+        { label: "Engineering Notes", url: "/writing" }
       ]
     }
   },
