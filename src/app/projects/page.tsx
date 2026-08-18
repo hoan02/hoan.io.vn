@@ -10,6 +10,7 @@ import { PROJECTS_DATA } from "@/data/portfolioData";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { CustomCursor } from "@/components/common/CustomCursor";
+import { GithubIcon } from "@/components/common/Icons";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
 import { AskAIModal } from "@/components/ai/AskAIModal";
 import {
@@ -18,7 +19,6 @@ import {
   ArrowLeft,
   Search,
   ExternalLink,
-  Github,
   Sparkles,
   Layers,
   CheckCircle2,
@@ -197,7 +197,7 @@ function ProjectsContent() {
                               className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                               title="View GitHub Repository"
                             >
-                              <Github className="w-4 h-4" />
+                              <GithubIcon className="w-4 h-4" />
                             </a>
                           )}
                           {project.liveUrl && project.liveUrl !== "#contact" && (

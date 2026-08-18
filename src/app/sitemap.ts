@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { ARTICLES_DATA } from "@/data/portfolioData";
+import { ARTICLES_DATA, PROJECTS_DATA } from "@/data/portfolioData";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://hoan.io.vn";
@@ -10,6 +10,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/projects`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95,
     },
     {
       url: `${baseUrl}/writing`,
@@ -31,6 +37,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  const projectRoutes: MetadataRoute.Sitemap = PROJECTS_DATA.map((project) => ({
+    url: `${baseUrl}/projects/${project.id}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.9,
+  }));
+
   const articleRoutes: MetadataRoute.Sitemap = ARTICLES_DATA.map((article) => ({
     url: `${baseUrl}/writing/${article.slug}`,
     lastModified: new Date(),
@@ -38,5 +51,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  return [...staticRoutes, ...articleRoutes];
+  return [...staticRoutes, ...projectRoutes, ...articleRoutes];
 }

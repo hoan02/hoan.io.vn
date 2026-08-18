@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { PROJECTS_DATA } from "@/data/portfolioData";
 import { Project } from "@/types";
