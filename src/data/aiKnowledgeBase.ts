@@ -138,6 +138,35 @@ export const AI_KNOWLEDGE_BASE: AIKnowledgeEntry[] = [
     }
   },
   {
+    id: "micro-frontend-state-sync",
+    keywords: ["state", "synchronization", "đồng bộ", "shell", "remote", "state sync", "event bus", "giao tiếp", "mfe"],
+    patterns: [/state\s*(sync|synchronization|đồng\s*bộ)/i, /đồng\s*bộ\s*state/i, /shell\s*(&|và)?\s*remote/i, /inter-mfe/i, /giao\s*tiếp\s*giữa/i],
+    responseEn: {
+      answer: `Hoan handles **state synchronization between Shell and Remote Micro-Frontends** using decoupled, contract-driven architectural patterns:
+• **Router & URL as Single Source of Truth**: Route parameters, query state, and active navigation context are managed by the Shell and reflected down to remotes, avoiding hidden in-memory drift.
+• **Scoped Event Bridges (RxJS / Custom Events)**: Implemented lightweight event buses inside shared workspace packages (\`@workspace/core\`) using typed RxJS Subjects to broadcast milestone transitions (e.g. auth state, tenant switches, transaction submission) without coupling remote implementations.
+• **Shared Context & Interceptors**: Authentication tokens, user profiles, and HTTP interceptors are centrally handled in the Shell and injected into remote requests without leaking state or memory.`,
+      relatedTopic: "Frontend Architecture",
+      tags: ["Micro-Frontend", "State Synchronization", "Angular", "RxJS", "Module Federation"],
+      relevantLinks: [
+        { label: "View EPAS Case Study", url: "/projects/epas-enterprise-process-automation" },
+        { label: "Read Architecture Note", url: "/writing/angular-microfrontend-architecture" }
+      ]
+    },
+    responseVi: {
+      answer: `Trong các kiến trúc Micro-Frontend (EPAS & Arda), Hoan xử lý **đồng bộ trạng thái (State Synchronization) giữa Shell và Remote** theo các nguyên tắc chuẩn mực:
+• **URL & Router làm Nguồn Chân lý Duy nhất (Single Source of Truth)**: Tham số định tuyến, query params và ngữ cảnh navigation được Host/Shell quản lý và truyền tự nhiên xuống Remote, tránh việc lưu trữ state ngầm trong bộ nhớ gây lệch pha dữ liệu.
+• **Event Bus hướng Sự kiện với RxJS**: Sử dụng các Subject/BehaviorSubject có kiểu dữ liệu chặt chẽ đóng gói trong thư viện dùng chung (\`@workspace/core\` / \`@shared/ui-lib\`) để phát các sự kiện vòng đời (như chuyển phiên, đổi tổ chức, nộp giao dịch) mà không làm dính chặt (tight-coupling) mã nguồn giữa các remote.
+• **Bảo mật & Context Injection**: Thông tin xác thực (SSO session, RBAC permissions) và HTTP interceptor được quản trị tập trung tại Shell và nạp vào request của remote, đảm bảo giải phóng bộ nhớ rõ ràng khi remote unmount.`,
+      relatedTopic: "Kiến trúc Frontend",
+      tags: ["Micro-Frontend", "Đồng bộ State", "Angular", "RxJS", "Module Federation"],
+      relevantLinks: [
+        { label: "Xem Chi tiết Dự án EPAS", url: "/projects/epas-enterprise-process-automation" },
+        { label: "Đọc Bài viết Kiến trúc Frontend", url: "/writing/angular-microfrontend-architecture" }
+      ]
+    }
+  },
+  {
     id: "kubernetes-devops",
     keywords: ["kubernetes", "k8s", "docker", "devops", "ci/cd", "jenkins", "ingress", "registry"],
     patterns: [/kubernetes/i, /k8s/i, /docker/i, /devops/i, /jenkins/i, /ci\/cd/i, /triển\s*khai/i, /hạ\s*tầng/i],

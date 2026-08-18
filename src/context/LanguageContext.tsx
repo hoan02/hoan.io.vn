@@ -16,22 +16,29 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
 
   useEffect(() => {
-    const saved = localStorage.getItem("portfolio_lang") as Language | null;
-    if (saved === "en" || saved === "vi") {
-      setLanguageState(saved);
-    } else {
-      // Default to Vietnamese if browser is Vietnamese, otherwise English
-      const browserLang = navigator.language.toLowerCase();
-      if (browserLang.startsWith("vi")) {
-        setLanguageState("vi");
+    try {
+      const saved = localStorage.getItem("portfolio_lang") as Language | null;
+      if (saved === "en" || saved === "vi") {
+        queueMicrotask(() => setLanguageState(saved));
+      } else {
+        const browserLang = navigator.language.toLowerCase();
+        if (browserLang.startsWith("vi")) {
+          queueMicrotask(() => setLanguageState("vi"));
+        }
       }
+    } catch {
+      // Ignore storage errors in restricted contexts
     }
   }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem("portfolio_lang", lang);
-    document.documentElement.lang = lang;
+    try {
+      localStorage.setItem("portfolio_lang", lang);
+      document.documentElement.lang = lang;
+    } catch {
+      // Ignore storage errors
+    }
   };
 
   const toggleLanguage = () => {

@@ -1,16 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { CATEGORIZED_PROMPTS, PromptItem } from "@/data/aiKnowledgeBase";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
-import { AIServiceResult, ChatMessage } from "@/lib/aiService";
 import { TechIcon } from "@/components/common/TechIcon";
 import { ChatMessageRenderer } from "@/components/ai/ChatMessageRenderer";
+import { readDataStream } from "@/lib/streamHelper";
 import {
   X,
   Sparkles,
-  CornerDownLeft,
   Bot,
   ExternalLink,
   RefreshCw,
@@ -24,7 +22,8 @@ import {
   MessageSquarePlus,
   Copy,
   Check,
-  Send
+  Send,
+  Zap,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -43,7 +42,159 @@ interface DisplayMessage {
   isStreaming?: boolean;
 }
 
+interface PromptCategory {
+  categoryEn: string;
+  categoryVi: string;
+  promptsEn: { badge: string; text: string }[];
+  promptsVi: { badge: string; text: string }[];
+}
+
+const CATEGORY_PROMPTS: PromptCategory[] = [
+  {
+    categoryEn: "Featured Architecture",
+    categoryVi: "Kiến trúc & Dự án Tiêu biểu",
+    promptsEn: [
+      {
+        badge: "Arda Platform",
+        text: "How did Hoan architect Arda with 9 Go microservices, gRPC, and React Module Federation?",
+      },
+      {
+        badge: "Puchi Platform",
+        text: "Tell me about Puchidemy's Go Kratos v3 backend, Next.js PWA, and ArgoCD GitOps.",
+      },
+      {
+        badge: "EPAS Enterprise",
+        text: "What did Hoan build in the EPAS banking system using Angular Micro-Frontends?",
+      },
+      {
+        badge: "CamRelay & Rust",
+        text: "Why did Hoan build CamRelay in Rust to bridge P2P camera streams into RTSP?",
+      },
+    ],
+    promptsVi: [
+      {
+        badge: "Nền tảng Arda",
+        text: "Hoan đã thiết kế Arda với 9 Go microservices, gRPC và React Module Federation ra sao?",
+      },
+      {
+        badge: "Nền tảng Puchi",
+        text: "Kiến trúc Puchidemy kết hợp Go Kratos v3, Next.js PWA và GitOps ArgoCD như thế nào?",
+      },
+      {
+        badge: "Hệ thống EPAS",
+        text: "Hoan đã làm gì trong hệ thống ngân hàng EPAS với Angular Micro-Frontend?",
+      },
+      {
+        badge: "CamRelay & Rust",
+        text: "Tại sao Hoan xây dựng CamRelay bằng Rust để chuyển đổi luồng camera P2P sang RTSP?",
+      },
+    ],
+  },
+  {
+    categoryEn: "Engineering Capabilities",
+    categoryVi: "Năng lực Chuyên môn",
+    promptsEn: [
+      {
+        badge: "Full-stack Profile",
+        text: "What are Hoan's strongest core competencies across frontend and backend?",
+      },
+      {
+        badge: "Kubernetes & Homelab",
+        text: "Does Hoan have hands-on experience running a bare-metal Kubernetes K3s cluster?",
+      },
+      {
+        badge: "Auth Architecture",
+        text: "How does Hoan design authentication systems using Ory Kratos, Hydra, and Keycloak?",
+      },
+      {
+        badge: "Distributed Systems",
+        text: "Why can we say Hoan understands distributed systems and Transactional Outbox?",
+      },
+    ],
+    promptsVi: [
+      {
+        badge: "Thế mạnh Full-stack",
+        text: "Điểm mạnh cốt lõi và định hướng chuyên môn của Hoan là gì?",
+      },
+      {
+        badge: "Kubernetes Homelab",
+        text: "Hoan đã tự vận hành cụm Kubernetes K3s thực tế trên homelab như thế nào?",
+      },
+      {
+        badge: "Kiến trúc Auth",
+        text: "Kinh nghiệm thiết kế hệ thống xác thực của Hoan với Ory Kratos, Hydra và Keycloak?",
+      },
+      {
+        badge: "Hệ thống Phân tán",
+        text: "Tại sao có thể nói Hoan hiểu sâu về Distributed Systems và Transactional Outbox?",
+      },
+    ],
+  },
+  {
+    categoryEn: "Education & Career",
+    categoryVi: "Học vấn & Kinh nghiệm",
+    promptsEn: [
+      {
+        badge: "UTC Engineer",
+        text: "What is Hoan's degree and graduation honor at University of Transport and Communications?",
+      },
+      {
+        badge: "Work Experience",
+        text: "What companies has Hoan worked at and what were his key deliverables?",
+      },
+      {
+        badge: "Engineering Notes",
+        text: "What architectural case studies has Hoan published on /writing?",
+      },
+    ],
+    promptsVi: [
+      {
+        badge: "Kỹ sư UTC",
+        text: "Học vấn và xếp loại tốt nghiệp Kỹ sư CNTT của Hoan tại ĐH Giao thông Vận tải?",
+      },
+      {
+        badge: "Kinh nghiệm làm việc",
+        text: "Hoan từng làm việc ở những công ty nào và phụ trách những mảng gì?",
+      },
+      {
+        badge: "Bài viết /writing",
+        text: "Hoan đã xuất bản những case study kiến trúc nào trên trang /writing?",
+      },
+    ],
+  },
+  {
+    categoryEn: "Personal & Contact",
+    categoryVi: "Cá nhân & Liên hệ",
+    promptsEn: [
+      {
+        badge: "Birthday & Age",
+        text: "When was Hoan born and what are his technical hobbies?",
+      },
+      {
+        badge: "Contact & Resume",
+        text: "How can I download Hoan's CV or get in touch for collaboration?",
+      },
+    ],
+    promptsVi: [
+      {
+        badge: "Ngày sinh & Tuổi",
+        text: "Hoan sinh ngày bao nhiêu và có sở thích kỹ thuật gì?",
+      },
+      {
+        badge: "Liên hệ & CV",
+        text: "Làm sao để tải CV hoặc liên hệ trực tiếp với Hoan?",
+      },
+    ],
+  },
+];
+
 const CATEGORY_ICONS = [Layers, Cpu, GraduationCap, UserCheck];
+
+let messageIdCounter = 0;
+function nextId(prefix: string): string {
+  messageIdCounter += 1;
+  return `${prefix}-${messageIdCounter}`;
+}
 
 export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
   const { language } = useLanguage();
@@ -87,7 +238,39 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Compute 1-3 contextual follow-up questions based on the last message/answer
+  // Derive relevant contextual navigation links
+  const deriveRelevantLinks = (text: string): { label: string; url: string }[] => {
+    const lower = text.toLowerCase();
+    const links: { label: string; url: string }[] = [];
+
+    if (lower.includes("arda") || lower.includes("finops")) {
+      links.push({ label: "Arda Architecture Note", url: "/writing/designing-arda-cloud-native-finops-platform" });
+      links.push({ label: "Arda GitHub", url: "https://github.com/arda-labs" });
+    }
+    if (lower.includes("puchi") || lower.includes("học tiếng việt")) {
+      links.push({ label: "Puchi Architecture Note", url: "/writing/puchi-vietnamese-learning-platform-architecture" });
+      links.push({ label: "Puchidemy GitHub", url: "https://github.com/puchidemy" });
+    }
+    if (lower.includes("camrelay") || lower.includes("dahua") || lower.includes("rtsp")) {
+      links.push({ label: "CamRelay GitHub", url: "https://github.com/hoan02/camrelay" });
+    }
+    if (lower.includes("b4s") || lower.includes("tauri") || lower.includes("bluetooth")) {
+      links.push({ label: "B4S GitHub", url: "https://github.com/hoan02/b4s" });
+    }
+    if (lower.includes("epas") || lower.includes("selected-work") || lower.includes("dự án tiêu biểu")) {
+      links.push({ label: "View Projects", url: "/#selected-work" });
+    }
+    if (lower.includes("ngv") || lower.includes("mochimochi") || lower.includes("kinh nghiệm")) {
+      links.push({ label: "View Experience", url: "/#experience" });
+    }
+    if (lower.includes("homelab") || lower.includes("k3s") || lower.includes("writing") || lower.includes("bài viết")) {
+      links.push({ label: "Engineering Notes", url: "/writing" });
+    }
+
+    return links.slice(0, 3);
+  };
+
+  // Compute 1-3 contextual follow-up questions
   const computeContextualFollowUps = (lastQuery: string, answerText: string): string[] => {
     const combined = `${lastQuery} ${answerText}`.toLowerCase();
     const isVi = language === "vi";
@@ -116,7 +299,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           ];
     }
 
-    if (combined.includes("epas") || combined.includes("ngv") || combined.includes("crm") || combined.includes("bpm")) {
+    if (combined.includes("epas") || combined.includes("ngv") || combined.includes("bpm")) {
       return isVi
         ? [
             "Hoan xử lý state synchronization giữa Shell & Remote thế nào?",
@@ -140,18 +323,6 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           ];
     }
 
-    if (combined.includes("b4s") || combined.includes("tauri") || combined.includes("bluetooth")) {
-      return isVi
-        ? [
-            "Cơ chế BLE reverse-engineering trên Tauri v2 & Rust của B4S?",
-            "Giao diện SolidJS và kiểm soát 10-band EQ hoạt động ra sao?",
-          ]
-        : [
-            "How did Hoan reverse-engineer BLE protocols in Tauri v2 & Rust?",
-            "How does the SolidJS UI control the 10-band headphone EQ?",
-          ];
-    }
-
     if (combined.includes("k8s") || combined.includes("homelab") || combined.includes("kubernetes")) {
       return isVi
         ? [
@@ -164,19 +335,18 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           ];
     }
 
-    if (combined.includes("học vấn") || combined.includes("utc") || combined.includes("education") || combined.includes("tốt nghiệp")) {
+    if (combined.includes("học vấn") || combined.includes("utc") || combined.includes("education")) {
       return isVi
         ? [
-            "Xếp loại tốt nghiệp và đề tài kỹ sư của Hoan tại UTC?",
-            "Xem các bài viết kỹ thuật và ghi chép của Hoan?",
+            "Xếp loại tốt nghiệp và chuyên ngành của Hoan tại UTC?",
+            "Xem các bài viết kỹ thuật và case study trên /writing?",
           ]
         : [
-            "What was his graduation honor and engineering capstone at UTC?",
+            "What was his graduation honor at UTC?",
             "Where can I read his technical notes on /writing?",
           ];
     }
 
-    // Default general follow-ups
     return isVi
       ? [
           "Các dự án mã nguồn mở Arda & Puchi trên GitHub?",
@@ -193,67 +363,102 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
     if (!q || loading) return;
 
     const userMessage: DisplayMessage = {
-      id: `user-${Date.now()}`,
+      id: nextId("user"),
       role: "user",
       content: q,
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const assistantMsgId = nextId("assistant");
+    const initialAssistantMessage: DisplayMessage = {
+      id: assistantMsgId,
+      role: "assistant",
+      content: "",
+      source: "Vercel AI SDK + Groq",
+      isStreaming: true,
+    };
+
+    setMessages((prev) => [...prev, userMessage, initialAssistantMessage]);
     setQuery("");
     setLoading(true);
 
-    const historyPayload: ChatMessage[] = messages.map((m) => ({
+    const historyPayload = messages.map((m) => ({
       role: m.role,
       content: m.content,
     }));
 
     try {
-      const res = await fetch("/api/ask-ai", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: q,
-          lang: language,
           history: historyPayload,
+          lang: language,
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to query AI");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to query AI");
+      }
 
-      const data: AIServiceResult = await res.json();
-      const followUps = computeContextualFollowUps(q, data.response.answer);
+      let fullAnswer = "";
 
-      const assistantMessage: DisplayMessage = {
-        id: `assistant-${Date.now()}`,
-        role: "assistant",
-        content: data.response.answer,
-        source: data.source,
-        relevantLinks: data.response.relevantLinks,
-        followUps,
-        isStreaming: true,
-      };
+      for await (const chunk of readDataStream(res)) {
+        fullAnswer += chunk;
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantMsgId
+              ? {
+                  ...msg,
+                  content: fullAnswer,
+                  isStreaming: true,
+                }
+              : msg
+          )
+        );
+      }
 
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch (err) {
-      console.error(err);
+      const relevantLinks = deriveRelevantLinks(`${q} ${fullAnswer}`);
+      const followUps = computeContextualFollowUps(q, fullAnswer);
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantMsgId
+            ? {
+                ...msg,
+                content: fullAnswer || "Hoan AI đã xử lý yêu cầu của bạn.",
+                isStreaming: false,
+                relevantLinks: relevantLinks.length > 0 ? relevantLinks : undefined,
+                followUps,
+              }
+            : msg
+        )
+      );
+    } catch (err: unknown) {
+      console.error("[Chat UI error]:", err);
       const fallbackContent =
         language === "vi"
-          ? "Lê Công Hoan sinh ngày 02/04/2002 (24 tuổi). Là Kỹ sư Full-stack Developer tốt nghiệp loại Giỏi ĐH Giao thông Vận tải (UTC), chuyên sâu về **Angular Micro-Frontend**, **Go Microservices**, **Spring Boot**, và hạ tầng **Kubernetes Homelab**."
-          : "Le Cong Hoan was born on April 2, 2002 (24 years old). He is a Full-stack Developer graduated with Distinction from UTC, specializing in **Angular Micro-Frontends**, **Go Microservices**, **Spring Boot**, and **Kubernetes Homelab** infrastructure.";
+          ? `Lê Công Hoan sinh ngày **02/04/2002** (24 tuổi). Là Kỹ sư Full-stack Developer tốt nghiệp loại Giỏi tại **Đại học Giao thông Vận tải (UTC)**, hiện làm việc tại **NGV Group**. Hoan chuyên sâu về **Angular Micro-Frontend**, **Go Microservices** (Arda, Puchi), và hạ tầng **Kubernetes K3s Homelab**.`
+          : `Le Cong Hoan was born on **April 2, 2002** (24 years old). He is a Full-stack Developer graduated with Distinction from **UTC**, currently working at **NGV Group**, specializing in **Angular Micro-Frontends**, **Go Microservices** (Arda, Puchi), and **Kubernetes K3s Homelab** infrastructure.`;
 
-      const assistantMessage: DisplayMessage = {
-        id: `assistant-${Date.now()}`,
-        role: "assistant",
-        content: fallbackContent,
-        source: "local-semantic",
-        relevantLinks: [
-          { label: "View Projects", url: "/projects" },
-          { label: "Engineering Notes", url: "/writing" },
-        ],
-        followUps: computeContextualFollowUps(q, fallbackContent),
-        isStreaming: true,
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
+      const relevantLinks = deriveRelevantLinks(fallbackContent);
+      const followUps = computeContextualFollowUps(q, fallbackContent);
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantMsgId
+            ? {
+                ...msg,
+                content: fallbackContent,
+                isStreaming: false,
+                source: "Evidence Grounding Fallback",
+                relevantLinks,
+                followUps,
+              }
+            : msg
+        )
+      );
     } finally {
       setLoading(false);
     }
@@ -314,12 +519,14 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <span>Hoan AI Assistant</span>
                   <span className="flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Gemini 2.5 Flash
+                    <Zap className="w-2.5 h-2.5 fill-emerald-400 text-emerald-400" />
+                    Tool Calling Engine
                   </span>
                 </h3>
                 <p className="text-[11px] text-zinc-400 font-mono">
-                  {language === "vi" ? "Trợ lý Kỹ thuật & Hỏi đáp Thực chiến" : "Technical & Architectural Profile Companion"}
+                  {language === "vi"
+                    ? "Vercel AI SDK • Groq Llama 3.3 70B • Evidence Grounding"
+                    : "Vercel AI SDK • Groq Llama 3.3 70B • Evidence Grounding"}
                 </p>
               </div>
             </div>
@@ -330,7 +537,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                   type="button"
                   onClick={handleClearChat}
                   className="p-2 rounded-xl text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/80 transition-colors flex items-center gap-1 text-xs font-mono border border-transparent hover:border-zinc-700"
-                  title="Clear conversation"
+                  title="Reset conversation"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Reset</span>
@@ -349,24 +556,24 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
 
           {/* Modal Body / Scrollable Chat Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 custom-scrollbar">
-            {/* Initial Welcome & Category Suggestion Cards (when no messages yet) */}
+            {/* Initial Welcome & Category Suggestion Cards */}
             {messages.length === 0 && (
               <div className="space-y-6">
                 <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/20 via-zinc-900/60 to-zinc-950 border border-zinc-800/80">
                   <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-semibold uppercase tracking-wider mb-2">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Interactive Engineering Prompting</span>
+                    <span>Evidence-Grounded AI Companion</span>
                   </div>
                   <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed">
                     {language === "vi"
-                      ? "👋 Chào bạn! Tôi là trợ lý AI được nhúng trực tiếp trên portfolio của Lê Công Hoan. Hãy chọn chủ đề gợi ý bên dưới hoặc hỏi bất kỳ câu hỏi kỹ thuật nào về hệ thống vi dịch vụ, micro-frontend, Kubernetes hay kinh nghiệm thực chiến."
-                      : "👋 Hello! I am the AI assistant embedded in Le Cong Hoan's portfolio. Select a suggested topic below or ask anything about his distributed systems, micro-frontends, Kubernetes, or career background."}
+                      ? "👋 Chào bạn! Tôi là trợ lý AI nhúng trực tiếp trong portfolio của Lê Công Hoan. Chatbot hoạt động dựa trên Vercel AI SDK kết hợp hệ thống Custom Tools truy xuất trực tiếp dữ liệu dự án, kiến trúc vi dịch vụ, Kubernetes và năng lực thực chiến."
+                      : "👋 Hello! I am the AI assistant embedded in Le Cong Hoan's portfolio. Powered by Vercel AI SDK & custom tool calling to accurately retrieve project architectures, microservices, Kubernetes homelab, and engineering evidence."}
                   </p>
                 </div>
 
                 {/* Category Selector Tabs */}
                 <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                  {CATEGORIZED_PROMPTS.map((cat, idx) => {
+                  {CATEGORY_PROMPTS.map((cat, idx) => {
                     const Icon = CATEGORY_ICONS[idx % CATEGORY_ICONS.length];
                     const catTitle = language === "vi" ? cat.categoryVi : cat.categoryEn;
                     const isActive = activeCategoryIdx === idx;
@@ -391,8 +598,8 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                 {/* Prompt Cards for the Active Category */}
                 <div className="grid grid-cols-1 gap-2.5 pt-1">
                   {(language === "vi"
-                    ? CATEGORIZED_PROMPTS[activeCategoryIdx].promptsVi
-                    : CATEGORIZED_PROMPTS[activeCategoryIdx].promptsEn
+                    ? CATEGORY_PROMPTS[activeCategoryIdx].promptsVi
+                    : CATEGORY_PROMPTS[activeCategoryIdx].promptsEn
                   ).map((prompt, promptIdx) => (
                     <button
                       key={promptIdx}
@@ -439,26 +646,35 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                         : "bg-zinc-900/90 text-zinc-200 border border-zinc-800/90 rounded-tl-sm"
                     }`}
                   >
-                    {/* Message Body with Rich Markdown & Streaming */}
+                    {/* Message Body with Rich Markdown */}
                     {isAssistant ? (
-                      <ChatMessageRenderer
-                        content={msg.content}
-                        isStreaming={isLatestAssistant && msg.isStreaming}
-                      />
+                      msg.content ? (
+                        <ChatMessageRenderer
+                          content={msg.content}
+                          isStreaming={isLatestAssistant && msg.isStreaming}
+                        />
+                      ) : (
+                        <div className="flex items-center gap-2 text-zinc-400 font-mono text-xs">
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-400" />
+                          <span>Đang truy xuất dữ liệu & suy luận...</span>
+                        </div>
+                      )
                     ) : (
                       <div className="whitespace-pre-line font-semibold text-zinc-950">
                         {msg.content}
                       </div>
                     )}
 
-                    {/* Direct Navigation Links (if assistant) */}
+                    {/* Direct Navigation Links */}
                     {isAssistant && msg.relevantLinks && msg.relevantLinks.length > 0 && (
                       <div className="pt-3 border-t border-zinc-800/80 flex flex-wrap gap-2">
                         {msg.relevantLinks.map((link, linkIdx) => (
                           <a
                             key={linkIdx}
                             href={link.url}
-                            onClick={onClose}
+                            target={link.url.startsWith("http") ? "_blank" : undefined}
+                            rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined}
+                            onClick={() => !link.url.startsWith("http") && onClose()}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-all hover:scale-105"
                           >
                             <span>{link.label}</span>
@@ -468,12 +684,10 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                       </div>
                     )}
 
-                    {/* Footer bar for assistant messages (copy & source badge) */}
-                    {isAssistant && (
+                    {/* Footer bar for assistant messages */}
+                    {isAssistant && msg.content && (
                       <div className="flex items-center justify-between pt-2 border-t border-zinc-800/60 text-[10px] font-mono text-zinc-500">
-                        <span>
-                          via {msg.source === "gemini" ? "Gemini 2.5 Flash" : msg.source === "openai" ? "OpenAI" : "Context Engine"}
-                        </span>
+                        <span>Tool Calling Active</span>
                         <button
                           type="button"
                           onClick={() => handleCopyMessage(msg.id, msg.content)}
@@ -525,14 +739,6 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                     </button>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Loading Thinking Indicator */}
-            {loading && (
-              <div className="flex items-center gap-3 p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800/80 text-xs font-mono text-zinc-300 animate-pulse w-fit ml-11">
-                <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
-                <span>Hoan AI is analyzing architecture & drafting response...</span>
               </div>
             )}
 

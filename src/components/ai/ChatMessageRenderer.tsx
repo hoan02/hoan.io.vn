@@ -1,49 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Check, Copy, Terminal, ExternalLink } from "lucide-react";
-import { TechIcon } from "@/components/common/TechIcon";
 
 interface ChatMessageRendererProps {
   content: string;
   isStreaming?: boolean;
-  onStreamComplete?: () => void;
 }
 
 export function ChatMessageRenderer({
   content,
   isStreaming = false,
-  onStreamComplete,
 }: ChatMessageRendererProps) {
-  const [displayedText, setDisplayedText] = useState(isStreaming ? "" : content);
   const [copiedCodeIndex, setCopiedCodeIndex] = useState<number | null>(null);
-
-  // Typewriter streaming effect when isStreaming is true
-  useEffect(() => {
-    if (!isStreaming) {
-      setDisplayedText(content);
-      return;
-    }
-
-    let currentIndex = 0;
-    const totalLength = content.length;
-    // Dynamic speed based on length (faster for longer text)
-    const step = Math.max(2, Math.floor(totalLength / 80));
-    const intervalTime = 16; // ~60fps
-
-    const timer = setInterval(() => {
-      currentIndex += step;
-      if (currentIndex >= totalLength) {
-        setDisplayedText(content);
-        clearInterval(timer);
-        if (onStreamComplete) onStreamComplete();
-      } else {
-        setDisplayedText(content.slice(0, currentIndex));
-      }
-    }, intervalTime);
-
-    return () => clearInterval(timer);
-  }, [content, isStreaming, onStreamComplete]);
 
   const handleCopyCode = (code: string, index: number) => {
     navigator.clipboard.writeText(code);
@@ -250,8 +219,8 @@ export function ChatMessageRenderer({
 
   return (
     <div className="chat-markdown space-y-2 text-left">
-      {parseBlocks(displayedText)}
-      {isStreaming && displayedText.length < content.length && (
+      {parseBlocks(content)}
+      {isStreaming && (
         <span className="inline-block w-2 h-4 bg-emerald-400 animate-pulse ml-0.5 align-middle" />
       )}
     </div>
