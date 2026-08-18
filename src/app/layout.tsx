@@ -45,12 +45,57 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: [
+      { url: "/images/logo-dark.svg", media: "(prefers-color-scheme: dark)" },
+      { url: "/images/logo-light.svg", media: "(prefers-color-scheme: light)" },
+      { url: "/images/logo-dark.svg" },
+    ],
+    shortcut: "/images/logo-dark.svg",
+    apple: "/images/logo-dark.svg",
+  },
 };
 
 export const viewport: Viewport = {
   themeColor: "#090a0f",
   width: "device-width",
   initialScale: 1,
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Le Cong Hoan",
+  alternateName: "Lê Công Hoan",
+  url: "https://hoan.io.vn",
+  image: "https://hoan.io.vn/images/logo-dark.svg",
+  jobTitle: "Senior Full-stack Developer",
+  worksFor: {
+    "@type": "Organization",
+    name: "Software Engineering",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Hanoi",
+    addressCountry: "Vietnam",
+  },
+  sameAs: [
+    "https://github.com/hoan02",
+    "https://linkedin.com/in/hoan02",
+    "https://facebook.com/hoan02",
+  ],
+  knowsAbout: [
+    "Angular",
+    "Next.js",
+    "TypeScript",
+    "Java",
+    "Spring Boot",
+    "Golang",
+    "Kubernetes",
+    "Docker",
+    "PostgreSQL",
+    "Microservices",
+  ],
 };
 
 export default function RootLayout({
@@ -63,6 +108,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} scroll-smooth antialiased dark`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-screen bg-[#090a0f] text-[#f4f4f5] font-sans selection:bg-emerald-500 selection:text-black overflow-x-hidden">
         {children}
       </body>

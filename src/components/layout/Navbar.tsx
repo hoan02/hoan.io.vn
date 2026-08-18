@@ -60,9 +60,13 @@ export function Navbar({ onOpenAI }: NavbarProps) {
         {/* Brand / Name */}
         <Link
           href="#"
-          className="flex items-center gap-2 text-sm font-semibold tracking-tight text-white hover:text-emerald-400 transition-colors"
+          className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white hover:text-emerald-400 transition-colors group"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+          <img
+            src="/images/logo-dark.svg"
+            alt="Hoan Logo"
+            className="w-6 h-6 object-contain rounded-md transition-transform duration-300 group-hover:scale-110 shadow-[0_0_10px_rgba(35,207,46,0.3)]"
+          />
           <span>{language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}</span>
         </Link>
 

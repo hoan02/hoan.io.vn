@@ -1,0 +1,91 @@
+# Le Cong Hoan — Full-stack Developer
+
+> Professional profile and technical dossier of Le Cong Hoan (Lê Công Hoan), Senior Full-stack Developer based in Hanoi, Vietnam. Specialized in Angular Micro-frontends, Next.js, Java Spring Boot microservices, high-scale database workflows (Oracle, PostgreSQL), and Kubernetes/CI-CD cloud-native infrastructure.
+
+## Core Information
+- **Name**: Le Cong Hoan (Lê Công Hoan)
+- **Title**: Senior Full-stack Developer
+- **Location**: Hanoi, Vietnam (Available for Remote / Hybrid worldwide)
+- **Email**: lehoan.dev@gmail.com
+- **Phone**: (+84) 0358 069 992
+- **Website**: https://hoan.io.vn
+- **GitHub**: https://github.com/hoan02
+- **LinkedIn**: https://www.linkedin.com/in/hoan02
+- **Facebook**: https://web.facebook.com/hoanit02
+- **Resume / CV**: https://hoan.io.vn/cv/Le_Cong_Hoan_CV.pdf
+- **Education**: Degree of Engineer in Information Technology (Graduated with Distinction / Bằng Kỹ sư CNTT Loại Giỏi) — University of Transport and Communications (2020 – 2024).
+
+---
+
+## Technical Expertise & Core Stack
+
+### Frontend & Architecture
+- **Frameworks & Libraries**: Angular (Advanced, Micro-Frontend, NX Monorepo, RxJS, NgRx, Dynamic Forms), Next.js (App Router, SSR, SSG, SEO, Core Web Vitals), React, TypeScript (Strict Typing, Complex Generics), JavaScript (ES6+).
+- **Styling & UI**: Tailwind CSS, SCSS, CSS Modules, Responsive & Cross-Browser Design, Component Design Systems.
+
+### Backend & Microservices
+- **Java / Spring Boot**: Spring Cloud, Microservices Architecture, Spring Security, RESTful APIs, Keycloak (OIDC/RBAC), BPM/CRM integrations.
+- **Node.js & Scripting**: Asynchronous services, REST API development, backend automation.
+- **Messaging & Cache**: Apache Kafka (Distributed event streaming), Redis (Distributed caching, session storage, distributed locking).
+- **Storage & Identity**: MinIO (Object Storage), Keycloak (IAM/OAuth2/OIDC).
+
+### Databases & Data Engineering
+- **Oracle Database**: Enterprise schema design, SQL tuning, stored procedures, high-throughput transaction processing.
+- **PostgreSQL**: Relational modeling, indexing strategies, connection pooling, complex query optimization.
+- **In-Memory**: Redis (In-memory key-value cache, pub/sub).
+
+### DevOps, Cloud-Native & Infrastructure
+- **Kubernetes (K8s)**: On-premises cluster orchestration, Deployments, Services, Ingress Controllers, ConfigMaps/Secrets, Health Probes, Rolling Updates.
+- **Containers & Build Tools**: Docker (Multi-stage builds, container packaging), Private Container Registries.
+- **CI/CD & Automation**: Jenkins Declarative Pipelines, Automated Multi-Environment Deployments, Git, Linux Server Administration, Postman.
+
+---
+
+## Key Enterprise Projects
+
+### 1. EPAS — Enterprise Process Automation System (NGV Group, 12/2024 – Present)
+- **Role**: Full-stack Developer
+- **Tech Stack**: Angular Micro-Frontend (NX monorepo), Java Spring Boot, Oracle, PostgreSQL, Apache Kafka, Redis, Keycloak, Kubernetes, Docker, Jenkins.
+- **Key Contributions**:
+  - Architected Angular micro-frontends with shared component libraries, standardized routing, and reusable dynamic forms across multiple enterprise modules.
+  - Engineered CRM/BPM workflow automation including transaction inboxes, task dispatching, and audit trails.
+  - Integrated frontend clients with high-throughput Spring Boot microservices and Oracle/PostgreSQL data pipelines.
+  - Maintained automated Jenkins CI/CD pipelines deploying Docker containers to on-premises Kubernetes clusters with zero downtime.
+
+### 2. Zalo Official Account (OA) Messaging & Communication Platform (NGV Group, 12/2024 – Present)
+- **Role**: Full-stack Developer
+- **Tech Stack**: Angular, Java Spring Boot, TypeScript, RESTful APIs, PostgreSQL, Redis.
+- **Key Contributions**:
+  - Developed conversation management interfaces, message templates, status tracking, dynamic filtering, and real-time interaction modules.
+  - Implemented high-performance pagination and instant search across large historical conversation archives.
+  - Synchronized Zalo OA webhooks and REST endpoints with Spring Boot backend services and Redis cache.
+
+### 3. MochiMochi Language Learning Platform (MochiMochi, 03/2024 – 08/2024)
+- **Role**: Frontend Developer
+- **Tech Stack**: Next.js, React, TypeScript, Tailwind CSS, SSR/SSG, Core Web Vitals Optimization.
+- **Key Contributions**:
+  - Developed learner-facing web applications serving thousands of active Japanese and Chinese language learners.
+  - Optimized Server-Side Rendering (SSR), asset pipelines, and metadata structure, substantially increasing organic SEO traffic and Lighthouse scores.
+  - Refactored legacy code into standardized reusable UI modules, accelerating feature delivery lead time.
+
+### 4. Enterprise CI/CD & Kubernetes Multi-Environment Infrastructure (2024 – Present)
+- **Role**: DevOps & Infrastructure
+- **Tech Stack**: Kubernetes, Docker, Jenkins, Linux, Shell Scripting, Git.
+- **Key Contributions**:
+  - Built automated multi-stage build and container image publishing pipelines with Jenkins.
+  - Configured and operated on-premises Kubernetes clusters, ingress controllers, registries, and rolling zero-downtime release workflows.
+
+---
+
+## Professional Work History
+- **NGV Group** | Fullstack Developer (12/2024 – Present) — Hanoi, Vietnam
+- **MochiMochi** | Frontend Developer (03/2024 – 08/2024) — Hanoi, Vietnam
+
+---
+
+## Contact & Inquiries
+- **Website**: [https://hoan.io.vn](https://hoan.io.vn)
+- **Direct Email**: [lehoan.dev@gmail.com](mailto:lehoan.dev@gmail.com)
+- **Phone / Zalo**: (+84) 0358 069 992
+- **GitHub**: [https://github.com/hoan02](https://github.com/hoan02)
+- **LinkedIn**: [https://www.linkedin.com/in/hoan02](https://www.linkedin.com/in/hoan02)

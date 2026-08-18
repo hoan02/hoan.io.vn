@@ -20,8 +20,12 @@ export function Footer() {
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
         {/* Left side */}
         <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
-          <div className="flex items-center gap-2 text-zinc-300 font-semibold">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+          <div className="flex items-center gap-2.5 text-zinc-300 font-semibold">
+            <img
+              src="/images/logo-dark.svg"
+              alt="Hoan Logo"
+              className="w-5 h-5 object-contain rounded"
+            />
             <span>{language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}</span>
           </div>
           <span className="hidden sm:inline text-zinc-700">/</span>

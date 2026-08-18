@@ -1,3 +1,17 @@
+# Project Context & Agent Guidelines
+
+## Owner Information
+- **Full Name**: Lê Công Hoan (English: Le Cong Hoan)
+  - *Important Note*: The Vietnamese name is **Lê Công Hoan** (with "Hoan", NOT "Hoàn").
+- **Title**: Senior Full-stack Developer
+- **Contact**: lehoan.dev@gmail.com | (+84) 0358 069 992
+- **Website**: https://hoan.io.vn
+
+## Core Technology Stack
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, Lucide Icons, Canvas / Framer Motion.
+- **Backend & Data**: Java Spring Boot, Go, Oracle, PostgreSQL, Redis, Apache Kafka.
+- **DevOps**: Docker, Kubernetes, Jenkins CI/CD.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
