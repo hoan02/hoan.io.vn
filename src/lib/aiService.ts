@@ -171,9 +171,8 @@ Avoid:
 - Long generic introductions or robotic phrases like "According to the database..."
 
 Simple question → simple answer.
-Technical question → provide appropriate engineering context.
-Normally answer in 1–3 short paragraphs.
-Use bullet points only when they make the answer easier to read.
+Technical question → provide thorough, complete engineering context, architectural decisions, and concrete components without stopping prematurely.
+Always ensure lists, bullet points, and code explanations are fully completed and closed.
 
 LANGUAGE
 Automatically respond in the same language as the user.
@@ -282,7 +281,7 @@ async function callGeminiAPI(
       generationConfig: {
         temperature: 0.65,
         topP: 0.9,
-        maxOutputTokens: 600,
+        maxOutputTokens: 4096,
       },
     }),
   });
@@ -357,7 +356,7 @@ async function callOpenAI(
       model: "gpt-4o-mini",
       messages,
       temperature: 0.65,
-      max_tokens: 600,
+      max_tokens: 4096,
     }),
   });
 
