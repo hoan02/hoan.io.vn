@@ -419,6 +419,10 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
         );
       }
 
+      if (!fullAnswer.trim()) {
+        throw new Error("Empty response from AI stream");
+      }
+
       const relevantLinks = deriveRelevantLinks(`${q} ${fullAnswer}`);
       const followUps = computeContextualFollowUps(q, fullAnswer);
 
@@ -427,7 +431,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           msg.id === assistantMsgId
             ? {
                 ...msg,
-                content: fullAnswer || "Hoan AI đã xử lý yêu cầu của bạn.",
+                content: fullAnswer,
                 isStreaming: false,
                 relevantLinks: relevantLinks.length > 0 ? relevantLinks : undefined,
                 followUps,
@@ -437,12 +441,27 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
       );
     } catch (err: unknown) {
       console.error("[Chat UI error]:", err);
-      const fallbackContent =
-        language === "vi"
-          ? `Lê Công Hoan sinh ngày **02/04/2002** (24 tuổi). Là Kỹ sư Full-stack Developer tốt nghiệp loại Giỏi tại **Đại học Giao thông Vận tải (UTC)**, hiện làm việc tại **NGV Group**. Hoan chuyên sâu về **Angular Micro-Frontend**, **Go Microservices** (Arda, Puchi), và hạ tầng **Kubernetes K3s Homelab**.`
-          : `Le Cong Hoan was born on **April 2, 2002** (24 years old). He is a Full-stack Developer graduated with Distinction from **UTC**, currently working at **NGV Group**, specializing in **Angular Micro-Frontends**, **Go Microservices** (Arda, Puchi), and **Kubernetes K3s Homelab** infrastructure.`;
+      let fallbackContent = "";
+      const lowerQ = q.toLowerCase();
 
-      const relevantLinks = deriveRelevantLinks(fallbackContent);
+      if (lowerQ.includes("puchi")) {
+        fallbackContent =
+          language === "vi"
+            ? `**Puchidemy** là nền tảng học tiếng Việt tương tác kết hợp **5 Go microservices** (phát triển trên nền **Go Kratos v3** framework, gRPC contracts & NATS event bus), giao diện **Next.js PWA** (với cơ chế cache audio trên Cloudflare R2), và hệ thống tự động hoá triển khai **GitOps ArgoCD** trên cụm **K3s** homelab.`
+            : `**Puchidemy** is an interactive Vietnamese learning platform combining **5 Go microservices** (built on **Go Kratos v3** with gRPC & NATS events), a **Next.js PWA** frontend (with Cloudflare R2 audio caching), and automated **ArgoCD GitOps** deployments on a **K3s** cluster.`;
+      } else if (lowerQ.includes("arda")) {
+        fallbackContent =
+          language === "vi"
+            ? `**ARDA Platform** là nền tảng FinOps SaaS đa người dùng với **9 Go microservices** (gRPC/NATS JetStream với Transactional Outbox), **React Module Federation** (1 Shell + 7 Remotes), hệ thống IAM phân tán bằng **Ory Kratos/Hydra**, và cụm 3-node **K3s** tự vận hành.`
+            : `**ARDA Platform** is a multi-tenant FinOps SaaS platform with **9 Go microservices** (gRPC/NATS JetStream with Transactional Outbox), **React Module Federation** (1 Shell + 7 Remotes), **Ory Kratos/Hydra IAM**, and a self-hosted 3-node **K3s** cluster.`;
+      } else {
+        fallbackContent =
+          language === "vi"
+            ? `Lê Công Hoan sinh ngày **02/04/2002** (24 tuổi). Là Kỹ sư Full-stack Developer tốt nghiệp loại Giỏi tại **Đại học Giao thông Vận tải (UTC)**, hiện làm việc tại **NGV Group**. Hoan chuyên sâu về **Angular Micro-Frontend**, **Go Microservices** (Arda, Puchi), và hạ tầng **Kubernetes K3s Homelab**.`
+            : `Le Cong Hoan was born on **April 2, 2002** (24 years old). He is a Full-stack Developer graduated with Distinction from **UTC**, currently working at **NGV Group**, specializing in **Angular Micro-Frontends**, **Go Microservices** (Arda, Puchi), and **Kubernetes K3s Homelab** infrastructure.`;
+      }
+
+      const relevantLinks = deriveRelevantLinks(`${q} ${fallbackContent}`);
       const followUps = computeContextualFollowUps(q, fallbackContent);
 
       setMessages((prev) =>
