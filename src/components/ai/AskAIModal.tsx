@@ -4,13 +4,21 @@ import React, { useState, useEffect, useRef } from "react";
 import { SUGGESTED_PROMPTS_EN, SUGGESTED_PROMPTS_VI } from "@/data/aiKnowledgeBase";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
-import { AIServiceResult } from "@/lib/aiService";
-import { X, Sparkles, CornerDownLeft, Bot, ExternalLink, RefreshCw, ArrowRight } from "lucide-react";
+import { AIServiceResult, ChatMessage } from "@/lib/aiService";
+import { X, Sparkles, CornerDownLeft, Bot, ExternalLink, RefreshCw, ArrowRight, User, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface AskAIModalProps {
   isOpen: boolean;
   onClose: () => void;
+}
+
+interface DisplayMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  source?: string;
+  relevantLinks?: { label: string; url: string }[];
 }
 
 export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
@@ -21,11 +29,9 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
 
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [currentResult, setCurrentResult] = useState<AIServiceResult | null>(null);
-  const [displayedText, setDisplayedText] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Focus on input when opened
   useEffect(() => {
@@ -37,7 +43,12 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
     }
   }, [isOpen]);
 
-  // Handle global shortcuts
+  // Scroll to bottom when messages update
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
+  // Handle global shortcuts (Ctrl+K / Cmd+K / Esc)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -52,58 +63,65 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Streaming typewriter effect
-  const typeText = (fullText: string) => {
-    if (typingTimerRef.current) clearInterval(typingTimerRef.current);
-    setDisplayedText("");
-    setIsTyping(true);
-
-    let index = 0;
-    typingTimerRef.current = setInterval(() => {
-      if (index < fullText.length) {
-        const chunk = fullText.slice(0, index + 3);
-        setDisplayedText(chunk);
-        index += 3;
-      } else {
-        setDisplayedText(fullText);
-        setIsTyping(false);
-        if (typingTimerRef.current) clearInterval(typingTimerRef.current);
-      }
-    }, 10);
-  };
-
   const handleSearch = async (searchQuery: string) => {
     const q = searchQuery.trim();
-    if (!q) return;
+    if (!q || loading) return;
 
+    const userMessage: DisplayMessage = {
+      id: `user-${Date.now()}`,
+      role: "user",
+      content: q,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setQuery("");
     setLoading(true);
-    setQuery(q);
+
+    // Build history payload
+    const historyPayload: ChatMessage[] = messages.map((m) => ({
+      role: m.role,
+      content: m.content,
+    }));
 
     try {
       const res = await fetch("/api/ask-ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: q, lang: language })
+        body: JSON.stringify({
+          query: q,
+          lang: language,
+          history: historyPayload,
+        }),
       });
 
       if (!res.ok) throw new Error("Failed to query AI");
 
       const data: AIServiceResult = await res.json();
-      setCurrentResult(data);
-      typeText(data.response.answer);
+      const assistantMessage: DisplayMessage = {
+        id: `assistant-${Date.now()}`,
+        role: "assistant",
+        content: data.response.answer,
+        source: data.source,
+        relevantLinks: data.response.relevantLinks,
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (err) {
       console.error(err);
-      const fallbackResult: AIServiceResult = {
-        response: {
-          answer: language === "vi" 
-            ? "Lê Công Hoan là Kỹ sư Full-stack Developer với kinh nghiệm chuyên sâu về Angular Micro-Frontend, Next.js, Java Spring Boot, Oracle, PostgreSQL, Docker và Kubernetes."
-            : "Le Cong Hoan is a Full-stack Developer with deep expertise in Angular Micro-Frontends, Next.js, Java Spring Boot, Oracle, PostgreSQL, Docker, and Kubernetes.",
-          relatedTopic: language === "vi" ? "Thông tin Tổng quan" : "Profile Summary"
-        },
-        source: "local-semantic"
+      const fallbackMessage: DisplayMessage = {
+        id: `assistant-${Date.now()}`,
+        role: "assistant",
+        content:
+          language === "vi"
+            ? "Lê Công Hoan là Kỹ sư Full-stack Developer với kinh nghiệm chuyên sâu về Angular Micro-Frontend, Next.js, Java Spring Boot, Oracle, PostgreSQL, Docker, Kubernetes và hạ tầng Homelab."
+            : "Le Cong Hoan is a Full-stack Developer with practical experience in Angular Micro-Frontends, Next.js, Java Spring Boot, Oracle, PostgreSQL, Docker, Kubernetes, and Homelab infrastructure.",
+        source: "local-semantic",
+        relevantLinks: [
+          { label: "View Projects", url: "/#selected-work" },
+          { label: "Engineering Notes", url: "/writing" },
+        ],
       };
-      setCurrentResult(fallbackResult);
-      typeText(fallbackResult.response.answer);
+      setMessages((prev) => [...prev, fallbackMessage]);
     } finally {
       setLoading(false);
     }
@@ -118,18 +136,23 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
     handleSearch(query);
   };
 
+  const handleClearChat = () => {
+    setMessages([]);
+    setQuery("");
+  };
+
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-10">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/80 backdrop-blur-md"
+          className="fixed inset-0 bg-black/85 backdrop-blur-md"
         />
 
         {/* Modal Window */}
@@ -141,7 +164,10 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-zinc-950 border border-zinc-800 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] z-10 overflow-hidden"
         >
           {/* Top Bar / Search Input */}
-          <form onSubmit={handleSubmit} className="relative flex items-center border-b border-zinc-800 px-4 py-3.5 bg-zinc-900/50">
+          <form
+            onSubmit={handleSubmit}
+            className="relative flex items-center border-b border-zinc-800 px-4 py-3.5 bg-zinc-900/60"
+          >
             <Sparkles className="w-5 h-5 text-emerald-400 mr-3 shrink-0" />
             <input
               ref={inputRef}
@@ -154,11 +180,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
             {query && (
               <button
                 type="button"
-                onClick={() => {
-                  setQuery("");
-                  setCurrentResult(null);
-                  setDisplayedText("");
-                }}
+                onClick={() => setQuery("")}
                 className="p-1 text-zinc-500 hover:text-zinc-300 mr-2"
               >
                 <X className="w-4 h-4" />
@@ -168,102 +190,116 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
               type="submit"
               disabled={loading || !query.trim()}
               className="p-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:opacity-30 text-zinc-950 transition-colors"
+              title="Send"
             >
               <CornerDownLeft className="w-4 h-4" />
             </button>
           </form>
 
-          {/* Modal Body */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar">
-            {/* Quick Suggestions Chips */}
-            <div>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 block mb-2.5">
-                {t.ai.suggestedTitle}
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {suggestedPrompts.map((prompt, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handlePromptClick(prompt)}
-                    className="text-xs px-3 py-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-emerald-300 border border-zinc-800/80 transition-all text-left flex items-center gap-1.5"
-                  >
-                    <span>{prompt}</span>
-                    <ArrowRight className="w-3 h-3 text-zinc-500" />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Answer Display Area */}
-            {loading && (
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/60 text-xs text-zinc-400 animate-pulse">
-                <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
-                <span>{t.ai.retrieving} &quot;{query}&quot;...</span>
+          {/* Modal Body / Chat Messages */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar min-h-[260px]">
+            {/* Quick Suggestions Chips (when no messages yet) */}
+            {messages.length === 0 && (
+              <div>
+                <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 block mb-2.5">
+                  {t.ai.suggestedTitle}
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {suggestedPrompts.map((prompt, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handlePromptClick(prompt)}
+                      className="text-xs px-3 py-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-emerald-300 border border-zinc-800/80 transition-all text-left flex items-center gap-1.5"
+                    >
+                      <span>{prompt}</span>
+                      <ArrowRight className="w-3 h-3 text-zinc-500" />
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
 
-            {currentResult && !loading && (
-              <div className="p-5 rounded-xl bg-zinc-900/70 border border-emerald-500/20 space-y-4">
-                <div className="flex items-center justify-between gap-2 border-b border-zinc-800/60 pb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                      <Bot className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-xs font-semibold text-zinc-200">
-                      {currentResult.response.relatedTopic || "AI Assistant"}
-                    </span>
+            {/* Conversation Flow */}
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+              >
+                {msg.role === "assistant" && (
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <Bot className="w-4 h-4" />
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                    {currentResult.source === "local-semantic" ? "Local Semantic Engine" : currentResult.source.toUpperCase()}
-                  </span>
-                </div>
+                )}
 
-                {/* Streamed Answer Text */}
-                <div className="text-sm text-zinc-200 leading-relaxed whitespace-pre-line">
-                  {displayedText}
-                  {isTyping && (
-                    <span className="inline-block w-1.5 h-4 ml-1 bg-emerald-400 animate-pulse align-middle" />
+                <div
+                  className={`max-w-[85%] rounded-2xl p-4 text-xs sm:text-sm leading-relaxed space-y-3 ${
+                    msg.role === "user"
+                      ? "bg-emerald-500 text-zinc-950 font-medium rounded-tr-sm"
+                      : "bg-zinc-900/80 text-zinc-200 border border-zinc-800 rounded-tl-sm"
+                  }`}
+                >
+                  <div className="whitespace-pre-line">{msg.content}</div>
+
+                  {/* Direct Navigation Links for Assistant responses */}
+                  {msg.relevantLinks && msg.relevantLinks.length > 0 && (
+                    <div className="pt-2 border-t border-zinc-800/80 flex flex-wrap gap-2">
+                      {msg.relevantLinks.map((link, linkIdx) => (
+                        <a
+                          key={linkIdx}
+                          href={link.url}
+                          onClick={onClose}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-mono rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-colors"
+                        >
+                          <span>{link.label}</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+
+                  {msg.source && (
+                    <div className="text-[10px] font-mono text-zinc-500 pt-1">
+                      via {msg.source === "gemini" ? "Gemini 2.5 Flash" : msg.source === "openai" ? "OpenAI" : "Local Engine"}
+                    </div>
                   )}
                 </div>
 
-                {/* Tags */}
-                {currentResult.response.tags && currentResult.response.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {currentResult.response.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-800/90 text-zinc-300"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Direct Links */}
-                {currentResult.response.relevantLinks && currentResult.response.relevantLinks.length > 0 && (
-                  <div className="pt-3 border-t border-zinc-800/60 flex flex-wrap gap-2">
-                    {currentResult.response.relevantLinks.map((link, i) => (
-                      <a
-                        key={i}
-                        href={link.url}
-                        onClick={onClose}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-colors"
-                      >
-                        <span>{link.label}</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    ))}
+                {msg.role === "user" && (
+                  <div className="w-7 h-7 rounded-lg bg-zinc-800 text-zinc-300 flex items-center justify-center shrink-0 mt-0.5">
+                    <User className="w-4 h-4" />
                   </div>
                 )}
               </div>
+            ))}
+
+            {/* Loading indicator */}
+            {loading && (
+              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-zinc-900/40 border border-zinc-800/60 text-xs text-zinc-400 animate-pulse w-fit">
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-400" />
+                <span>Thinking...</span>
+              </div>
             )}
+
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Modal Footer */}
           <div className="px-5 py-3 border-t border-zinc-800/80 bg-zinc-950 flex items-center justify-between text-xs text-zinc-500 font-mono">
-            <span>{t.ai.escToClose}</span>
+            <div className="flex items-center gap-3">
+              <span>{t.ai.escToClose}</span>
+              {messages.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClearChat}
+                  className="flex items-center gap-1 text-zinc-500 hover:text-zinc-300 transition-colors"
+                  title="Clear conversation"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  <span>Clear</span>
+                </button>
+              )}
+            </div>
             <button
               onClick={onClose}
               className="text-zinc-400 hover:text-zinc-200 transition-colors"

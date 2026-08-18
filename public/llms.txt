@@ -4,6 +4,7 @@
 
 ## Core Information
 - **Name**: Le Cong Hoan (Lê Công Hoan)
+- **Date of Birth**: 02/04/2002 (April 2, 2002)
 - **Title**: Full-stack Developer
 - **Location**: Hanoi, Vietnam (Available for Remote / Hybrid worldwide)
 - **Email**: lehoan.dev@gmail.com
@@ -83,6 +84,10 @@
 5. **PostgreSQL & Oracle in Enterprise Systems: Architecture & SQL Tuning**
    - URL: https://hoan.io.vn/writing/postgresql-oracle-migration-lessons
    - Topics: Database, PostgreSQL, Oracle, Spring Boot, SQL Tuning.
+
+6. **Reflections on Graduating as an IT Engineer (Distinction) & Transitioning to Production Systems**
+   - URL: https://hoan.io.vn/writing/from-utc-engineer-to-production-systems
+   - Topics: Career, Education, UTC, Engineering, Personal Journey.
 
 ---
 

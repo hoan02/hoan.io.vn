@@ -3,6 +3,7 @@ import { Project, ExperienceItem, TechCategory, BentoStat, Article } from "@/typ
 export const PERSONAL_INFO = {
   name: "Le Cong Hoan",
   nameVi: "Lê Công Hoan",
+  dateOfBirth: "02/04/2002",
   title: "Full-stack Developer",
   titleVi: "Full-stack Developer",
   phone: "0358 069 992",
@@ -640,6 +641,43 @@ spec:
         "Rút ngắn đáng kể thời gian thực thi truy vấn trên các bảng hàng triệu bản ghi.",
         "Quản lý connection pool an toàn, ngăn ngừa cạn kiệt kết nối khi lượng truy cập tăng đột biến.",
         "Phân tách rõ ràng giữa dữ liệu lưu trữ doanh nghiệp và schema dịch vụ mới."
+      ]
+    }
+  },
+  {
+    slug: "from-utc-engineer-to-production-systems",
+    title: "Reflections on Graduating as an IT Engineer (Distinction) & Transitioning to Production Systems",
+    titleVi: "Nhìn lại Chặng đường Kỹ sư CNTT Loại Giỏi (UTC) & Bước chuyển mình vào Vận hành Hệ thống",
+    summary: "Personal and technical reflections on completing an Engineer Degree in IT with Distinction from University of Transport and Communications (UTC), mastering core computer science foundations, and bridging the gap to enterprise architectures.",
+    summaryVi: "Những đúc kết cá nhân và kỹ thuật sau khi tốt nghiệp Kỹ sư CNTT loại Giỏi tại ĐH Giao thông Vận tải (UTC), xây dựng nền tảng cốt lõi và chuyển tiếp vào phát triển hệ thống doanh nghiệp.",
+    date: "Aug 2024",
+    readTime: "6 min read",
+    tags: ["Career", "Education", "Engineering", "UTC", "Personal"],
+    featured: false,
+    content: {
+      problemStatement: "The transition from university theoretical computer science concepts (algorithms, databases, OS internals) to fast-paced production delivery often catches new graduates off-guard with real-world complexities like microservices, CI/CD, and distributed observability.",
+      problemStatementVi: "Bước chuyển từ lý thuyết đại học (thuật toán, cấu trúc dữ liệu, hệ điều hành) sang môi trường thực chiến thường gặp rào cản lớn về tính phức tạp của microservices, CI/CD và khả năng chịu tải thực tế.",
+      architectureDesign: "During 4 years at UTC (10/2020 – 08/2024), maintaining disciplined focus on software architecture fundamentals and actively building production-like homelab projects laid the solid ground to graduate with Distinction and quickly assume full-stack enterprise responsibilities.",
+      architectureDesignVi: "Trong suốt 4 năm tại UTC (10/2020 – 08/2024), việc kiên trì rèn luyện tư duy kiến trúc và tự thực hành các dự án homelab thực tế đã tạo nền móng vững chắc để tốt nghiệp Bằng Kỹ sư loại Giỏi và nhanh chóng tham gia phát triển các hệ thống lớn.",
+      technicalDecisions: [
+        "Focus on fundamental computer science principles: network protocols (TCP/HTTP), database transaction isolation levels, and concurrency patterns.",
+        "Bridge theory to practice by maintaining hands-on self-hosted servers, Docker containers, and full-stack side projects alongside coursework.",
+        "Emphasize code readability, defensive typing in TypeScript, and modular design over short-term hacks."
+      ],
+      technicalDecisionsVi: [
+        "Tập trung sâu vào nền tảng khoa học máy tính: giao thức mạng, cấp độ cô lập transaction trong CSDL và xử lý đa luồng.",
+        "Chủ động thu hẹp khoảng cách lý thuyết - thực tế bằng việc tự dựng server, container Docker và các side project hoàn chỉnh song song việc học.",
+        "Đề cao tính dễ đọc của mã nguồn, typing chặt chẽ với TypeScript và thiết kế module hóa thay vì các giải pháp chắp vá ngắn hạn."
+      ],
+      keyTakeaways: [
+        "Strong computer science fundamentals significantly accelerate learning new frameworks (Angular, Next.js, Spring Boot, K8s).",
+        "Graduating with Distinction from UTC reinforced personal discipline and thorough problem-solving rigor.",
+        "The real world rewards pragmatic execution, reliable architectures, and continuous curiosity."
+      ],
+      keyTakeawaysVi: [
+        "Nền tảng CS vững vàng giúp tiếp cận cực nhanh các công nghệ và framework mới.",
+        "Cột mốc tốt nghiệp loại Giỏi tại UTC là minh chứng cho sự kiên trì và kỷ luật học tập nghiêm túc.",
+        "Thực tế luôn ưu tiên tính thực dụng, kiến trúc tin cậy và tinh thần không ngừng học hỏi."
       ]
     }
   }
