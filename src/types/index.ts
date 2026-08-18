@@ -33,6 +33,50 @@ export interface Project {
   accentColor?: string;
 }
 
+export interface ArticleHighlight {
+  value: string;
+  label: string;
+  labelVi?: string;
+  detail: string;
+  detailVi?: string;
+}
+
+export interface ArticleComparison {
+  naiveTitle: string;
+  naiveTitleVi?: string;
+  naivePoints: string[];
+  naivePointsVi?: string[];
+  solutionTitle: string;
+  solutionTitleVi?: string;
+  solutionPoints: string[];
+  solutionPointsVi?: string[];
+}
+
+export interface ArticleSection {
+  id: string;
+  title: string;
+  titleVi?: string;
+  content: string;
+  contentVi?: string;
+  callout?: {
+    type: "info" | "warning" | "tip";
+    text: string;
+    textVi?: string;
+  };
+}
+
+export interface ArticleEmbed {
+  type: "facebook-post" | "facebook-video" | "youtube" | "iframe";
+  src?: string;
+  url?: string;
+  title?: string;
+  titleVi?: string;
+  caption?: string;
+  captionVi?: string;
+  width?: number | string;
+  height?: number | string;
+}
+
 export interface Article {
   slug: string;
   title: string;
@@ -43,8 +87,19 @@ export interface Article {
   readTime: string;
   tags: string[];
   featured: boolean;
+  project?: "arda" | "puchi" | "epas" | "infrastructure" | "personal";
   relatedProject?: string; // Project ID
+  diagramKey?: string;
+  evidenceIds?: string[];
+  repositoryUrl?: string;
+  heroImage?: string;
+  heroImageCaption?: string;
+  heroImageCaptionVi?: string;
+  embeds?: ArticleEmbed[];
+  highlights?: ArticleHighlight[];
+  comparison?: ArticleComparison;
   architectureDiagram?: string;
+  sections?: ArticleSection[];
   content: {
     problemStatement: string;
     problemStatementVi?: string;

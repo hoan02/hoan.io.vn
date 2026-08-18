@@ -12,8 +12,8 @@ export function LatestWriting() {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
 
-  // Pick top 3 featured articles
-  const featuredArticles = ARTICLES_DATA.slice(0, 3);
+  // Pick featured engineering case studies (up to 4)
+  const featuredArticles = ARTICLES_DATA.filter((a) => a.featured).slice(0, 4);
 
   return (
     <section id="writing" className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
@@ -35,7 +35,7 @@ export function LatestWriting() {
       </MotionWrapper>
 
       {/* Grid of Articles */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         {featuredArticles.map((article, idx) => {
           const articleTitle = language === "vi" && article.titleVi ? article.titleVi : article.title;
           const articleSummary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;

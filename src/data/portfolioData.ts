@@ -331,21 +331,1190 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     featured: false,
     image: "/images/projects/analytics.svg",
     accentColor: "#818cf8",
+  },
+  {
+    id: "arda-finops-platform",
+    title: "Arda — Multi-Tenant Financial Operations Platform",
+    titleVi: "Arda — Nền tảng FinOps & Vận hành Tài chính Đa Khách thuê",
+    subtitle: "Cloud-native platform with 9 Go microservices (gRPC & NATS), React Module Federation (7 remotes), and Ory IAM",
+    subtitleVi: "Kiến trúc FinOps đám mây với 9 Go Microservices (gRPC & NATS), React Module Federation (7 remotes) và Ory IAM",
+    description: "Architected a multi-tenant financial operations platform organized into 3 Git repositories: 9 Go microservices backend (arda-be), React Module Federation (arda-mfe), and GitOps-managed Kubernetes infrastructure (arda-infra) with Ory Kratos/Hydra authentication and CloudNativePG.",
+    descriptionVi: "Thiết kế nền tảng FinOps đa khách thuê gồm 3 repo: 9 Go Microservices (arda-be), React Module Federation 7 remote apps (arda-mfe) và hạ tầng Kubernetes GitOps (arda-infra) với xác thực Ory Kratos/Hydra và CloudNativePG.",
+    problem: "Financial operations demand strict multi-tenant data isolation, high-throughput microservices communication, unified zero-trust identity, and decoupled frontend release cycles across CRM, Finance, HRM, and Workflow domains.",
+    problemVi: "Hệ thống vận hành tài chính yêu cầu cách ly dữ liệu đa khách thuê nghiêm ngặt, giao tiếp microservice hiệu năng cao, định danh zero-trust tập trung và phân tách chu kỳ release độc lập giữa các module Finance, CRM, HRM và Workflow.",
+    architectureDiagram: `Browser / Client ──► Cloudflare Tunnel ──► Traefik (ForwardAuth)
+                                                  │
+           ┌──────────────────────────────────────┴──────────────────────────────────────┐
+           ▼                                                                             ▼
+    BFF Auth-Gateway ──► Ory Kratos + Hydra (Identity)                         React Shell + 7 MFE Remotes
+           │                                                                   [@workspace/ui, api, auth]
+           ▼
+    9 Go Microservices (HTTP/JSON + gRPC + NATS Events)
+    [iam, platform, finance, workflow, crm, hrm, notification, media, mdm]
+           │
+           ▼
+    CloudNativePG (HA Postgres) · Valkey · Garage S3 · Zeebe 8.5 BPMN`,
+    contributionsDetailed: [
+      "Engineered 9 Go microservices sharing common libraries (arda-auth, arda-grpc, arda-events, arda-postgres) with sub-10ms inter-service latency via gRPC.",
+      "Architected React Module Federation with a central shell and 7 remotes (mfe-iam, platform, finance, account, hrm, workflow, crm) using shared workspace packages.",
+      "Built zero-trust identity flow with Ory Kratos, Ory Hydra, Traefik ForwardAuth, and BFF session cookies.",
+      "Orchestrated HA PostgreSQL with CloudNativePG, Valkey distributed cache, and Zeebe 8.5 BPMN workflow on a 3-node K3s cluster."
+    ],
+    contributionsDetailedVi: [
+      "Xây dựng 9 Go microservices sử dụng thư viện dùng chung (arda-auth, arda-grpc, arda-events) giao tiếp gRPC độ trễ dưới 10ms.",
+      "Thiết kế kiến trúc React Module Federation gồm Shell trung tâm và 7 remote apps dùng chung gói @workspace/* (shadcn UI, auth, API).",
+      "Thiết lập cơ chế bảo mật zero-trust với Ory Kratos, Ory Hydra, Traefik ForwardAuth và BFF session cookies.",
+      "Vận hành CloudNativePG (PostgreSQL HA), Valkey cache và Zeebe 8.5 BPMN workflow trên cụm 3-node K3s."
+    ],
+    results: [
+      "Fully decoupled frontend and backend release velocity across independent domain teams.",
+      "Zero-trust security with centralized IAM and route-level RBAC policy enforcement.",
+      "Resilient high-availability architecture running bare-metal on 3-node K3s."
+    ],
+    resultsVi: [
+      "Tách biệt hoàn toàn chu kỳ phát hành giữa các nhóm phát triển phân hệ tài chính và nhân sự.",
+      "Bảo mật zero-trust với định danh tập trung và chính sách phân quyền RBAC cấp route.",
+      "Hạ tầng sẵn sàng cao (HA) tự vận hành ổn định trên cụm bare-metal 3-node K3s."
+    ],
+    relatedArticles: ["arda-finops-microservices-module-federation", "kubernetes-homelab-k3s"],
+    role: "Lead Architect & Open Source Maintainer",
+    roleVi: "Kiến trúc sư & Maintainer Dự án",
+    year: "2025 – Present",
+    techStack: ["Go", "gRPC", "NATS", "React", "Module Federation", "Ory Kratos", "CloudNativePG", "K3s", "Zeebe"],
+    category: "Full-stack",
+    categoryVi: "Full-stack",
+    metrics: [
+      "9 Go Microservices with gRPC & NATS event streams",
+      "React Module Federation (Shell + 7 Remotes)",
+      "Zero-trust Ory Kratos/Hydra IAM & CloudNativePG HA"
+    ],
+    metricsVi: [
+      "9 Go Microservices giao tiếp qua gRPC và luồng sự kiện NATS",
+      "React Module Federation gồm Shell và 7 phân hệ Remotes",
+      "Định danh Zero-trust Ory Kratos/Hydra và CSDL CloudNativePG HA"
+    ],
+    architecture: [
+      "React Module Federation with shared @workspace packages",
+      "9 Go Microservices with gRPC inter-service calls & NATS domain events",
+      "Ory Kratos & Hydra zero-trust authentication via Traefik ForwardAuth",
+      "CloudNativePG HA PostgreSQL cluster with Valkey distributed caching"
+    ],
+    architectureVi: [
+      "React Module Federation với các gói dùng chung @workspace/*",
+      "9 Go Microservices kết nối gRPC và luồng sự kiện bất đồng bộ NATS",
+      "Xác thực Zero-trust qua Ory Kratos/Hydra và Traefik ForwardAuth",
+      "Cụm CloudNativePG HA PostgreSQL và bộ nhớ đệm phân tán Valkey"
+    ],
+    liveUrl: "https://arda.io.vn",
+    githubUrl: "https://github.com/arda-labs",
+    featured: true,
+    image: "/images/projects/gateway.svg",
+    accentColor: "#6366f1",
+  },
+  {
+    id: "puchi-language-platform",
+    title: "Puchi — Vietnamese Language Learning Platform",
+    titleVi: "Puchi — Nền tảng Học tiếng Việt Trực tuyến",
+    subtitle: "Next.js PWA with 5 Go microservices (Kratos v3), Limen Auth, NATS events, and ArgoCD GitOps",
+    subtitleVi: "Ứng dụng Next.js PWA với 5 Go Microservices (Kratos v3), Limen Auth, NATS events và ArgoCD GitOps",
+    description: "Developed a modern Vietnamese learning web platform featuring a responsive Next.js PWA frontend, 5 Go microservices monorepo built on Kratos v3, Limen auth session exchange, NATS event bus, and automated ArgoCD GitOps deployments on K3s.",
+    descriptionVi: "Phát triển nền tảng học tiếng Việt hiện đại gồm Next.js PWA frontend, monorepo 5 Go microservices trên nền Kratos v3, xác thực Limen Auth, NATS event bus và CI/CD GitOps qua ArgoCD trên K3s.",
+    problem: "Online language learners need fast, offline-capable PWA experiences with instant lesson progress synchronization, audio pronunciation streaming, and resilient microservice APIs under traffic spikes.",
+    problemVi: "Học viên học ngoại ngữ cần trải nghiệm PWA mượt mà hỗ trợ offline, đồng bộ tiến độ học tức thì, phát âm thanh bài học nhanh và hạ tầng microservice ổn định dưới tải cao.",
+    architectureDiagram: `User ──► Cloudflare CDN ──► Next.js PWA (Limen Auth) ──► Envoy Gateway
+                │
+                ▼
+       Go Services (Kratos v3) ──► PostgreSQL / NATS / Cloudflare R2
+       [auth, core, learn, media, notification]
+                │
+                ▼
+       K3s Cluster (v1.35) + ArgoCD GitOps + Traefik Ingress`,
+    contributionsDetailed: [
+      "Built responsive Next.js PWA frontend with progress tracking, interactive quiz exercises, and audio pronunciation streaming via Cloudflare R2.",
+      "Developed 5 Go microservices monorepo (app/auth, core, learn, media, notification) powered by the Kratos v3 framework.",
+      "Implemented asynchronous domain events via NATS (auth.user.created, learn.lesson.completed, email.send).",
+      "Automated continuous delivery via ArgoCD GitOps on a 3-node K3s cluster with Traefik ingress and Cloudflare Tunnels."
+    ],
+    contributionsDetailedVi: [
+      "Xây dựng frontend Next.js PWA theo dõi tiến độ học tập, bài tập trắc nghiệm tương tác và stream âm thanh qua Cloudflare R2.",
+      "Phát triển monorepo 5 Go microservices (auth, core, learn, media, notification) trên nền tảng Kratos v3.",
+      "Hiện thực hóa kiến trúc event-driven qua NATS (auth.user.created, learn.lesson.completed, email.send).",
+      "Tự động hóa triển khai GitOps với ArgoCD trên cụm K3s v1.35 kết hợp Traefik và Cloudflare Tunnel."
+    ],
+    results: [
+      "Sub-second PWA initial load and instant interactive exercise feedback for language learners.",
+      "Event-driven decoupling of learning progress tracking and notification dispatching.",
+      "Zero-downtime automated deployments with declarative ArgoCD GitOps."
+    ],
+    resultsVi: [
+      "Tốc độ tải trang PWA dưới 1 giây và phản hồi bài tập trắc nghiệm tức thì cho học viên.",
+      "Phân tách kiến trúc theo hướng sự kiện (Event-Driven) tối ưu tải hệ thống.",
+      "Triển khai zero-downtime hoàn toàn tự động qua mô hình ArgoCD GitOps."
+    ],
+    relatedArticles: ["building-puchi-product-idea-to-service-architecture", "why-puchi-uses-opaque-sessions-over-jwt", "git-push-to-k3s-puchi-gitops-pipeline", "designing-story-based-language-learning-engine"],
+    role: "Fullstack Architect & Creator",
+    roleVi: "Kiến trúc sư & Nhà sáng lập",
+    year: "2025 – Present",
+    techStack: ["Go", "Kratos v3", "Next.js", "PWA", "NATS", "PostgreSQL", "ArgoCD", "K3s", "Cloudflare R2"],
+    category: "Full-stack",
+    categoryVi: "Full-stack",
+    metrics: [
+      "5 Go Microservices (Kratos v3) + NATS Event Bus",
+      "Next.js PWA with Limen Auth & Cloudflare R2",
+      "Declarative ArgoCD GitOps on K3s Kubernetes"
+    ],
+    metricsVi: [
+      "5 Go Microservices (Kratos v3) và luồng sự kiện NATS",
+      "Next.js PWA tích hợp Limen Auth và Cloudflare R2",
+      "Triển khai GitOps tự động hóa với ArgoCD trên K3s"
+    ],
+    architecture: [
+      "Next.js PWA with Limen authentication session management",
+      "5 Go Microservices (Kratos v3) with NATS asynchronous event messaging",
+      "Cloudflare R2 object storage for audio pronunciation assets",
+      "ArgoCD GitOps deployment pipeline on multi-node K3s cluster"
+    ],
+    architectureVi: [
+      "Next.js PWA quản lý phiên người dùng qua Limen Auth",
+      "5 Go Microservices (Kratos v3) xử lý sự kiện bất đồng bộ qua NATS",
+      "Lưu trữ tệp âm thanh bài giảng trên Cloudflare R2",
+      "Pipeline triển khai ArgoCD GitOps trên cụm K3s Kubernetes"
+    ],
+    liveUrl: "https://puchi.io.vn",
+    githubUrl: "https://github.com/puchidemy",
+    featured: true,
+    image: "/images/projects/saas.svg",
+    accentColor: "#10b981",
   }
 ];
 
 export const ARTICLES_DATA: Article[] = [
+  // ==========================================
+  // ARDA LABS ARTICLES
+  // ==========================================
+  {
+    slug: "designing-arda-cloud-native-finops-platform",
+    title: "Designing Arda: A Cloud-Native Financial Operations Platform",
+    titleVi: "Thiết kế Hệ thống Arda: Nền tảng FinOps Đám mây Đa Khách thuê",
+    summary: "Comprehensive system design of Arda (arda.io.vn) — 9 Go microservices, synchronous gRPC, NATS domain events, BFF auth-gateway proxy, CloudNativePG HA, Zeebe workflow, and K3s GitOps.",
+    summaryVi: "Chi tiết kiến trúc hệ thống vận hành tài chính Arda (arda.io.vn) — 9 Go microservices, gRPC đồng bộ, NATS domain events, BFF auth-gateway proxy, CloudNativePG HA, Zeebe workflow và K3s GitOps.",
+    date: "Feb 2026",
+    readTime: "12 min read",
+    tags: ["Arda Labs", "Go", "gRPC", "Microservices", "FinOps", "Architecture", "Distributed Systems"],
+    featured: true,
+    project: "arda",
+    relatedProject: "arda-finops-platform",
+    diagramKey: "designing-arda-cloud-native-finops-platform",
+    evidenceIds: ["arda-microservices-grpc", "arda-auth-zero-trust", "arda-transactional-outbox-nats"],
+    repositoryUrl: "https://github.com/arda-labs/arda-be",
+    heroImage: "https://raw.githubusercontent.com/arda-labs/.github/main/profile/assets/system-architecture.png",
+    heroImageCaption: "ARDA Labs System Architecture: Browser ──► Cloudflare ──► Traefik (ForwardAuth) ──► auth-gateway BFF ──► 9 Go Services ──► CloudNativePG / Zeebe",
+    heroImageCaptionVi: "Sơ đồ Kiến trúc ARDA Labs: Trình duyệt ──► Cloudflare ──► Traefik (ForwardAuth) ──► auth-gateway BFF ──► 9 Go Microservices ──► CloudNativePG / Zeebe",
+    highlights: [
+      {
+        value: "< 10ms",
+        label: "gRPC RPC Latency",
+        labelVi: "Độ trễ gRPC",
+        detail: "Synchronous intra-cluster calls",
+        detailVi: "Truy vấn nội bộ cụm cực nhanh"
+      },
+      {
+        value: "9 Services",
+        label: "Go Microservices",
+        labelVi: "Microservices Go",
+        detail: "Shared libs/go toolkit",
+        detailVi: "Dùng chung thư viện libs/go"
+      },
+      {
+        value: "7 Remotes",
+        label: "Module Federation",
+        labelVi: "Remote MFE",
+        detail: "Independent UI releases",
+        detailVi: "Phát hành giao diện độc lập"
+      },
+      {
+        value: "Zero Trust",
+        label: "Ory Kratos + Hydra",
+        labelVi: "Định danh Zero-Trust",
+        detail: "Edge ForwardAuth verification",
+        detailVi: "Xác thực biên mạng qua Traefik"
+      }
+    ],
+    comparison: {
+      naiveTitle: "Traditional Monolith or Uncontrolled Services",
+      naiveTitleVi: "Monolith Truyền thống hoặc Services Không Chuẩn hóa",
+      naivePoints: [
+        "Monolith release lockstep blocks independent feature delivery across Finance, CRM, and HRM.",
+        "Direct cross-service database access causes schema coupling and cascading failure modes.",
+        "Client browsers coordinate raw JWTs directly, creating security vulnerabilities and zero revocation control."
+      ],
+      naivePointsVi: [
+        "Chu kỳ release dính chùm làm nghẽn tiến độ giữa các nhóm Tài chính, CRM và Nhân sự.",
+        "Các service chọc chéo vào CSDL của nhau gây phụ thuộc schema và sập lan truyền.",
+        "Trình duyệt tự quản lý raw JWT tiềm ẩn rủi ro lộ lọt và không thể thu hồi phiên tức thì."
+      ],
+      solutionTitle: "ARDA Cloud-Native Architecture",
+      solutionTitleVi: "Kiến trúc ARDA FinOps Đám Mây Chuẩn Mực",
+      solutionPoints: [
+        "React Module Federation (7 remotes) and 9 Go microservices release independently via CI/CD.",
+        "Transactional Outbox + NATS JetStream guarantee atomic events with zero dual-write hazard.",
+        "Traefik ForwardAuth passes verified identity headers to services, eliminating JWT decoding overhead."
+      ],
+      solutionPointsVi: [
+        "React Module Federation (7 remotes) và 9 Go microservices phát hành độc lập hoàn toàn.",
+        "Transactional Outbox kết hợp NATS JetStream đảm bảo xuất bản sự kiện nguyên tử an toàn.",
+        "Traefik ForwardAuth inject header đã xác thực, giải phóng service khỏi việc decode JWT."
+      ]
+    },
+    sections: [
+      {
+        id: "service-boundaries",
+        title: "Service Boundaries & Domain Partitioning",
+        titleVi: "Phân Định Ranh Giới Service & Kiến trúc Hướng Miền (DDD)",
+        content: "Arda partitions financial operations into 9 distinct Go services: `iam-service` (identity & tenant policies), `platform-service` (organization hierarchy), `finance-service` (general ledger, billing, invoices), `workflow-service` (Zeebe 8.5 BPMN facade), `crm-service` (leads & accounts), `hrm-service` (personnel records), `notification-service` (emails & webhooks), `media-service` (Garage S3 uploads), and `mdm-service` (master data management).\n\nBy enforcing protobuf contracts and forbidding direct cross-database queries, each service retains complete ownership over its database schema.",
+        contentVi: "Arda phân chia nghiệp vụ tài chính thành 9 Go service độc lập: `iam-service` (phân quyền & chính sách tenant), `platform-service` (cơ cấu tổ chức), `finance-service` (sổ cái, hóa đơn, thanh toán), `workflow-service` (facade Zeebe 8.5 BPMN), `crm-service` (khách hàng), `hrm-service` (nhân sự), `notification-service` (thông báo & webhook), `media-service` (lưu trữ Garage S3) và `mdm-service` (dữ liệu danh mục).\n\nNhờ chuẩn hóa protobuf contract và cấm tuyệt đối việc gọi chéo database, mỗi service toàn quyền quản trị schema CSDL của mình.",
+        callout: {
+          type: "tip",
+          text: "Design Principle: High cohesion within service boundaries, loose coupling across networks via gRPC contracts and NATS domain events.",
+          textVi: "Nguyên tắc Thiết kế: Tính gắn kết cao bên trong ranh giới service, liên kết lỏng qua mạng bằng protobuf gRPC và sự kiện NATS."
+        }
+      },
+      {
+        id: "storage-reliability",
+        title: "High-Availability Storage & Failover Strategy",
+        titleVi: "Kiến trúc Lưu trữ Sẵn sàng Cao (HA) & Chiến lược Failover",
+        content: "Stateful reliability is achieved via the CloudNativePG operator running on the bare-metal 3-node K3s cluster. CloudNativePG coordinates PostgreSQL streaming replication across all 3 nodes with automated leader election and WAL archiving.\n\nTransient state, tenant session caches, and rate-limiting counters are hosted on Valkey, providing sub-millisecond in-memory lookups.",
+        contentVi: "Độ tin cậy của dữ liệu có trạng thái (stateful) được đảm bảo bởi operator CloudNativePG trên cụm bare-metal 3-node K3s. CloudNativePG điều phối streaming replication giữa cả 3 node với cơ chế tự động bầu chọn leader và lưu trữ WAL liên tục.\n\nBộ nhớ đệm phiên làm việc và giới hạn tần suất được lưu trữ trên Valkey, mang lại thời gian phản hồi dưới 1 mili-giây.",
+        callout: {
+          type: "info",
+          text: "CloudNativePG automatically triggers failover in under 10 seconds if the primary node stops heartbeating.",
+          textVi: "CloudNativePG tự động kích hoạt chuyển đổi dự phòng (failover) trong dưới 10 giây nếu node chính ngừng gửi tín hiệu heartbeat."
+        }
+      }
+    ],
+    content: {
+      problemStatement: "Financial operations platforms must provide strict multi-tenant isolation, unified auditability, sub-10ms inter-service latency, and independent release cycles across domain modules (Finance, IAM, CRM, HRM, Workflow). A traditional monolith suffers from release lockstep, while uncontrolled microservices lead to distributed transaction chaos.",
+      problemStatementVi: "Nền tảng vận hành tài chính đòi hỏi cách ly dữ liệu đa khách thuê nghiêm ngặt, kiểm toán thống nhất, giao tiếp microservice dưới 10ms và chu kỳ release độc lập giữa các phân hệ (Finance, IAM, CRM, HRM, Workflow). Kiến trúc monolith nguyên khối gây nghẽn phát hành, trong khi chia nhỏ microservices thiếu kỷ luật sẽ dẫn tới hỗn loạn transaction.",
+      architectureDesign: "Arda isolates concerns across 3 Git repositories: arda-be (9 Go microservices + shared libs/go), arda-mfe (React Module Federation 7 remotes), and arda-infra (3-node K3s GitOps). Client traffic routes through Cloudflare Tunnels to Traefik Ingress with ForwardAuth. The auth-gateway BFF validates sessions via Ory Kratos/Hydra and injects trusted identity headers. Go domain services communicate via gRPC for synchronous data and NATS JetStream for asynchronous domain events, backed by CloudNativePG HA PostgreSQL, Valkey cache, and Zeebe 8.5 BPMN.",
+      architectureDesignVi: "Arda phân tách ranh giới qua 3 repository: arda-be (9 Go microservices và libs/go), arda-mfe (React Module Federation 7 remotes) và arda-infra (K3s GitOps). Client kết nối qua Cloudflare Tunnel tới Traefik Ingress tích hợp ForwardAuth. auth-gateway BFF xác thực phiên qua Ory Kratos/Hydra và đính kèm identity header. Các Go microservices giao tiếp qua gRPC cho truy vấn đồng bộ và NATS JetStream cho sự kiện nghiệp vụ, lưu trữ trên CloudNativePG HA Postgres, Valkey cache và Zeebe 8.5 BPMN.",
+      technicalDecisions: [
+        "Internal Shared Library (libs/go): unified arda-auth, arda-grpc, arda-events, arda-postgres packages preventing drift across all 9 domain services.",
+        "Dual gRPC & NATS Protocol Strategy: gRPC for synchronous low-latency intra-cluster reads/writes; NATS JetStream for asynchronous domain event propagation.",
+        "BFF Auth Gateway Facade: abstracts authentication complexity from client browsers, managing session cookies, CSRF protection, and token exchanges.",
+        "High-Availability Bare-Metal Storage: CloudNativePG HA PostgreSQL with automated failover and local NVMe storage on a 3-node K3s cluster."
+      ],
+      technicalDecisionsVi: [
+        "Bộ thư viện nội bộ (libs/go): chuẩn hóa các package arda-auth, arda-grpc, arda-events, arda-postgres ngăn ngừa sự phân mảnh giữa 9 microservices.",
+        "Chiến lược giao tiếp kép gRPC & NATS: gRPC phục vụ đọc/ghi đồng bộ nội bộ cụm độ trễ thấp; NATS JetStream cho luồng sự kiện nghiệp vụ bất đồng bộ.",
+        "Mô hình BFF Auth Gateway: che giấu độ phức tạp xác thực khỏi trình duyệt, quản lý session cookie, CSRF và trao đổi token tập trung.",
+        "Lưu trữ sẵn sàng cao trên bare-metal: CloudNativePG HA PostgreSQL với cơ chế tự động failover trên cụm 3-node K3s."
+      ],
+      keyTakeaways: [
+        "Enforcing a strict protobuf-first gRPC contract eliminates API drift between backend microservices.",
+        "Decoupling the BFF from domain services allows frontend teams to iterate on composite APIs without touching core business logic.",
+        "Bare-metal K3s with CloudNativePG delivers production-like resilience at a fraction of cloud managed service costs."
+      ],
+      keyTakeawaysVi: [
+        "Áp dụng gRPC với Protobuf contract loại bỏ hoàn toàn tình trạng sai lệch schema giữa các backend microservices.",
+        "Tách biệt BFF khỏi domain services giúp frontend phát triển nhanh các API tổng hợp mà không cần sửa core logic.",
+        "Hạ tầng bare-metal K3s với CloudNativePG mang lại độ tin cậy tương đương môi trường production với chi phí tối ưu."
+      ],
+      codeSnippet: {
+        language: "go",
+        title: "Arda Shared gRPC Server Interceptor (libs/go/arda-grpc)",
+        code: `// UnaryServerInterceptor injecting trusted tenant & actor context
+func TenantContextUnaryServerInterceptor() grpc.UnaryServerInterceptor {
+    return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
+        md, ok := metadata.FromIncomingContext(ctx)
+        if !ok {
+            return nil, status.Error(codes.Unauthenticated, "missing grpc metadata")
+        }
+
+        tenantID := getHeaderValue(md, "x-tenant-id")
+        userID := getHeaderValue(md, "x-user-id")
+        if tenantID == "" || userID == "" {
+            return nil, status.Error(codes.Unauthenticated, "missing tenant or user context")
+        }
+
+        ctx = context.WithValue(ctx, TenantIDKey, tenantID)
+        ctx = context.WithValue(ctx, UserIDKey, userID)
+        return handler(ctx, req)
+    }
+}`
+      }
+    }
+  },
+  {
+    slug: "authentication-beyond-jwt-arda-identity-architecture",
+    title: "Authentication Beyond JWT: Designing Arda's Identity Architecture",
+    titleVi: "Bảo mật Vượt trên JWT: Thiết kế Kiến trúc Định danh Zero-Trust trong Arda",
+    summary: "Deep dive into why browsers shouldn't juggle raw JWTs: Traefik ForwardAuth, auth-gateway BFF, Ory Kratos (Identity), Ory Hydra (OAuth2/OIDC), and downstream header injection.",
+    summaryVi: "Phân tích vì sao trình duyệt không nên trực tiếp xử lý raw JWT: Traefik ForwardAuth, auth-gateway BFF, Ory Kratos (Identity), Ory Hydra (OAuth2/OIDC) và cơ chế inject header đáng tin cậy.",
+    date: "Feb 2026",
+    readTime: "10 min read",
+    tags: ["Arda Labs", "Auth", "Security", "Ory Kratos", "Ory Hydra", "ForwardAuth", "Zero-Trust"],
+    featured: false,
+    project: "arda",
+    relatedProject: "arda-finops-platform",
+    diagramKey: "authentication-beyond-jwt-arda-identity-architecture",
+    evidenceIds: ["arda-auth-zero-trust"],
+    repositoryUrl: "https://github.com/arda-labs/arda-be",
+    highlights: [
+      {
+        value: "HttpOnly",
+        label: "Cookie Security",
+        labelVi: "Bảo mật Cookie",
+        detail: "Zero client token leakage",
+        detailVi: "Không lộ token ra Javascript"
+      },
+      {
+        value: "Instant",
+        label: "Session Revocation",
+        labelVi: "Thu hồi Phiên Tức thì",
+        detail: "Centralized in Ory Kratos",
+        detailVi: "Quản lý tập trung tại Kratos"
+      },
+      {
+        value: "Edge Auth",
+        label: "Traefik ForwardAuth",
+        labelVi: "Xác thực Biên Mạng",
+        detail: "Zero backend verification cost",
+        detailVi: "Giải phóng tính toán backend"
+      },
+      {
+        value: "RBAC + IAM",
+        label: "Tenant Role Injection",
+        labelVi: "Phân quyền Đa Tenant",
+        detail: "Injected trusted headers",
+        detailVi: "Đính kèm header tin cậy"
+      }
+    ],
+    comparison: {
+      naiveTitle: "Client-Side JWT Management",
+      naiveTitleVi: "Quản lý JWT Truyền thống ở Trình duyệt",
+      naivePoints: [
+        "Tokens stored in localStorage/sessionStorage vulnerable to XSS exfiltration.",
+        "Impossible to revoke stolen JWTs before expiration without distributed blacklists.",
+        "Every downstream service must verify RSA/ECDSA public-key signatures on every RPC."
+      ],
+      naivePointsVi: [
+        "Lưu token trong localStorage/sessionStorage dễ bị đánh cắp qua tấn công XSS.",
+        "Không thể thu hồi JWT bị đánh cắp trước khi hết hạn nếu không dựng blacklist phân tán.",
+        "Mọi service nội bộ phải tự giải mã chữ ký RSA/ECDSA trên từng request gRPC."
+      ],
+      solutionTitle: "Arda Edge Zero-Trust Identity",
+      solutionTitleVi: "Định danh Zero-Trust Biên Mạng trong Arda",
+      solutionPoints: [
+        "HttpOnly SameSite opaque cookie completely invisible to browser JavaScript.",
+        "Instant session invalidation at Ory Kratos identity authority.",
+        "Traefik ForwardAuth injects trusted identity headers (X-User-Id, X-Tenant-Id, X-Roles) downstream."
+      ],
+      solutionPointsVi: [
+        "Cookie HttpOnly SameSite vô hình hoàn toàn trước mã JavaScript trình duyệt.",
+        "Hủy phiên làm việc ngay lập tức tại máy chủ định danh Ory Kratos.",
+        "Traefik ForwardAuth inject các header đáng tin cậy đã xác thực tới các service phía sau."
+      ]
+    },
+    sections: [
+      {
+        id: "why-not-client-jwt",
+        title: "The Pitfalls of Browser-Held JWTs in Enterprise Systems",
+        titleVi: "Hạn chế của Việc Lưu JWT ở Trình duyệt trong Hệ thống Lớn",
+        content: "While JWT is popular in simple tutorials, in high-compliance multi-tenant platforms it introduces severe operational issues:\n1. Revocation Delay: A compromised token remains valid until expiry unless complex Redis blacklists are checked on every request.\n2. Security Boundary: If client JavaScript has access to tokens, any third-party script vulnerability (XSS) can exfiltrate full credentials.\n3. Header Bloat: As tenant permissions and roles grow, the Authorization header balloons, degrading mobile network bandwidth.",
+        contentVi: "Dù JWT rất phổ biến trong các tutorial đơn giản, trong hệ thống tài chính đa khách thuê nó tạo ra nhiều rủi ro vận hành:\n1. Độ trễ thu hồi: Token bị lộ vẫn hợp lệ cho tới khi hết hạn trừ khi phải dựng thêm blacklist Redis.\n2. Lỗ hổng bảo mật: Khi JavaScript client đọc được token, bất kỳ lỗ hổng XSS nào cũng có thể làm lộ thông tin đăng nhập.\n3. Phình to kích thước header: Khi quyền hạn và vai trò tenant tăng lên, header Authorization phình to làm chậm đường truyền di động.",
+        callout: {
+          type: "warning",
+          text: "Never store credentials or unencrypted JWTs in localStorage for applications handling financial or enterprise data.",
+          textVi: "Tuyệt đối không lưu token hoặc JWT trong localStorage đối với các ứng dụng xử lý dữ liệu tài chính hoặc doanh nghiệp."
+        }
+      }
+    ],
+    content: {
+      problemStatement: "Storing raw JWTs in browser localStorage or cookies creates token leakage vulnerabilities, makes instant session revocation impossible without distributed blocklists, and forces every microservice to maintain complex public-key signature verification logic.",
+      problemStatementVi: "Lưu trữ raw JWT trong localStorage hoặc cookie trình duyệt tiềm ẩn nguy cơ rò rỉ token, khiến việc thu hồi phiên tức thì trở nên bất khả thi nếu không có blacklist phân tán, và buộc mọi microservice phải gánh logic xác thực chữ ký phức tạp.",
+      architectureDesign: "Arda shifts identity verification to the network edge: Browser requests carry an HttpOnly opaque session cookie to Traefik Ingress. Traefik's ForwardAuth middleware delegates inspection to auth-gateway. auth-gateway verifies the session against Ory Kratos and extracts tenant permissions via IAM. Once verified, auth-gateway responds with HTTP 200 and injects trusted identity headers (X-User-Id, X-Tenant-Id, X-Roles, X-Permissions) which Traefik forwards directly to downstream services.",
+      architectureDesignVi: "Arda chuyển việc xác thực định danh ra biên mạng: Request từ trình duyệt gửi kèm HttpOnly session cookie tới Traefik Ingress. Middleware ForwardAuth ủy quyền kiểm tra cho auth-gateway. auth-gateway đối soát phiên với Ory Kratos và phân quyền qua IAM. Khi hợp lệ, auth-gateway phản hồi HTTP 200 và đính kèm các header đã xác thực (X-User-Id, X-Tenant-Id, X-Roles, X-Permissions) để Traefik chuyển tiếp tới các service phía sau.",
+      technicalDecisions: [
+        "Separation of Identity (Kratos) vs OAuth2 (Hydra) vs Application RBAC (IAM Service): clear separation of concerns without coupling credentials to business permissions.",
+        "Edge ForwardAuth with Traefik: unauthorized requests are rejected at the ingress before consuming internal cluster compute.",
+        "HttpOnly SameSite Cookies: eliminates XSS token exfiltration risks by never exposing credentials to JavaScript execution.",
+        "Downstream Trust Boundary: internal Go services trust injected headers because external clients cannot bypass Traefik's header sanitization."
+      ],
+      technicalDecisionsVi: [
+        "Phân tách rõ ràng Định danh (Kratos) vs OAuth2 (Hydra) vs Phân quyền ứng dụng (IAM Service): không gộp thông tin xác thực với logic quyền hạn nghiệp vụ.",
+        "ForwardAuth tại Ingress Traefik: loại bỏ các request không hợp lệ ngay tại cổng vào, tiết kiệm tài nguyên tính toán bên trong cụm.",
+        "Cookie HttpOnly SameSite: ngăn chặn triệt để rủi ro đánh cắp token qua tấn công XSS do JavaScript client không thể đọc cookie.",
+        "Ranh giới tin cậy nội bộ: các Go microservice tin tưởng header được inject vì Traefik luôn xóa sạch các header giả mạo từ client bên ngoài."
+      ],
+      keyTakeaways: [
+        "Opaque cookies with edge ForwardAuth combine the security of instant revocation with the speed of internal header passing.",
+        "Microservices become simpler and faster because they do not verify cryptographic JWT signatures on every RPC.",
+        "Multi-factor authentication (MFA) and OAuth2 social logins are managed centrally in Kratos/Hydra without touching domain services."
+      ],
+      keyTakeawaysVi: [
+        "Opaque cookie kết hợp ForwardAuth mang lại khả năng thu hồi phiên tức thì cùng tốc độ xử lý header nội bộ cực nhanh.",
+        "Các microservice trở nên gọn nhẹ và tối ưu hơn do không phải xác thực chữ ký JWT trên từng request.",
+        "Xác thực 2 bước (MFA) và đăng nhập mạng xã hội được quản lý tập trung tại Kratos/Hydra mà không ảnh hưởng tới domain services."
+      ],
+      codeSnippet: {
+        language: "go",
+        title: "Arda ForwardAuth Handler in auth-gateway",
+        code: `func (g *Gateway) ForwardAuthHandler(w http.ResponseWriter, r *http.Request) {
+    session, err := g.kratosClient.ValidateSessionCookie(r.Context(), r)
+    if err != nil || !session.Active {
+        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+        return
+    }
+
+    // Resolve tenant membership and RBAC permissions from iam-service
+    authCtx, err := g.iamClient.ResolveUserContext(r.Context(), session.Identity.Id)
+    if err != nil {
+        http.Error(w, "Forbidden", http.StatusForbidden)
+        return
+    }
+
+    // Inject trusted downstream identity headers
+    w.Header().Set("X-User-Id", authCtx.UserId)
+    w.Header().Set("X-Tenant-Id", authCtx.TenantId)
+    w.Header().Set("X-Roles", strings.Join(authCtx.Roles, ","))
+    w.Header().Set("X-Permissions", strings.Join(authCtx.Permissions, ","))
+    w.WriteHeader(http.StatusOK)
+}`
+      }
+    }
+  },
+  {
+    slug: "reliable-domain-events-nats-transactional-outbox",
+    title: "Reliable Domain Events with NATS and the Transactional Outbox Pattern",
+    titleVi: "Xuất bản Sự kiện Miền Tin cậy với NATS và Mẫu Transactional Outbox",
+    summary: "Solving the dual-write hazard in distributed Go services: writing business state and domain events atomically in PostgreSQL, relaying via NATS JetStream, and enforcing idempotent consumer deduplication.",
+    summaryVi: "Giải quyết rủi ro dual-write trong hệ thống Go phân tán: ghi nhận trạng thái nghiệp vụ và sự kiện miền nguyên tử trong PostgreSQL, chuyển tiếp qua NATS JetStream và xử lý deduplication ở consumer.",
+    date: "Jan 2026",
+    readTime: "11 min read",
+    tags: ["Arda Labs", "NATS JetStream", "Transactional Outbox", "Distributed Systems", "Go", "PostgreSQL", "Event-Driven"],
+    featured: true,
+    project: "arda",
+    relatedProject: "arda-finops-platform",
+    diagramKey: "reliable-domain-events-nats-transactional-outbox",
+    evidenceIds: ["arda-transactional-outbox-nats"],
+    repositoryUrl: "https://github.com/arda-labs/arda-be",
+    highlights: [
+      {
+        value: "100% Atomic",
+        label: "Zero Dual-Write",
+        labelVi: "Không Lỗi Dual-Write",
+        detail: "Co-located outbox table",
+        detailVi: "Bảng outbox trong cùng transaction"
+      },
+      {
+        value: "< 1ms",
+        label: "NATS JetStream",
+        labelVi: "Độ trễ NATS",
+        detail: "Disk-backed stream replay",
+        detailVi: "Lưu trữ bền vững trên đĩa"
+      },
+      {
+        value: "UUIDv7",
+        label: "Event ID Ordering",
+        labelVi: "Định danh UUIDv7",
+        detail: "Time-sortable event keys",
+        detailVi: "Sắp xếp theo thời gian tự nhiên"
+      },
+      {
+        value: "Idempotent",
+        label: "Deduplication Log",
+        labelVi: "Khử Trùng lặp",
+        detail: "At-least-once safety",
+        detailVi: "An toàn tuyệt đối khi phân phối"
+      }
+    ],
+    comparison: {
+      naiveTitle: "Direct DB Commit + Broker Publish",
+      naiveTitleVi: "Commit CSDL rồi Bắn Message Trực tiếp",
+      naivePoints: [
+        "If broker publish fails after DB commit, events are permanently lost with zero trace.",
+        "If DB transaction aborts after message dispatch, ghost events corrupt downstream systems.",
+        "Unversioned JSON payloads break downstream consumers during rapid schema evolution."
+      ],
+      naivePointsVi: [
+        "Nếu broker lỗi sau khi commit CSDL, sự kiện sẽ bị mất vĩnh viễn không dấu vết.",
+        "Nếu transaction CSDL bị rollback sau khi bắn tin, message ma làm hỏng dữ liệu downstream.",
+        "Payload JSON không đánh version sẽ làm sập consumer khi cập nhật schema."
+      ],
+      solutionTitle: "Transactional Outbox + NATS JetStream",
+      solutionTitleVi: "Transactional Outbox kết hợp NATS JetStream",
+      solutionPoints: [
+        "Outbox record written in the exact same SQL transaction as domain state — 100% atomic.",
+        "Relay worker continuously sweeps unpublished events and acknowledges upon JetStream disk write.",
+        "Envelope[T] enforces UUIDv7 event IDs, schema versions, and consumer idempotency tables."
+      ],
+      solutionPointsVi: [
+        "Bản ghi outbox được ghi trong cùng một transaction SQL với dữ liệu miền — 100% nguyên tử.",
+        "Worker quét sự kiện chưa gửi và chỉ xác nhận xóa khi NATS JetStream đã ghi đĩa an toàn.",
+        "Schema Envelope[T] chuẩn hóa UUIDv7, version và bảng log khử trùng lặp ở consumer."
+      ]
+    },
+    content: {
+      problemStatement: "In distributed microservices, performing a database commit and publishing a message to a broker in the same API handler creates a critical 'dual-write' hazard. If the broker publish fails after DB commit (or DB crashes after publish), data becomes permanently inconsistent across services.",
+      problemStatementVi: "Trong hệ thống microservices phân tán, việc vừa commit vào CSDL vừa bắn message sang broker trong cùng một API handler dẫn đến rủi ro 'dual-write' nghiêm trọng. Nếu bắn message thất bại sau khi đã commit CSDL (hoặc DB lỗi sau khi bắn message), dữ liệu giữa các service sẽ bị lệch lạc vĩnh viễn.",
+      architectureDesign: "Arda implements the Transactional Outbox pattern in `libs/go/arda-events`: Business data and a structured outbox record are committed within a single atomic PostgreSQL transaction. A background outbox worker polls unpublished records, wraps them into versioned `Envelope[T]` schemas with tenant and actor metadata, and publishes them to NATS JetStream. Downstream consumers maintain an idempotent processing log to discard duplicate deliveries.",
+      architectureDesignVi: "Arda áp dụng mẫu Transactional Outbox trong thư viện `libs/go/arda-events`: Dữ liệu nghiệp vụ và bản ghi outbox được ghi đồng thời trong cùng một transaction PostgreSQL nguyên tử. Một worker chạy ngầm sẽ quét các bản ghi chưa xuất bản, đóng gói vào schema `Envelope[T]` có version, tenant và actor metadata, rồi publish lên NATS JetStream. Phía consumer duy trì bảng log xử lý để loại bỏ các message trùng lặp.",
+      technicalDecisions: [
+        "Atomic Outbox Table: `outbox_events` table co-located in every service's PostgreSQL schema, ensuring 100% atomic writes with business data.",
+        "Structured Event Envelope: `Envelope[T]` includes `event_id` (UUIDv7), `schema_version`, `tenant_id`, `actor_id`, `timestamp`, and strongly-typed JSON payload.",
+        "NATS JetStream Stream Persistence: JetStream stores messages on disk with file-based retention, ack policy, and consumer replay capabilities.",
+        "Idempotent Consumer Deduplication: consumers store processed `event_id` in a dedicated processed_events table inside their own local transaction."
+      ],
+      technicalDecisionsVi: [
+        "Bảng Outbox nguyên tử: bảng `outbox_events` nằm ngay trong schema PostgreSQL của từng service, đảm bảo ghi 100% nguyên tử cùng dữ liệu nghiệp vụ.",
+        "Chuẩn hóa Envelope sự kiện: `Envelope[T]` chứa `event_id` (UUIDv7), `schema_version`, `tenant_id`, `actor_id`, `timestamp` và payload JSON.",
+        "Lưu trữ bền vững với NATS JetStream: JetStream lưu trữ message xuống đĩa với chính sách ACK rõ ràng và khả năng replay sự kiện.",
+        "Cơ chế Idempotent Consumer: consumer lưu `event_id` đã xử lý vào bảng deduplication nội bộ trong transaction riêng."
+      ],
+      keyTakeaways: [
+        "Guarantees at-least-once delivery without distributed 2-phase commits (2PC) or XA transactions.",
+        "Versioned event envelopes allow schema evolution without breaking downstream consumers.",
+        "NATS JetStream provides sub-millisecond pub/sub latency with low operational overhead compared to Kafka."
+      ],
+      keyTakeawaysVi: [
+        "Đảm bảo cơ chế phân phối ít nhất một lần (at-least-once) mà không cần dùng 2-phase commit (2PC) phức tạp.",
+        "Envelope có version cho phép nâng cấp cấu trúc sự kiện mà không làm lỗi các consumer đang chạy.",
+        "NATS JetStream mang lại độ trễ dưới 1 mili-giây cùng chi phí vận hành nhẹ hơn đáng kể so với Kafka."
+      ],
+      codeSnippet: {
+        language: "go",
+        title: "Transactional Outbox Helper in libs/go/arda-events",
+        code: `// Atomically inserts domain entity and outbox event in PostgreSQL
+func (r *OrderRepository) CreateOrderWithOutbox(ctx context.Context, tx pgx.Tx, order *Order) error {
+    // 1. Insert domain row
+    if err := r.insertOrder(ctx, tx, order); err != nil {
+        return fmt.Errorf("failed to insert order: %w", err)
+    }
+
+    // 2. Prepare structured event envelope
+    env := ardaevents.NewEnvelope("finance.order.created", "v1", order.TenantID, order.CreatedBy, order)
+
+    // 3. Insert into outbox_events table within the SAME transaction
+    query := \`INSERT INTO outbox_events (id, subject, payload, status, created_at) 
+              VALUES ($1, $2, $3, 'PENDING', NOW())\`
+    _, err := tx.Exec(ctx, query, env.ID, env.Subject, env.PayloadJSON())
+    return err
+}`
+      }
+    }
+  },
+  {
+    slug: "bpmn-workflow-service-boundary-zeebe",
+    title: "Putting BPMN Behind a Workflow Service Boundary",
+    titleVi: "Cô lập Quy trình BPMN Phía sau Phân hệ Workflow Service (Zeebe 8.5)",
+    summary: "Why domain services shouldn't talk directly to Zeebe: Designing a clean gRPC/HTTP workflow-service facade for case lifecycles, user tasks, SLA timers, and domain error handling.",
+    summaryVi: "Vì sao các domain service không nên kết nối trực tiếp vào Zeebe: Thiết kế facade workflow-service qua gRPC/HTTP quản lý vòng đời hồ sơ, user task, SLA timer và xử lý lỗi nghiệp vụ.",
+    date: "Jan 2026",
+    readTime: "9 min read",
+    tags: ["Arda Labs", "Zeebe", "BPMN", "Workflow", "Go", "gRPC", "Architecture"],
+    featured: false,
+    project: "arda",
+    relatedProject: "arda-finops-platform",
+    diagramKey: "bpmn-workflow-service-boundary-zeebe",
+    evidenceIds: ["arda-zeebe-workflow-boundary"],
+    repositoryUrl: "https://github.com/arda-labs/arda-be",
+    content: {
+      problemStatement: "Allowing multiple microservices (finance, crm, hrm) to import the Zeebe gRPC client directly tightly couples business domain code to workflow engine internals, leaks process variables, and scatters case lifecycle tracking across disparate codebases.",
+      problemStatementVi: "Nếu cho phép nhiều microservices (finance, crm, hrm) trực tiếp gọi Zeebe gRPC client sẽ làm mã nguồn nghiệp vụ bị phụ thuộc chặt chẽ vào engine workflow, rò rỉ biến quy trình và phân tán việc theo dõi vòng đời hồ sơ.",
+      architectureDesign: "Arda introduces a dedicated `workflow-service` as an architectural boundary in front of Zeebe 8.5. Domain services call standard gRPC endpoints (`CreateCase`, `SubmitCase`, `CancelCase`) without knowing Zeebe exists. The workflow-service handles BPMN process definitions, variable serialization, user task assignments, SLA timer events, and publishes NATS notifications upon workflow milestone completion.",
+      architectureDesignVi: "Arda xây dựng phân hệ `workflow-service` độc lập làm facade che chắn phía trước Zeebe 8.5. Các service nghiệp vụ chỉ gọi các endpoint gRPC chuẩn (`CreateCase`, `SubmitCase`, `CancelCase`). workflow-service chịu trách nhiệm nạp định nghĩa BPMN, chuyển đổi biến, phân công user task, bắt sự kiện timer SLA và phát thông báo qua NATS khi hoàn thành mốc quy trình.",
+      technicalDecisions: [
+        "Standardized Case Interface: domain services treat workflows as generic Case entities with status transitions (DRAFT -> SUBMITTED -> APPROVED -> REJECTED).",
+        "Encapsulated Zeebe Client: only workflow-service manages Zeebe connection pools, worker threads, and job streaming.",
+        "Asynchronous SLA Escalation: Zeebe timer boundary events trigger automated escalation tasks without custom cron jobs in domain services.",
+        "Unified Audit Log: all BPMN state changes are automatically recorded in an audit table and published to NATS for compliance."
+      ],
+      technicalDecisionsVi: [
+        "Chuẩn hóa Interface Case: các domain service coi workflow như các thực thể Case với các trạng thái chuẩn (DRAFT -> SUBMITTED -> APPROVED -> REJECTED).",
+        "Đóng gói Zeebe Client: chỉ duy nhất workflow-service quản lý kết nối Zeebe, worker pool và job streaming.",
+        "Xử lý Escalation SLA tự động: Timer boundary event trong BPMN tự động kích hoạt luồng cảnh báo mà không cần viết cron job thủ công ở domain service.",
+        "Audit Log tập trung: mọi thay đổi trạng thái BPMN đều được ghi nhận vào bảng kiểm toán và bắn sự kiện qua NATS."
+      ],
+      keyTakeaways: [
+        "Domain microservices remain decoupled from the workflow engine and can be tested with simple mock interfaces.",
+        "Business analysts can inspect and update BPMN models in Camunda Modeler without altering domain service code.",
+        "Centralized error handling prevents unhandled workflow panics from polluting business transaction logs."
+      ],
+      keyTakeawaysVi: [
+        "Các domain microservice hoàn toàn độc lập với workflow engine, dễ dàng viết unit test với mock interface.",
+        "Chuyên viên nghiệp vụ có thể chỉnh sửa mô hình BPMN trên Camunda Modeler mà không cần sửa code backend.",
+        "Xử lý lỗi tập trung ngăn ngừa các sự cố luồng workflow làm ảnh hưởng đến transaction của hệ thống."
+      ],
+      codeSnippet: {
+        language: "go",
+        title: "Workflow Service Facade Interface (app/workflow-service)",
+        code: `// gRPC Service definition isolating Zeebe orchestration
+type WorkflowServiceServer interface {
+    StartProcessInstance(ctx context.Context, req *pb.StartProcessRequest) (*pb.ProcessInstanceReply, error)
+    CompleteUserTask(ctx context.Context, req *pb.CompleteTaskRequest) (*pb.TaskReply, error)
+    GetCaseHistory(ctx context.Context, req *pb.CaseHistoryRequest) (*pb.CaseHistoryReply, error)
+}`
+      }
+    }
+  },
+  {
+    slug: "multi-remote-micro-frontend-platform-module-federation",
+    title: "What I Learned Building a Multi-Remote Micro Frontend Platform",
+    titleVi: "Bài học Thực chiến khi Xây dựng Nền tảng Micro-Frontend Đa Phân hệ với React Module Federation",
+    summary: "Architecting Arda's frontend with React Module Federation: 1 Shell host + 7 decoupled remotes (IAM, Platform, Finance, Account, HRM, Workflow, CRM) sharing @workspace packages and avoiding shared state traps.",
+    summaryVi: "Kiến trúc frontend Arda với React Module Federation: 1 Shell Host + 7 Remotes độc lập dùng chung gói @workspace/*, chuẩn hóa ranh giới và tránh bẫy chia sẻ state.",
+    date: "Feb 2026",
+    readTime: "11 min read",
+    tags: ["Arda Labs", "React", "Module Federation", "Micro-Frontend", "TypeScript", "Tailwind CSS"],
+    featured: true,
+    project: "arda",
+    relatedProject: "arda-finops-platform",
+    diagramKey: "multi-remote-micro-frontend-platform-module-federation",
+    evidenceIds: ["arda-react-module-federation"],
+    repositoryUrl: "https://github.com/arda-labs/arda-mfe",
+    highlights: [
+      {
+        value: "7 Remotes",
+        label: "Domain Remotes",
+        labelVi: "Remote Độc lập",
+        detail: "Finance, IAM, CRM, HRM, Workflow",
+        detailVi: "Tài chính, IAM, CRM, HRM, Quy trình"
+      },
+      {
+        value: "1 Host",
+        label: "Orchestration Shell",
+        labelVi: "Shell Điều phối",
+        detail: "Top-level layout & routing",
+        detailVi: "Khung layout & điều hướng chung"
+      },
+      {
+        value: "6 Packages",
+        label: "Shared @workspace",
+        labelVi: "Gói Dùng chung",
+        detail: "ui, api, auth, i18n, core, theme",
+        detailVi: "ui, api, auth, i18n, core, theme"
+      },
+      {
+        value: "Singleton",
+        label: "React 19 Runtime",
+        labelVi: "React Singleton",
+        detail: "Zero duplicate bundle bloat",
+        detailVi: "Tránh nạp trùng thư viện"
+      }
+    ],
+    comparison: {
+      naiveTitle: "Component-Level Micro-Frontends",
+      naiveTitleVi: "Micro-Frontend Cắt Nhỏ Cấp Component",
+      naivePoints: [
+        "Exporting individual buttons and modals creates cross-app CSS and state entanglement.",
+        "Sharing global state across remotes breaks independent team deployments.",
+        "MFE bundle version mismatches cause frequent runtime crashes."
+      ],
+      naivePointsVi: [
+        "Export từng nút bấm hay modal nhỏ khiến CSS và state bị dính chùm giữa các app.",
+        "Chia sẻ global state giữa các remote làm mất đi tính độc lập khi release.",
+        "Lệch phiên bản thư viện giữa các remote gây lỗi văng app khi chạy."
+      ],
+      solutionTitle: "Arda Route-Level Module Federation",
+      solutionTitleVi: "Module Federation Cấp Route Chuẩn Mực",
+      solutionPoints: [
+        "Remotes expose clean route trees (./Routes) rather than scattered micro-components.",
+        "State remains encapsulated within each remote; inter-app sync is handled via URL query params.",
+        "Shared dependencies (React, ReactDOM) configured as strict singletons via Module Federation."
+      ],
+      solutionPointsVi: [
+        "Các remote chỉ export cây route hoàn chỉnh (./Routes) thay vì phân mảnh component.",
+        "State được đóng gói trọn vẹn trong remote; liên kết giữa các app qua URL query param.",
+        "Các thư viện dùng chung (React, ReactDOM) được khóa singleton nghiêm ngặt."
+      ]
+    },
+    sections: [
+      {
+        id: "module-federation-rules",
+        title: "Golden Rules for Module Federation in Production",
+        titleVi: "Nguyên Tắc Vàng Khi Vận Hành Module Federation",
+        content: "1. Never export internal state: Remotes should own their stores (Zustand, React Query). Never import a store from another remote.\n2. Keep packages pure: `@workspace/ui` contains design components (shadcn) without business domain logic.\n3. Graceful degradation: Wrap remote imports in React Error Boundaries and Suspense fallback spinners.",
+        contentVi: "1. Tuyệt đối không export state nội bộ: Mỗi remote tự quản lý store của mình (Zustand, React Query). Không import store từ remote khác.\n2. Giữ các gói dùng chung thuần túy: `@workspace/ui` chỉ chứa UI component (shadcn) không chứa logic nghiệp vụ.\n3. Dự phòng sự cố: Luôn bọc các remote import bằng React Error Boundary và Suspense fallback spinner.",
+        callout: {
+          type: "tip",
+          text: "When updating shared @workspace packages, TypeScript project references in the monorepo provide instant compile-time feedback across all 7 remotes.",
+          textVi: "Khi cập nhật các gói @workspace/*, tính năng TypeScript Project References trong monorepo giúp phát hiện lỗi type trên cả 7 remote ngay lập tức."
+        }
+      }
+    ],
+    content: {
+      problemStatement: "Large enterprise dashboards built as single monolithic frontends result in slow CI/CD builds, tight coupling between feature teams, and risky all-or-nothing deployments. Conversely, poorly designed micro-frontends suffer from styling conflicts, duplicated npm bundles, and fragmented auth states.",
+      problemStatementVi: "Các dashboard doanh nghiệp lớn viết dưới dạng monolith dẫn tới thời gian build CI/CD kéo dài, phụ thuộc chéo giữa các team và rủi ro cao khi deploy. Ngược lại, chia MFE không khéo sẽ gây xung đột CSS, nạp trùng thư viện JS và phân mảnh trạng thái đăng nhập.",
+      architectureDesign: "Arda MFE organizes the frontend into a monorepo with an orchestration Shell and 7 domain remotes (`mfe-iam`, `platform`, `finance`, `account`, `hrm`, `workflow`, `crm`). Remotes expose only top-level route modules rather than arbitrary internal components. Cross-cutting concerns are factored into shared internal packages (`@workspace/ui` with shadcn, `@workspace/api`, `@workspace/auth`, `@workspace/i18n`, `@workspace/core`, and `@workspace/theme`).",
+      architectureDesignVi: "Arda MFE tổ chức frontend thành monorepo gồm Shell điều phối và 7 remote apps (`mfe-iam`, `platform`, `finance`, `account`, `hrm`, `workflow`, `crm`). Các remote chỉ export các module Route cấp cao thay vì export component nhỏ lẻ. Các phần dùng chung được đóng gói vào `@workspace/*` (shadcn UI, api, auth, i18n, core, theme).",
+      technicalDecisions: [
+        "Route-Level Module Exposing: remotes expose lazy-loaded page route trees (`./Routes`), ensuring remote internal state remains encapsulated.",
+        "Shared Workspace Packages: `@workspace/ui` enforces consistent design tokens without duplicating CSS stylesheets across remotes.",
+        "Strict Singleton Sharing: React, ReactDOM, and React Router are configured as strict singletons to prevent multiple React instance errors at runtime.",
+        "URL Query as Inter-App State: cross-module navigation uses standard browser URL query parameters instead of fragile global window event buses."
+      ],
+      technicalDecisionsVi: [
+        "Export Module ở cấp Route: các remote chỉ export route tree dạng lazy-load (`./Routes`), đảm bảo state nội bộ của remote không bị rò rỉ.",
+        "Bộ thư viện @workspace dùng chung: `@workspace/ui` đồng nhất design system mà không làm phình kích thước bundle CSS.",
+        "Chia sẻ Singleton nghiêm ngặt: React, ReactDOM, React Router được cấu hình singleton bắt buộc để tránh lỗi đa instance React khi chạy.",
+        "Đồng bộ State qua URL Query: việc điều hướng giữa các module sử dụng query param chuẩn của trình duyệt thay vì lạm dụng window event bus."
+      ],
+      keyTakeaways: [
+        "Do not share global Redux/Zustand state across micro-frontends — keep state scoped to individual remotes.",
+        "Exposing entire routes rather than micro-components provides the best balance of decoupling and performance.",
+        "Independent deployments allow the Finance team to release updates in seconds without rebuilding the IAM or HRM remotes."
+      ],
+      keyTakeawaysVi: [
+        "Không nên chia sẻ global store (Redux/Zustand) giữa các remote — hãy giữ state cục bộ trong từng module.",
+        "Export theo Route hoàn chỉnh mang lại sự phân tách ranh giới và hiệu năng tốt nhất so với export từng nút bấm nhỏ.",
+        "Quy trình release độc lập giúp team Finance phát hành tính năng chỉ trong vài giây mà không cần build lại IAM hay HRM."
+      ],
+      codeSnippet: {
+        language: "typescript",
+        title: "Arda Shell Dynamic Remote Route Loader",
+        code: `import React, { Suspense, lazy } from "react";
+import { Route, Routes } from "react-router-dom";
+import { LoadingSpinner } from "@workspace/ui";
+
+const FinanceApp = lazy(() => import("finance/Routes"));
+const IamApp = lazy(() => import("iam/Routes"));
+const WorkflowApp = lazy(() => import("workflow/Routes"));
+
+export function AppRoutes() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <Routes>
+        <Route path="/finance/*" element={<FinanceApp />} />
+        <Route path="/iam/*" element={<IamApp />} />
+        <Route path="/workflow/*" element={<WorkflowApp />} />
+      </Routes>
+    </Suspense>
+  );
+}`
+      }
+    }
+  },
+  {
+    slug: "production-like-platform-three-node-k3s-cluster",
+    title: "Running a Production-Like Platform on a Three-Node K3s Cluster",
+    titleVi: "Vận hành Nền tảng Tương đương Production trên Cụm K3s 3-Node Bare-Metal",
+    summary: "Setting up a resilient self-hosted lab: 3 control-plane/worker nodes, CloudNativePG HA PostgreSQL, NATS JetStream, Valkey, Traefik, Cloudflare Tunnel, and ArgoCD GitOps.",
+    summaryVi: "Thiết lập cụm lab tự vận hành: 3 node control-plane/worker, CloudNativePG HA PostgreSQL, NATS JetStream, Valkey, Traefik, Cloudflare Tunnel và ArgoCD GitOps.",
+    date: "Jan 2026",
+    readTime: "11 min read",
+    tags: ["Arda Labs", "K3s", "Kubernetes", "CloudNativePG", "DevOps", "GitOps", "Homelab", "Infrastructure"],
+    featured: false,
+    project: "infrastructure",
+    relatedProject: "devops-k8s-infrastructure",
+    diagramKey: "production-like-platform-three-node-k3s-cluster",
+    evidenceIds: ["arda-k3s-gitops-infra", "homelab-3node-longhorn"],
+    repositoryUrl: "https://github.com/arda-labs/arda-infra",
+    content: {
+      problemStatement: "Testing real distributed microservice patterns (HA failover, zero-downtime rolling rollouts, outbox consumers, ingress security) on public cloud managed Kubernetes (EKS/GKE) quickly becomes prohibitively expensive for independent research and development.",
+      problemStatementVi: "Thử nghiệm các kiến trúc phân tán thực tế (HA failover, zero-downtime rollout, outbox worker, bảo mật ingress) trên các dịch vụ đám mây công cộng (EKS/GKE) thường rất đắt đỏ đối với các dự án nghiên cứu và phát triển độc lập.",
+      architectureDesign: "We constructed a production-like 3-node bare-metal K3s cluster (nodes 192.168.100.201-203) using embedded etcd for high availability. Ingress traffic enters via Cloudflare Tunnels (eliminating public IP exposure) into Traefik Ingress. State is managed by CloudNativePG (HA PostgreSQL with automatic leader election) and Valkey. Workload delivery is fully automated via declarative ArgoCD GitOps syncing manifests directly from GitHub.",
+      architectureDesignVi: "Chúng tôi thiết lập cụm 3-node K3s bare-metal (IP 192.168.100.201-203) sử dụng etcd nhúng để đạt tính sẵn sàng cao (HA). Luồng truy cập đi qua Cloudflare Tunnel (không cần mở IP tĩnh công khai) vào Traefik Ingress. Dữ liệu được quản lý bởi CloudNativePG (PostgreSQL HA tự động bầu chọn leader) và Valkey. Triển khai ứng dụng hoàn toàn tự động qua ArgoCD GitOps đồng bộ từ GitHub.",
+      technicalDecisions: [
+        "Embedded etcd High-Availability: 3 server nodes participate in quorum, allowing any single node to fail without cluster downtime.",
+        "CloudNativePG PostgreSQL Operator: automated asynchronous streaming replication, continuous WAL archiving, and sub-10s failover.",
+        "Cloudflare Tunnel Zero-Trust Ingress: all cluster endpoints are published securely without port forwarding or exposing router firewalls.",
+        "ArgoCD App of Apps Pattern: single root GitOps application orchestrating infrastructure operators and microservice Helm releases."
+      ],
+      technicalDecisionsVi: [
+        "Cụm etcd nhúng sẵn sàng cao: 3 master node duy trì quorum, cho phép 1 node gặp sự cố mà cụm vẫn hoạt động bình thường.",
+        "Operator CloudNativePG: tự động nhân bản streaming replication, lưu trữ WAL liên tục và tự động failover trong dưới 10 giây.",
+        "Cloudflare Tunnel Zero-Trust Ingress: xuất bản các dịch vụ an toàn mà không cần mở port firewall hay cấu hình IP tĩnh.",
+        "Mô hình App of Apps với ArgoCD: quản lý toàn bộ hạ tầng và các microservice Helm release chỉ từ một Git repository gốc."
+      ],
+      keyTakeaways: [
+        "A 3-node K3s cluster provides identical API semantics to full Kubernetes while consuming less than 512MB RAM per control-plane node.",
+        "CloudNativePG delivers enterprise-grade database replication and automated failover out of the box.",
+        "Declarative GitOps guarantees that the entire infrastructure state is version-controlled and reproducible from scratch."
+      ],
+      keyTakeawaysVi: [
+        "Cụm 3-node K3s mang lại API chuẩn như Kubernetes đầy đủ nhưng chỉ tiêu tốn dưới 512MB RAM trên mỗi control plane node.",
+        "CloudNativePG cung cấp cơ chế nhân bản và tự động failover CSDL đạt chuẩn doanh nghiệp.",
+        "Mô hình GitOps đảm bảo toàn bộ trạng thái hạ tầng đều được lưu vết trên Git và có thể tái dựng lại bất kỳ lúc nào."
+      ],
+      codeSnippet: {
+        language: "yaml",
+        title: "CloudNativePG HA Cluster Definition (k8s/database/cluster.yaml)",
+        code: `apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: arda-postgres-ha
+  namespace: database
+spec:
+  instances: 3
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 20Gi
+    storageClass: local-path
+  postgresql:
+    parameters:
+      shared_buffers: "256MB"
+      max_connections: "200"`
+      }
+    }
+  },
+
+  // ==========================================
+  // PUCHIDEMY ARTICLES
+  // ==========================================
+  {
+    slug: "building-puchi-product-idea-to-service-architecture",
+    title: "Building Puchi: From Product Idea to Service Architecture",
+    titleVi: "Xây dựng Puchi: Từ Ý tưởng Trải nghiệm Học tập đến Kiến trúc Microservices",
+    summary: "Deriving backend service boundaries from product domain needs: Next.js PWA, Go Kratos v3 monorepo (auth, core, learn, media, notification), NATS event bus, and Cloudflare R2 audio streaming.",
+    summaryVi: "Xây dựng ranh giới microservice từ trải nghiệm học viên: Next.js PWA, Go Kratos v3 monorepo (auth, core, learn, media, notification), NATS event bus và stream âm thanh Cloudflare R2.",
+    date: "Jan 2026",
+    readTime: "10 min read",
+    tags: ["Puchidemy", "Go", "Kratos v3", "Next.js", "PWA", "Microservices", "Product Engineering"],
+    featured: true,
+    project: "puchi",
+    relatedProject: "puchi-language-platform",
+    diagramKey: "building-puchi-product-idea-to-service-architecture",
+    evidenceIds: ["puchi-kratos-monorepo", "puchi-learning-domain-engine"],
+    repositoryUrl: "https://github.com/puchidemy/puchi-backend",
+    heroImage: "https://raw.githubusercontent.com/puchidemy/.github/main/profile/assets/system-design.png",
+    heroImageCaption: "Puchidemy System Design: Learner PWA ──► Envoy Gateway ──► 5 Go Kratos Services ──► PostgreSQL / NATS / Cloudflare R2",
+    heroImageCaptionVi: "Thiết kế Hệ thống Puchidemy: PWA Học viên ──► Envoy Gateway ──► 5 Go Kratos Services ──► PostgreSQL / NATS / Cloudflare R2",
+    highlights: [
+      {
+        value: "5 Services",
+        label: "Go Kratos Monorepo",
+        labelVi: "Go Kratos Monorepo",
+        detail: "Protobuf contracts & gRPC/HTTP",
+        detailVi: "Chuẩn hóa Protobuf & gRPC/HTTP"
+      },
+      {
+        value: "< 1s PWA",
+        label: "Mobile First Content",
+        labelVi: "Tốc độ Tải PWA",
+        detail: "Edge CDN & IndexedDB cache",
+        detailVi: "Cache IndexedDB & CDN Edge"
+      },
+      {
+        value: "NATS Bus",
+        label: "Async XP & Streaks",
+        labelVi: "Luồng Sự kiện NATS",
+        detail: "Non-blocking quiz feedback",
+        detailVi: "Chấm điểm không nghẽn HTTP"
+      },
+      {
+        value: "GitOps",
+        label: "ArgoCD on K3s",
+        labelVi: "ArgoCD trên K3s",
+        detail: "Automated declarative releases",
+        detailVi: "Phát hành tự động qua GitOps"
+      }
+    ],
+    comparison: {
+      naiveTitle: "Monolithic Language App with Direct Media Delivery",
+      naiveTitleVi: "Ứng dụng Ngoại ngữ Monolith Lưu Audio Trực tiếp",
+      naivePoints: [
+        "Serving high-frequency audio pronunciation files consumes server CPU and saturates network bandwidth.",
+        "Synchronous user gamification (XP, streaks, leaderboard) adds 200ms+ latency to quiz submissions.",
+        "Monolithic schema intertwines static language grammar rules with mutable learner test attempts."
+      ],
+      naivePointsVi: [
+        "Phát file âm thanh trực tiếp từ server gây nghẽn băng thông và tốn CPU máy chủ.",
+        "Tính điểm thưởng XP và chuỗi streak đồng bộ làm tăng độ trễ nộp bài lên hơn 200ms.",
+        "Schema monolith gộp chung ngữ pháp bài học với lịch sử làm bài của học viên."
+      ],
+      solutionTitle: "Puchi Cloud-Native EdTech Architecture",
+      solutionTitleVi: "Kiến trúc Nền tảng Học Ngoại ngữ Puchi Đám Mây",
+      solutionPoints: [
+        "Cloudflare R2 edge audio streaming offloads 100% of media traffic from backend instances.",
+        "NATS event stream processes gamification in background, returning quiz results in <10ms.",
+        "Domain separation: immutable curriculum tree decoupled from append-only learner progress logs."
+      ],
+      solutionPointsVi: [
+        "Stream audio qua Cloudflare R2 giải phóng 100% lưu lượng media khỏi backend.",
+        "Sự kiện NATS xử lý tính XP ngầm, trả kết quả trắc nghiệm tức thì dưới 10ms.",
+        "Phân tách nghiệp vụ: cây bài học tĩnh bất biến tách khỏi lịch sử làm bài append-only."
+      ]
+    },
+    sections: [
+      {
+        id: "product-to-services",
+        title: "From Learner Journey to Microservice Boundaries",
+        titleVi: "Từ Hành Trình Người Học đến Ranh Giới Microservices",
+        content: "When designing Puchi, we modeled services strictly after learner interactions:\n1. Authentication & OAuth -> `auth-service`\n2. Story & Scene Navigation -> `learn-service`\n3. Audio Pronunciation Streaming -> `media-service` (backed by Cloudflare R2)\n4. XP Streaks & Daily Rewards -> `core-service` (via NATS events)\n5. Email Reminders & Notifications -> `notification-service`.\n\nThis functional separation ensures that an influx of learners listening to audio lessons never impacts the latency of authentication or progress evaluation.",
+        contentVi: "Khi thiết kế Puchi, các service được phân tách bám sát trải nghiệm học viên:\n1. Đăng nhập & OAuth -> `auth-service`\n2. Cốt truyện & Bài tập -> `learn-service`\n3. Phát âm thanh bài giảng -> `media-service` (lưu trữ Cloudflare R2)\n4. Chuỗi streak & Điểm thưởng XP -> `core-service` (qua NATS events)\n5. Nhắc nhở học tập -> `notification-service`.\n\nSự phân tách này đảm bảo việc hàng nghìn học viên cùng nghe audio không bao giờ làm chậm API đăng nhập hay chấm bài.",
+        callout: {
+          type: "tip",
+          text: "Audio files are cached globally on Cloudflare Edge with Cache-Control headers, eliminating egress bandwidth costs.",
+          textVi: "Các file âm thanh phát âm được cache trên Cloudflare Edge toàn cầu với Cache-Control header, triệt tiêu hoàn toàn chi phí băng thông egress."
+        }
+      }
+    ],
+    content: {
+      problemStatement: "Designing an online language learning platform requires balancing rapid client-side lesson interactivity (audio playback, quiz validations, offline PWA access) with reliable backend services for user auth, learning progress tracking, XP streaks, and media storage without over-engineering.",
+      problemStatementVi: "Xây dựng ứng dụng học ngoại ngữ đòi hỏi cân bằng giữa tương tác client tốc độ cao (phát âm thanh, chấm trắc nghiệm, PWA offline) với các backend service ổn định xử lý xác thực, tiến độ học, chuỗi streak và lưu trữ media mà không bị quá tải kiến trúc.",
+      architectureDesign: "Puchi derives its 5 Go microservices directly from user domain boundaries: `auth` (opaque sessions & OAuth), `core` (gamification, XP, streaks, user profiles), `learn` (pedagogical curriculum, lessons, quizzes), `media` (Cloudflare R2 audio asset uploads & streaming), and `notification` (email/push dispatches). Services are organized in a clean Go Kratos v3 monorepo sharing protobuf contracts and communicating asynchronously via NATS.",
+      architectureDesignVi: "Puchi phân chia 5 Go microservices bám sát nghiệp vụ người dùng: `auth` (opaque session & OAuth), `core` (gamification, XP, streak, hồ sơ), `learn` (giáo trình, bài học, bài tập trắc nghiệm), `media` (tải lên & stream âm thanh qua Cloudflare R2) và `notification` (thông báo/email). Các service nằm trong Go Kratos monorepo dùng chung protobuf và kết nối qua NATS.",
+      technicalDecisions: [
+        "Go Kratos v3 Framework: standardizes HTTP/gRPC dual-transport, configuration parsing, middleware, and dependency injection across all services.",
+        "Decoupled Learning Progress: `learn-service` records lesson completion and immediately emits `learn.lesson.completed` over NATS, delegating XP and streak updates to `core-service`.",
+        "Cloudflare R2 Audio Distribution: high-quality Vietnamese pronunciation audio stored in R2 with edge CDN caching, saving server bandwidth.",
+        "Protobuf-First Contracts: API schemas defined in `.proto` files automatically generate TypeScript clients for Next.js and Go structs for services."
+      ],
+      technicalDecisionsVi: [
+        "Framework Go Kratos v3: chuẩn hóa hỗ trợ song song HTTP/gRPC, nạp cấu hình, middleware và dependency injection xuyên suốt các service.",
+        "Tách biệt tiến độ học: `learn-service` ghi nhận kết quả bài học và bắn ngay sự kiện `learn.lesson.completed` qua NATS để `core-service` tính XP ngầm.",
+        "Phân phối âm thanh qua Cloudflare R2: lưu trữ file âm thanh phát âm chuẩn trên Cloudflare R2 với CDN edge cache giúp tiết kiệm băng thông máy chủ.",
+        "Chuẩn hóa Protobuf: định nghĩa schema trong `.proto` tự động sinh ra client TypeScript cho Next.js và struct Go cho backend."
+      ],
+      keyTakeaways: [
+        "Product domain boundaries should dictate service boundaries, not arbitrary technical slicing.",
+        "Asynchronous NATS messaging keeps the learner's quiz completion response instantaneous.",
+        "Kratos v3 monorepo provides microservice modularity without the pain of managing multiple Git repositories."
+      ],
+      keyTakeawaysVi: [
+        "Ranh giới phân chia service phải bám sát luồng trải nghiệm người dùng thay vì chia tách máy móc.",
+        "Gửi sự kiện bất đồng bộ qua NATS giúp thao tác nộp bài của học viên luôn được phản hồi tức thì.",
+        "Monorepo với Kratos v3 mang lại tính module hóa cao mà không tốn công quản lý nhiều repo riêng lẻ."
+      ],
+      codeSnippet: {
+        language: "go",
+        title: "Puchi Learn Service Event Dispatcher",
+        code: `func (s *LearnService) SubmitQuizAttempt(ctx context.Context, req *pb.SubmitAttemptRequest) (*pb.SubmitAttemptReply, error) {
+    result, err := s.evaluator.Grade(ctx, req.QuizId, req.Answers)
+    if err != nil {
+        return nil, err
+    }
+
+    // Emit async domain event for Core Service (XP/Streak calculation)
+    event := &events.LessonCompletedEvent{
+        UserID:     req.UserId,
+        LessonID:   req.LessonId,
+        Score:      result.Score,
+        Passed:     result.Passed,
+        Timestamp:  time.Now().Unix(),
+    }
+    _ = s.eventBus.Publish("learn.lesson.completed", event)
+
+    return &pb.SubmitAttemptReply{Passed: result.Passed, Score: result.Score}, nil
+}`
+      }
+    }
+  },
+  {
+    slug: "why-puchi-uses-opaque-sessions-over-jwt",
+    title: "Why Puchi Uses Opaque Sessions Instead of JWT Everywhere",
+    titleVi: "Vì sao Puchi Sử dụng Opaque Session Thay vì Lạm dụng JWT",
+    summary: "Architecting authentication for language learners: opaque bearer tokens, centralized revocation authority, internal session introspection, and caching trade-offs.",
+    summaryVi: "Kiến trúc xác thực người dùng trong Puchi: opaque bearer token, khả năng thu hồi phiên tập trung, introspection nội bộ và chiến lược bộ nhớ đệm.",
+    date: "Jan 2026",
+    readTime: "9 min read",
+    tags: ["Puchidemy", "Auth", "Security", "Go", "Architecture"],
+    featured: false,
+    project: "puchi",
+    relatedProject: "puchi-language-platform",
+    diagramKey: "why-puchi-uses-opaque-sessions-over-jwt",
+    evidenceIds: ["puchi-opaque-session-auth"],
+    repositoryUrl: "https://github.com/puchidemy/puchi-backend",
+    content: {
+      problemStatement: "While stateless JWTs appear simple, they suffer from inability to immediately revoke compromised sessions, payload bloat on high-frequency mobile requests, and token expiration edge cases that disrupt learning flow.",
+      problemStatementVi: "Dù JWT stateless có vẻ tiện lợi, chúng lại gặp nhược điểm chí mạng là không thể thu hồi phiên ngay lập tức khi bị lộ, kích thước payload lớn làm nặng request di động và các lỗi hết hạn token làm gián đoạn bài học.",
+      architectureDesign: "Puchi's `auth-service` issues high-entropy opaque random strings as bearer session tokens to the Next.js PWA. Downstream services (`learn`, `core`, `media`) validate incoming tokens by introspecting against `auth-service` via gRPC, cached in Valkey for sub-millisecond repeated checks. Instant logout or session revocation deletes the key from Valkey/PostgreSQL immediately.",
+      architectureDesignVi: "Phân hệ `auth-service` của Puchi cấp phát chuỗi ngẫu nhiên có độ entropy cao (opaque session token) cho Next.js PWA. Các service phía sau (`learn`, `core`, `media`) kiểm tra tính hợp lệ của token qua lời gọi gRPC introspection tới `auth-service`, được cache trên Valkey dưới 1 mili-giây. Khi người dùng đăng xuất, key sẽ bị xóa ngay lập tức.",
+      technicalDecisions: [
+        "Opaque Random Bearer Tokens: client never parses or depends on token internals, preventing brittle frontend coupling.",
+        "Centralized Session Revocation: user logout or security resets take effect across all microservices instantly.",
+        "Valkey Session Cache: introspection latency is reduced to <1ms with a short TTL cache in memory.",
+        "OAuth2 Social Login Integration: Google, Facebook, and TikTok OAuth codes are exchanged centrally in `auth-service`."
+      ],
+      technicalDecisionsVi: [
+        "Opaque Bearer Token ngẫu nhiên: frontend không cần parse hay phụ thuộc vào cấu trúc bên trong của token.",
+        "Thu hồi phiên tập trung: khi người dùng đổi mật khẩu hoặc đăng xuất, phiên làm việc sẽ bị hủy ngay lập tức trên toàn bộ các service.",
+        "Cache phiên với Valkey: giảm độ trễ kiểm tra token xuống dưới 1ms với TTL ngắn trong RAM.",
+        "Tích hợp OAuth2 tập trung: luồng đăng nhập Google, Facebook, TikTok được xử lý duy nhất tại `auth-service`."
+      ],
+      keyTakeaways: [
+        "Opaque sessions offer superior security control for consumer applications where instant session revocation is required.",
+        "With proper Valkey caching, session introspection introduces negligible overhead compared to cryptographic JWT verification.",
+        "Simpler client code with no token refresh race conditions."
+      ],
+      keyTakeawaysVi: [
+        "Opaque session mang lại khả năng kiểm soát bảo mật tuyệt đối cho ứng dụng người dùng khi cần thu hồi phiên tức thì.",
+        "Với bộ nhớ đệm Valkey, việc kiểm tra token chỉ mất dưới 1ms, không hề thua kém việc giải mã chữ ký JWT.",
+        "Frontend trở nên đơn giản hơn nhiều do không phải xử lý race condition khi refresh token."
+      ],
+      codeSnippet: {
+        language: "go",
+        title: "Puchi Auth Token Introspection Middleware",
+        code: `func AuthMiddleware(authClient pb.AuthServiceClient) middleware.Middleware {
+    return func(handler middleware.Handler) middleware.Handler {
+        return func(ctx context.Context, req any) (any, error) {
+            token := extractBearerToken(ctx)
+            if token == "" {
+                return nil, errors.Unauthorized("UNAUTHORIZED", "missing bearer token")
+            }
+
+            reply, err := authClient.IntrospectToken(ctx, &pb.IntrospectRequest{Token: token})
+            if err != nil || !reply.Active {
+                return nil, errors.Unauthorized("INVALID_SESSION", "session expired or revoked")
+            }
+
+            ctx = context.WithValue(ctx, UserIDKey, reply.UserId)
+            return handler(ctx, req)
+        }
+    }
+}`
+      }
+    }
+  },
+  {
+    slug: "git-push-to-k3s-puchi-gitops-pipeline",
+    title: "Git Push to K3s: Building Puchi's GitOps Deployment Pipeline",
+    titleVi: "Từ Git Push đến K3s: Xây dựng Pipeline Triển khai GitOps cho Puchi",
+    summary: "Automating zero-touch continuous delivery: GitHub Actions container builds, GHCR registry publishing, and declarative ArgoCD synchronization on a multi-node K3s cluster with zero open firewall ports.",
+    summaryVi: "Tự động hóa phân phối ứng dụng: GitHub Actions đóng gói container, xuất bản lên GHCR và ArgoCD tự động đồng bộ lên cụm K3s mà không cần mở port firewall.",
+    date: "Jan 2026",
+    readTime: "10 min read",
+    tags: ["Puchidemy", "GitOps", "ArgoCD", "K3s", "GitHub Actions", "Docker", "DevOps"],
+    featured: false,
+    project: "puchi",
+    relatedProject: "puchi-language-platform",
+    diagramKey: "git-push-to-k3s-puchi-gitops-pipeline",
+    evidenceIds: ["puchi-gitops-argocd"],
+    repositoryUrl: "https://github.com/puchidemy/puchi-infra",
+    content: {
+      problemStatement: "Manual SSH deployments and imperative deployment scripts are error-prone, lack auditability, risk environment drift, and require opening direct SSH/Kubeconfig access into internal cluster networks.",
+      problemStatementVi: "Việc deploy thủ công qua SSH hay chạy script dòng lệnh rất dễ xảy ra sai sót, thiếu khả năng kiểm toán lịch sử, dễ bị lệch cấu hình giữa các môi trường và đòi hỏi phải mở quyền truy cập trực tiếp vào mạng cụm máy chủ.",
+      architectureDesign: "Puchi establishes a declarative GitOps workflow: When code is pushed to GitHub, GitHub Actions runs tests, builds multi-stage Docker images, and publishes them to GitHub Container Registry (GHCR). A Git commit updates image tags in `puchi-infra`. ArgoCD running inside the K3s cluster detects repository changes and performs an automated rolling update with zero downtime.",
+      architectureDesignVi: "Puchi thiết lập quy trình GitOps khai báo: Khi commit mã nguồn lên GitHub, GitHub Actions chạy test, build Docker image đa tầng và xuất bản lên GHCR. Commit tiếp theo cập nhật tag image trong `puchi-infra`. ArgoCD chạy bên trong cụm K3s phát hiện thay đổi và tự động thực hiện rolling update zero-downtime.",
+      technicalDecisions: [
+        "ArgoCD App of Apps Pattern: single root manifest manages individual microservice deployments, services, ingress, and configmaps.",
+        "GitHub Actions Multi-Stage Builds: slim scratch/alpine base images minimize container image size and reduce attack surface.",
+        "Zero Inbound Firewall Ports: cluster pulls from Git & GHCR internally; user access is routed securely via Cloudflare Tunnels.",
+        "Sealed Secrets Management: sensitive credentials encrypted with Bitnami SealedSecrets committed safely to public/private Git."
+      ],
+      technicalDecisionsVi: [
+        "Mô hình App of Apps trong ArgoCD: một manifest gốc điều phối toàn bộ deployment, service, ingress và configmap của các microservices.",
+        "Build Docker đa tầng (Multi-Stage): sử dụng base image alpine/scratch tinh gọn giúp giảm dung lượng image và hạn chế lỗ hổng bảo mật.",
+        "Không cần mở port Inbound: cụm K3s chủ động pull dữ liệu từ Git và GHCR; người dùng truy cập an toàn qua Cloudflare Tunnel.",
+        "Bảo mật Secret với SealedSecrets: mã hóa mật khẩu an toàn và lưu trữ trực tiếp trên Git mà không sợ lộ thông tin nhạy cảm."
+      ],
+      keyTakeaways: [
+        "Git is the single source of truth for all application deployments and infrastructure state.",
+        "Rolling back a bad release is as simple as running `git revert` on GitHub.",
+        "ArgoCD continuously monitors cluster state and automatically heals manual configuration drifts."
+      ],
+      keyTakeawaysVi: [
+        "Git là nguồn chân lý duy nhất (Single Source of Truth) cho toàn bộ trạng thái triển khai ứng dụng.",
+        "Rollback phiên bản lỗi chỉ đơn giản bằng một lệnh `git revert` trên GitHub.",
+        "ArgoCD liên tục giám sát và tự động đồng bộ nếu có ai đó chỉnh sửa cấu hình thủ công trong cụm."
+      ],
+      codeSnippet: {
+        language: "yaml",
+        title: "ArgoCD Application Definition for Puchi Backend",
+        code: `apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: puchi-backend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/puchidemy/puchi-infra.git
+    targetRevision: main
+    path: k8s/apps/backend
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: puchi
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true`
+      }
+    }
+  },
+  {
+    slug: "designing-story-based-language-learning-engine",
+    title: "Designing a Story-Based Language Learning Engine",
+    titleVi: "Thiết kế Engine Học Ngôn ngữ theo Cốt truyện & Mô hình Hóa Miền Nghiệp vụ",
+    summary: "Domain modeling for interactive language learning: City -> Story -> Scene -> Content -> Activity hierarchy, separating static pedagogical curriculum from dynamic learner progress and XP streaks.",
+    summaryVi: "Cấu trúc City -> Story -> Scene -> Content -> Activity, phân tách giáo trình sư phạm tĩnh khỏi tiến độ và streak học viên.",
+    date: "Jan 2026",
+    readTime: "9 min read",
+    tags: ["Puchidemy", "Domain-Driven Design", "Next.js", "Go", "PostgreSQL", "Product Engineering"],
+    featured: false,
+    project: "puchi",
+    relatedProject: "puchi-language-platform",
+    diagramKey: "designing-story-based-language-learning-engine",
+    evidenceIds: ["puchi-learning-domain-engine"],
+    repositoryUrl: "https://github.com/puchidemy/puchi-backend",
+    content: {
+      problemStatement: "Tightly coupling static lesson content (stories, dialogues, vocabulary, audio assets) with mutable learner state (scores, attempts, streaks, XP) causes severe database contention, schema bloat, and makes content authoring slow and fragile.",
+      problemStatementVi: "Gộp chung dữ liệu bài học tĩnh (cốt truyện, hội thoại, từ vựng, file âm thanh) với trạng thái động của người học (điểm số, lượt làm bài, streak, XP) gây nghẽn CSDL, phình schema và làm việc biên tập nội dung trở nên chậm chạp.",
+      architectureDesign: "Puchi models the learning engine into two strictly decoupled layers: (1) Static Content Hierarchy (City -> Story -> Scene -> Content -> Activity) stored with optimistic caching and CDN distribution, and (2) Dynamic Learner State (UserAttempt -> MasteryRecord -> StreakCounter) updated via asynchronous NATS event streams. Learners can retry activities infinitely without locking curriculum tables.",
+      architectureDesignVi: "Puchi mô hình hóa engine học tập thành 2 tầng phân tách triệt để: (1) Cây nội dung tĩnh (City -> Story -> Scene -> Content -> Activity) được cache tối ưu và phân phối qua CDN, và (2) Trạng thái động của học viên (UserAttempt -> MasteryRecord -> StreakCounter) cập nhật qua luồng sự kiện NATS. Học viên có thể làm lại bài tập không giới hạn mà không gây khóa bảng giáo trình.",
+      technicalDecisions: [
+        "Immutable Content Nodes: learning content is versioned and immutable, allowing aggressive caching in browser IndexedDB and edge CDNs.",
+        "Decoupled Learner Attempt Log: user attempts are recorded as append-only events, preserving full learning history for analytics.",
+        "Asynchronous Gamification: XP points and streak milestones are computed asynchronously in the background via NATS subscribers.",
+        "Polymorphic Activity Schema: flexible activity types (multiple-choice, fill-in-blank, pronunciation listening) validated via strongly-typed JSONB schemas in PostgreSQL."
+      ],
+      technicalDecisionsVi: [
+        "Cấu trúc nội dung bất biến: nội dung bài học có version và bất biến, cho phép cache mạnh mẽ trên IndexedDB trình duyệt và CDN.",
+        "Lưu vết lượt làm bài dạng Append-Only: các lần làm bài được lưu nối tiếp, bảo toàn toàn bộ lịch sử học tập để phân tích tiến bộ.",
+        "Tính điểm Gamification bất đồng bộ: điểm thưởng XP và chuỗi streak được tính toán ngầm qua NATS consumer mà không làm chậm giao diện.",
+        "Schema bài tập đa hình (Polymorphic): hỗ trợ linh hoạt nhiều dạng bài tập (trắc nghiệm, điền từ, nghe phát âm) với validation qua JSONB trong PostgreSQL."
+      ],
+      keyTakeaways: [
+        "Separating content architecture from learner state enables instant offline PWA caching without synchronization conflicts.",
+        "Append-only attempt logs unlock rich analytics on learner difficulty curves.",
+        "Domain-driven design creates clean boundaries that scale gracefully as curriculum expands."
+      ],
+      keyTakeawaysVi: [
+        "Phân tách nội dung khỏi trạng thái người học giúp ứng dụng PWA chạy offline mượt mà không lo xung đột dữ liệu.",
+        "Lưu vết append-only mở ra khả năng phân tích chi tiết độ khó của từng câu hỏi theo thời gian.",
+        "Thiết kế hướng miền (DDD) tạo nên cấu trúc mở rộng linh hoạt khi bổ sung thêm các ngôn ngữ mới."
+      ],
+      codeSnippet: {
+        language: "typescript",
+        title: "Puchi Content Hierarchy & Attempt Types",
+        code: `export interface SceneContent {
+  id: string;
+  storyId: string;
+  order: number;
+  dialogues: Array<{
+    speaker: string;
+    vietnamese: string;
+    english: string;
+    audioUrl: string;
+  }>;
+  activities: Array<{
+    id: string;
+    type: "MULTIPLE_CHOICE" | "FILL_BLANK" | "LISTEN_SELECT";
+    question: string;
+    options: string[];
+    correctAnswer: string;
+  }>;
+}`
+      }
+    }
+  },
+
+  // ==========================================
+  // ENTERPRISE & CAREER ARTICLES
+  // ==========================================
   {
     slug: "angular-microfrontend-architecture",
     title: "Designing Angular Micro-Frontends for Enterprise Applications",
     titleVi: "Thiết kế Kiến trúc Angular Micro-Frontend cho Ứng dụng Doanh nghiệp",
-    summary: "How to structure Nx monorepos, module federation, shared UI libraries, and synchronized routing across independent enterprise teams.",
-    summaryVi: "Cách tổ chức Nx monorepo, Module Federation, thư viện dùng chung và đồng bộ routing giữa các nhóm phát triển độc lập.",
+    summary: "How to structure Nx monorepos, module federation, shared UI libraries, dynamic forms, and synchronized routing across independent enterprise teams at NGV Group.",
+    summaryVi: "Cách tổ chức Nx monorepo, Module Federation, thư viện dùng chung, dynamic forms và đồng bộ routing giữa các nhóm phát triển độc lập tại NGV Group.",
     date: "Feb 2026",
     readTime: "8 min read",
-    tags: ["Angular", "Architecture", "Micro-Frontend", "Nx"],
-    featured: true,
+    tags: ["Angular", "Architecture", "Micro-Frontend", "Nx", "Enterprise"],
+    featured: false,
+    project: "epas",
     relatedProject: "epas-enterprise-process-automation",
+    evidenceIds: ["epas-enterprise-mfe-k8s"],
     architectureDiagram: `┌─────────────────────────────────────────────────────────────┐
 │                 Angular Shell (Host App)                    │
 │   • Auth / Keycloak Session  • Global Navigation  • Routing │
@@ -416,235 +1585,6 @@ export default config;`
     }
   },
   {
-    slug: "kubernetes-homelab-k3s",
-    title: "Building a 3-Node Kubernetes (K3s) Homelab with Longhorn Storage",
-    titleVi: "Xây dựng Cụm Kubernetes (K3s) Homelab 3-Node với Lưu trữ Phân tán Longhorn",
-    summary: "Hands-on architectural setup for bare-metal/virtualized multi-node K3s, Longhorn distributed block storage, Traefik ingress, and local deployment pipelines.",
-    summaryVi: "Chi tiết thiết lập cụm K3s đa node, hệ thống lưu trữ phân tán Longhorn, Traefik Ingress và quy trình tự động hóa triển khai.",
-    date: "Jan 2026",
-    readTime: "10 min read",
-    tags: ["Kubernetes", "DevOps", "Homelab", "Longhorn", "Linux"],
-    featured: true,
-    relatedProject: "devops-k8s-infrastructure",
-    architectureDiagram: `┌─────────────────────────────────────────────────────────────┐
-│                    Cloudflare Tunnel / LAN                  │
-└──────────────┬───────────────────────────────┬──────────────┘
-               │                               │
-┌──────────────▼───────────────────────────────▼──────────────┐
-│                  Traefik Ingress Controller                 │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-┌──────────────────────────────▼──────────────────────────────┐
-│                    3-Node K3s Cluster                       │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌────────────────┐ │
-│  │ Node 1 (Master) │ │  Node 2 (Worker)│ │ Node 3 (Worker)│ │
-│  │ • K3s Server    │ │  • K3s Agent    │ │ • K3s Agent    │ │
-│  │ • Control Plane │ │  • Workload Pods│ │ • Workload Pods│ │
-│  └────────┬────────┘ └────────┬────────┘ └────────┬───────┘ │
-│           │                   │                   │         │
-│  ┌────────▼───────────────────▼───────────────────▼───────┐ │
-│  │     Longhorn Distributed Block Storage Engine (Replication = 2) │ │
-│  └────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘`,
-    content: {
-      problemStatement: "Testing microservice architectures, persistent database clusters, and deployment failover strategies requires a real multi-node Kubernetes environment without incurring unpredictable public cloud costs.",
-      problemStatementVi: "Thử nghiệm kiến trúc microservices, cơ chế sao lưu CSDL phân tán và kịch bản failover đòi hỏi môi trường Kubernetes đa node thực tế mà không phát sinh chi phí đắt đỏ trên cloud.",
-      architectureDesign: "We deploy a lightweight, production-grade K3s cluster across 3 nodes (Ubuntu Linux). Persistent volumes are handled by Longhorn distributed block storage with synchronous data replication, while Traefik acts as the ingress controller routing HTTP/gRPC traffic with automated TLS.",
-      architectureDesignVi: "Thiết lập cụm K3s gọn nhẹ trên 3 node Ubuntu Linux. Dữ liệu bền vững (PV/PVC) được quản lý qua Longhorn với cơ chế nhân bản dữ liệu 2x, kết hợp Traefik Ingress định tuyến lưu lượng HTTP/gRPC và tự động cấp phát chứng chỉ TLS.",
-      technicalDecisions: [
-        "Selected K3s over full-blown K8s for lower memory footprint (under 512MB per control plane) while maintaining 100% Kubernetes API compatibility.",
-        "Configured Longhorn with node storage tagging and a replication factor of 2, ensuring zero data loss if one physical worker node goes offline.",
-        "Static IP assignment and local DNS overrides to ensure deterministic node discovery during cluster reboots.",
-        "Automated backup snapshots exported to MinIO object storage on a scheduled cron trigger."
-      ],
-      technicalDecisionsVi: [
-        "Chọn K3s thay vì full K8s để tối ưu tài nguyên RAM (dưới 512MB cho control plane) nhưng vẫn giữ 100% độ tương thích API chuẩn.",
-        "Cấu hình Longhorn với replication factor = 2, đảm bảo dữ liệu toàn vẹn ngay cả khi một node vật lý gặp sự cố mất điện.",
-        "Gán địa chỉ IP tĩnh và cấu hình DNS nội bộ giúp các node nhận diện nhau ổn định sau mỗi lần khởi động lại.",
-        "Thiết lập snapshot sao lưu định kỳ xuất ra cụm MinIO Object Storage."
-      ],
-      keyTakeaways: [
-        "True hands-on understanding of pod scheduling, storage classes, and PVC attachments.",
-        "Resilient environment for hosting personal backend services and staging builds.",
-        "Deep debugging insights into Linux networking, iptables, and CoreDNS lookups."
-      ],
-      keyTakeawaysVi: [
-        "Nắm vững cơ chế pod scheduling, storage class và gắn kết PVC trong thực tế.",
-        "Môi trường tin cậy để chạy các dịch vụ backend cá nhân và staging test.",
-        "Kinh nghiệm xử lý sự cố mạng Linux, iptables và phân giải tên miền CoreDNS."
-      ],
-      codeSnippet: {
-        language: "yaml",
-        title: "longhorn-pvc.yaml (Persistent Volume Claim)",
-        code: `apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-data-pvc
-  namespace: database
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 20Gi`
-      }
-    }
-  },
-  {
-    slug: "practical-cicd-jenkins-k8s",
-    title: "Building a Practical CI/CD Pipeline: From Git to Kubernetes",
-    titleVi: "Xây dựng Pipeline CI/CD Thực chiến: Từ Git đến Kubernetes",
-    summary: "A battle-tested Jenkins declarative pipeline featuring multi-stage Docker builds, layer caching, automated versioning, and zero-downtime rolling updates.",
-    summaryVi: "Pipeline Jenkins Declarative thực chiến kết hợp Docker multi-stage, tối ưu cache layer, gắn tag phiên bản và cập nhật rolling update.",
-    date: "Jan 2026",
-    readTime: "9 min read",
-    tags: ["CI/CD", "Jenkins", "Docker", "Kubernetes", "DevOps"],
-    featured: true,
-    relatedProject: "devops-k8s-infrastructure",
-    architectureDiagram: `┌────────────┐       ┌──────────────────────┐       ┌──────────────────────┐
-│ Git Commit ├──────►│ Jenkins Declarative  ├──────►│ Multi-Stage Docker   │
-│ (Push Tag) │       │ Pipeline (Lint/Test) │       │ Build & Layer Cache  │
-└────────────┘       └──────────────────────┘       └──────────┬───────────┘
-                                                               │
-┌──────────────────────┐       ┌──────────────────────┐        │
-│ Kubernetes Deployment│◄──────┤ Private Container    │◄───────┘
-│ Rolling Zero-Downtime│       │ Registry (v1.2.x Tag)│
-└──────────────────────┘       └──────────────────────┘`,
-    content: {
-      problemStatement: "Manual container builds and ad-hoc kubectl apply commands create human errors, inconsistent build environments, and unpredictable downtime during production releases.",
-      problemStatementVi: "Quy trình build thủ công và chạy lệnh kubectl apply trực tiếp thường dẫn đến sai sót do con người, thiếu tính nhất quán giữa các môi trường và gây gián đoạn dịch vụ khi release.",
-      architectureDesign: "A standardized Declarative Jenkinsfile automates the entire lifecycle: running unit tests, packaging container images with multi-stage Dockerfiles, publishing tagged artifacts to a secure registry, and applying rolling update manifests to the cluster.",
-      architectureDesignVi: "Tự động hóa toàn diện chu trình release bằng Declarative Jenkinsfile: chạy kiểm thử, đóng gói image qua Dockerfile multi-stage, đẩy image có tag phiên bản lên registry và áp dụng cập nhật rolling update vào cụm K8s.",
-      technicalDecisions: [
-        "Multi-stage Docker builds: compile in a full SDK image (Node/Maven), copy only the final artifact into a lightweight runtime (Alpine/Distroless).",
-        "Deterministic tagging strategy: \`\${GIT_COMMIT_SHORT}-\${BUILD_NUMBER}\` prevents \`latest\` tag caching pitfalls.",
-        "K8s rollout status verification: Jenkins waits for deployment rollout status before declaring success, automatically rolling back on crash loops."
-      ],
-      technicalDecisionsVi: [
-        "Build Docker đa tầng (multi-stage): biên dịch trong môi trường SDK đầy đủ, sau đó chỉ sao chép file thực thi sang image runtime siêu nhẹ (Alpine/Distroless).",
-        "Chiến lược gắn tag định danh theo commit và build number, loại bỏ rủi ro khi dùng tag latest.",
-        "Kiểm tra trạng thái rollout tự động: Jenkins chỉ xác nhận thành công khi toàn bộ pod mới đã ready và vượt qua liveness check."
-      ],
-      keyTakeaways: [
-        "100% reproducible builds across staging and production environments.",
-        "Sub-3-minute build and deployment cycles for microservices.",
-        "Safe rollback capability with immutable image tags."
-      ],
-      keyTakeawaysVi: [
-        "Đảm bảo 100% tính nhất quán giữa môi trường staging và production.",
-        "Rút ngắn thời gian build và triển khai dịch vụ xuống dưới 3 phút.",
-        "Khả năng rollback tức thì nhờ lưu trữ đầy đủ các image tag bất biến."
-      ],
-      codeSnippet: {
-        language: "groovy",
-        title: "Jenkinsfile (Declarative Pipeline)",
-        code: `pipeline {
-  agent any
-  environment {
-    IMAGE_NAME = 'registry.local:5000/app/backend-service'
-    IMAGE_TAG  = "\${env.BUILD_NUMBER}-\${env.GIT_COMMIT.take(7)}"
-  }
-  stages {
-    stage('Build & Test') {
-      steps {
-        sh 'mvn clean package -DskipTests=false'
-      }
-    }
-    stage('Docker Build & Push') {
-      steps {
-        sh "docker build -t \${IMAGE_NAME}:\${IMAGE_TAG} ."
-        sh "docker push \${IMAGE_NAME}:\${IMAGE_TAG}"
-      }
-    }
-    stage('Deploy to K8s') {
-      steps {
-        sh "kubectl set image deployment/backend-service backend=\${IMAGE_NAME}:\${IMAGE_TAG} -n production"
-        sh "kubectl rollout status deployment/backend-service -n production --timeout=120s"
-      }
-    }
-  }
-}`
-      }
-    }
-  },
-  {
-    slug: "angular-complex-list-state",
-    title: "Preserving Complex Filter & Pagination State in Angular Applications",
-    titleVi: "Kỹ thuật Giữ Trạng thái Bộ lọc & Phân trang Phức tạp trong Ứng dụng Angular",
-    summary: "Managing enterprise data grid states with RxJS declarative streams, bi-directional URL query sync, and seamless browser history navigation.",
-    summaryVi: "Quản lý trạng thái bảng dữ liệu doanh nghiệp với luồng RxJS, đồng bộ hai chiều với URL query và điều hướng lịch sử mượt mà.",
-    date: "Dec 2025",
-    readTime: "7 min read",
-    tags: ["Angular", "RxJS", "TypeScript", "Frontend"],
-    featured: false,
-    relatedProject: "epas-enterprise-process-automation",
-    content: {
-      problemStatement: "In enterprise data tables with multi-field filters, date ranges, and pagination, users lose their context whenever navigating to detail screens or refreshing the browser.",
-      problemStatementVi: "Trong các bảng dữ liệu doanh nghiệp có bộ lọc đa trường, khoảng thời gian và phân trang, người dùng thường bị mất trạng thái lọc khi bấm vào chi tiết hoặc tải lại trang.",
-      architectureDesign: "We establish a single source of truth by syncing filter state bi-directionally with Angular Router query parameters and RxJS `combineLatest` streams, ensuring shareable URLs and instant state restoration.",
-      architectureDesignVi: "Thiết lập nguồn chân lý duy nhất (Single Source of Truth) bằng cách đồng bộ trạng thái lọc với URL query parameters và luồng RxJS combineLatest, giúp URL có thể chia sẻ và tự khôi phục trạng thái.",
-      technicalDecisions: [
-        "Store state in URL Query Params: makes every filter view bookmarkable and shareable between enterprise teammates.",
-        "Debounce filter text inputs with RxJS `distinctUntilChanged` and `debounceTime(300)` to eliminate redundant API requests.",
-        "Use `switchMap` for data fetching to automatically cancel outdated HTTP requests on rapid filter changes."
-      ],
-      technicalDecisionsVi: [
-        "Lưu trạng thái vào Query Params trên URL: cho phép bookmark và chia sẻ trực tiếp link lọc cho đồng nghiệp.",
-        "Debounce các trường nhập liệu văn bản với distinctUntilChanged và debounceTime(300) để triệt tiêu request thừa.",
-        "Sử dụng switchMap khi gọi API để tự động hủy các HTTP request cũ khi người dùng thay đổi bộ lọc nhanh."
-      ],
-      keyTakeaways: [
-        "Zero state loss during back/forward browser navigation.",
-        "Cleaner component architecture without messy imperative state resetting.",
-        "Optimized server load with request cancellation and input debouncing."
-      ],
-      keyTakeawaysVi: [
-        "Không bị mất trạng thái lọc khi người dùng nhấn nút Back/Forward trên trình duyệt.",
-        "Mã nguồn component rõ ràng, loại bỏ các đoạn code gán biến thủ công.",
-        "Giảm tải cho backend nhờ hủy request thừa và debounce thông minh."
-      ]
-    }
-  },
-  {
-    slug: "postgresql-oracle-migration-lessons",
-    title: "PostgreSQL & Oracle in Enterprise Systems: Architecture & SQL Tuning",
-    titleVi: "Xử lý Dữ liệu Oracle & PostgreSQL trong Hệ thống Doanh nghiệp: Kiến trúc & Tối ưu SQL",
-    summary: "Architectural insights on dual-persistence patterns, indexing strategies, connection pooling, and optimizing high-throughput SQL queries with Spring Boot.",
-    summaryVi: "Kinh nghiệm thực chiến về kiến trúc tương thích dữ liệu, chiến lược đánh index, cấu hình connection pool và tối ưu truy vấn SQL tải cao.",
-    date: "Nov 2025",
-    readTime: "8 min read",
-    tags: ["Database", "PostgreSQL", "Oracle", "Spring Boot", "SQL"],
-    featured: false,
-    relatedProject: "epas-enterprise-process-automation",
-    content: {
-      problemStatement: "Enterprise systems often require interfacing with legacy Oracle schemas while operating modern PostgreSQL microservices, demanding high query efficiency and robust connection management.",
-      problemStatementVi: "Hệ thống doanh nghiệp thường cần kết nối đồng thời với cơ sở dữ liệu Oracle legacy và các microservices PostgreSQL mới, đòi hỏi hiệu năng truy vấn cao và quản lý kết nối an toàn.",
-      architectureDesign: "We utilize Spring Data JPA with multi-datasource configurations, HikariCP connection pooling, tailored execution plan analysis (EXPLAIN ANALYZE), and partial indexes to maintain sub-50ms query latency.",
-      architectureDesignVi: "Sử dụng Spring Data JPA cấu hình multi-datasource, tối ưu connection pool với HikariCP, phân tích execution plan (EXPLAIN ANALYZE) và đánh partial index để duy trì độ trễ truy vấn dưới 50ms.",
-      technicalDecisions: [
-        "Fine-tune HikariCP pool sizing based on CPU core formulas to avoid thread contention.",
-        "Implement Composite and Partial Indexes on high-cardinality status columns to eliminate full table scans.",
-        "Use read-only transaction annotations (`@Transactional(readOnly = true)`) for reporting queries to bypass Hibernate dirty-checking overhead."
-      ],
-      technicalDecisionsVi: [
-        "Tinh chỉnh kích thước connection pool HikariCP theo công thức số core CPU để tránh tắc nghẽn thread.",
-        "Thiết lập Composite Index và Partial Index trên các cột trạng thái để loại bỏ hoàn toàn việc quét toàn bảng (Full Table Scan).",
-        "Sử dụng @Transactional(readOnly = true) cho các truy vấn đọc dữ liệu để bỏ qua chi phí dirty-checking của Hibernate."
-      ],
-      keyTakeaways: [
-        "Significant reduction in query execution times on million-row tables.",
-        "Resilient connection pool management preventing thread starvation during traffic spikes.",
-        "Clean separation between legacy enterprise records and modern service schemas."
-      ],
-      keyTakeawaysVi: [
-        "Rút ngắn đáng kể thời gian thực thi truy vấn trên các bảng hàng triệu bản ghi.",
-        "Quản lý connection pool an toàn, ngăn ngừa cạn kiệt kết nối khi lượng truy cập tăng đột biến.",
-        "Phân tách rõ ràng giữa dữ liệu lưu trữ doanh nghiệp và schema dịch vụ mới."
-      ]
-    }
-  },
-  {
     slug: "from-utc-engineer-to-production-systems",
     title: "Reflections on Graduating as an IT Engineer (Distinction) & Transitioning to Production Systems",
     titleVi: "Nhìn lại Chặng đường Kỹ sư CNTT Loại Giỏi (UTC) & Bước chuyển mình vào Vận hành Hệ thống",
@@ -654,6 +1594,118 @@ spec:
     readTime: "6 min read",
     tags: ["Career", "Education", "Engineering", "UTC", "Personal"],
     featured: false,
+    project: "personal",
+    highlights: [
+      {
+        value: "Distinction",
+        label: "Engineer Degree",
+        labelVi: "Bằng Kỹ sư Loại Giỏi",
+        detail: "UTC (10/2020 – 08/2024)",
+        detailVi: "ĐH GTVT (10/2020 – 08/2024)"
+      },
+      {
+        value: "4 Years",
+        label: "CS Fundamentals",
+        labelVi: "Nền tảng CS Vững chắc",
+        detail: "OS, DB isolation, Networks",
+        detailVi: "Hệ điều hành, CSDL, Mạng"
+      },
+      {
+        value: "Homelab",
+        label: "Hands-on Practice",
+        labelVi: "Thực hành Homelab",
+        detail: "Linux, Docker, K8s, Go",
+        detailVi: "Tự dựng server, K8s & Go"
+      },
+      {
+        value: "Enterprise",
+        label: "Production Ready",
+        labelVi: "Sẵn sàng Thực chiến",
+        detail: "Angular MFE & Spring Boot",
+        detailVi: "Microservices & MFE lớn"
+      }
+    ],
+    comparison: {
+      naiveTitle: "Academic-Only Theory without Practical Depth",
+      naiveTitleVi: "Học Lý thuyết Thuần túy Thiếu Thực hành",
+      naivePoints: [
+        "Memorizing algorithms without understanding real-world concurrency or latency bottlenecks.",
+        "Relying solely on classroom assignments without building production-like homelab systems.",
+        "Struggling when transitioning to enterprise microservices, CI/CD pipelines, and cloud infra."
+      ],
+      naivePointsVi: [
+        "Học thuộc thuật toán mà không hiểu về xử lý đa luồng thực tế hay điểm nghẽn độ trễ.",
+        "Chỉ làm bài tập trên lớp mà không tự tay dựng server và kiến trúc hệ thống riêng.",
+        "Bỡ ngỡ khi bước vào môi trường doanh nghiệp với microservices, CI/CD và Kubernetes."
+      ],
+      solutionTitle: "Theory-to-Production Hybrid Engineering Rigor",
+      solutionTitleVi: "Phương pháp Thực chiến Kết hợp Nền tảng Lý thuyết",
+      solutionPoints: [
+        "Master deep CS foundations (networking, database ACID/isolation, OS internals) alongside coursework.",
+        "Self-host production-grade infrastructure (K3s, NATS, PostgreSQL HA) to simulate enterprise workloads.",
+        "Write clean, defensive code and modular architectures that directly translate to production value."
+      ],
+      solutionPointsVi: [
+        "Nắm chắc gốc rễ khoa học máy tính (giao thức mạng, cấp độ cô lập CSDL, luồng hệ điều hành).",
+        "Tự xây dựng hạ tầng thực tế (cụm K3s, NATS, PostgreSQL HA) để mô phỏng tải doanh nghiệp.",
+        "Viết code chỉn chu, typing chặt chẽ và thiết kế module hóa áp dụng ngay vào dự án thực chiến."
+      ]
+    },
+    sections: [
+      {
+        id: "utc-journey",
+        title: "The 4-Year Academic Foundation at UTC",
+        titleVi: "Hành trình 4 Năm Xây dựng Nền tảng Kỹ sư tại UTC",
+        content: "Entering the University of Transport and Communications (UTC) in October 2020, the focus from day one was cultivating true engineering rigor. Rather than chasing ephemeral framework trends, substantial time was invested in mastering fundamental computer science: operating systems, networking protocols, compiler design, and database transaction theory.\n\nThis continuous discipline culminated in graduating with the Degree of Engineer in Information Technology with Distinction in August 2024.",
+        contentVi: "Bắt đầu chặng đường tại Trường Đại học Giao thông Vận tải (UTC) vào tháng 10/2020, mục tiêu cốt lõi luôn là rèn luyện tư duy kỹ sư thực thụ. Thay vì chỉ chạy theo các framework ngắn hạn, phần lớn thời gian được dành để đào sâu các nguyên lý cốt lõi: hệ điều hành, giao thức mạng, kiến trúc phần mềm và lý thuyết giao dịch trong CSDL.\n\nSự kiên trì liên tục này đã được đền đáp với tấm Bằng Kỹ sư Công nghệ Thông tin loại Giỏi vào tháng 08/2024.",
+        callout: {
+          type: "tip",
+          text: "Strong computer science foundations make learning any modern framework (Angular, React, Spring Boot, Go) a matter of days rather than months.",
+          textVi: "Nền tảng khoa học máy tính vững chắc giúp việc làm chủ bất kỳ công nghệ mới nào (Angular, React, Spring Boot, Go) trở nên rất nhanh chóng và tự tin."
+        }
+      }
+    ],
+    embeds: [
+      {
+        type: "facebook-post",
+        src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fweb.facebook.com%2Fhoanit02%2Fposts%2Fpfbid02RBrpFKVBtGw2AYC5chgNjGfQkeoFhDJdNkwgk7oe5SDBt6rrm5uTBLUN2dhgRWoZl&show_text=true&width=500",
+        title: "UTC Engineer Degree Graduation with Distinction",
+        titleVi: "Lễ Tốt nghiệp Bằng Kỹ sư CNTT Loại Giỏi tại UTC",
+        caption: "Ceremony & Engineer Degree Diploma at University of Transport and Communications (UTC)",
+        captionVi: "Hình ảnh Lễ trao bằng Kỹ sư Công nghệ Thông tin tại Trường ĐH Giao thông Vận tải",
+        width: 500,
+        height: 250,
+      },
+      {
+        type: "facebook-video",
+        src: "https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fweb.facebook.com%2Freel%2F1131656488139965%2F&show_text=false&width=267&t=0",
+        title: "Graduation Moments & Engineer Journey",
+        titleVi: "Khoảnh khắc Tốt nghiệp & Chặng đường Kỹ sư",
+        caption: "Graduation reel capturing the engineer milestones (10/2020 – 08/2024)",
+        captionVi: "Video khoảnh khắc tốt nghiệp và chặng đường 4 năm học tập tại UTC",
+        width: 267,
+        height: 476,
+      },
+      {
+        type: "facebook-post",
+        src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fweb.facebook.com%2Fhoanit02%2Fposts%2Fpfbid088R858r8T4f5bXy7m1CEnf5AiaFir2B4Kd8nCh7w1sw3NNMibH7zuY42NfWPbQSxl&show_text=true&width=500",
+        title: "Engineering Reflections & Future Direction",
+        titleVi: "Chia sẻ Chặng đường Phát triển Kỹ thuật",
+        caption: "Personal milestone post reflecting on academic discipline and engineering growth",
+        captionVi: "Bài viết đúc kết về kỷ luật học tập và hành trình theo đuổi lập trình hệ thống",
+        width: 500,
+        height: 250,
+      },
+      {
+        type: "youtube",
+        src: "https://www.youtube-nocookie.com/embed/ASVxal2cwXo",
+        url: "https://www.youtube.com/watch?v=ASVxal2cwXo",
+        title: "Engineering Journey & Student Life Documentary",
+        titleVi: "Phim Tư liệu Chặng đường Kỹ sư & Đời sống Sinh viên UTC",
+        caption: "Documentary capturing university engineering milestones and memories",
+        captionVi: "Video tài liệu ghi lại dấu ấn học tập và trải nghiệm thực chiến",
+      }
+    ],
     content: {
       problemStatement: "The transition from university theoretical computer science concepts (algorithms, databases, OS internals) to fast-paced production delivery often catches new graduates off-guard with real-world complexities like microservices, CI/CD, and distributed observability.",
       problemStatementVi: "Bước chuyển từ lý thuyết đại học (thuật toán, cấu trúc dữ liệu, hệ điều hành) sang môi trường thực chiến thường gặp rào cản lớn về tính phức tạp của microservices, CI/CD và khả năng chịu tải thực tế.",

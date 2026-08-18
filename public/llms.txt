@@ -1,20 +1,28 @@
 # Le Cong Hoan
 
-> Full-stack Engineer based in Hanoi, Vietnam, specializing in Angular Micro-frontends, Next.js, Java Spring Boot microservices, high-scale database workflows (Oracle, PostgreSQL), automated CI/CD pipelines, and multi-node Kubernetes (K3s) Homelab infrastructure. Born April 2, 2002. Graduated with an Engineer Degree in Information Technology with Distinction from the University of Transport and Communications (UTC).
+> Full-stack Engineer based in Hanoi, Vietnam, specializing in Angular Micro-frontends, Next.js, Go microservices, Java Spring Boot, high-scale database workflows (Oracle, PostgreSQL), automated CI/CD pipelines, and multi-node Kubernetes (K3s) Homelab infrastructure. Born April 2, 2002. Graduated with an Engineer Degree in Information Technology with Distinction from the University of Transport and Communications (UTC).
 
-Le Cong Hoan is a Full-stack Engineer and System Builder experienced in developing enterprise process automation systems (EPAS) and high-performance web applications.
+Le Cong Hoan is a Full-stack Engineer and System Builder experienced in developing enterprise process automation systems (EPAS), cloud-native multi-tenant FinOps architectures (Arda Labs), and educational platforms (Puchidemy, MochiMochi).
 
 ## Technical Notes & Articles
 
+- [Designing Arda: A Cloud-Native Financial Operations Platform](https://hoan.io.vn/writing/designing-arda-cloud-native-finops-platform): Comprehensive system design of Arda (arda.io.vn) — 9 Go microservices, synchronous gRPC, NATS domain events, BFF auth-gateway proxy, CloudNativePG HA, Zeebe workflow, and K3s GitOps.
+- [Authentication Beyond JWT: Designing Arda's Identity Architecture](https://hoan.io.vn/writing/authentication-beyond-jwt-arda-identity-architecture): Deep dive into why browsers shouldn't juggle raw JWTs: Traefik ForwardAuth, auth-gateway BFF, Ory Kratos (Identity), Ory Hydra (OAuth2/OIDC), and downstream header injection.
+- [Reliable Domain Events with NATS and the Transactional Outbox Pattern](https://hoan.io.vn/writing/reliable-domain-events-nats-transactional-outbox): Solving the dual-write hazard in distributed Go services: writing business state and domain events atomically in PostgreSQL, relaying via NATS JetStream, and enforcing idempotent consumer deduplication.
+- [Putting BPMN Behind a Workflow Service Boundary](https://hoan.io.vn/writing/bpmn-workflow-service-boundary-zeebe): Why domain services shouldn't talk directly to Zeebe: Designing a clean gRPC/HTTP workflow-service facade for case lifecycles, user tasks, SLA timers, and domain error handling.
+- [What I Learned Building a Multi-Remote Micro Frontend Platform](https://hoan.io.vn/writing/multi-remote-micro-frontend-platform-module-federation): Architecting Arda's frontend with React Module Federation: 1 Shell host + 7 decoupled remotes sharing @workspace packages and avoiding shared state traps.
+- [Running a Production-Like Platform on a Three-Node K3s Cluster](https://hoan.io.vn/writing/production-like-platform-three-node-k3s-cluster): Setting up a resilient self-hosted lab: 3 control-plane/worker nodes, CloudNativePG HA PostgreSQL, NATS JetStream, Valkey, Traefik, Cloudflare Tunnel, and ArgoCD GitOps.
+- [Building Puchi: From Product Idea to Service Architecture](https://hoan.io.vn/writing/building-puchi-product-idea-to-service-architecture): Deriving backend service boundaries from product domain needs: Next.js PWA, Go Kratos v3 monorepo, NATS event bus, and Cloudflare R2 audio streaming.
+- [Why Puchi Uses Opaque Sessions Instead of JWT Everywhere](https://hoan.io.vn/writing/why-puchi-uses-opaque-sessions-over-jwt): Architecting authentication for language learners: opaque bearer tokens, centralized revocation authority, internal session introspection, and caching trade-offs.
+- [Git Push to K3s: Building Puchi's GitOps Deployment Pipeline](https://hoan.io.vn/writing/git-push-to-k3s-puchi-gitops-pipeline): Automating zero-touch continuous delivery: GitHub Actions container builds, GHCR registry publishing, and declarative ArgoCD synchronization on a multi-node K3s cluster.
+- [Designing a Story-Based Language Learning Engine](https://hoan.io.vn/writing/designing-story-based-language-learning-engine): Domain modeling for interactive language learning: City -> Story -> Scene -> Content -> Activity hierarchy, separating static pedagogical curriculum from dynamic learner progress.
 - [Designing Angular Micro-Frontends for Enterprise Applications](https://hoan.io.vn/writing/angular-microfrontend-architecture): How to structure Nx monorepos, module federation, shared UI libraries, and synchronized routing across independent enterprise teams.
-- [Building a 3-Node Kubernetes (K3s) Homelab with Longhorn Storage](https://hoan.io.vn/writing/kubernetes-homelab-k3s): Hands-on architectural setup for bare-metal multi-node K3s, Longhorn distributed block storage, Traefik ingress, and local deployment pipelines.
-- [Building a Practical CI/CD Pipeline: From Git to Kubernetes](https://hoan.io.vn/writing/practical-cicd-jenkins-k8s): A battle-tested Jenkins declarative pipeline featuring multi-stage Docker builds, layer caching, automated versioning, and zero-downtime rolling updates.
-- [Preserving Complex Filter & Pagination State in Angular Applications](https://hoan.io.vn/writing/angular-complex-list-state): Managing enterprise data grid states with RxJS declarative streams, bi-directional URL query sync, and seamless browser history navigation.
-- [PostgreSQL & Oracle in Enterprise Systems: Architecture & SQL Tuning](https://hoan.io.vn/writing/postgresql-oracle-migration-lessons): Architectural insights on dual-persistence patterns, indexing strategies, connection pooling, and optimizing high-throughput SQL queries with Spring Boot.
 - [Reflections on Graduating as an IT Engineer (Distinction) & Transitioning to Production Systems](https://hoan.io.vn/writing/from-utc-engineer-to-production-systems): Personal and technical reflections on graduating with distinction from UTC, computer science fundamentals, and stepping into enterprise engineering.
 
 ## Featured Systems & Projects
 
+- [Arda — Multi-Tenant Financial Operations Platform](https://arda.io.vn): Cloud-native platform with 9 Go microservices (gRPC & NATS), React Module Federation (7 remotes), Ory IAM, and CloudNativePG on 3-node K3s.
+- [Puchi — Vietnamese Language Learning Platform](https://puchi.io.vn): Next.js PWA with 5 Go microservices (Kratos v3), Limen Auth, NATS event bus, and declarative ArgoCD GitOps on K3s.
 - [EPAS — Enterprise Process Automation System](https://hoan.io.vn/#selected-work): Enterprise-scale micro-frontend and microservice platform with CRM/BPM workflow automation built on Angular, Nx, Spring Boot, Kafka, Keycloak, and Kubernetes.
 - [Enterprise CI/CD & Kubernetes Homelab Infrastructure](https://hoan.io.vn/#selected-work): Automated container pipelines, private registry, Longhorn distributed storage, and multi-node K3s cluster orchestration.
 - [Zalo OA Integration & Message Management Platform](https://hoan.io.vn/#selected-work): Enterprise communication console for conversation filtering, broadcast template administration, and Spring Boot REST integration.
@@ -24,8 +32,10 @@ Le Cong Hoan is a Full-stack Engineer and System Builder experienced in developi
 
 - [Portfolio Website](https://hoan.io.vn): Official personal portfolio and interactive engineering showcase.
 - [Engineering Notes](https://hoan.io.vn/writing): Technical blog, architecture deep dives, and system notes.
-- [Curriculum Vitae / Resume](https://hoan.io.vn/cv/Le_Cong_Hoan_CV.pdf): Downloadable CV of Le Cong Hoan.
 - [GitHub Profile](https://github.com/hoan02): Open source repositories, side projects, and code samples.
+- [Arda Labs GitHub](https://github.com/arda-labs): Multi-tenant FinOps architecture organization on GitHub.
+- [Puchidemy GitHub](https://github.com/puchidemy): Language learning platform organization on GitHub.
+- [Curriculum Vitae / Resume](https://hoan.io.vn/cv/Le_Cong_Hoan_CV.pdf): Downloadable CV of Le Cong Hoan.
 - [LinkedIn Profile](https://www.linkedin.com/in/hoan02): Professional experience, career updates, and networking.
 - [Facebook Profile](https://web.facebook.com/hoanit02): Personal social profile.
 - [Direct Email](mailto:lehoan.dev@gmail.com): Contact email for project inquiries and engineering collaborations.

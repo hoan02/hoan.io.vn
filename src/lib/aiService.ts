@@ -1,5 +1,6 @@
 import { queryAIKnowledgeBase } from "@/data/aiKnowledgeBase";
 import { PERSONAL_INFO, PROJECTS_DATA, EXPERIENCES_DATA, TECH_CATEGORIES, ARTICLES_DATA } from "@/data/portfolioData";
+import { ENGINEERING_EVIDENCE } from "@/data/engineeringEvidence";
 import { AIResponse } from "@/types";
 
 export interface ChatMessage {
@@ -14,10 +15,12 @@ export interface AIServiceResult {
 
 const HOAN_PROFILE = {
   identity: {
-    fullName: "Lê Công Hoan",
+    fullName: PERSONAL_INFO.name,
+    fullNameVi: "Lê Công Hoan",
     preferredName: "Hoan",
-    dateOfBirth: "2002-04-02",
     birthDateFormatted: "02/04/2002",
+    birthYear: 2002,
+    age: 24,
     location: "Hanoi, Vietnam",
     phone: PERSONAL_INFO.phone,
     email: PERSONAL_INFO.email,
@@ -26,6 +29,20 @@ const HOAN_PROFILE = {
     facebook: PERSONAL_INFO.facebook,
     cvUrl: PERSONAL_INFO.cvUrl,
     website: "https://hoan.io.vn",
+    openSourceOrganizations: [
+      {
+        name: "Arda Labs",
+        github: "https://github.com/arda-labs",
+        website: "https://arda.io.vn",
+        description: "Cloud-native multi-tenant FinOps platform with 9 Go microservices (gRPC/NATS), React Module Federation (7 remotes), and Ory IAM on 3-node K3s."
+      },
+      {
+        name: "Puchidemy",
+        github: "https://github.com/puchidemy",
+        website: "https://puchi.io.vn",
+        description: "Modern Vietnamese language learning platform with Next.js PWA, 5 Go microservices (Kratos v3), Limen Auth, NATS event bus, and ArgoCD GitOps on K3s."
+      }
+    ],
   },
   personal: {
     hobbies: [
@@ -81,6 +98,16 @@ const HOAN_PROFILE = {
     contributions: e.contributions,
     techStack: e.techStack,
   })),
+  engineeringEvidence: ENGINEERING_EVIDENCE.map((ev) => ({
+    id: ev.id,
+    project: ev.project,
+    category: ev.category,
+    claim: ev.claim,
+    evidence: ev.evidence,
+    confidence: ev.confidence,
+    relatedArticles: ev.relatedArticles,
+    technologies: ev.technologies,
+  })),
   writing: ARTICLES_DATA.map((a) => ({
     title: a.title,
     slug: a.slug,
@@ -96,35 +123,31 @@ const DERIVED_PROFILE = {
   currentDate: new Date().toISOString().split("T")[0],
   currentAge: 24,
   birthYear: 2002,
-  primaryStack: "Angular, Next.js, TypeScript, Java Spring Boot, Go, Kubernetes, PostgreSQL, Oracle, Docker, Jenkins",
+  primaryStack: "Angular, Next.js, TypeScript, Java Spring Boot, Go, Kubernetes, PostgreSQL, Oracle, Docker, Jenkins, NATS",
 };
 
 const SYSTEM_INSTRUCTION_TEXT = `You are Hoan AI, the personal AI assistant embedded in Le Cong Hoan's portfolio website.
-Your purpose is to help visitors learn about Hoan naturally and accurately, including his personal background, career, skills, projects, interests, education, and experience.
-You are not a generic chatbot and you are not a recruiter bot.
+Your purpose is to help visitors learn about Hoan naturally and accurately, including his personal background, career, skills, projects, interests, education, engineering evidence, and technical articles.
+Your purpose is to help visitors learn about Hoan naturally and accurately, including his personal background, career, skills, projects, interests, education, engineering evidence, and technical articles.
+You are not a generic recruiter bot.
 
-SOURCE OF TRUTH
-You will receive structured data called HOAN_PROFILE.
-HOAN_PROFILE is the ONLY source of truth about Hoan.
-Use information from it to answer questions.
-Never invent, guess, or assume personal facts that are not explicitly present in the profile.
-If the requested information is not available, respond naturally, for example:
-Vietnamese: "Thông tin này hiện Hoan chưa chia sẻ trên portfolio."
-English: "Hoan hasn't shared that information on his portfolio yet."
-Do not fabricate an answer.
+EVIDENCE-GROUNDED TECHNICAL RESPONSES
+When answering technical questions, rely on the verified ENGINEERING EVIDENCE and ARCHITECTURAL CASE STUDIES rather than merely listing skill names:
+- When asked "Does Hoan know Kubernetes?": Explain that Hoan runs a multi-node self-hosted K3s cluster running CloudNativePG HA, NATS JetStream, Traefik, and ArgoCD GitOps for projects like Arda and Puchi.
+- When asked "Does Hoan understand distributed systems?": Explain his hands-on implementation of the Transactional Outbox pattern with NATS JetStream, idempotent consumer deduplication, and gRPC service contracts in Arda.
+- When asked "What is Hoan strongest at?": Answer with nuanced perspective: building systems across boundaries — frontend architecture (Module Federation & Angular MFEs), backend services (Go microservices, Spring Boot, NATS), and deployment infrastructure (K3s, GitOps).
+- Always distinguish between verified code evidence, self-hosted deployment environments, and general skills. Never invent fake enterprise traffic, transaction numbers, or business metrics.
 
 MOST IMPORTANT RULE
 Answer the user's actual question first.
-Do not unnecessarily redirect every answer toward Hoan's career, technical skills, or projects.
+Do not unnecessarily redirect personal or simple questions toward Hoan's technical stack.
 
 Examples:
 User: Hoan bao nhiêu tuổi? / Hoan sinh ngày nào?
 Good: Hoan sinh ngày 02/04/2002, hiện 24 tuổi.
-Bad: Hoan là một Full-stack Developer có kinh nghiệm với Angular, Spring Boot...
 
 User: Hoan thích làm gì?
-Good: Hoan khá thích mày mò homelab, self-hosting, thử công nghệ mới và xây các side project.
-Bad: Hoan có nhiều kinh nghiệm với Angular và Kubernetes...
+Good: Hoan thích mày mò cụm homelab/self-hosting, thử nghiệm công nghệ mới và xây dựng các dự án mã nguồn mở như Arda và Puchi.
 
 User: Hoan có kinh nghiệm Angular không?
 Good: Có. Angular là một trong những công nghệ Hoan sử dụng nhiều nhất. Hoan đã dùng Angular trong các hệ thống enterprise, bao gồm micro-frontend, reusable libraries và tối ưu hiệu năng.
@@ -273,6 +296,14 @@ async function callGeminiAPI(
   const lowerQuery = query.toLowerCase();
   const relevantLinks: { label: string; url: string }[] = [];
 
+  if (lowerQuery.includes("arda") || lowerQuery.includes("finops")) {
+    relevantLinks.push({ label: "Read Arda Architecture Note", url: "/writing/arda-finops-microservices-module-federation" });
+    relevantLinks.push({ label: "Arda GitHub", url: "https://github.com/arda-labs" });
+  }
+  if (lowerQuery.includes("puchi") || lowerQuery.includes("học tiếng việt")) {
+    relevantLinks.push({ label: "Read Puchi Architecture Note", url: "/writing/puchi-vietnamese-learning-platform-architecture" });
+    relevantLinks.push({ label: "Puchidemy GitHub", url: "https://github.com/puchidemy" });
+  }
   if (lowerQuery.includes("project") || lowerQuery.includes("dự án") || lowerQuery.includes("epas") || lowerQuery.includes("zalo")) {
     relevantLinks.push({ label: "View Projects", url: "/#selected-work" });
   }
