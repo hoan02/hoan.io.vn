@@ -5,6 +5,7 @@ import { BENTO_STATS } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
+import { TechBadge } from "@/components/common/TechIcon";
 import { Terminal, ShieldCheck, Zap, Code2, Layers } from "lucide-react";
 
 export function AboutBento() {
@@ -70,13 +71,19 @@ export function AboutBento() {
             </div>
 
             <div className="grid grid-cols-2 gap-2 pt-4 mt-4 border-t border-zinc-800/80">
-              <div className="p-2.5 rounded-lg bg-zinc-900/70 border border-zinc-800 text-xs">
-                <span className="text-zinc-400 block text-[11px]">{t.about.primaryFrontend}</span>
-                <span className="text-emerald-400 font-semibold">Angular & Next.js</span>
+              <div className="p-3 rounded-xl bg-zinc-900/70 border border-zinc-800 space-y-1.5">
+                <span className="text-zinc-400 block text-[11px] font-mono">{t.about.primaryFrontend}</span>
+                <div className="flex flex-wrap gap-1.5">
+                  <TechBadge name="Angular" size="xs" />
+                  <TechBadge name="Next.js" size="xs" />
+                </div>
               </div>
-              <div className="p-2.5 rounded-lg bg-zinc-900/70 border border-zinc-800 text-xs">
-                <span className="text-zinc-400 block text-[11px]">{t.about.primaryBackend}</span>
-                <span className="text-emerald-400 font-semibold">Spring Boot & Go</span>
+              <div className="p-3 rounded-xl bg-zinc-900/70 border border-zinc-800 space-y-1.5">
+                <span className="text-zinc-400 block text-[11px] font-mono">{t.about.primaryBackend}</span>
+                <div className="flex flex-wrap gap-1.5">
+                  <TechBadge name="Spring Boot" size="xs" />
+                  <TechBadge name="Go" size="xs" />
+                </div>
               </div>
             </div>
           </div>

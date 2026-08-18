@@ -5,6 +5,7 @@ import { EXPERIENCES_DATA } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
+import { TechBadge } from "@/components/common/TechIcon";
 import { Calendar, MapPin, ChevronRight } from "lucide-react";
 
 export function Experience() {
@@ -87,15 +88,10 @@ export function Experience() {
                     ))}
                   </div>
 
-                  {/* Tech Stack Chips */}
-                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-zinc-900">
+                  {/* Tech Stack Badges */}
+                  <div className="flex flex-wrap gap-2 pt-4 border-t border-zinc-900">
                     {exp.techStack.map((tech, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2.5 py-1 text-xs rounded-md bg-zinc-900 text-zinc-400 font-mono border border-zinc-800/80"
-                      >
-                        {tech}
-                      </span>
+                      <TechBadge key={idx} name={tech} size="xs" />
                     ))}
                   </div>
                 </div>

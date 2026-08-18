@@ -11,6 +11,7 @@ import { PROJECTS_DATA, ARTICLES_DATA } from "@/data/portfolioData";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { CustomCursor } from "@/components/common/CustomCursor";
 import { GithubIcon } from "@/components/common/Icons";
+import { TechBadge } from "@/components/common/TechIcon";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
 import { AskAIModal } from "@/components/ai/AskAIModal";
 import { DIAGRAM_MAP } from "@/components/diagrams/ArchitectureDiagrams";
@@ -164,19 +165,14 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
 
         {/* Tech Stack Pills Bar */}
         <MotionWrapper delay={0.1}>
-          <div className="mb-12 p-6 rounded-2xl bg-zinc-950/70 border border-zinc-800/80">
-            <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 mb-3 flex items-center gap-2">
+          <div className="mb-12 p-6 sm:p-7 rounded-2xl bg-zinc-950/70 border border-zinc-800/80">
+            <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 mb-4 flex items-center gap-2">
               <Cpu className="w-3.5 h-3.5 text-emerald-400" />
               <span>{t.selectedWork.technologies}</span>
             </h2>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2.5">
               {project.techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1 text-xs font-mono rounded-lg bg-zinc-900 text-zinc-300 border border-zinc-800 shadow-sm"
-                >
-                  {tech}
-                </span>
+                <TechBadge key={tech} name={tech} size="sm" />
               ))}
             </div>
           </div>

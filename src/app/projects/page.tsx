@@ -11,6 +11,7 @@ import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { CustomCursor } from "@/components/common/CustomCursor";
 import { GithubIcon } from "@/components/common/Icons";
+import { TechBadge } from "@/components/common/TechIcon";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
 import { AskAIModal } from "@/components/ai/AskAIModal";
 import {
@@ -250,15 +251,10 @@ function ProjectsContent() {
                     <div>
                       <div className="flex flex-wrap gap-1.5 pt-4 border-t border-zinc-900 mb-5">
                         {project.techStack.slice(0, 5).map((tech) => (
-                          <span
-                            key={tech}
-                            className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900/90 text-zinc-400 border border-zinc-800"
-                          >
-                            {tech}
-                          </span>
+                          <TechBadge key={tech} name={tech} size="xs" />
                         ))}
                         {project.techStack.length > 5 && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900/50 text-zinc-500 border border-zinc-800/60">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900/50 text-zinc-500 border border-zinc-800/60 flex items-center">
                             +{project.techStack.length - 5}
                           </span>
                         )}

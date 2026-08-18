@@ -5,6 +5,7 @@ import { TECH_CATEGORIES } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
+import { TechIcon } from "@/components/common/TechIcon";
 import { Sparkles, Server, Terminal, Database, Cloud } from "lucide-react";
 
 export function TechStack() {
@@ -84,10 +85,11 @@ export function TechStack() {
                           className="p-3.5 rounded-xl bg-zinc-900/50 hover:bg-zinc-900/90 border border-zinc-800/60 hover:border-zinc-700 transition-all flex flex-col gap-2"
                         >
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-sm font-semibold text-zinc-100 flex items-center gap-2">
-                              {item.name}
+                            <span className="text-sm font-semibold text-zinc-100 flex items-center gap-2.5">
+                              <TechIcon name={item.name} className="w-4 h-4 rounded-[2px] flex-shrink-0" />
+                              <span>{item.name}</span>
                               {item.highlight && (
-                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 text-[10px] font-mono font-normal rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-normal rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                                   <Sparkles className="w-2.5 h-2.5" /> {t.techStack.coreTag}
                                 </span>
                               )}

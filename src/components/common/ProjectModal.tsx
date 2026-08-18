@@ -8,6 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { ARTICLES_DATA } from "@/data/portfolioData";
 import { GithubIcon } from "@/components/common/Icons";
+import { TechBadge } from "@/components/common/TechIcon";
 import { X, ExternalLink, CheckCircle2, Layers, Cpu, AlertCircle, Wrench, BookOpen, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -171,14 +172,9 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <h4 className="text-xs font-semibold uppercase text-zinc-300 tracking-wider mb-3 flex items-center gap-2">
                   <Cpu className="w-4 h-4 text-emerald-400" /> {t.selectedWork.technologies}
                 </h4>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {project.techStack.map((tech, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2.5 py-1 text-xs rounded-md bg-zinc-800 text-zinc-300 border border-zinc-700/60 font-mono"
-                    >
-                      {tech}
-                    </span>
+                    <TechBadge key={idx} name={tech} size="xs" />
                   ))}
                 </div>
               </div>

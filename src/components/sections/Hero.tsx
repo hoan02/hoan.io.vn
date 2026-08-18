@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { GithubIcon, LinkedinIcon, FacebookIcon } from "@/components/common/Icons";
+import { TechBadge } from "@/components/common/TechIcon";
 import { ArrowDown, Mail, MapPin, FileText, Check, Sparkles } from "lucide-react";
 
 interface HeroProps {
@@ -67,13 +68,23 @@ export function Hero({ onOpenAI }: HeroProps) {
       </MotionWrapper>
 
       <MotionWrapper delay={0.3}>
-        <div className="flex flex-wrap items-center gap-3 text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-400 mb-6">
+        <div className="flex flex-wrap items-center gap-3 text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-400 mb-4">
           <span className="text-emerald-400 font-mono">01/</span>
           <span className="text-zinc-100">{t.hero.title}</span>
-          <span className="hidden sm:inline text-zinc-700">—</span>
-          <span className="text-zinc-400 text-lg sm:text-xl font-normal">
-            {t.hero.tagline}
-          </span>
+        </div>
+      </MotionWrapper>
+
+      {/* Core Tech Stack Badges with Authentic Logos */}
+      <MotionWrapper delay={0.35}>
+        <div className="flex flex-wrap items-center gap-2 mb-6">
+          <TechBadge name="Angular" size="sm" />
+          <TechBadge name="Next.js" size="sm" />
+          <TechBadge name="Java" size="sm" />
+          <TechBadge name="Spring Boot" size="sm" />
+          <TechBadge name="Go" size="sm" />
+          <TechBadge name="Rust" size="sm" />
+          <TechBadge name="PostgreSQL" size="sm" />
+          <TechBadge name="Kubernetes" size="sm" />
         </div>
       </MotionWrapper>
 

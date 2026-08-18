@@ -5,6 +5,7 @@ import { CATEGORIZED_PROMPTS, PromptItem } from "@/data/aiKnowledgeBase";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { AIServiceResult, ChatMessage } from "@/lib/aiService";
+import { TechIcon } from "@/components/common/TechIcon";
 import { X, Sparkles, CornerDownLeft, Bot, ExternalLink, RefreshCw, ArrowRight, User, Trash2, Layers, Cpu, GraduationCap, UserCheck, MessageSquarePlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -350,9 +351,10 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                       onClick={() => handlePromptClick(prompt.text)}
                       className="group p-3 rounded-xl bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/80 hover:border-emerald-500/40 transition-all text-left flex items-center justify-between gap-3"
                     >
-                      <div className="space-y-1 min-w-0">
-                        <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                          {prompt.badge}
+                      <div className="space-y-1.5 min-w-0">
+                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <TechIcon name={prompt.badge} className="w-3 h-3 rounded-[2px] flex-shrink-0" />
+                          <span>{prompt.badge}</span>
                         </span>
                         <p className="text-xs sm:text-sm text-zinc-200 group-hover:text-emerald-300 transition-colors truncate">
                           {prompt.text}

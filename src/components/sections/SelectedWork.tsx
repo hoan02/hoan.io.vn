@@ -10,6 +10,7 @@ import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import dynamic from "next/dynamic";
 import { ArrowUpRight, CheckCircle2, Eye, Sparkles } from "lucide-react";
+import { TechBadge } from "@/components/common/TechIcon";
 
 const ProjectModal = dynamic(
   () => import("@/components/common/ProjectModal").then((mod) => mod.ProjectModal),
@@ -104,15 +105,10 @@ export function SelectedWork() {
                       </div>
                     )}
 
-                    {/* Tech Stack Pills */}
-                    <div className="flex flex-wrap gap-1.5 pt-3">
+                    {/* Tech Stack Badges */}
+                    <div className="flex flex-wrap gap-2 pt-3">
                       {project.techStack.map((tech, i) => (
-                        <span
-                          key={i}
-                          className="px-2.5 py-1 text-xs rounded-md bg-zinc-900/90 text-zinc-300 border border-zinc-800 font-mono"
-                        >
-                          {tech}
-                        </span>
+                        <TechBadge key={i} name={tech} size="xs" />
                       ))}
                     </div>
 
