@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Article } from "@/types";
@@ -18,6 +18,7 @@ import {
   Calendar,
   Clock,
   ArrowLeft,
+  ArrowRight,
   Layers,
   AlertCircle,
   CheckCircle2,
@@ -25,7 +26,6 @@ import {
   Copy,
   Check,
   BookOpen,
-  ArrowRight,
   Sparkles,
   ExternalLink,
   GitBranch,
@@ -37,7 +37,12 @@ import {
   Lightbulb,
   Maximize2,
   Video,
-  Play
+  Play,
+  Share2,
+  ChevronRight,
+  Terminal,
+  Cpu,
+  Flame
 } from "lucide-react";
 
 import { LanguageProvider, useLanguage } from "@/context/LanguageContext";
@@ -50,8 +55,11 @@ function ArticleReader({ article }: ArticleClientViewProps) {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
   const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedShare, setCopiedShare] = useState(false);
   const [aiModalOpen, setAiModalOpen] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [activeSectionId, setActiveSectionId] = useState<string>("");
 
   const handleOpenAI = () => setAiModalOpen(true);
   const handleCloseAI = () => setAiModalOpen(false);
@@ -73,13 +81,22 @@ function ArticleReader({ article }: ArticleClientViewProps) {
     ? ENGINEERING_EVIDENCE.filter((ev) => article.evidenceIds?.includes(ev.id))
     : [];
 
-  // Find other articles
-  const otherArticles = ARTICLES_DATA.filter((a) => a.slug !== article.slug).slice(0, 2);
+  // Next & Previous Articles
+  const currentIndex = ARTICLES_DATA.findIndex((a) => a.slug === article.slug);
+  const prevArticle = currentIndex > 0 ? ARTICLES_DATA[currentIndex - 1] : null;
+  const nextArticle = currentIndex < ARTICLES_DATA.length - 1 ? ARTICLES_DATA[currentIndex + 1] : null;
+  const otherArticles = ARTICLES_DATA.filter((a) => a.slug !== article.slug).slice(0, 3);
 
   const handleCopyCode = (codeText: string) => {
     navigator.clipboard.writeText(codeText);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
+  };
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopiedShare(true);
+    setTimeout(() => setCopiedShare(false), 2000);
   };
 
   const DiagramComponent = DIAGRAM_MAP[article.slug] || (article.diagramKey ? DIAGRAM_MAP[article.diagramKey] : null);
@@ -98,33 +115,87 @@ function ArticleReader({ article }: ArticleClientViewProps) {
     { id: "takeaways", label: t.writing.keyTakeaways },
   ];
 
+  // Track Reading Progress & Scroll Spy
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = Math.min(100, Math.max(0, (window.scrollY / totalHeight) * 100));
+        setReadingProgress(progress);
+      }
+
+      // Scroll Spy for TOC
+      for (const item of tocItems) {
+        const el = document.getElementById(item.id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 200 && rect.bottom >= 100) {
+            setActiveSectionId(item.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [tocItems]);
+
   return (
     <main className="relative min-h-screen bg-[#090a0f] text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black">
-      {/* Ambient light */}
+      {/* Top Reading Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-zinc-900">
+        <div
+          className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-150 ease-out"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
+
+      {/* Ambient glow */}
       <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-emerald-500/[0.04] rounded-full blur-[160px] pointer-events-none -z-10" />
+      <div className="fixed bottom-1/3 right-1/4 w-[500px] h-[500px] bg-teal-500/[0.03] rounded-full blur-[160px] pointer-events-none -z-10" />
 
       <CustomCursor />
       <Navbar onOpenAI={handleOpenAI} />
 
       <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        {/* Navigation Breadcrumb */}
+        {/* Navigation Breadcrumb & Share */}
         <MotionWrapper delay={0.05}>
-          <div className="flex items-center gap-3 text-xs font-mono text-zinc-400 mb-8">
-            <Link href="/" className="hover:text-emerald-400 transition-colors">
-              Home
-            </Link>
-            <span className="text-zinc-600">/</span>
-            <Link href="/writing" className="hover:text-emerald-400 transition-colors">
-              Writing
-            </Link>
-            <span className="text-zinc-600">/</span>
-            <span className="text-zinc-500 truncate max-w-[200px] sm:max-w-xs">{article.slug}</span>
+          <div className="flex items-center justify-between gap-4 mb-8">
+            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
+              <Link href="/" className="hover:text-emerald-400 transition-colors">
+                Home
+              </Link>
+              <span className="text-zinc-600">/</span>
+              <Link href="/writing" className="hover:text-emerald-400 transition-colors">
+                Writing
+              </Link>
+              <span className="text-zinc-600">/</span>
+              <span className="text-zinc-500 truncate max-w-[180px] sm:max-w-xs">{article.slug}</span>
+            </div>
+
+            <button
+              onClick={handleShare}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 transition-colors"
+            >
+              {copiedShare ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">{language === "vi" ? "Đã copy link" : "Link copied!"}</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5 text-zinc-400" />
+                  <span>{t.writing.shareNote}</span>
+                </>
+              )}
+            </button>
           </div>
         </MotionWrapper>
 
         {/* Article Header */}
         <MotionWrapper delay={0.1}>
-          <div className="border-b border-zinc-800/80 pb-8 mb-12">
+          <div className="border-b border-zinc-800/80 pb-8 mb-10">
             {/* Meta bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-zinc-500 mb-4">
               <div className="flex items-center gap-3">
@@ -162,12 +233,12 @@ function ArticleReader({ article }: ArticleClientViewProps) {
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-6 leading-[1.15]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6 leading-[1.15]">
               {articleTitle}
             </h1>
 
-            {/* Summary */}
-            <p className="text-base sm:text-lg text-zinc-300 leading-relaxed font-normal mb-6 max-w-3xl">
+            {/* Lead Paragraph Summary */}
+            <p className="text-lg sm:text-xl text-zinc-300 leading-relaxed font-normal mb-8 max-w-4xl">
               {articleSummary}
             </p>
 
@@ -185,9 +256,24 @@ function ArticleReader({ article }: ArticleClientViewProps) {
           </div>
         </MotionWrapper>
 
+        {/* 30-Second Key Insights Callout Box */}
+        <MotionWrapper delay={0.12}>
+          <div className="mb-12 p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-emerald-950/30 via-zinc-950/80 to-zinc-950 border border-emerald-500/30 shadow-[0_10px_30px_-15px_rgba(16,185,129,0.15)] relative overflow-hidden">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider mb-3">
+              <Sparkles className="w-4 h-4" />
+              <span>{t.writing.keyInsights}</span>
+            </div>
+            <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
+              {language === "vi"
+                ? "Bản ghi chép này đúc kết các quyết định thiết kế kiến trúc thực chiến, cách xử lý sự cố ranh giới phân tán và các bài học tối ưu hiệu năng đã được kiểm chứng qua mã nguồn sản phẩm."
+                : "This technical note distills real-world architectural design trade-offs, boundary isolation techniques, and verified production benchmarks proven in active repository codebases."}
+            </p>
+          </div>
+        </MotionWrapper>
+
         {/* Hero Image Illustration Banner (if configured) */}
         {article.heroImage && (
-          <MotionWrapper delay={0.12}>
+          <MotionWrapper delay={0.14}>
             <div className="mb-12 rounded-2xl overflow-hidden border border-zinc-800 bg-[#09090B] p-2 sm:p-4 shadow-2xl relative group">
               <div className="relative w-full h-64 sm:h-96 md:h-[420px] rounded-xl overflow-hidden bg-zinc-950 flex items-center justify-center">
                 <Image
@@ -255,7 +341,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                 <AlertCircle className="w-5 h-5 text-emerald-400" />
                 <span>{t.writing.problemContext}</span>
               </h2>
-              <div className="p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 text-sm sm:text-base leading-relaxed text-zinc-300">
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 text-base leading-relaxed text-zinc-300">
                 {problemStatement}
               </div>
             </section>
@@ -348,7 +434,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                 <Layers className="w-5 h-5 text-emerald-400" />
                 <span>{t.writing.architecturalSolution}</span>
               </h2>
-              <div className="p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 text-sm sm:text-base leading-relaxed text-zinc-300">
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 text-base leading-relaxed text-zinc-300">
                 {architectureDesign}
               </div>
             </section>
@@ -363,12 +449,12 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                 {technicalDecisions.map((decision, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl bg-zinc-950/70 border border-zinc-800/80 flex items-start gap-3.5 hover:border-zinc-700 transition-colors"
+                    className="p-5 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 flex items-start gap-4 hover:border-zinc-700 transition-colors"
                   >
-                    <span className="text-emerald-400 font-mono font-bold shrink-0 mt-0.5 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 text-xs">
+                    <span className="text-emerald-400 font-mono font-bold shrink-0 mt-0.5 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 text-xs">
                       0{idx + 1}
                     </span>
-                    <span className="text-xs sm:text-sm text-zinc-300 leading-relaxed">{decision}</span>
+                    <span className="text-sm sm:text-base text-zinc-300 leading-relaxed">{decision}</span>
                   </div>
                 ))}
               </div>
@@ -386,11 +472,11 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                     <BookOpen className="w-5 h-5 text-emerald-400" />
                     <span>{secTitle}</span>
                   </h2>
-                  <div className="p-5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 text-sm sm:text-base leading-relaxed text-zinc-300">
+                  <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 text-base leading-relaxed text-zinc-300">
                     <p className="whitespace-pre-line">{secContent}</p>
                   </div>
                   {calloutText && (
-                    <div className={`p-4 rounded-xl flex items-start gap-3 text-xs sm:text-sm leading-relaxed ${
+                    <div className={`p-5 rounded-2xl flex items-start gap-3.5 text-sm leading-relaxed ${
                       sec.callout?.type === "warning"
                         ? "bg-amber-950/30 border border-amber-500/30 text-amber-200"
                         : sec.callout?.type === "tip"
@@ -398,11 +484,11 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                         : "bg-blue-950/30 border border-blue-500/30 text-blue-200"
                     }`}>
                       {sec.callout?.type === "warning" ? (
-                        <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+                        <AlertTriangle className="w-5 h-5 shrink-0 text-amber-400 mt-0.5" />
                       ) : sec.callout?.type === "tip" ? (
-                        <Lightbulb className="w-4 h-4 shrink-0 text-emerald-400 mt-0.5" />
+                        <Lightbulb className="w-5 h-5 shrink-0 text-emerald-400 mt-0.5" />
                       ) : (
-                        <Info className="w-4 h-4 shrink-0 text-blue-400 mt-0.5" />
+                        <Info className="w-5 h-5 shrink-0 text-blue-400 mt-0.5" />
                       )}
                       <span>{calloutText}</span>
                     </div>
@@ -411,7 +497,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               );
             })}
 
-            {/* 6. Code Implementation */}
+            {/* 6. Code Implementation (Enhanced Tabbed Code Box) */}
             {article.content.codeSnippet && (
               <section id="implementation" className="space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
@@ -419,27 +505,27 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                     <Code2 className="w-5 h-5 text-emerald-400" />
                     <span>{t.writing.codeImplementation}</span>
                   </h2>
-                  <span className="text-xs font-mono text-emerald-400 uppercase bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  <span className="text-xs font-mono text-emerald-400 uppercase bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 font-bold">
                     {article.content.codeSnippet.language}
                   </span>
                 </div>
 
                 <div className="relative rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-950 shadow-2xl">
-                  {/* Code snippet header bar */}
-                  <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-900/90 border-b border-zinc-800 text-xs font-mono text-zinc-400">
+                  {/* Header bar */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/90 border-b border-zinc-800 text-xs font-mono text-zinc-400">
                     <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                      <span>{article.content.codeSnippet.title}</span>
+                      <Terminal className="w-4 h-4 text-emerald-400" />
+                      <span className="text-zinc-200 font-semibold">{article.content.codeSnippet.title}</span>
                     </div>
                     <button
                       onClick={() => handleCopyCode(article.content.codeSnippet!.code)}
-                      className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
                       title="Copy code"
                     >
                       {copiedCode ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400">Copied</span>
+                          <span className="text-emerald-400 font-semibold">Copied</span>
                         </>
                       ) : (
                         <>
@@ -450,7 +536,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                     </button>
                   </div>
 
-                  <pre className="p-4 sm:p-5 font-mono text-xs text-zinc-200 overflow-x-auto leading-relaxed bg-[#09090B]">
+                  <pre className="p-5 font-mono text-xs sm:text-sm text-zinc-200 overflow-x-auto leading-relaxed bg-[#09090B] custom-scrollbar">
                     <code>{article.content.codeSnippet.code}</code>
                   </pre>
                 </div>
@@ -468,23 +554,23 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                   {verifiedEvidence.map((ev) => (
                     <div
                       key={ev.id}
-                      className="p-4 rounded-xl bg-zinc-950/80 border border-zinc-800/80 space-y-2"
+                      className="p-5 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 space-y-2.5"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                        <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
                           {ev.category.toUpperCase()} • {ev.confidence.toUpperCase()}
                         </span>
                         <a
                           href={ev.evidence[0]?.repository}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[11px] font-mono text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1"
+                          className="text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1"
                         >
                           <span>{ev.evidence[0]?.repository.replace("https://github.com/", "")}</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       </div>
-                      <p className="text-xs sm:text-sm text-zinc-200 font-medium">
+                      <p className="text-sm text-zinc-200 font-medium">
                         {language === "vi" ? ev.claimVi : ev.claim}
                       </p>
                       {ev.evidence[0]?.description && (
@@ -498,7 +584,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               </section>
             )}
 
-            {/* 7.5 Media & Practical Documentation Embeds (Facebook Posts, Reels, YouTube) */}
+            {/* 7.5 Media & Practical Documentation Embeds */}
             {article.embeds && article.embeds.length > 0 && (
               <section id="media-embeds" className="space-y-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
@@ -560,7 +646,6 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                       );
                     }
 
-                    // Facebook Post / iframe
                     return (
                       <div key={idx} className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4 space-y-3 shadow-2xl overflow-hidden flex flex-col items-center">
                         {title && (
@@ -595,17 +680,17 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                 <Sparkles className="w-5 h-5 text-emerald-400" />
                 <span>{t.writing.keyTakeaways}</span>
               </h2>
-              <div className="p-5 sm:p-6 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 space-y-3">
+              <div className="p-6 sm:p-7 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 space-y-3.5">
                 {keyTakeaways.map((takeaway, idx) => (
-                  <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-200">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div key={idx} className="flex items-start gap-3 text-sm sm:text-base text-zinc-200">
+                    <Check className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                     <span>{takeaway}</span>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* Related Project Callout */}
+            {/* Related Project Card */}
             {relatedProject && (
               <div className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
@@ -620,49 +705,94 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                   </p>
                 </div>
                 <Link
-                  href="/#selected-work"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold shrink-0 transition-colors"
+                  href={`/projects/${relatedProject.id}`}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold shrink-0 transition-colors"
                 >
-                  <span>View Project</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>{t.selectedWork.viewArchitecture}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             )}
+
+            {/* Next / Previous Article Footer Links */}
+            <div className="pt-10 border-t border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {prevArticle ? (
+                <Link
+                  href={`/writing/${prevArticle.slug}`}
+                  className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-zinc-700 transition-all group text-left"
+                >
+                  <span className="text-xs font-mono text-zinc-500 flex items-center gap-1 mb-1">
+                    <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                    {t.writing.prevArticle}
+                  </span>
+                  <p className="text-sm font-bold text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-1">
+                    {language === "vi" && prevArticle.titleVi ? prevArticle.titleVi : prevArticle.title}
+                  </p>
+                </Link>
+              ) : <div />}
+
+              {nextArticle && (
+                <Link
+                  href={`/writing/${nextArticle.slug}`}
+                  className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-zinc-700 transition-all group text-right ml-auto w-full"
+                >
+                  <span className="text-xs font-mono text-zinc-500 inline-flex items-center gap-1 mb-1">
+                    {t.writing.nextArticle}
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <p className="text-sm font-bold text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-1">
+                    {language === "vi" && nextArticle.titleVi ? nextArticle.titleVi : nextArticle.title}
+                  </p>
+                </Link>
+              )}
+            </div>
           </article>
 
           {/* Sticky Sidebar (TOC + Author + Other Articles) */}
           <aside className="lg:col-span-4 space-y-8">
             {/* Table of Contents */}
             <div className="sticky top-28 space-y-6">
-              <div className="p-6 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 backdrop-blur-sm">
-                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-400 mb-4 pb-2 border-b border-zinc-800">
-                  <BookOpen className="w-3.5 h-3.5" />
-                  <span>{t.writing.tableOfContents}</span>
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 backdrop-blur-sm">
+                <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-emerald-400 mb-4 pb-2 border-b border-zinc-800">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>{t.writing.tableOfContents}</span>
+                  </div>
+                  <span className="text-[10px] text-zinc-500">{Math.round(readingProgress)}%</span>
                 </div>
-                <nav className="space-y-1.5">
-                  {tocItems.map((item, idx) => (
-                    <a
-                      key={item.id}
-                      href={`#${item.id}`}
-                      className="block text-xs font-mono text-zinc-400 hover:text-emerald-400 py-1 transition-colors truncate"
-                    >
-                      <span className="text-zinc-600 mr-2">0{idx + 1}.</span>
-                      {item.label}
-                    </a>
-                  ))}
+                <nav className="space-y-1.5 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
+                  {tocItems.map((item, idx) => {
+                    const isActive = activeSectionId === item.id;
+                    return (
+                      <a
+                        key={item.id}
+                        href={`#${item.id}`}
+                        className={`block text-xs font-mono py-1.5 px-2 rounded-lg transition-all truncate ${
+                          isActive
+                            ? "bg-emerald-500/10 text-emerald-400 font-bold border-l-2 border-emerald-400"
+                            : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
+                        }`}
+                      >
+                        <span className="text-zinc-600 mr-2">0{idx + 1}.</span>
+                        {item.label}
+                      </a>
+                    );
+                  })}
                 </nav>
               </div>
 
               {/* Author & System Builder Card */}
-              <div className="p-6 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 backdrop-blur-sm space-y-3">
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 backdrop-blur-sm space-y-3">
                 <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
                   Author & Builder
                 </div>
                 <div className="font-bold text-white text-base">
-                  {PERSONAL_INFO.name}
+                  {language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}
                 </div>
                 <p className="text-xs text-zinc-400 leading-relaxed">
-                  Full-stack Engineer & System Builder. Graduated with Distinction from UTC. Building cloud-native multi-tenant architectures and language learning platforms.
+                  {language === "vi"
+                    ? "Kỹ sư Full-stack & System Builder. Tốt nghiệp loại Giỏi ĐH Giao thông Vận tải. Chuyên sâu về vi dịch vụ, micro-frontend và hệ thống phân tán."
+                    : "Full-stack Engineer & System Builder. Graduated with Distinction from UTC. Building cloud-native multi-tenant architectures and distributed platforms."}
                 </p>
                 <div className="pt-2 border-t border-zinc-800 flex items-center justify-between text-xs font-mono">
                   <Link href="/#contact" className="text-emerald-400 hover:underline">
@@ -681,21 +811,21 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
               {/* Other Related Notes */}
               {otherArticles.length > 0 && (
-                <div className="p-6 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 backdrop-blur-sm space-y-3">
+                <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 backdrop-blur-sm space-y-3">
                   <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
-                    {language === "vi" ? "Bài viết liên quan" : "Related Notes"}
+                    {language === "vi" ? "Gợi ý Đọc tiếp" : "Recommended Notes"}
                   </div>
                   <div className="space-y-3">
                     {otherArticles.map((other) => (
                       <Link
                         key={other.slug}
                         href={`/writing/${other.slug}`}
-                        className="block group"
+                        className="block group p-2.5 rounded-xl hover:bg-zinc-900 transition-colors"
                       >
                         <h4 className="text-xs font-semibold text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-2">
                           {language === "vi" && other.titleVi ? other.titleVi : other.title}
                         </h4>
-                        <span className="text-[10px] font-mono text-zinc-500">
+                        <span className="text-[10px] font-mono text-zinc-500 mt-1 block">
                           {other.readTime} • {other.date}
                         </span>
                       </Link>
@@ -727,7 +857,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
       )}
 
       <AskAIFloatingButton onClick={handleOpenAI} />
-      <AskAIModal isOpen={aiModalOpen} onClose={handleCloseAI} />
+      {aiModalOpen && <AskAIModal isOpen={aiModalOpen} onClose={handleCloseAI} />}
       <Footer />
     </main>
   );

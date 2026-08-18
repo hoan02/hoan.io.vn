@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { PERSONAL_INFO } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
@@ -12,6 +13,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ onOpenAI }: NavbarProps) {
+  const pathname = usePathname() || "/";
   const { language, setLanguage, toggleLanguage } = useLanguage();
   const t = UI_TRANSLATIONS[language];
 
@@ -19,27 +21,31 @@ export function Navbar({ onOpenAI }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const isHome = pathname === "/";
+
   const navLinks = [
-    { label: t.nav.work, href: "/#selected-work" },
-    { label: t.nav.writing, href: "/#writing" },
-    { label: t.nav.about, href: "/#about" },
-    { label: t.nav.experience, href: "/#experience" },
-    { label: t.nav.techStack, href: "/#tech-stack" },
-    { label: t.nav.contact, href: "/#contact" },
+    { label: t.nav.work, href: isHome ? "/#selected-work" : "/projects", route: "/projects", sectionId: "selected-work" },
+    { label: t.nav.writing, href: "/writing", route: "/writing", sectionId: "writing" },
+    { label: t.nav.about, href: isHome ? "/#about" : "/#about", route: "/#about", sectionId: "about" },
+    { label: t.nav.experience, href: isHome ? "/#experience" : "/#experience", route: "/#experience", sectionId: "experience" },
+    { label: t.nav.techStack, href: isHome ? "/#tech-stack" : "/#tech-stack", route: "/#tech-stack", sectionId: "tech-stack" },
+    { label: t.nav.contact, href: isHome ? "/#contact" : "/#contact", route: "/#contact", sectionId: "contact" },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
 
-      const sections = navLinks.map(link => link.href.substring(1));
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 200 && rect.bottom >= 200) {
-            setActiveSection(section);
-            break;
+      if (isHome) {
+        const sections = ["selected-work", "writing", "about", "experience", "tech-stack", "contact"];
+        for (const section of sections) {
+          const el = document.getElementById(section);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= 200 && rect.bottom >= 200) {
+              setActiveSection(section);
+              break;
+            }
           }
         }
       }
@@ -47,7 +53,7 @@ export function Navbar({ onOpenAI }: NavbarProps) {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [language]);
+  }, [language, isHome]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 flex justify-center px-4 pt-4 sm:pt-6 pointer-events-none">
@@ -60,7 +66,7 @@ export function Navbar({ onOpenAI }: NavbarProps) {
       >
         {/* Brand / Name */}
         <Link
-          href="#"
+          href="/"
           className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white hover:text-emerald-400 transition-colors group"
         >
           <img
@@ -74,10 +80,13 @@ export function Navbar({ onOpenAI }: NavbarProps) {
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => {
-            const isActive = activeSection === link.href.substring(1);
+            const isActive = isHome
+              ? activeSection === link.sectionId
+              : pathname.startsWith(link.route);
+
             return (
               <Link
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all ${
                   isActive
