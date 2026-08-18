@@ -373,7 +373,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
       id: assistantMsgId,
       role: "assistant",
       content: "",
-      source: "Vercel AI SDK + Groq",
+      source: "Evidence Grounding Engine",
       isStreaming: true,
     };
 
@@ -539,13 +539,13 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                   <span>Hoan AI Assistant</span>
                   <span className="flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                     <Zap className="w-2.5 h-2.5 fill-emerald-400 text-emerald-400" />
-                    Tool Calling Engine
+                    Neon DB • Tool Calling
                   </span>
                 </h3>
                 <p className="text-[11px] text-zinc-400 font-mono">
                   {language === "vi"
-                    ? "Vercel AI SDK • Groq Llama 3.3 70B • Evidence Grounding"
-                    : "Vercel AI SDK • Groq Llama 3.3 70B • Evidence Grounding"}
+                    ? "Truy xuất dữ liệu có cấu trúc & suy luận theo bằng chứng kỹ thuật"
+                    : "Evidence-Grounded Technical & Architectural Companion"}
                 </p>
               </div>
             </div>
@@ -585,8 +585,8 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                   </div>
                   <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed">
                     {language === "vi"
-                      ? "👋 Chào bạn! Tôi là trợ lý AI nhúng trực tiếp trong portfolio của Lê Công Hoan. Chatbot hoạt động dựa trên Vercel AI SDK kết hợp hệ thống Custom Tools truy xuất trực tiếp dữ liệu dự án, kiến trúc vi dịch vụ, Kubernetes và năng lực thực chiến."
-                      : "👋 Hello! I am the AI assistant embedded in Le Cong Hoan's portfolio. Powered by Vercel AI SDK & custom tool calling to accurately retrieve project architectures, microservices, Kubernetes homelab, and engineering evidence."}
+                      ? "👋 Chào bạn! Tôi là trợ lý AI nhúng trực tiếp trong portfolio của Lê Công Hoan. Chatbot hoạt động dựa trên cơ chế Custom Tools truy xuất trực tiếp dữ liệu từ Neon PostgreSQL về dự án, kiến trúc vi dịch vụ, Kubernetes và năng lực thực chiến."
+                      : "👋 Hello! I am the AI assistant embedded in Le Cong Hoan's portfolio. Powered by custom tool calling to query structured data from Neon PostgreSQL for verified system architectures, microservices, and engineering evidence."}
                   </p>
                 </div>
 

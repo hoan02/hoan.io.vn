@@ -20,7 +20,7 @@ export function ChatMessageRenderer({
     setTimeout(() => setCopiedCodeIndex(null), 2000);
   };
 
-  // Custom parser for Markdown blocks
+  // Custom parser for Markdown blocks including Tables, CodeBlocks, Headers, Lists
   const parseBlocks = (text: string) => {
     // Split by code blocks first ```lang\ncode```
     const parts = text.split(/(```[\s\S]*?```)/g);
@@ -70,91 +70,182 @@ export function ChatMessageRenderer({
         );
       }
 
-      // Regular text block -> parse lines (headers, lists, paragraphs)
-      const lines = part.split("\n");
-      return (
-        <div key={partIdx} className="space-y-2">
-          {lines.map((line, lineIdx) => {
-            const trimmed = line.trim();
-            if (!trimmed) {
-              return <div key={lineIdx} className="h-1.5" />;
-            }
+      // Process regular text with support for tables and standard blocks
+      const rawLines = part.split("\n");
+      const elements: React.ReactNode[] = [];
+      let i = 0;
 
-            // Headers
-            if (trimmed.startsWith("### ")) {
-              return (
-                <h4
-                  key={lineIdx}
-                  className="text-sm font-bold text-emerald-400 pt-2 pb-1 flex items-center gap-2 border-b border-zinc-800/60"
-                >
-                  <span>{renderInline(trimmed.slice(4))}</span>
-                </h4>
-              );
-            }
-            if (trimmed.startsWith("## ")) {
-              return (
-                <h3 key={lineIdx} className="text-base font-bold text-white pt-2.5 pb-1">
-                  {renderInline(trimmed.slice(3))}
-                </h3>
-              );
-            }
-            if (trimmed.startsWith("# ")) {
-              return (
-                <h2 key={lineIdx} className="text-lg font-extrabold text-white pt-3 pb-1">
-                  {renderInline(trimmed.slice(2))}
-                </h2>
-              );
-            }
+      while (i < rawLines.length) {
+        const line = rawLines[i];
+        const trimmed = line.trim();
 
-            // Unordered List (- or *)
-            if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
-              return (
-                <div key={lineIdx} className="flex items-start gap-2 text-xs sm:text-sm pl-1">
-                  <span className="text-emerald-400 font-bold text-sm leading-none mt-1">•</span>
-                  <div className="flex-1 leading-relaxed text-zinc-200">
-                    {renderInline(trimmed.slice(2))}
-                  </div>
-                </div>
-              );
-            }
+        if (!trimmed) {
+          elements.push(<div key={`space-${i}`} className="h-1.5" />);
+          i++;
+          continue;
+        }
 
-            // Ordered List (1. 2.)
-            const numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
-            if (numMatch) {
-              return (
-                <div key={lineIdx} className="flex items-start gap-2 text-xs sm:text-sm pl-1">
-                  <span className="text-emerald-400 font-mono font-semibold text-xs mt-0.5">
-                    {numMatch[1]}.
-                  </span>
-                  <div className="flex-1 leading-relaxed text-zinc-200">
-                    {renderInline(numMatch[2])}
-                  </div>
-                </div>
-              );
-            }
+        // 1. Table Detection (| Header 1 | Header 2 |)
+        if (trimmed.startsWith("|") && trimmed.endsWith("|") && i + 1 < rawLines.length && rawLines[i + 1].trim().startsWith("|") && rawLines[i + 1].includes("---")) {
+          const tableRows: string[][] = [];
+          const headerCells = trimmed
+            .split("|")
+            .slice(1, -1)
+            .map((c) => c.trim());
 
-            // Blockquote (> )
-            if (trimmed.startsWith("> ")) {
-              return (
-                <blockquote
-                  key={lineIdx}
-                  className="pl-3.5 py-1.5 my-1.5 border-l-2 border-emerald-500/60 bg-emerald-950/15 text-xs sm:text-sm text-zinc-300 italic rounded-r-lg"
-                >
-                  {renderInline(trimmed.slice(2))}
-                </blockquote>
-              );
-            }
+          i += 2; // Skip header and separator (| --- | --- |)
 
-            // Standard Paragraph
-            return (
-              <p key={lineIdx} className="text-xs sm:text-sm leading-relaxed text-zinc-200">
-                {renderInline(line)}
-              </p>
-            );
-          })}
-        </div>
-      );
+          while (i < rawLines.length && rawLines[i].trim().startsWith("|") && rawLines[i].trim().endsWith("|")) {
+            const cells = rawLines[i]
+              .trim()
+              .split("|")
+              .slice(1, -1)
+              .map((c) => c.trim());
+            tableRows.push(cells);
+            i++;
+          }
+
+          elements.push(
+            <div key={`table-${i}`} className="my-3 overflow-x-auto custom-scrollbar rounded-xl border border-zinc-800/90 shadow-md">
+              <table className="w-full border-collapse text-left text-xs">
+                <thead>
+                  <tr className="bg-zinc-900/90 border-b border-zinc-800 text-zinc-300 font-semibold font-mono text-[11px]">
+                    {headerCells.map((h, hIdx) => (
+                      <th key={hIdx} className="p-3 whitespace-nowrap">
+                        {renderInline(h)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-800/60 bg-zinc-950/60">
+                  {tableRows.map((row, rIdx) => (
+                    <tr key={rIdx} className="hover:bg-zinc-900/40 transition-colors">
+                      {row.map((cell, cIdx) => (
+                        <td key={cIdx} className="p-3 align-top text-zinc-300 leading-relaxed">
+                          {renderCellContent(cell)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+          continue;
+        }
+
+        // 2. Headers
+        if (trimmed.startsWith("### ")) {
+          elements.push(
+            <h4
+              key={`h4-${i}`}
+              className="text-sm font-bold text-emerald-400 pt-2 pb-1 flex items-center gap-2 border-b border-zinc-800/60"
+            >
+              <span>{renderInline(trimmed.slice(4))}</span>
+            </h4>
+          );
+          i++;
+          continue;
+        }
+
+        if (trimmed.startsWith("## ")) {
+          elements.push(
+            <h3 key={`h3-${i}`} className="text-base font-bold text-white pt-2.5 pb-1">
+              {renderInline(trimmed.slice(3))}
+            </h3>
+          );
+          i++;
+          continue;
+        }
+
+        if (trimmed.startsWith("# ")) {
+          elements.push(
+            <h2 key={`h2-${i}`} className="text-lg font-extrabold text-white pt-3 pb-1">
+              {renderInline(trimmed.slice(2))}
+            </h2>
+          );
+          i++;
+          continue;
+        }
+
+        // 3. Horizontal Rule
+        if (trimmed === "---" || trimmed === "***" || trimmed === "___") {
+          elements.push(<hr key={`hr-${i}`} className="my-3 border-zinc-800" />);
+          i++;
+          continue;
+        }
+
+        // 4. Unordered List (- or *)
+        if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+          elements.push(
+            <div key={`ul-${i}`} className="flex items-start gap-2 text-xs sm:text-sm pl-1">
+              <span className="text-emerald-400 font-bold text-sm leading-none mt-1">•</span>
+              <div className="flex-1 leading-relaxed text-zinc-200">
+                {renderInline(trimmed.slice(2))}
+              </div>
+            </div>
+          );
+          i++;
+          continue;
+        }
+
+        // 5. Ordered List (1. 2.)
+        const numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+        if (numMatch) {
+          elements.push(
+            <div key={`ol-${i}`} className="flex items-start gap-2 text-xs sm:text-sm pl-1">
+              <span className="text-emerald-400 font-mono font-semibold text-xs mt-0.5">
+                {numMatch[1]}.
+              </span>
+              <div className="flex-1 leading-relaxed text-zinc-200">
+                {renderInline(numMatch[2])}
+              </div>
+            </div>
+          );
+          i++;
+          continue;
+        }
+
+        // 6. Blockquote (> )
+        if (trimmed.startsWith("> ")) {
+          elements.push(
+            <blockquote
+              key={`quote-${i}`}
+              className="pl-3.5 py-1.5 my-1.5 border-l-2 border-emerald-500/60 bg-emerald-950/15 text-xs sm:text-sm text-zinc-300 italic rounded-r-lg"
+            >
+              {renderInline(trimmed.slice(2))}
+            </blockquote>
+          );
+          i++;
+          continue;
+        }
+
+        // 7. Standard Paragraph
+        elements.push(
+          <p key={`p-${i}`} className="text-xs sm:text-sm leading-relaxed text-zinc-200">
+            {renderInline(line)}
+          </p>
+        );
+        i++;
+      }
+
+      return <div key={partIdx} className="space-y-2">{elements}</div>;
     });
+  };
+
+  // Render cell content handling <br>, bullets, and inline markdown
+  const renderCellContent = (cellText: string) => {
+    // Split by <br>, <br/>, or <br />
+    const segments = cellText.split(/<br\s*\/?>/gi);
+    return (
+      <div className="space-y-1.5">
+        {segments.map((seg, sIdx) => {
+          const trimmedSeg = seg.trim();
+          if (!trimmedSeg) return null;
+          return <div key={sIdx}>{renderInline(trimmedSeg)}</div>;
+        })}
+      </div>
+    );
   };
 
   // Parse inline elements: bold, italic, inline code, links

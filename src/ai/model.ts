@@ -11,7 +11,7 @@ export function getChatModel() {
       console.warn("GROQ_API_KEY is not set. Trying Google Gemini fallback...");
     } else {
       const groq = createGroq({ apiKey });
-      const modelName = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
+      const modelName = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
       return groq(modelName);
     }
   }
@@ -31,5 +31,5 @@ export function getChatModel() {
   const groq = createGroq({
     apiKey: process.env.GROQ_API_KEY || "dummy-key",
   });
-  return groq(process.env.GROQ_MODEL || "openai/gpt-oss-120b");
+  return groq(process.env.GROQ_MODEL || "openai/gpt-oss-20b");
 }

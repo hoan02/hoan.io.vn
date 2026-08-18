@@ -77,6 +77,7 @@ export async function POST(req: Request) {
       messages: formattedMessages,
       tools: aiTools,
       stopWhen: stepCountIs(5),
+      maxOutputTokens: 1500,
       temperature: 0.5,
       onFinish: ({ usage }) => {
         const duration = Date.now() - startTime;
