@@ -526,7 +526,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="relative w-full max-w-3xl h-[85vh] max-h-[760px] flex flex-col rounded-3xl bg-zinc-950 border border-zinc-800/90 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] z-10 overflow-hidden"
+          className="relative w-full max-w-3xl lg:max-w-4xl h-[85vh] max-h-[780px] flex flex-col rounded-3xl bg-zinc-950 border border-zinc-800/90 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] z-10 overflow-hidden"
         >
           {/* Header Bar */}
           <div className="flex items-center justify-between px-5 py-3.5 border-b border-zinc-800/80 bg-zinc-900/70 shrink-0">
