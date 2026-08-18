@@ -22,7 +22,7 @@ export interface Project {
   roleVi?: string;
   year: string;
   techStack: string[];
-  category: "Full-stack" | "Backend" | "Frontend" | "DevOps & Cloud";
+  category: "Full-stack" | "Backend" | "Frontend" | "DevOps & Cloud" | "Systems & IoT" | "Desktop & IoT";
   categoryVi?: string;
   metrics?: string[];
   metricsVi?: string[];
@@ -87,7 +87,7 @@ export interface Article {
   readTime: string;
   tags: string[];
   featured: boolean;
-  project?: "arda" | "puchi" | "epas" | "infrastructure" | "personal";
+  project?: "arda" | "puchi" | "epas" | "infrastructure" | "personal" | "camrelay" | "b4s";
   relatedProject?: string; // Project ID
   diagramKey?: string;
   evidenceIds?: string[];

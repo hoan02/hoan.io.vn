@@ -485,6 +485,152 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     featured: true,
     image: "/images/projects/saas.svg",
     accentColor: "#10b981",
+  },
+  {
+    id: "camrelay-p2p-rtsp-bridge",
+    title: "Camrelay — P2P IP Camera to RTSP Stream Relay",
+    titleVi: "Camrelay — Cầu nối Chuyển đổi P2P IP Camera sang RTSP Stream",
+    subtitle: "High-performance Rust bridge tunneling proprietary Dahua/easy4ip P2P cameras into local RTSP streams for Frigate & NVRs",
+    subtitleVi: "Hệ thống Rust hiệu năng cao chuyển đổi luồng P2P Dahua/easy4ip sang chuẩn RTSP nội bộ cho Frigate NVR & Home Assistant",
+    description: "Engineered a high-performance, asynchronous Rust bridge that handshakes with proprietary Dahua/P2P cloud signaling servers and tunnels video streams to local RTSP endpoints. Integrates seamlessly with Frigate NVR, Home Assistant, go2rtc, and features automatic FFmpeg segment recording with rclone Google Drive archiving.",
+    descriptionVi: "Phát triển giải pháp Rust hiệu năng cao kết nối giao thức bắt tay P2P đóng của Dahua/easy4ip và chuyển đổi thành luồng RTSP nội bộ. Tương thích hoàn hảo với Frigate NVR, Home Assistant, go2rtc, tích hợp tính năng ghi hình phân đoạn FFmpeg và tự động lưu trữ lên Google Drive qua rclone.",
+    problem: "Proprietary IP cameras (Dahua, easy4ip) restrict access behind closed P2P cloud servers, preventing local integration into open-source NVR systems (Frigate, Home Assistant, Scrypted) without subscription fees or vulnerable open ports.",
+    problemVi: "Các dòng camera IP sử dụng giao thức P2P đóng (Dahua, easy4ip) bị phụ thuộc vào máy chủ đám mây của hãng, gây khó khăn khi tích hợp vào hệ thống NVR mã nguồn mở (Frigate, Home Assistant) mà không phải trả phí thuê bao hay mở port router tiềm ẩn nguy cơ bảo mật.",
+    architectureDiagram: `IP Camera (P2P Cloud) ──► [ camrelay (Rust / Tokio) ] ──► Local RTSP Stream (:8551)
+                                       │                              │
+                                       ├─► Web Dashboard & Probe      ├─► Frigate NVR / Home Assistant
+                                       └─► FFmpeg Segments (300s) ──► rclone ──► Google Drive Archive`,
+    contributionsDetailed: [
+      "Engineered an asynchronous Rust daemon with Tokio and Axum for high-throughput, low-latency video packet tunneling.",
+      "Implemented reverse-engineered Dahua/easy4ip P2P handshake signaling protocols to establish direct and relay UDP/TCP data sessions.",
+      "Exposed local multi-channel RTSP stream servers allowing drop-in ingestion for Frigate NVR, go2rtc, and Home Assistant.",
+      "Built optional background FFmpeg recording workers that segment video streams into JSON-indexed archives and sync to Google Drive via rclone.",
+      "Developed a clean embedded web management dashboard for camera onboarding, live tunnel health telemetry, and API token management."
+    ],
+    contributionsDetailedVi: [
+      "Xây dựng daemon Rust bất đồng bộ với Tokio và Axum cho thông lượng cao, độ trễ cực thấp khi chuyển tiếp các gói tin video.",
+      "Hiện thực hóa giao thức bắt tay P2P của Dahua/easy4ip thiết lập phiên truyền nhận dữ liệu UDP/TCP direct và relay.",
+      "Cung cấp máy chủ RTSP nội bộ đa luồng cho phép cắm-và-chạy trực tiếp vào Frigate NVR, go2rtc và Home Assistant.",
+      "Phát triển worker ngầm tích hợp FFmpeg cắt phân đoạn video, lập chỉ mục JSON và tự động đồng bộ lên Google Drive qua rclone.",
+      "Xây dựng dashboard quản trị web nhúng gọn nhẹ để cấu hình camera, theo dõi trạng thái tunnel thời gian thực và quản lý token API."
+    ],
+    results: [
+      "Sub-second video latency relaying 1080p/2K camera streams to local NVR instances.",
+      "Zero monthly cloud subscription costs for continuous P2P streaming and recording.",
+      "Automated off-site Google Drive backup pipeline with configurable retention policies."
+    ],
+    resultsVi: [
+      "Độ trễ truyền hình ảnh dưới 1 giây với chất lượng 1080p/2K truyền thẳng vào NVR nội bộ.",
+      "Triệt tiêu 100% chi phí thuê bao đám mây định kỳ cho việc xem và lưu trữ video camera.",
+      "Tự động hóa sao lưu an toàn lên Google Drive với chính sách xoay vòng dữ liệu linh hoạt."
+    ],
+    relatedArticles: ["production-like-platform-three-node-k3s-cluster"],
+    role: "Sole Creator & Systems Engineer",
+    roleVi: "Tác giả & Kỹ sư Hệ thống",
+    year: "2025 – Present",
+    techStack: ["Rust", "Tokio", "RTSP", "P2P Signaling", "FFmpeg", "rclone", "Axum", "Docker"],
+    category: "Systems & IoT",
+    categoryVi: "Hệ thống & IoT",
+    metrics: [
+      "Rust Async Tokio Core with Sub-10ms Relay Latency",
+      "Native Ingestion for Frigate NVR & Home Assistant",
+      "Automated FFmpeg Segments & Google Drive Sync"
+    ],
+    metricsVi: [
+      "Nhân Rust Tokio bất đồng bộ độ trễ chuyển tiếp dưới 10ms",
+      "Tích hợp trực tiếp Frigate NVR & Home Assistant",
+      "Ghi hình phân đoạn FFmpeg và đồng bộ Google Drive"
+    ],
+    architecture: [
+      "P2P handshake engine connecting to vendor signaling servers without port forwarding",
+      "Multi-threaded RTSP server exposing local video streams on dedicated ports",
+      "Continuous FFmpeg segment recorder with automated rclone cloud offloading",
+      "Token-authenticated HTTP REST management API & responsive dashboard"
+    ],
+    architectureVi: [
+      "Engine bắt tay P2P kết nối tới signaling server mà không cần mở port NAT",
+      "Máy chủ RTSP đa luồng cung cấp luồng video trên từng cổng mạng nội bộ riêng",
+      "Bộ ghi hình phân đoạn FFmpeg liên tục tự động đẩy file qua rclone",
+      "REST API quản trị xác thực qua token và giao diện quản lý trực quan"
+    ],
+    liveUrl: "https://github.com/hoan02/camrelay",
+    githubUrl: "https://github.com/hoan02/camrelay",
+    featured: true,
+    image: "/images/projects/gateway.svg",
+    accentColor: "#f59e0b",
+  },
+  {
+    id: "b4s-baseus-desktop-companion",
+    title: "B4S — Desktop Companion for Baseus Headphones",
+    titleVi: "B4S — Ứng dụng Desktop Điều khiển Tai nghe Baseus",
+    subtitle: "Cross-platform desktop companion built with Tauri v2, Rust (btleplug), and SolidJS for local Bluetooth LE headphone control",
+    subtitleVi: "Ứng dụng Desktop đa nền tảng với Tauri v2, Rust (btleplug) và SolidJS điều khiển tai nghe Baseus qua Bluetooth LE",
+    description: "Built a lightweight, cross-platform desktop application (Windows, macOS, Linux) to control and customize Baseus Bluetooth headphones locally without third-party cloud apps. Implements direct GATT frame communication, ANC mode switching, 10-band Equalizer tuning, battery telemetry, and spatial audio modes.",
+    descriptionVi: "Xây dựng ứng dụng desktop đa nền tảng (Windows, macOS, Linux) gọn nhẹ cho phép điều khiển và tùy biến tai nghe Bluetooth Baseus hoàn toàn cục bộ không cần tài khoản đám mây. Tự giải mã giao thức GATT frame, chuyển đổi chế độ chống ồn ANC, tinh chỉnh Equalizer 10 dải tần và theo dõi dung lượng pin.",
+    problem: "Headphone manufacturers often only release mobile apps for EQ and ANC adjustments, leaving desktop users (Windows, macOS, Linux) unable to configure their devices without an Android/iOS phone and mandatory cloud accounts.",
+    problemVi: "Các hãng sản xuất tai nghe thường chỉ phát hành app di động để chỉnh EQ/ANC, khiến người dùng máy tính (Windows, macOS, Linux) không thể tùy biến thiết bị trên desktop mà bắt buộc phải dùng điện thoại và đăng ký tài khoản đám mây.",
+    architectureDiagram: `Desktop GUI (SolidJS + Tailwind) ──► Tauri v2 IPC Bridge
+                                              │
+                                              ▼
+Baseus Headphones (BLE) ◄─── GATT Frames ─── [ Rust Core (btleplug) ]`,
+    contributionsDetailed: [
+      "Engineered a lightweight desktop application utilizing Tauri v2 and Rust, consuming less than 30MB RAM.",
+      "Implemented asynchronous Bluetooth Low Energy (BLE) scanning, GATT connection lifecycle, and event handling via btleplug.",
+      "Reverse-engineered proprietary Baseus protocol packet frames for reading battery levels, switching ANC/Transparency modes, and applying 10-band EQ curves.",
+      "Designed a responsive, modern dark-mode user interface using SolidJS, TypeScript, and Tailwind CSS.",
+      "Ensured zero-tracking, 100% offline local operation without requiring user registration or external network calls."
+    ],
+    contributionsDetailedVi: [
+      "Phát triển ứng dụng desktop siêu nhẹ trên nền Tauri v2 và Rust, tiêu thụ dưới 30MB RAM khi chạy nền.",
+      "Hiện thực hóa quá trình quét Bluetooth Low Energy (BLE), quản lý kết nối GATT và sự kiện qua thư viện btleplug.",
+      "Giải mã cấu trúc gói tin (GATT packet frames) của tai nghe Baseus để đọc dung lượng pin, chuyển chế độ ANC/Xuyên âm và nạp EQ 10 dải.",
+      "Thiết kế giao diện Dark Mode hiện đại, mượt mà với SolidJS, TypeScript và Tailwind CSS.",
+      "Đảm bảo hoạt động offline 100% không thu thập dữ liệu và không yêu cầu đăng ký tài khoản."
+    ],
+    results: [
+      "Native desktop control for Baseus headphone features previously exclusive to mobile apps.",
+      "Sub-30MB memory footprint and near-instant application startup on Windows, macOS, and Linux.",
+      "100% privacy-preserving local Bluetooth LE communication with zero telemetry."
+    ],
+    resultsVi: [
+      "Điều khiển trực tiếp các tính năng tai nghe Baseus trên desktop mà trước đây chỉ có trên mobile.",
+      "Mức chiếm dụng RAM dưới 30MB và thời gian khởi động tức thì trên Windows, macOS, Linux.",
+      "Bảo mật quyền riêng tư tuyệt đối với giao tiếp Bluetooth LE thuần cục bộ không gửi dữ liệu ra ngoài."
+    ],
+    relatedArticles: ["from-utc-engineer-to-production-systems"],
+    role: "Creator & Systems Developer",
+    roleVi: "Tác giả & Lập trình viên Hệ thống",
+    year: "2025 – Present",
+    techStack: ["Tauri v2", "Rust", "SolidJS", "Bluetooth LE", "btleplug", "TypeScript", "Tailwind CSS"],
+    category: "Desktop & IoT",
+    categoryVi: "Desktop & IoT",
+    metrics: [
+      "Tauri v2 + Rust Core with < 30MB RAM Footprint",
+      "Direct Local Bluetooth LE (GATT) Protocol",
+      "Cross-Platform Support (Windows, macOS, Linux)"
+    ],
+    metricsVi: [
+      "Nhân Tauri v2 + Rust tiêu thụ dưới 30MB RAM",
+      "Giao thức Bluetooth LE (GATT) trực tiếp không qua mây",
+      "Hỗ trợ đa nền tảng (Windows, macOS, Linux)"
+    ],
+    architecture: [
+      "Tauri v2 IPC bridge connecting SolidJS frontend to native Rust backend",
+      "Cross-platform Bluetooth LE GATT client using btleplug adapter abstraction",
+      "Structured Baseus packet codec for frame serialization and checksum verification",
+      "Decoupled model catalog supporting capability-based UI rendering per headphone profile"
+    ],
+    architectureVi: [
+      "Cầu nối IPC Tauri v2 kết nối giao diện SolidJS với backend Rust gốc",
+      "Client Bluetooth LE GATT đa nền tảng trừu tượng hóa qua btleplug",
+      "Bộ mã hóa/giải mã gói tin Baseus với kiểm tra checksum an toàn",
+      "Catalog model tách biệt tự động render giao diện theo tính năng của từng dòng tai nghe"
+    ],
+    liveUrl: "https://github.com/hoan02/b4s",
+    githubUrl: "https://github.com/hoan02/b4s",
+    featured: true,
+    image: "/images/projects/saas.svg",
+    accentColor: "#3b82f6",
   }
 ];
 

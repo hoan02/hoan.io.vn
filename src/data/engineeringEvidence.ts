@@ -207,5 +207,41 @@ export const ENGINEERING_EVIDENCE: EngineeringEvidence[] = [
     confidence: "direct",
     relatedArticles: ["kubernetes-homelab-k3s", "production-like-platform-three-node-k3s-cluster"],
     technologies: ["Kubernetes", "K3s", "Longhorn", "Traefik", "Linux", "Ubuntu", "Docker"]
+  },
+
+  // --- IOT & SYSTEMS REVERSE ENGINEERING EVIDENCE ---
+  {
+    id: "camrelay-rust-p2p-rtsp",
+    project: "camrelay",
+    category: "systems",
+    claim: "Engineered high-performance asynchronous Rust bridge connecting proprietary P2P cloud cameras (Dahua/easy4ip) to local RTSP streams for Frigate NVR & Home Assistant with FFmpeg recording & rclone cloud sync.",
+    claimVi: "Phát triển hệ thống Rust bất đồng bộ kết nối camera P2P Dahua/easy4ip sang luồng RTSP nội bộ cho Frigate NVR & Home Assistant tích hợp ghi hình FFmpeg và đồng bộ rclone.",
+    evidence: [
+      {
+        repository: "hoan02/camrelay",
+        file: "src/main.rs",
+        description: "Tokio async daemon, reverse-engineered P2P handshake signaling protocols, multi-threaded RTSP server, and embedded Axum web manager with token auth."
+      }
+    ],
+    confidence: "direct",
+    relatedArticles: ["production-like-platform-three-node-k3s-cluster"],
+    technologies: ["Rust", "Tokio", "RTSP", "P2P Signaling", "FFmpeg", "rclone", "Axum", "Docker"]
+  },
+  {
+    id: "b4s-tauri-rust-ble-gatt",
+    project: "b4s",
+    category: "systems",
+    claim: "Built lightweight cross-platform desktop companion with Tauri v2, Rust (btleplug), and SolidJS for local Bluetooth LE headphone control (ANC, 10-band EQ, battery telemetry).",
+    claimVi: "Xây dựng ứng dụng desktop đa nền tảng với Tauri v2, Rust (btleplug) và SolidJS điều khiển tai nghe Baseus Bluetooth LE hoàn toàn cục bộ (ANC, EQ 10 dải, đo pin).",
+    evidence: [
+      {
+        repository: "hoan02/b4s",
+        file: "src-tauri/src/ble.rs",
+        description: "GATT connection lifecycle, btleplug BLE adapter abstraction, proprietary Baseus protocol packet codec, and SolidJS reactive UI consuming < 30MB RAM."
+      }
+    ],
+    confidence: "direct",
+    relatedArticles: ["from-utc-engineer-to-production-systems"],
+    technologies: ["Tauri v2", "Rust", "SolidJS", "Bluetooth LE", "btleplug", "TypeScript", "Tailwind CSS"]
   }
 ];

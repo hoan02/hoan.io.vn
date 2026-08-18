@@ -18,7 +18,10 @@
    - `puchi-frontend`: Next.js PWA with Limen Auth opaque sessions.
    - `puchi-backend`: 5 Go microservices monorepo (`auth`, `core`, `learn`, `media`, `notification`) on Kratos v3 framework. Protobuf-first, NATS event bus.
    - `puchi-infra`: K3s cluster, ArgoCD GitOps, Cloudflare Tunnel, Cloudflare R2 audio streaming.
-3. **Enterprise Experience**:
+3. **Systems & IoT Projects**:
+   - `camrelay` (`https://github.com/hoan02/camrelay`): High-performance asynchronous Rust bridge tunneling proprietary Dahua/easy4ip P2P cameras into local RTSP streams for Frigate NVR & Home Assistant with FFmpeg recording and rclone Google Drive archiving.
+   - `b4s` (`https://github.com/hoan02/b4s`): Cross-platform desktop companion (Tauri v2 + Rust btleplug + SolidJS) for local Bluetooth LE headphone control (ANC, 10-band EQ, battery telemetry) without cloud accounts.
+4. **Enterprise Experience**:
    - `NGV Group` (12/2024 – Present): Angular micro-frontends, Java Spring Boot microservices, Oracle/PostgreSQL, Kubernetes on-premise, Zalo OA module.
    - `MochiMochi` (03/2024 – 08/2024): Next.js App Router, web applications for Japanese & Chinese language learning.
 

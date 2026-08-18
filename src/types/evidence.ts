@@ -8,6 +8,7 @@ export type EvidenceCategory =
   | "database"
   | "devops"
   | "infrastructure"
+  | "systems"
   | "product";
 
 export type ConfidenceLevel = "direct" | "strong-inference" | "direction";
@@ -21,7 +22,7 @@ export interface EvidenceSource {
 
 export interface EngineeringEvidence {
   id: string;
-  project: "arda" | "puchi" | "epas" | "infrastructure" | "personal";
+  project: "arda" | "puchi" | "epas" | "infrastructure" | "personal" | "camrelay" | "b4s";
   category: EvidenceCategory;
   claim: string;
   claimVi: string;

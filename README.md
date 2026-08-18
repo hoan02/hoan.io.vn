@@ -27,6 +27,8 @@
 
 - 🏢 **[ARDA Labs](https://github.com/arda-labs)** ([arda.io.vn](https://arda.io.vn)): Cloud-native multi-tenant FinOps platform featuring 9 Go microservices (synchronous gRPC + NATS JetStream events), React Module Federation (1 Shell + 7 Remotes), Ory Kratos/Hydra zero-trust identity with Traefik ForwardAuth, Zeebe 8.5 BPMN workflows, and CloudNativePG HA on a 3-node bare-metal K3s cluster.
 - 📚 **[Puchidemy](https://github.com/puchidemy)** ([puchi.io.vn](https://puchi.io.vn)): Modern Vietnamese language learning web platform featuring a Next.js PWA frontend, 5 Go microservices monorepo built on Kratos v3, Limen Auth opaque sessions, NATS event bus, Cloudflare R2 audio streaming, and declarative ArgoCD GitOps on K3s.
+- 📹 **[camrelay](https://github.com/hoan02/camrelay)**: High-performance asynchronous Rust daemon tunneling proprietary Dahua/easy4ip P2P cameras into local RTSP streams for Frigate NVR & Home Assistant with FFmpeg recording and rclone Google Drive archiving.
+- 🎧 **[b4s](https://github.com/hoan02/b4s)**: Cross-platform desktop companion (Tauri v2 + Rust btleplug + SolidJS) for local Bluetooth LE headphone control (ANC, 10-band EQ, battery telemetry) without third-party cloud apps.
 
 ---
 

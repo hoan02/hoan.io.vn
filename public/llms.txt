@@ -25,6 +25,8 @@ Le Cong Hoan is a Full-stack Engineer and System Builder experienced in developi
 - [Puchi — Vietnamese Language Learning Platform](https://puchi.io.vn): Next.js PWA with 5 Go microservices (Kratos v3), Limen Auth, NATS event bus, and declarative ArgoCD GitOps on K3s.
 - [EPAS — Enterprise Process Automation System](https://hoan.io.vn/#selected-work): Enterprise-scale micro-frontend and microservice platform with CRM/BPM workflow automation built on Angular, Nx, Spring Boot, Kafka, Keycloak, and Kubernetes.
 - [Enterprise CI/CD & Kubernetes Homelab Infrastructure](https://hoan.io.vn/#selected-work): Automated container pipelines, private registry, Longhorn distributed storage, and multi-node K3s cluster orchestration.
+- [Camrelay — P2P IP Camera to RTSP Stream Relay](https://github.com/hoan02/camrelay): High-performance Rust bridge tunneling proprietary Dahua/easy4ip P2P cameras into local RTSP streams for Frigate & Home Assistant, with FFmpeg recording and rclone Google Drive archiving.
+- [B4S — Desktop Companion for Baseus Headphones](https://github.com/hoan02/b4s): Lightweight cross-platform desktop companion (Tauri v2 + Rust + SolidJS) for local Bluetooth LE headphone control (ANC, 10-band EQ, battery telemetry) without third-party cloud accounts.
 - [Zalo OA Integration & Message Management Platform](https://hoan.io.vn/#selected-work): Enterprise communication console for conversation filtering, broadcast template administration, and Spring Boot REST integration.
 - [MochiMochi Language Learning Platform](https://hoan.io.vn/#selected-work): Learner-facing web applications with Next.js App Router, Core Web Vitals optimization, and modular TypeScript components.
 
