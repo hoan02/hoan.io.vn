@@ -117,6 +117,20 @@ export interface Article {
   };
 }
 
+export interface ExperienceProject {
+  name: string;
+  nameVi?: string;
+  role?: string;
+  roleVi?: string;
+  period?: string;
+  periodVi?: string;
+  description: string;
+  descriptionVi?: string;
+  highlights: string[];
+  highlightsVi?: string[];
+  techStack: string[];
+}
+
 export interface ExperienceItem {
   id: string;
   period: string;
@@ -125,12 +139,15 @@ export interface ExperienceItem {
   roleVi?: string;
   company: string;
   companyVi?: string;
+  companyDescription?: string;
+  companyDescriptionVi?: string;
   location: string;
   locationVi?: string;
-  type: "Full-time" | "Contract" | "Lead";
+  type: "Full-time" | "Contract" | "Lead" | "Education";
   typeVi?: string;
   summary: string;
   summaryVi?: string;
+  projects?: ExperienceProject[];
   contributions: string[];
   contributionsVi?: string[];
   techStack: string[];

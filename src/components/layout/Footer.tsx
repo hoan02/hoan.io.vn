@@ -20,7 +20,10 @@ export function Footer() {
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
         {/* Left side */}
         <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
-          <div className="flex items-center gap-2.5 text-zinc-300 font-semibold">
+          <div
+            onClick={scrollToTop}
+            className="flex items-center gap-2.5 text-zinc-300 hover:text-emerald-400 font-semibold cursor-pointer transition-colors"
+          >
             <img
               src="/images/logo-dark.svg"
               alt="Hoan Logo"

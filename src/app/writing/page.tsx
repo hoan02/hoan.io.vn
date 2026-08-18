@@ -11,6 +11,7 @@ import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { CustomCursor } from "@/components/common/CustomCursor";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
 import { AskAIModal } from "@/components/ai/AskAIModal";
+import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import {
   BookOpen,
   Calendar,
@@ -295,6 +296,7 @@ function WritingContent() {
 
       <Footer />
       <AskAIFloatingButton onClick={handleOpenAI} />
+      <MobileTabBar onOpenAI={handleOpenAI} />
       {aiModalOpen && <AskAIModal isOpen={aiModalOpen} onClose={handleCloseAI} />}
     </main>
   );

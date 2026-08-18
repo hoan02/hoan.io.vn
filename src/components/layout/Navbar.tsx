@@ -25,10 +25,8 @@ export function Navbar({ onOpenAI }: NavbarProps) {
 
   const navLinks = [
     { label: t.nav.work, href: isHome ? "/#selected-work" : "/projects", route: "/projects", sectionId: "selected-work" },
-    { label: t.nav.writing, href: "/writing", route: "/writing", sectionId: "writing" },
-    { label: t.nav.about, href: isHome ? "/#about" : "/#about", route: "/#about", sectionId: "about" },
     { label: t.nav.experience, href: isHome ? "/#experience" : "/#experience", route: "/#experience", sectionId: "experience" },
-    { label: t.nav.techStack, href: isHome ? "/#tech-stack" : "/#tech-stack", route: "/#tech-stack", sectionId: "tech-stack" },
+    { label: t.nav.writing, href: "/writing", route: "/writing", sectionId: "writing" },
     { label: t.nav.contact, href: isHome ? "/#contact" : "/#contact", route: "/#contact", sectionId: "contact" },
   ];
 
@@ -37,7 +35,7 @@ export function Navbar({ onOpenAI }: NavbarProps) {
       setScrolled(window.scrollY > 40);
 
       if (isHome) {
-        const sections = ["selected-work", "writing", "about", "experience", "tech-stack", "contact"];
+        const sections = ["selected-work", "experience", "tech-stack", "writing", "contact"];
         for (const section of sections) {
           const el = document.getElementById(section);
           if (el) {
@@ -55,6 +53,13 @@ export function Navbar({ onOpenAI }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [language, isHome]);
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-40 flex justify-center px-4 pt-4 sm:pt-6 pointer-events-none">
       <nav
@@ -67,7 +72,8 @@ export function Navbar({ onOpenAI }: NavbarProps) {
         {/* Brand / Name */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white hover:text-emerald-400 transition-colors group"
+          onClick={handleLogoClick}
+          className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white hover:text-emerald-400 transition-colors group cursor-pointer"
         >
           <img
             src="/images/logo-dark.svg"

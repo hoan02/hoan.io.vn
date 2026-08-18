@@ -1,12 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { EXPERIENCES_DATA } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { TechBadge } from "@/components/common/TechIcon";
-import { Calendar, MapPin, ChevronRight } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Briefcase,
+  Building2,
+  CheckCircle2,
+  Sparkles,
+  FolderGit2,
+  ChevronRight,
+  GraduationCap,
+  Layers,
+  ArrowUpRight
+} from "lucide-react";
 
 export function Experience() {
   const { language } = useLanguage();
@@ -19,82 +31,154 @@ export function Experience() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-zinc-800/80 pb-6">
           <div>
             <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono tracking-widest uppercase mb-2">
+              <Briefcase className="w-4 h-4" />
               <span>{t.experience.badge}</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
               {t.experience.title}
             </h2>
           </div>
-          <p className="text-sm text-zinc-400 max-w-md">
+          <p className="text-sm text-zinc-400 max-w-md font-normal leading-relaxed">
             {t.experience.subtitle}
           </p>
         </div>
       </MotionWrapper>
 
-      {/* Vertical Timeline */}
-      <div className="relative pl-6 sm:pl-10 border-l border-zinc-800 space-y-12">
+      {/* Structured Company & Project Timeline */}
+      <div className="space-y-12">
         {EXPERIENCES_DATA.map((exp, index) => {
           const expPeriod = language === "vi" && exp.periodVi ? exp.periodVi : exp.period;
           const expRole = language === "vi" && exp.roleVi ? exp.roleVi : exp.role;
           const expCompany = language === "vi" && exp.companyVi ? exp.companyVi : exp.company;
+          const expCompanyDesc = language === "vi" && exp.companyDescriptionVi ? exp.companyDescriptionVi : exp.companyDescription;
           const expLocation = language === "vi" && exp.locationVi ? exp.locationVi : exp.location;
           const expType = language === "vi" && exp.typeVi ? exp.typeVi : exp.type;
           const expSummary = language === "vi" && exp.summaryVi ? exp.summaryVi : exp.summary;
-          const expContributions = language === "vi" && exp.contributionsVi ? exp.contributionsVi : exp.contributions;
+          const isCurrent = expPeriod.toLowerCase().includes("present") || expPeriod.toLowerCase().includes("hiện tại") || expPeriod.includes("Present");
 
           return (
-            <MotionWrapper key={exp.id} delay={index * 0.15}>
-              <div className="relative group">
-                {/* Timeline Node Dot */}
-                <div className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-4 h-4 rounded-full bg-zinc-950 border-2 border-emerald-400 group-hover:bg-emerald-400 group-hover:scale-125 transition-all shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+            <MotionWrapper key={exp.id} delay={index * 0.12}>
+              <div className="group relative rounded-3xl bg-zinc-950/90 border border-zinc-800/90 hover:border-emerald-500/40 p-6 sm:p-8 lg:p-10 transition-all duration-300 hover:shadow-[0_20px_50px_-20px_rgba(16,185,129,0.12)] overflow-hidden space-y-8">
+                {/* Ambient background glow */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                {/* Experience Card */}
-                <div className="p-6 sm:p-8 rounded-2xl bg-zinc-950/80 border border-zinc-800/90 hover:border-emerald-500/30 transition-all">
-                  {/* Period & Role Tag */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-                    <div className="flex items-center gap-2 font-mono text-xs text-emerald-400">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>{expPeriod}</span>
+                {/* Company Header Block */}
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-6 border-b border-zinc-800/80">
+                  <div className="space-y-3">
+                    {/* Timeframe & Type pill */}
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-mono font-semibold border ${
+                        isCurrent
+                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.25)]"
+                          : "bg-zinc-900 text-zinc-300 border-zinc-800"
+                      }`}>
+                        {isCurrent && <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />}
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>{expPeriod}</span>
+                      </span>
+
+                      <span className="px-3 py-1 text-xs font-mono rounded-full bg-zinc-900/90 text-zinc-400 border border-zinc-800">
+                        {expType}
+                      </span>
                     </div>
-                    <span className="px-2.5 py-0.5 text-xs font-mono rounded-full bg-zinc-900 text-zinc-300 border border-zinc-800">
-                      {expType}
-                    </span>
-                  </div>
 
-                  {/* Role & Company */}
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-1">
-                    {expRole}
-                  </h3>
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-zinc-400 mb-4">
-                    <span className="font-medium text-zinc-200">{expCompany}</span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1 text-xs text-zinc-400">
-                      <MapPin className="w-3 h-3 text-emerald-400" /> {expLocation}
-                    </span>
-                  </div>
-
-                  {/* Summary */}
-                  <p className="text-sm sm:text-base text-zinc-400 mb-5 leading-relaxed">
-                    {expSummary}
-                  </p>
-
-                  {/* Key Contributions */}
-                  <div className="space-y-2.5 mb-6">
-                    {expContributions.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-300">
-                        <ChevronRight className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                        <span>{item}</span>
+                    {/* Role and Organization */}
+                    <div>
+                      <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight group-hover:text-emerald-300 transition-colors flex items-center gap-3">
+                        <Building2 className="w-7 h-7 text-emerald-400 shrink-0" />
+                        <span>{expRole}</span>
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-2 text-sm sm:text-base text-zinc-300 font-semibold mt-1">
+                        <span className="text-emerald-400">{expCompany}</span>
+                        <span className="text-zinc-600">•</span>
+                        <span className="flex items-center gap-1 text-xs text-zinc-400 font-normal">
+                          <MapPin className="w-3.5 h-3.5 text-zinc-500" />
+                          {expLocation}
+                        </span>
                       </div>
-                    ))}
+                      {expCompanyDesc && (
+                        <p className="text-xs text-zinc-500 font-mono mt-1">
+                          {expCompanyDesc}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Tech Stack Badges */}
-                  <div className="flex flex-wrap gap-2 pt-4 border-t border-zinc-900">
-                    {exp.techStack.map((tech, idx) => (
-                      <TechBadge key={idx} name={tech} size="xs" />
-                    ))}
+                  {/* Summary & Global Tech Badges */}
+                  <div className="lg:max-w-md space-y-3">
+                    <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
+                      {expSummary}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {exp.techStack.map((tech, idx) => (
+                        <TechBadge key={idx} name={tech} size="xs" />
+                      ))}
+                    </div>
                   </div>
                 </div>
+
+                {/* Sub-Projects & Responsibilities Section */}
+                {exp.projects && exp.projects.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 uppercase tracking-widest">
+                      <FolderGit2 className="w-4 h-4" />
+                      <span>{language === "vi" ? "Các Dự án & Trọng tâm Thực hiện" : "Key Projects & Core Deliverables"}</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      {exp.projects.map((proj, pIdx) => {
+                        const projName = language === "vi" && proj.nameVi ? proj.nameVi : proj.name;
+                        const projRole = language === "vi" && proj.roleVi ? proj.roleVi : proj.role;
+                        const projPeriod = language === "vi" && proj.periodVi ? proj.periodVi : proj.period;
+                        const projDesc = language === "vi" && proj.descriptionVi ? proj.descriptionVi : proj.description;
+                        const projHighlights = language === "vi" && proj.highlightsVi ? proj.highlightsVi : proj.highlights;
+
+                        return (
+                          <div
+                            key={pIdx}
+                            className="rounded-2xl bg-zinc-900/50 hover:bg-zinc-900/90 border border-zinc-800/80 hover:border-emerald-500/30 p-5 sm:p-6 transition-all space-y-4"
+                          >
+                            {/* Project Header */}
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-zinc-800/60">
+                              <div>
+                                <h4 className="text-base sm:text-lg font-bold text-zinc-100 flex items-center gap-2">
+                                  <span>{projName}</span>
+                                </h4>
+                                {projRole && (
+                                  <p className="text-xs text-zinc-400 font-mono mt-0.5">
+                                    {projRole} {projPeriod && `• ${projPeriod}`}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Project Context */}
+                            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
+                              {projDesc}
+                            </p>
+
+                            {/* Concrete Engineering Highlights */}
+                            <div className="space-y-2">
+                              {projHighlights.map((hl, hlIdx) => (
+                                <div key={hlIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-300">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                                  <span className="leading-relaxed">{hl}</span>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Project specific tech pills */}
+                            <div className="flex flex-wrap gap-1.5 pt-2">
+                              {proj.techStack.map((tech, tIdx) => (
+                                <TechBadge key={tIdx} name={tech} size="xs" />
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             </MotionWrapper>
           );

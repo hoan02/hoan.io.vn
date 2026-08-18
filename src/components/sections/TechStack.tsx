@@ -1,116 +1,165 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { TECH_CATEGORIES } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
-import { TechIcon } from "@/components/common/TechIcon";
-import { Sparkles, Server, Terminal, Database, Cloud } from "lucide-react";
+import { TechIcon, TechBadge } from "@/components/common/TechIcon";
+import {
+  Sparkles,
+  Server,
+  Terminal,
+  Database,
+  Cloud,
+  CheckCircle2,
+  Cpu,
+  Layers,
+  Code2,
+  Zap
+} from "lucide-react";
 
 export function TechStack() {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
+  const [activeCategoryIdx, setActiveCategoryIdx] = useState<number>(1);
 
-  const getCategoryIcon = (index: number) => {
-    switch (index) {
-      case 0:
-        return <Terminal className="w-5 h-5 text-emerald-400" />;
-      case 1:
-        return <Server className="w-5 h-5 text-emerald-400" />;
-      case 2:
-        return <Database className="w-5 h-5 text-emerald-400" />;
-      case 3:
-      default:
-        return <Cloud className="w-5 h-5 text-emerald-400" />;
+  const categories = [
+    { title: language === "vi" ? "Frontend & MFE" : "Frontend & MFE", icon: Terminal },
+    { title: language === "vi" ? "Backend Microservices" : "Backend & Services", icon: Server },
+    { title: language === "vi" ? "Cơ sở Dữ liệu" : "Databases & Cache", icon: Database },
+    { title: language === "vi" ? "DevOps & Cloud" : "DevOps & Cloud", icon: Cloud },
+    { title: language === "vi" ? "Tất cả" : "All Domains", icon: Sparkles },
+  ];
+
+  const displayedCategories = useMemo(() => {
+    if (activeCategoryIdx === 4) {
+      return TECH_CATEGORIES;
     }
-  };
+    return [TECH_CATEGORIES[activeCategoryIdx]];
+  }, [activeCategoryIdx]);
 
   return (
     <section id="tech-stack" className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Section Heading */}
       <MotionWrapper>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-zinc-800/80 pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-zinc-800/80 pb-6">
           <div>
             <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono tracking-widest uppercase mb-2">
+              <Cpu className="w-4 h-4" />
               <span>{t.techStack.badge}</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
               {t.techStack.title}
             </h2>
           </div>
-          <p className="text-sm text-zinc-400 max-w-md">
+          <p className="text-sm text-zinc-400 max-w-md font-normal leading-relaxed">
             {t.techStack.subtitle}
           </p>
         </div>
       </MotionWrapper>
 
-      {/* Grid of Categories */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {TECH_CATEGORIES.map((category, catIdx) => {
+      {/* Category Filter Pills */}
+      <MotionWrapper delay={0.05}>
+        <div className="flex flex-wrap items-center gap-2 mb-12">
+          {categories.map((cat, idx) => {
+            const Icon = cat.icon;
+            const isActive = activeCategoryIdx === idx;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setActiveCategoryIdx(idx)}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  isActive
+                    ? "bg-emerald-500 text-zinc-950 font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                    : "bg-zinc-900/90 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{cat.title}</span>
+              </button>
+            );
+          })}
+        </div>
+      </MotionWrapper>
+
+      {/* Categories & Technology Cards Grid */}
+      <div className="space-y-12">
+        {displayedCategories.map((category, catIdx) => {
           const categoryTitle = language === "vi" && category.titleVi ? category.titleVi : category.title;
           const categoryTagline = language === "vi" && category.taglineVi ? category.taglineVi : category.tagline;
 
           return (
             <MotionWrapper key={catIdx} delay={catIdx * 0.1}>
-              <div className="h-full rounded-2xl bg-zinc-950/80 border border-zinc-800/90 hover:border-emerald-500/30 p-6 sm:p-8 flex flex-col justify-between transition-colors">
-                <div>
-                  {/* Category Header */}
-                  <div className="flex items-center justify-between gap-4 mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                        {getCategoryIcon(catIdx)}
-                      </div>
-                      <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+              <div className="rounded-3xl bg-zinc-950/80 border border-zinc-800/90 p-6 sm:p-8 lg:p-10 shadow-xl space-y-6">
+                {/* Category Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-zinc-800/80">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                      {catIdx === 0 ? <Terminal className="w-5 h-5" /> : catIdx === 1 ? <Server className="w-5 h-5" /> : catIdx === 2 ? <Database className="w-5 h-5" /> : <Cloud className="w-5 h-5" />}
+                    </div>
+                    <div>
+                      <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                         {categoryTitle}
                       </h3>
+                      <p className="text-xs sm:text-sm text-zinc-400 font-normal">
+                        {categoryTagline}
+                      </p>
                     </div>
-                    <span className="text-[11px] font-mono text-zinc-500">
-                      {category.items.length} {t.techStack.technologiesCount}
-                    </span>
                   </div>
+                  <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-fit">
+                    {category.items.length} {t.techStack.technologiesCount}
+                  </span>
+                </div>
 
-                  <p className="text-xs text-zinc-400 mb-6 font-normal">
-                    {categoryTagline}
-                  </p>
+                {/* Grid of Tech Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                  {category.items.map((item, itemIdx) => {
+                    const capabilities = language === "vi" && item.capabilitiesVi ? item.capabilitiesVi : item.capabilities;
 
-                  {/* Items List with Concrete Capabilities */}
-                  <div className="space-y-3.5">
-                    {category.items.map((item, itemIdx) => {
-                      const capabilities = language === "vi" && item.capabilitiesVi ? item.capabilitiesVi : item.capabilities;
+                    return (
+                      <div
+                        key={itemIdx}
+                        className="group relative rounded-2xl bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/80 hover:border-emerald-500/40 p-5 sm:p-6 transition-all duration-300 hover:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.15)] flex flex-col justify-between"
+                      >
+                        <div>
+                          {/* Card Header: Icon + Name + Core badge */}
+                          <div className="flex items-center justify-between gap-3 mb-4">
+                            <div className="flex items-center gap-3">
+                              <TechIcon name={item.name} className="w-7 h-7 rounded-md p-0.5 bg-zinc-950/80 border border-zinc-800 shadow-sm" />
+                              <h4 className="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                                {item.name}
+                              </h4>
+                            </div>
 
-                      return (
-                        <div
-                          key={itemIdx}
-                          className="p-3.5 rounded-xl bg-zinc-900/50 hover:bg-zinc-900/90 border border-zinc-800/60 hover:border-zinc-700 transition-all flex flex-col gap-2"
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-sm font-semibold text-zinc-100 flex items-center gap-2.5">
-                              <TechIcon name={item.name} className="w-4 h-4 rounded-[2px] flex-shrink-0" />
-                              <span>{item.name}</span>
-                              {item.highlight && (
-                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-normal rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                                  <Sparkles className="w-2.5 h-2.5" /> {t.techStack.coreTag}
-                                </span>
-                              )}
-                            </span>
+                            {item.highlight && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-semibold rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                                <Sparkles className="w-2.5 h-2.5" />
+                                <span>{t.techStack.coreTag}</span>
+                              </span>
+                            )}
                           </div>
 
-                          {/* Capability bullets / tags */}
-                          <div className="flex flex-wrap gap-1.5">
+                          {/* Concrete Capability Checkpoints */}
+                          <div className="space-y-2 mb-4">
                             {capabilities.map((cap, capIdx) => (
-                              <span
-                                key={capIdx}
-                                className="px-2 py-0.5 text-[11px] font-mono rounded bg-zinc-800/80 text-zinc-300 border border-zinc-700/50"
-                              >
-                                {cap}
-                              </span>
+                              <div key={capIdx} className="flex items-start gap-2 text-xs sm:text-sm text-zinc-300">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                                <span>{cap}</span>
+                              </div>
                             ))}
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
+
+                        {/* Bottom Tagline Indicator */}
+                        <div className="pt-3 border-t border-zinc-800/60 flex items-center justify-between text-[11px] font-mono text-zinc-500">
+                          <span>Production Proven</span>
+                          <span className="text-emerald-400 group-hover:translate-x-1 transition-transform">✓</span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </MotionWrapper>

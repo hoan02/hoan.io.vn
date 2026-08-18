@@ -266,7 +266,7 @@ Git Push ──► Jenkins Pipeline ──► Multi-Stage Docker ──► Regis
     ],
     liveUrl: "#contact",
     githubUrl: "https://github.com/hoan02",
-    featured: true,
+    featured: false,
     image: "/images/projects/gateway.svg",
     accentColor: "#38bdf8",
   },
@@ -1890,20 +1890,84 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
     roleVi: "Kỹ sư Fullstack Developer",
     company: "NGV Group",
     companyVi: "NGV Group",
+    companyDescription: "Enterprise Digital Transformation & Process Automation Solutions Provider",
+    companyDescriptionVi: "Tập đoàn giải pháp công nghệ chuyển đổi số và tự động hóa quy trình doanh nghiệp",
     location: "Hanoi, Vietnam",
     locationVi: "Hà Nội, Việt Nam",
     type: "Full-time",
     typeVi: "Chính thức",
-    summary: "Engineering enterprise process automation systems (EPAS) and Zalo OA communication modules with Angular micro-frontends, Java Spring Boot microservices, and Kubernetes infrastructure.",
-    summaryVi: "Phát triển hệ thống tự động hóa quy trình doanh nghiệp (EPAS) và phân hệ Zalo OA trên nền tảng Angular Micro-Frontend, Java Spring Boot microservices và hạ tầng Kubernetes.",
+    summary: "Driving enterprise process automation systems (EPAS), real-time Zalo OA communication modules, and managing on-premises Kubernetes/CI-CD infrastructure.",
+    summaryVi: "Phát triển hệ thống tự động hóa quy trình nghiệp vụ (EPAS), phân hệ truyền thông Zalo OA thời gian thực và vận hành hạ tầng CI/CD Kubernetes nội bộ.",
+    projects: [
+      {
+        name: "EPAS — Enterprise Process Automation System",
+        nameVi: "Hệ thống Tự động hóa Quy trình Doanh nghiệp (EPAS)",
+        role: "Frontend & Micro-Frontend Engineer",
+        roleVi: "Kỹ sư Frontend & Micro-Frontend",
+        period: "12/2024 — Present",
+        periodVi: "12/2024 — Hiện tại",
+        description: "Large-scale enterprise workflow automation platform integrating BPM engines, dynamic task inboxes, and complex financial/operational transaction processing.",
+        descriptionVi: "Nền tảng tự động hóa quy trình doanh nghiệp quy mô lớn tích hợp BPM engine, hộp thư tác vụ động và xử lý giao dịch tài chính/vận hành phức tạp.",
+        highlights: [
+          "Designed Angular Micro-Frontend architecture (1 Shell + multiple Remotes) managed via Nx monorepo with seamless cross-module routing.",
+          "Built shared enterprise component libraries (@workspace/ui, dynamic reactive forms, high-performance data tables with virtual scroll).",
+          "Integrated frontend flows with Java Spring Boot microservices, Oracle/PostgreSQL schemas, and Redis cache."
+        ],
+        highlightsVi: [
+          "Thiết kế kiến trúc Angular Micro-Frontend (1 Shell + các Remote apps) quản lý theo Nx monorepo với cơ chế định tuyến linh hoạt.",
+          "Xây dựng thư viện component doanh nghiệp dùng chung (biểu mẫu phản ứng động, bảng dữ liệu hiệu năng cao với virtual scroll).",
+          "Tích hợp luồng frontend với microservices Java Spring Boot, cơ sở dữ liệu Oracle/PostgreSQL và bộ nhớ đệm Redis."
+        ],
+        techStack: ["Angular", "Micro-Frontend", "RxJS", "Java Spring Boot", "Oracle", "PostgreSQL", "Redis", "Kafka"]
+      },
+      {
+        name: "Enterprise Micro-Frontend & Dynamic Form Engine",
+        nameVi: "Phân hệ Micro-Frontend & Nền tảng Biểu mẫu Động (Dynamic Form)",
+        role: "Frontend Core Engineer",
+        roleVi: "Kỹ sư Frontend Core",
+        period: "12/2024 — Present",
+        periodVi: "12/2024 — Hiện tại",
+        description: "Standardized reusable UI foundation, dynamic reactive form engine, complex validation pipelines, and cross-micro-frontend state synchronization.",
+        descriptionVi: "Chuẩn hóa nền tảng UI dùng chung, engine biểu mẫu phản ứng động (dynamic form), pipeline kiểm tra dữ liệu phức tạp và cơ chế đồng bộ state giữa các remote app.",
+        highlights: [
+          "Developed schema-driven dynamic form generators rendering complex multi-step transaction approval workflows.",
+          "Implemented high-performance virtualized data tables supporting sorting, multi-column filters, and large dataset streaming.",
+          "Integrated state bridges and shared authentication contexts across micro-frontend boundaries with zero memory leaks."
+        ],
+        highlightsVi: [
+          "Phát triển bộ sinh biểu mẫu động theo schema cấu hình cho các quy trình phê duyệt giao dịch đa bước phức tạp.",
+          "Hiện thực hóa bảng dữ liệu ảo hóa (virtual scroll) hiệu năng cao hỗ trợ sắp xếp, lọc đa cột và stream dữ liệu lớn.",
+          "Xây dựng cầu nối state và ngữ cảnh xác thực dùng chung xuyên suốt các remote micro-frontend mà không gây rò rỉ bộ nhớ."
+        ],
+        techStack: ["Angular", "TypeScript", "RxJS", "Micro-Frontend", "Dynamic Forms", "Tailwind CSS"]
+      },
+      {
+        name: "On-Premises Kubernetes & CI/CD Pipelines",
+        nameVi: "Hạ tầng Kubernetes On-Premises & CI/CD Tự động hóa",
+        role: "DevOps & Infrastructure Engineer",
+        roleVi: "Kỹ sư DevOps & Hạ tầng",
+        period: "12/2024 — Present",
+        periodVi: "12/2024 — Hiện tại",
+        description: "Constructed automated delivery pipelines and maintained on-premises container clusters for multi-environment testing and production workloads.",
+        descriptionVi: "Xây dựng pipeline phân phối phần mềm tự động và duy trì cụm container nội bộ cho các môi trường kiểm thử và production.",
+        highlights: [
+          "Built declarative Jenkins CI/CD pipelines automating Docker multi-stage builds, version tagging, and registry pushes.",
+          "Managed on-premises Kubernetes cluster deployments, Traefik ingress routing, container health checks, and rolling updates."
+        ],
+        highlightsVi: [
+          "Xây dựng pipeline Jenkins declarative tự động hóa build Docker đa tầng, gắn tag phiên bản và đẩy lên registry nội bộ.",
+          "Vận hành triển khai trên cụm Kubernetes on-premises, cấu hình Traefik ingress, kiểm tra sức khỏe container và rolling update zero-downtime."
+        ],
+        techStack: ["Kubernetes", "Docker", "Jenkins", "Traefik", "Linux", "Shell"]
+      }
+    ],
     contributions: [
       "Designed and maintained Angular micro-frontend architecture, shared libraries, routing, integration patterns, and reusable UI foundations across enterprise modules.",
       "Built reusable Angular UI capabilities for dynamic forms, data tables, pagination, attachments, and activity history.",
       "Implemented CRM/BPM workflows covering transaction inboxes, task management, customer flows, and business-process interactions.",
       "Integrated frontend modules with Java Spring Boot microservices and Oracle/PostgreSQL data flows for enterprise operations.",
       "Implemented CI/CD pipelines with Jenkins, Docker, and Kubernetes for builds, image publishing, configuration, and multi-environment deployments.",
-      "Supported on-premises infrastructure with Kubernetes clusters, ingress, registries, monitoring, and production troubleshooting.",
-      "Developed Angular modules integrating Zalo Official Account features, message conversation management, template administration, filtering, and Spring Boot REST APIs."
+      "Supported on-premises infrastructure with Kubernetes clusters, ingress, registries, monitoring, and production troubleshooting."
     ],
     contributionsVi: [
       "Thiết kế và duy trì kiến trúc Angular Micro-Frontend, thư viện dùng chung, chuẩn định tuyến và nền tảng UI tái sử dụng xuyên suốt các phân hệ doanh nghiệp.",
@@ -1911,8 +1975,7 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
       "Phát triển các luồng quy trình CRM/BPM bao gồm hộp thư giao dịch, quản lý tác vụ, luồng khách hàng và tương tác quy trình doanh nghiệp.",
       "Tích hợp các module frontend với microservices Java Spring Boot và luồng dữ liệu Oracle/PostgreSQL cho hoạt động vận hành.",
       "Xây dựng pipeline CI/CD với Jenkins, Docker và Kubernetes để tự động hóa build, xuất bản image, cấu hình và triển khai đa môi trường.",
-      "Vận hành hạ tầng on-premises với cụm Kubernetes, ingress, registry, giám sát và xử lý sự cố môi trường production.",
-      "Phát triển module Angular tích hợp tính năng Zalo Official Account, quản lý hội thoại tin nhắn, quản trị mẫu tin nhắn, lọc trạng thái và REST API Spring Boot."
+      "Vận hành hạ tầng on-premises với cụm Kubernetes, ingress, registry, giám sát và xử lý sự cố môi trường production."
     ],
     techStack: ["Angular", "Micro-Frontend", "Java Spring Boot", "Oracle", "PostgreSQL", "Redis", "Kafka", "Keycloak", "Minio", "Kubernetes", "Docker", "Jenkins"]
   },
@@ -1924,12 +1987,56 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
     roleVi: "Kỹ sư Frontend Developer",
     company: "MochiMochi",
     companyVi: "MochiMochi",
+    companyDescription: "EdTech Platform Specializing in Spaced-Repetition Japanese & Chinese Learning",
+    companyDescriptionVi: "Nền tảng công nghệ giáo dục chuyên sâu về học tiếng Nhật & tiếng Trung theo phương pháp lặp lại ngắt quãng",
     location: "Hanoi, Vietnam",
     locationVi: "Hà Nội, Việt Nam",
     type: "Full-time",
     typeVi: "Chính thức",
-    summary: "Developed and optimized learner-facing web applications for Japanese & Chinese language learning platforms using Next.js, React, and TypeScript.",
-    summaryVi: "Phát triển và tối ưu hóa ứng dụng web học tiếng Nhật & tiếng Trung hướng người học trên nền tảng Next.js, React và TypeScript.",
+    summary: "Developed learner-facing web applications, improved Core Web Vitals performance, strengthened SEO rankings, and modularized reusable UI component libraries.",
+    summaryVi: "Phát triển ứng dụng web học ngoại ngữ cho học viên, tối ưu chỉ số Core Web Vitals, nâng cao thứ hạng SEO và module hóa thư viện component tái sử dụng.",
+    projects: [
+      {
+        name: "Learner-Facing Web Applications (Japanese & Chinese)",
+        nameVi: "Ứng dụng Web Học Ngoại ngữ Trực tuyến (Tiếng Nhật & Tiếng Trung)",
+        role: "Frontend Developer",
+        roleVi: "Kỹ sư Frontend",
+        period: "03/2024 — 08/2024",
+        periodVi: "03/2024 — 08/2024",
+        description: "High-traffic learner portal delivering interactive lessons, spaced-repetition flashcards, and pronunciation practice across mobile and desktop browsers.",
+        descriptionVi: "Cổng học tập trực tuyến tải cao cung cấp bài học tương tác, flashcard ôn tập ngắt quãng và luyện phát âm trên cả trình duyệt di động lẫn máy tính.",
+        highlights: [
+          "Engineered responsive UI using Next.js App & Pages router, React, and TypeScript with smooth micro-interactions.",
+          "Refactored legacy UI components into clean, strictly-typed reusable component packages.",
+          "Optimized asset delivery, reducing JavaScript bundle size and boosting client-side responsiveness."
+        ],
+        highlightsVi: [
+          "Xây dựng giao diện responsive với Next.js (App & Pages router), React và TypeScript với hiệu ứng tương tác mượt mà.",
+          "Tái cấu trúc các component cũ thành các gói module TypeScript dùng chung có kiểu dữ liệu chặt chẽ.",
+          "Tối ưu hóa tài nguyên tải về, giảm kích thước bundle JavaScript và tăng tốc độ phản hồi trên trình duyệt."
+        ],
+        techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Responsive UI"]
+      },
+      {
+        name: "Core Web Vitals & SEO Architecture Optimization",
+        nameVi: "Tối ưu hóa Chỉ số Core Web Vitals & Kiến trúc SEO",
+        role: "Frontend & Performance Engineer",
+        roleVi: "Kỹ sư Frontend & Tối ưu Hiệu năng",
+        period: "04/2024 — 08/2024",
+        periodVi: "04/2024 — 08/2024",
+        description: "Audited and restructured web rendering pipelines to maximize organic search engine visibility and pass all Core Web Vitals thresholds.",
+        descriptionVi: "Khảo sát và tái cấu trúc pipeline rendering của trang web nhằm tối đa hóa khả năng tìm kiếm tự nhiên và đạt chuẩn các chỉ số Core Web Vitals.",
+        highlights: [
+          "Achieved green Core Web Vitals (LCP < 1.8s, CLS ~ 0) via Server-Side Rendering (SSR) and next/font optimizations.",
+          "Implemented structured JSON-LD schema, dynamic OpenGraph metadata, and canonical URL handling across thousands of course pages."
+        ],
+        highlightsVi: [
+          "Đạt chỉ số Core Web Vitals xanh (LCP < 1.8s, CLS ~ 0) thông qua cơ chế SSR và tối ưu hóa font chữ next/font.",
+          "Triển khai cấu trúc dữ liệu JSON-LD schema, metadata OpenGraph động và canonical URL cho hàng nghìn trang khóa học."
+        ],
+        techStack: ["Next.js", "SSR / SSG", "SEO Optimization", "Web Vitals", "TypeScript"]
+      }
+    ],
     contributions: [
       "Developed and maintained learner-facing web applications for Japanese and Chinese language learning using Next.js.",
       "Improved Core Web Vitals and SEO through rendering and asset optimization, page structure, and metadata improvements.",

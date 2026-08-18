@@ -208,7 +208,6 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
           <div className="space-y-8 mb-14">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-4 flex items-center gap-2.5">
-                <span className="text-emerald-400 font-mono text-base">01.</span>
                 <span>{t.selectedWork.overview}</span>
               </h2>
               <p className="text-base text-zinc-300 leading-relaxed font-normal">
@@ -235,7 +234,6 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
           <MotionWrapper delay={0.25}>
             <div className="mb-14">
               <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-6 flex items-center gap-2.5">
-                <span className="text-emerald-400 font-mono text-base">02.</span>
                 <span>{t.selectedWork.architecture}</span>
               </h2>
 
@@ -273,7 +271,6 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
           <MotionWrapper delay={0.3}>
             <div className="mb-14">
               <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-6 flex items-center gap-2.5">
-                <span className="text-emerald-400 font-mono text-base">03.</span>
                 <span>{t.selectedWork.contributions}</span>
               </h2>
               <div className="grid grid-cols-1 gap-3.5">
@@ -298,7 +295,6 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
           <MotionWrapper delay={0.35}>
             <div className="mb-14">
               <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-6 flex items-center gap-2.5">
-                <span className="text-emerald-400 font-mono text-base">04.</span>
                 <span>{t.selectedWork.results}</span>
               </h2>
               <div className="space-y-3">

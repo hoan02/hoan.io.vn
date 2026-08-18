@@ -14,7 +14,7 @@ export function AskAIFloatingButton({ onClick }: AskAIFloatingButtonProps) {
   const t = UI_TRANSLATIONS[language];
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="hidden md:block fixed bottom-6 right-6 z-40">
       <button
         onClick={onClick}
         className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-zinc-950/90 text-white border border-emerald-500/40 shadow-[0_8px_30px_rgba(16,185,129,0.2)] hover:shadow-[0_8px_35px_rgba(16,185,129,0.35)] hover:border-emerald-400 transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-md"

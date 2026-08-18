@@ -69,7 +69,6 @@ export function Hero({ onOpenAI }: HeroProps) {
 
       <MotionWrapper delay={0.3}>
         <div className="flex flex-wrap items-center gap-3 text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-400 mb-4">
-          <span className="text-emerald-400 font-mono">01/</span>
           <span className="text-zinc-100">{t.hero.title}</span>
         </div>
       </MotionWrapper>

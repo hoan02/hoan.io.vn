@@ -26,13 +26,13 @@ export const CATEGORIZED_PROMPTS: PromptCategory[] = [
     categoryVi: "Dự án Tiêu biểu",
     promptsEn: [
       { badge: "EPAS System", text: "What is Hoan's main enterprise project (EPAS)?" },
-      { badge: "K8s Homelab", text: "Tell me about his 3-Node Kubernetes Homelab cluster." },
-      { badge: "Zalo OA", text: "How did Hoan build the Zalo OA messaging platform?" }
+      { badge: "Puchi Platform", text: "How did Hoan architect Puchidemy with 5 Go microservices?" },
+      { badge: "K8s Homelab", text: "Tell me about his 3-Node Kubernetes Homelab cluster." }
     ],
     promptsVi: [
       { badge: "Hệ thống EPAS", text: "Dự án EPAS tại NGV Group của Hoan làm những gì?" },
-      { badge: "Homelab K8s", text: "Hạ tầng cụm 3-Node Kubernetes Homelab của Hoan ra sao?" },
-      { badge: "Zalo OA", text: "Hoan đã phát triển phân hệ Zalo OA như thế nào?" }
+      { badge: "Nền tảng Puchi", text: "Hoan đã thiết kế hệ thống Puchidemy với 5 Go microservices ra sao?" },
+      { badge: "Homelab K8s", text: "Hạ tầng cụm 3-Node Kubernetes Homelab của Hoan ra sao?" }
     ]
   },
   {

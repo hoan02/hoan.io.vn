@@ -14,6 +14,7 @@ import { GithubIcon } from "@/components/common/Icons";
 import { TechBadge } from "@/components/common/TechIcon";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
 import { AskAIModal } from "@/components/ai/AskAIModal";
+import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import {
   FolderGit2,
   ArrowRight,
@@ -278,6 +279,7 @@ function ProjectsContent() {
 
       <Footer />
       <AskAIFloatingButton onClick={handleOpenAI} />
+      <MobileTabBar onOpenAI={handleOpenAI} />
       {aiModalOpen && <AskAIModal isOpen={aiModalOpen} onClose={handleCloseAI} />}
     </main>
   );
