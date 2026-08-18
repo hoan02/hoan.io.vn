@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           error:
-            "Hệ thống đang nhận nhiều câu hỏi. Bạn vui lòng đợi 1 phút trước khi thử lại nhé.",
+            "Hệ thống đang nhận nhiều câu hỏi. Bạn vui lòng đợi 1 chút trước khi thử lại nhé.",
         },
         {
           status: 429,
@@ -37,31 +37,31 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { messages, query, history } = body;
 
-    // Normalizing messages format
+    // Normalizing messages format - Keep concise history (last 3 messages, max 400 chars each) to save TPM
     let formattedMessages: { role: "user" | "assistant" | "system"; content: string }[] = [];
 
     if (Array.isArray(messages) && messages.length > 0) {
       formattedMessages = messages
         .filter((m) => m && typeof m.content === "string")
-        .slice(-8)
+        .slice(-4)
         .map((m) => ({
-          role: m.role === "system" ? "system" : m.role === "assistant" ? "assistant" : "user",
-          content: m.content.trim().slice(0, 1000), // Max 1000 chars per message
+          role: (m.role === "system" ? "system" : m.role === "assistant" ? "assistant" : "user") as "user" | "assistant" | "system",
+          content: m.content.trim().slice(0, 500),
         }));
     } else if (typeof query === "string" && query.trim()) {
       const sanitizedHistory = Array.isArray(history)
         ? history
             .filter((m) => m && typeof m.content === "string")
-            .slice(-6)
+            .slice(-3)
             .map((m) => ({
               role: (m.role === "assistant" ? "assistant" : "user") as "assistant" | "user",
-              content: m.content.trim().slice(0, 1000),
+              content: m.content.trim().slice(0, 400),
             }))
         : [];
 
       formattedMessages = [
         ...sanitizedHistory,
-        { role: "user", content: query.trim().slice(0, 1000) },
+        { role: "user", content: query.trim().slice(0, 400) },
       ];
     } else {
       return NextResponse.json({ error: "Missing query or messages." }, { status: 400 });
@@ -76,24 +76,24 @@ export async function POST(req: Request) {
       system: SYSTEM_PROMPT,
       messages: formattedMessages,
       tools: aiTools,
-      stopWhen: stepCountIs(5),
-      maxOutputTokens: 1500,
-      temperature: 0.5,
+      stopWhen: stepCountIs(4),
+      maxOutputTokens: 1000,
+      temperature: 0.4,
       onFinish: ({ usage }) => {
         const duration = Date.now() - startTime;
         console.log(
-          `[Chat API] Handled request from IP: ${ip} in ${duration}ms | Tokens: total=${usage?.totalTokens}`
+          `[Chat API] Handled request in ${duration}ms | Tokens: total=${usage?.totalTokens}`
         );
       },
     });
 
     return result.toTextStreamResponse();
-  } catch (error) {
-    console.error("[Chat API Error]:", error);
+  } catch (error: any) {
+    console.error("[Chat API Error]:", error?.message || error);
     return NextResponse.json(
       {
         error:
-          "Đã có sự cố kết nối với AI provider. Bạn có thể thử lại sau giây lát hoặc xem trực tiếp các dự án tại /#selected-work.",
+          "Hệ thống AI đang tạm thời bận do vượt hạn mức tức thời. Bạn vui lòng thử lại sau vài giây nhé.",
       },
       { status: 500 }
     );

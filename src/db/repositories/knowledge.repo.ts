@@ -20,14 +20,17 @@ export class KnowledgeRepository {
             tags,
             url
           FROM knowledge_documents
-          WHERE tsv @@ plainto_tsquery('english', ${cleanQuery})
+          WHERE 
+            title ILIKE ${`%${cleanQuery}%`} 
+            OR summary ILIKE ${`%${cleanQuery}%`}
+            OR content ILIKE ${`%${cleanQuery}%`}
           LIMIT ${limit}
         `;
         if (rows && rows.length > 0) {
           return rows as unknown as KnowledgeDocument[];
         }
       } catch (error) {
-        console.warn("Full-text search in Neon DB failed, falling back to in-memory search:", error);
+        console.warn("Search in Neon DB failed, falling back to in-memory search:", error);
       }
     }
 
