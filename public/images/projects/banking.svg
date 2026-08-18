@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e131f"/>
+      <stop offset="100%" stop-color="#080a10"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="card-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(30, 41, 59, 0.7)"/>
+      <stop offset="100%" stop-color="rgba(15, 23, 42, 0.8)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="500" rx="16" fill="url(#bg-grad)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+  
+  <!-- Subtle Grid Lines -->
+  <g stroke="rgba(255,255,255,0.03)" stroke-width="1">
+    <line x1="40" y1="0" x2="40" y2="500"/>
+    <line x1="120" y1="0" x2="120" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="500"/>
+    <line x1="280" y1="0" x2="280" y2="500"/>
+    <line x1="360" y1="0" x2="360" y2="500"/>
+    <line x1="440" y1="0" x2="440" y2="500"/>
+    <line x1="520" y1="0" x2="520" y2="500"/>
+    <line x1="600" y1="0" x2="600" y2="500"/>
+    <line x1="680" y1="0" x2="680" y2="500"/>
+    <line x1="760" y1="0" x2="760" y2="500"/>
+  </g>
+
+  <!-- Header bar -->
+  <rect x="40" y="35" width="720" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)"/>
+  <circle cx="65" cy="55" r="4.5" fill="#ef4444" opacity="0.8"/>
+  <circle cx="82" cy="55" r="4.5" fill="#f59e0b" opacity="0.8"/>
+  <circle cx="99" cy="55" r="4.5" fill="#10b981" opacity="0.8"/>
+  <rect x="130" y="47" width="220" height="16" rx="4" fill="rgba(255,255,255,0.06)"/>
+  <text x="140" y="59" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="500">core-banking.treasury.prod.mesh</text>
+  
+  <rect x="640" y="45" width="100" height="20" rx="4" fill="rgba(16,185,129,0.12)" stroke="rgba(16,185,129,0.3)"/>
+  <circle cx="654" cy="55" r="3" fill="#10b981"/>
+  <text x="664" y="59" fill="#34d399" font-family="system-ui, sans-serif" font-size="10" font-weight="600">LIVE: 99.99%</text>
+
+  <!-- Metric Panels -->
+  <rect x="40" y="95" width="225" height="105" rx="10" fill="url(#card-grad)" stroke="rgba(255,255,255,0.07)"/>
+  <text x="60" y="125" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="500">TPS VOLUME / SEC</text>
+  <text x="60" y="158" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="26" font-weight="700">32,480</text>
+  <text x="60" y="182" fill="#10b981" font-family="system-ui, sans-serif" font-size="11" font-weight="600">▲ +14.8% spike capacity</text>
+
+  <rect x="285" y="95" width="225" height="105" rx="10" fill="url(#card-grad)" stroke="rgba(255,255,255,0.07)"/>
+  <text x="305" y="125" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="500">P99 SETTLEMENT LATENCY</text>
+  <text x="305" y="158" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="26" font-weight="700">114 ms</text>
+  <text x="305" y="182" fill="#10b981" font-family="system-ui, sans-serif" font-size="11" font-weight="600">● Oracle & Kafka CQRS Sync</text>
+
+  <rect x="530" y="95" width="230" height="105" rx="10" fill="url(#card-grad)" stroke="rgba(255,255,255,0.07)"/>
+  <text x="550" y="125" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="500">SECURITY AUDIT STATUS</text>
+  <text x="550" y="158" fill="#34d399" font-family="system-ui, sans-serif" font-size="22" font-weight="700">ISO 20022</text>
+  <text x="550" y="182" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">Zero-trust Micro-frontends</text>
+
+  <!-- Big Interactive Chart Area -->
+  <rect x="40" y="220" width="720" height="240" rx="12" fill="url(#card-grad)" stroke="rgba(255,255,255,0.07)"/>
+  <text x="65" y="255" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="14" font-weight="600">Treasury Liquidity Inflow & Event Stream</text>
+  
+  <!-- Flow Chart Wave Line -->
+  <path d="M 65 390 Q 140 330 220 370 T 380 300 T 520 280 T 660 340 T 730 260" fill="none" stroke="url(#emerald-grad)" stroke-width="3.5"/>
+  <path d="M 65 390 Q 140 330 220 370 T 380 300 T 520 280 T 660 340 T 730 260 L 730 420 L 65 420 Z" fill="url(#emerald-grad)" opacity="0.08"/>
+
+  <!-- Pulse nodes -->
+  <circle cx="380" cy="300" r="5" fill="#10b981"/>
+  <circle cx="380" cy="300" r="10" fill="#10b981" opacity="0.2"/>
+  <circle cx="520" cy="280" r="5" fill="#34d399"/>
+  <circle cx="520" cy="280" r="10" fill="#34d399" opacity="0.2"/>
+  <circle cx="730" cy="260" r="5" fill="#10b981"/>
+
+  <!-- Footer status line -->
+  <line x1="65" y1="425" x2="735" y2="425" stroke="rgba(255,255,255,0.06)"/>
+  <text x="65" y="445" fill="#64748b" font-family="system-ui, sans-serif" font-size="10">ANGULAR MICRO-FRONTENDS</text>
+  <text x="280" y="445" fill="#64748b" font-family="system-ui, sans-serif" font-size="10">SPRING BOOT MICROSERVICES</text>
+  <text x="540" y="445" fill="#64748b" font-family="system-ui, sans-serif" font-size="10">ORACLE 19C CLUSTER + KAFKA</text>
+</svg>

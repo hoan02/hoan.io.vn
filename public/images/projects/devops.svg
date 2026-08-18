@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-grad-do" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+    <linearGradient id="amber-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="do-card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(39, 39, 42, 0.7)"/>
+      <stop offset="100%" stop-color="rgba(24, 24, 27, 0.85)"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" rx="16" fill="url(#bg-grad-do)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+
+  <!-- Top bar -->
+  <rect x="40" y="35" width="720" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)"/>
+  <circle cx="65" cy="55" r="4.5" fill="#ef4444" opacity="0.8"/>
+  <circle cx="82" cy="55" r="4.5" fill="#f59e0b" opacity="0.8"/>
+  <circle cx="99" cy="55" r="4.5" fill="#10b981" opacity="0.8"/>
+  <text x="130" y="59" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">argocd.hoan.io.vn/clusters/production-apac</text>
+
+  <!-- Metric 1 -->
+  <rect x="40" y="95" width="225" height="105" rx="10" fill="url(#do-card)" stroke="rgba(255,255,255,0.07)"/>
+  <text x="60" y="125" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">DEPLOYMENT DURATION</text>
+  <text x="60" y="158" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="26" font-weight="700">3 min</text>
+  <text x="60" y="182" fill="#10b981" font-family="system-ui, sans-serif" font-size="11">▼ Reduced from 4h legacy</text>
+
+  <!-- Metric 2 -->
+  <rect x="285" y="95" width="225" height="105" rx="10" fill="url(#do-card)" stroke="rgba(255,255,255,0.07)"/>
+  <text x="305" y="125" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">CLUSTER REPLICAS</text>
+  <text x="305" y="158" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="26" font-weight="700">30+ Nodes</text>
+  <text x="305" y="182" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="11">Kubernetes / Helm / HPA</text>
+
+  <!-- Metric 3 -->
+  <rect x="530" y="95" width="230" height="105" rx="10" fill="url(#do-card)" stroke="rgba(255,255,255,0.07)"/>
+  <text x="550" y="125" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">SECURITY COMPLIANCE</text>
+  <text x="550" y="158" fill="#10b981" font-family="system-ui, sans-serif" font-size="24" font-weight="700">100% Passed</text>
+  <text x="550" y="182" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">Trivy SAST & DAST Automated</text>
+
+  <!-- Pipeline Stage Visual -->
+  <rect x="40" y="220" width="720" height="240" rx="12" fill="url(#do-card)" stroke="rgba(255,255,255,0.07)"/>
+  <text x="65" y="255" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="13" font-weight="600">Automated GitOps Sync & Canary Rollout</text>
+
+  <!-- Pipeline Stages -->
+  <g transform="translate(60, 280)">
+    <!-- Stage 1 -->
+    <rect x="10" y="20" width="120" height="70" rx="8" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b"/>
+    <text x="25" y="48" fill="#fbbf24" font-family="system-ui, sans-serif" font-size="12" font-weight="600">Git Commit</text>
+    <text x="25" y="70" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10">Branch main</text>
+
+    <!-- Arrow -->
+    <line x1="130" y1="55" x2="170" y2="55" stroke="#f59e0b" stroke-width="2"/>
+
+    <!-- Stage 2 -->
+    <rect x="170" y="20" width="140" height="70" rx="8" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981"/>
+    <text x="185" y="48" fill="#34d399" font-family="system-ui, sans-serif" font-size="12" font-weight="600">Docker & Tests</text>
+    <text x="185" y="70" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10">Multi-stage build</text>
+
+    <!-- Arrow -->
+    <line x1="310" y1="55" x2="350" y2="55" stroke="#10b981" stroke-width="2"/>
+
+    <!-- Stage 3 -->
+    <rect x="350" y="20" width="140" height="70" rx="8" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8"/>
+    <text x="365" y="48" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="12" font-weight="600">ArgoCD Sync</text>
+    <text x="365" y="70" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10">Helm manifest diff</text>
+
+    <!-- Arrow -->
+    <line x1="490" y1="55" x2="530" y2="55" stroke="#38bdf8" stroke-width="2"/>
+
+    <!-- Stage 4 -->
+    <rect x="530" y="20" width="130" height="70" rx="8" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="1.5"/>
+    <text x="545" y="48" fill="#10b981" font-family="system-ui, sans-serif" font-size="12" font-weight="700">K8s Rollout</text>
+    <text x="545" y="70" fill="#34d399" font-family="system-ui, sans-serif" font-size="10">Zero-Downtime</text>
+  </g>
+</svg>
