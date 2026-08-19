@@ -8,7 +8,14 @@ import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { GithubIcon, LinkedinIcon, FacebookIcon } from "@/components/common/Icons";
 import { TechBadge } from "@/components/common/TechIcon";
-import { ArrowDown, Mail, MapPin, FileText, Check, Sparkles } from "lucide-react";
+import {
+  ArrowDown,
+  Mail,
+  MapPin,
+  FileText,
+  Check,
+  Sparkles
+} from "lucide-react";
 
 interface HeroProps {
   onOpenAI: () => void;
@@ -41,13 +48,13 @@ export function Hero({ onOpenAI }: HeroProps) {
   };
 
   return (
-    <section className="relative min-h-[92vh] flex flex-col justify-center pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+    <section className="relative min-h-[88vh] flex flex-col justify-center pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
       {/* Background ambient light */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/[0.07] dark:bg-emerald-500/[0.06] rounded-full blur-[140px] pointer-events-none -z-10" />
 
       {/* Availability Status Badge */}
       <MotionWrapper delay={0.1}>
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-xs font-mono text-zinc-700 dark:text-zinc-300 mb-6 backdrop-blur-sm shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-xs font-mono text-zinc-700 dark:text-zinc-300 mb-6 backdrop-blur-sm shadow-sm w-fit">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -60,22 +67,23 @@ export function Hero({ onOpenAI }: HeroProps) {
         </div>
       </MotionWrapper>
 
-      {/* Main Name & Title */}
+      {/* Main Name */}
       <MotionWrapper delay={0.2}>
         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-zinc-950 dark:text-white mb-4 leading-[1.05]">
           {language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}
         </h1>
       </MotionWrapper>
 
+      {/* Title */}
       <MotionWrapper delay={0.3}>
-        <div className="flex flex-wrap items-center gap-3 text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-600 dark:text-zinc-400 mb-4">
+        <div className="flex flex-wrap items-center gap-3 text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-600 dark:text-zinc-400 mb-6">
           <span className="text-zinc-900 dark:text-zinc-100">{t.hero.title}</span>
         </div>
       </MotionWrapper>
 
       {/* Core Tech Stack Badges with Authentic Logos */}
       <MotionWrapper delay={0.35}>
-        <div className="flex flex-wrap items-center gap-2 mb-6">
+        <div className="flex flex-wrap items-center gap-2 mb-8">
           <TechBadge name="Angular" size="sm" />
           <TechBadge name="Next.js" size="sm" />
           <TechBadge name="Java" size="sm" />
@@ -95,12 +103,12 @@ export function Hero({ onOpenAI }: HeroProps) {
       </MotionWrapper>
 
       {/* CTAs and Direct Links */}
-      <MotionWrapper delay={0.5}>
-        <div className="flex flex-wrap items-center gap-4 mb-12">
+      <MotionWrapper delay={0.45}>
+        <div className="flex flex-wrap items-center gap-3.5 mb-12">
           {/* Primary CTA: View my work */}
           <Link
             href="#selected-work"
-            className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-sm transition-all duration-200 shadow-[0_0_25px_rgba(16,185,129,0.25)] hover:shadow-[0_0_35px_rgba(16,185,129,0.4)] active:scale-95"
+            className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-sm transition-all duration-200 shadow-[0_0_25px_rgba(16,185,129,0.25)] hover:shadow-[0_0_35px_rgba(16,185,129,0.4)] active:scale-95"
           >
             <span>{t.hero.viewWork}</span>
             <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
@@ -127,7 +135,7 @@ export function Hero({ onOpenAI }: HeroProps) {
       </MotionWrapper>
 
       {/* Social & Contact Strip */}
-      <MotionWrapper delay={0.6}>
+      <MotionWrapper delay={0.5}>
         <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-zinc-200 dark:border-zinc-900 text-xs font-mono text-zinc-500 dark:text-zinc-500">
           <span className="uppercase tracking-widest text-zinc-400 dark:text-zinc-600">{t.hero.connect}</span>
           

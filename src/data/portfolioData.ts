@@ -17,10 +17,8 @@ export const PERSONAL_INFO = {
   locationVi: "Hà Nội, Việt Nam • Sẵn sàng làm việc Remote / Hybrid",
   status: "Building enterprise workflows, products, and self-hosted systems",
   statusVi: "Xây dựng workflow enterprise, sản phẩm và hệ thống tự vận hành",
-  roleTagline: "Enterprise workflow platforms, product engineering, distributed systems, and private infrastructure.",
-  roleTaglineVi: "Nền tảng workflow enterprise, product engineering, hệ thống phân tán và hạ tầng private.",
-  bio: "Full-stack Engineer building systems where business workflows, data, and operations meet. My work spans EPAS process automation for multiple credit institutions, product platforms such as ARDA and Puchi, and lower-level systems including self-hosted infrastructure, camera relays, and local Bluetooth tooling.",
-  bioVi: "Full-stack Engineer xây dựng những hệ thống nơi quy trình nghiệp vụ, dữ liệu và vận hành phải hoạt động cùng nhau. Công việc của tôi trải rộng từ EPAS — nền tảng tự động hóa quy trình cho nhiều tổ chức tín dụng — đến ARDA, Puchi và các hệ thống cấp thấp như hạ tầng tự vận hành, camera relay và công cụ Bluetooth local.",
+  bio: "Full-stack Engineer dedicated to crafting modern web applications, high-performance microservices, and reliable distributed systems. Focused on solving practical challenges through clean architecture, maintainable code, and seamless user experiences.",
+  bioVi: "Kỹ sư Full-stack đam mê kiến tạo các hệ thống web hiện đại, vi dịch vụ hiệu năng cao và hạ tầng phân tán ổn định. Tập trung giải quyết các bài toán thực tế bằng kiến trúc rõ ràng, mã nguồn tối ưu và trải nghiệm người dùng mượt mà.",
   education: {
     school: "University of Transport and Communications",
     schoolVi: "Trường Đại học Giao thông Vận tải",
@@ -121,7 +119,7 @@ export const PROJECTS_DATA: Project[] = [
     liveUrl: "#contact",
     githubUrl: "https://github.com/hoan02",
     featured: true,
-    image: "/images/projects/banking.svg",
+    image: "/images/projects/epas-preview.jpg",
     accentColor: "#10b981",
   },
   {
@@ -220,7 +218,7 @@ Internet / Cloudflare Tunnel
     liveUrl: "#contact",
     githubUrl: "https://github.com/hoan02",
     featured: true,
-    image: "/images/projects/devops.svg",
+    image: "/images/projects/homelab-preview.jpg",
     accentColor: "#f59e0b",
   },
   {
@@ -424,7 +422,7 @@ Internet / Cloudflare Tunnel
     liveUrl: "https://arda.io.vn",
     githubUrl: "https://github.com/arda-labs",
     featured: true,
-    image: "/images/projects/gateway.svg",
+    image: "/images/projects/arda-preview.jpg",
     accentColor: "#6366f1",
   },
   {
@@ -499,7 +497,7 @@ Internet / Cloudflare Tunnel
     liveUrl: "https://puchi.io.vn",
     githubUrl: "https://github.com/puchidemy",
     featured: true,
-    image: "/images/projects/saas.svg",
+    image: "/images/projects/puchi-preview.jpg",
     accentColor: "#10b981",
   },
   {
