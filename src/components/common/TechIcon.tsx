@@ -235,7 +235,7 @@ export function TechBadge({ name, size = "sm" }: { name: string; size?: "xs" | "
 
   return (
     <span
-      className={`inline-flex items-center rounded-lg bg-zinc-900/90 hover:bg-zinc-800/90 text-zinc-200 border border-zinc-800/90 hover:border-zinc-700 font-mono transition-colors shadow-sm ${sizeClasses[size]}`}
+      className={`inline-flex items-center rounded-lg bg-white dark:bg-zinc-900/90 hover:bg-zinc-100 dark:hover:bg-zinc-800/90 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800/90 hover:border-zinc-300 dark:hover:border-zinc-700 font-mono transition-colors shadow-sm ${sizeClasses[size]}`}
     >
       <TechIcon name={name} className={`${iconSizes[size]} flex-shrink-0 rounded-[2px]`} />
       <span className="truncate">{name}</span>

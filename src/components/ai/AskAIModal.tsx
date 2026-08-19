@@ -517,7 +517,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/85 backdrop-blur-md"
+          className="fixed inset-0 bg-black/60 dark:bg-black/85 backdrop-blur-md"
         />
 
         {/* Modal Window */}
@@ -526,23 +526,23 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="relative w-full max-w-3xl lg:max-w-4xl h-[85vh] max-h-[780px] flex flex-col rounded-3xl bg-zinc-950 border border-zinc-800/90 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] z-10 overflow-hidden"
+          className="relative w-full max-w-3xl lg:max-w-4xl h-[85vh] max-h-[780px] flex flex-col rounded-3xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/90 shadow-2xl dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] z-10 overflow-hidden"
         >
           {/* Header Bar */}
-          <div className="flex items-center justify-between px-5 py-3.5 border-b border-zinc-800/80 bg-zinc-900/70 shrink-0">
+          <div className="flex items-center justify-between px-5 py-3.5 border-b border-zinc-200 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-900/70 shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.3)]">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.2)]">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                   <span>Hoan AI Assistant</span>
-                  <span className="flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                    <Zap className="w-2.5 h-2.5 fill-emerald-400 text-emerald-400" />
+                  <span className="flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    <Zap className="w-2.5 h-2.5 fill-emerald-500 text-emerald-500 dark:fill-emerald-400 dark:text-emerald-400" />
                     Neon DB • Tool Calling
                   </span>
                 </h3>
-                <p className="text-[11px] text-zinc-400 font-mono">
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">
                   {language === "vi"
                     ? "Truy xuất dữ liệu có cấu trúc & suy luận theo bằng chứng kỹ thuật"
                     : "Evidence-Grounded Technical & Architectural Companion"}
@@ -555,7 +555,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                 <button
                   type="button"
                   onClick={handleClearChat}
-                  className="p-2 rounded-xl text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/80 transition-colors flex items-center gap-1 text-xs font-mono border border-transparent hover:border-zinc-700"
+                  className="p-2 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200/70 dark:hover:bg-zinc-800/80 transition-colors flex items-center gap-1 text-xs font-mono border border-transparent hover:border-zinc-300 dark:hover:border-zinc-700"
                   title="Reset conversation"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -565,7 +565,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="p-2 rounded-xl text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/80 transition-colors border border-transparent hover:border-zinc-700"
+                className="p-2 rounded-xl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200/70 dark:hover:bg-zinc-800/80 transition-colors border border-transparent hover:border-zinc-300 dark:hover:border-zinc-700"
                 title="Close (Esc)"
               >
                 <X className="w-4 h-4" />
@@ -578,12 +578,12 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
             {/* Initial Welcome & Category Suggestion Cards */}
             {messages.length === 0 && (
               <div className="space-y-6">
-                <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/20 via-zinc-900/60 to-zinc-950 border border-zinc-800/80">
-                  <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-semibold uppercase tracking-wider mb-2">
+                <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-50 via-zinc-50 to-white dark:from-emerald-950/20 dark:via-zinc-900/60 dark:to-zinc-950 border border-zinc-200 dark:border-zinc-800/80 shadow-sm">
+                  <div className="flex items-center gap-2 text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold uppercase tracking-wider mb-2">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>Evidence-Grounded AI Companion</span>
                   </div>
-                  <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-200 leading-relaxed">
                     {language === "vi"
                       ? "👋 Chào bạn! Tôi là trợ lý AI nhúng trực tiếp trong portfolio của Lê Công Hoan. Chatbot hoạt động dựa trên cơ chế Custom Tools truy xuất trực tiếp dữ liệu từ Neon PostgreSQL về dự án, kiến trúc vi dịch vụ, Kubernetes và năng lực thực chiến."
                       : "👋 Hello! I am the AI assistant embedded in Le Cong Hoan's portfolio. Powered by custom tool calling to query structured data from Neon PostgreSQL for verified system architectures, microservices, and engineering evidence."}
@@ -604,7 +604,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                         className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
                           isActive
                             ? "bg-emerald-500 text-zinc-950 font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)]"
-                            : "bg-zinc-900/80 text-zinc-400 hover:text-white border border-zinc-800/80 hover:bg-zinc-800/60"
+                            : "bg-zinc-100 dark:bg-zinc-900/80 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-zinc-200 dark:border-zinc-800/80 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 shadow-sm"
                         }`}
                       >
                         <Icon className="w-3.5 h-3.5" />
@@ -624,18 +624,18 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                       key={promptIdx}
                       type="button"
                       onClick={() => handlePromptClick(prompt.text)}
-                      className="group p-4 rounded-2xl bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/80 hover:border-emerald-500/40 transition-all text-left flex items-center justify-between gap-3 shadow-sm"
+                      className="group p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900/60 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 hover:border-emerald-500/40 transition-all text-left flex items-center justify-between gap-3 shadow-sm"
                     >
                       <div className="space-y-1.5 min-w-0">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                           <TechIcon name={prompt.badge} className="w-3 h-3 rounded-[2px] flex-shrink-0" />
                           <span>{prompt.badge}</span>
                         </span>
-                        <p className="text-xs sm:text-sm text-zinc-200 group-hover:text-emerald-300 transition-colors">
+                        <p className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
                           {prompt.text}
                         </p>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all shrink-0" />
+                      <ArrowRight className="w-4 h-4 text-zinc-400 dark:text-zinc-500 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 group-hover:translate-x-1 transition-all shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -653,16 +653,16 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                   className={`flex gap-3.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {isAssistant && (
-                    <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/30">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/30">
                       <Bot className="w-4 h-4" />
                     </div>
                   )}
 
                   <div
-                    className={`max-w-[90%] sm:max-w-[85%] rounded-2xl p-4 sm:p-5 text-xs sm:text-sm leading-relaxed space-y-3 shadow-lg ${
+                    className={`max-w-[90%] sm:max-w-[85%] rounded-2xl p-4 sm:p-5 text-xs sm:text-sm leading-relaxed space-y-3 shadow-md ${
                       msg.role === "user"
                         ? "bg-emerald-500 text-zinc-950 font-medium rounded-tr-sm"
-                        : "bg-zinc-900/90 text-zinc-200 border border-zinc-800/90 rounded-tl-sm"
+                        : "bg-zinc-100 dark:bg-zinc-900/90 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800/90 rounded-tl-sm"
                     }`}
                   >
                     {/* Message Body with Rich Markdown */}
@@ -673,8 +673,8 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                           isStreaming={isLatestAssistant && msg.isStreaming}
                         />
                       ) : (
-                        <div className="flex items-center gap-2 text-zinc-400 font-mono text-xs">
-                          <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-400" />
+                        <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400 font-mono text-xs">
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-500 dark:text-emerald-400" />
                           <span>Đang truy xuất dữ liệu & suy luận...</span>
                         </div>
                       )
@@ -686,7 +686,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
 
                     {/* Direct Navigation Links */}
                     {isAssistant && msg.relevantLinks && msg.relevantLinks.length > 0 && (
-                      <div className="pt-3 border-t border-zinc-800/80 flex flex-wrap gap-2">
+                      <div className="pt-3 border-t border-zinc-200 dark:border-zinc-800/80 flex flex-wrap gap-2">
                         {msg.relevantLinks.map((link, linkIdx) => (
                           <a
                             key={linkIdx}
@@ -694,7 +694,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                             target={link.url.startsWith("http") ? "_blank" : undefined}
                             rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined}
                             onClick={() => !link.url.startsWith("http") && onClose()}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-all hover:scale-105"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 transition-all hover:scale-105"
                           >
                             <span>{link.label}</span>
                             <ExternalLink className="w-3 h-3" />
@@ -705,18 +705,18 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
 
                     {/* Footer bar for assistant messages */}
                     {isAssistant && msg.content && (
-                      <div className="flex items-center justify-between pt-2 border-t border-zinc-800/60 text-[10px] font-mono text-zinc-500">
+                      <div className="flex items-center justify-between pt-2 border-t border-zinc-200 dark:border-zinc-800/60 text-[10px] font-mono text-zinc-500">
                         <span>Tool Calling Active</span>
                         <button
                           type="button"
                           onClick={() => handleCopyMessage(msg.id, msg.content)}
-                          className="inline-flex items-center gap-1 text-zinc-400 hover:text-emerald-400 transition-colors p-1 rounded hover:bg-zinc-800"
+                          className="inline-flex items-center gap-1 text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors p-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-800"
                           title="Copy message"
                         >
                           {copiedMessageId === msg.id ? (
                             <>
-                              <Check className="w-3 h-3 text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
+                              <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                              <span className="text-emerald-600 dark:text-emerald-400">Copied</span>
                             </>
                           ) : (
                             <>
@@ -730,7 +730,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                   </div>
 
                   {msg.role === "user" && (
-                    <div className="w-8 h-8 rounded-xl bg-zinc-800 text-zinc-300 flex items-center justify-center shrink-0 mt-0.5 border border-zinc-700">
+                    <div className="w-8 h-8 rounded-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center shrink-0 mt-0.5 border border-zinc-300 dark:border-zinc-700">
                       <User className="w-4 h-4" />
                     </div>
                   )}
@@ -742,7 +742,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
             {messages.length > 0 && !loading && activeFollowUps.length > 0 && (
               <div className="pt-2 pl-11 space-y-2">
                 <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-zinc-500">
-                  <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-400" />
+                  <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                   <span>{language === "vi" ? "Gợi ý đào sâu tiếp theo:" : "Suggested deep dive:"}</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -751,10 +751,10 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                       key={idx}
                       type="button"
                       onClick={() => handlePromptClick(itemText)}
-                      className="text-xs px-3.5 py-2 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-emerald-300 border border-zinc-800 hover:border-emerald-500/40 transition-all flex items-center gap-2 text-left group/chip shadow-sm"
+                      className="text-xs px-3.5 py-2 rounded-xl bg-white dark:bg-zinc-900/90 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-300 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/40 transition-all flex items-center gap-2 text-left group/chip shadow-sm"
                     >
                       <span>{itemText}</span>
-                      <ArrowRight className="w-3 h-3 text-zinc-500 group-hover/chip:text-emerald-400 group-hover/chip:translate-x-0.5 transition-transform shrink-0" />
+                      <ArrowRight className="w-3 h-3 text-zinc-400 dark:text-zinc-500 group-hover/chip:text-emerald-500 dark:group-hover/chip:text-emerald-400 group-hover/chip:translate-x-0.5 transition-transform shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -765,25 +765,25 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
           </div>
 
           {/* Bottom Chat Input Form */}
-          <div className="p-4 border-t border-zinc-800/80 bg-zinc-900/80 shrink-0">
+          <div className="p-4 border-t border-zinc-200 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-900/80 shrink-0">
             <form
               onSubmit={handleSubmit}
-              className="relative flex items-center rounded-2xl bg-zinc-950 border border-zinc-800 focus-within:border-emerald-500/60 focus-within:ring-1 focus-within:ring-emerald-500/30 px-4 py-3 transition-all shadow-inner"
+              className="relative flex items-center rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 focus-within:border-emerald-500/60 focus-within:ring-1 focus-within:ring-emerald-500/30 px-4 py-3 transition-all shadow-inner"
             >
-              <Sparkles className="w-4 h-4 text-emerald-400 mr-3 shrink-0" />
+              <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mr-3 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t.ai.placeholder}
-                className="w-full bg-transparent text-xs sm:text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none font-mono"
+                className="w-full bg-transparent text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none font-mono"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery("")}
-                  className="p-1 text-zinc-500 hover:text-zinc-300 mr-2"
+                  className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 mr-2"
                 >
                   <X className="w-4 h-4" />
                 </button>

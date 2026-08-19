@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { LanguageProvider, useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ARTICLES_DATA } from "@/data/portfolioData";
@@ -68,10 +68,10 @@ function WritingContent() {
     : filteredArticles;
 
   return (
-    <main className="relative min-h-screen bg-[#090a0f] text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black">
+    <main className="relative min-h-screen bg-slate-50 dark:bg-[#090a0f] text-slate-900 dark:text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black transition-colors duration-200">
       {/* Ambient lighting */}
-      <div className="fixed top-0 left-1/3 w-[500px] h-[500px] bg-emerald-500/[0.04] rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/3 right-1/4 w-[450px] h-[450px] bg-teal-500/[0.03] rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="fixed top-0 left-1/3 w-[500px] h-[500px] bg-emerald-500/[0.04] dark:bg-emerald-500/[0.04] rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="fixed bottom-1/3 right-1/4 w-[450px] h-[450px] bg-teal-500/[0.03] dark:bg-teal-500/[0.03] rounded-full blur-[140px] pointer-events-none -z-10" />
       
       <CustomCursor />
       <Navbar onOpenAI={handleOpenAI} />
@@ -81,7 +81,7 @@ function WritingContent() {
         <MotionWrapper delay={0.05}>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-emerald-400 mb-8 transition-colors group"
+            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 mb-8 transition-colors group"
           >
             <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
             <span>{t.writing.backToHome}</span>
@@ -90,15 +90,15 @@ function WritingContent() {
 
         {/* Heading */}
         <MotionWrapper delay={0.1}>
-          <div className="mb-12 border-b border-zinc-800/80 pb-8">
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono tracking-widest uppercase mb-3">
+          <div className="mb-12 border-b border-zinc-200 dark:border-zinc-800/80 pb-8">
+            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-mono tracking-widest uppercase mb-3">
               <BookOpen className="w-4 h-4" />
               <span>{t.writing.badge}</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-zinc-950 dark:text-white tracking-tight mb-4">
               {t.writing.title}
             </h1>
-            <p className="text-base sm:text-lg text-zinc-400 max-w-3xl font-normal leading-relaxed">
+            <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-3xl font-normal leading-relaxed">
               {t.writing.subtitle}
             </p>
           </div>
@@ -115,12 +115,12 @@ function WritingContent() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.writing.searchPlaceholder}
-                className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-zinc-950/80 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/40 transition-all font-mono"
+                className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/40 transition-all font-mono shadow-sm"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-500 hover:text-zinc-300 px-2 py-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 px-2 py-1"
                 >
                   Clear
                 </button>
@@ -137,7 +137,7 @@ function WritingContent() {
                   className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
                     selectedTag === tag
                       ? "bg-emerald-500 text-zinc-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]"
-                      : "bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800"
+                      : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-sm"
                   }`}
                 >
                   {tag === "All" ? t.writing.allTags : tag}
@@ -154,8 +154,8 @@ function WritingContent() {
               {(() => {
                 const editorial = getArticleEditorial(heroArticle);
                 return (
-              <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono uppercase tracking-wider mb-3">
-                <Flame className="w-4 h-4 text-emerald-400 animate-pulse" />
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-mono uppercase tracking-wider mb-3">
+                <Flame className="w-4 h-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
                 <span>{language === "vi" ? `${editorial.seriesVi} · ${editorial.formatVi}` : `${editorial.series} · ${editorial.format}`}</span>
               </div>
                 );
@@ -163,28 +163,28 @@ function WritingContent() {
 
               <Link
                 href={`/writing/${heroArticle.slug}`}
-                className="group block rounded-3xl bg-gradient-to-b from-zinc-900/90 to-zinc-950 border border-emerald-500/30 hover:border-emerald-500/60 p-8 sm:p-10 lg:p-12 transition-all duration-300 hover:shadow-[0_20px_50px_-20px_rgba(16,185,129,0.25)] relative overflow-hidden"
+                className="group block rounded-3xl bg-gradient-to-b from-white via-zinc-50 to-zinc-100 dark:from-zinc-900/90 dark:to-zinc-950 border border-zinc-200 dark:border-emerald-500/30 hover:border-emerald-500/60 p-8 sm:p-10 lg:p-12 transition-all duration-300 shadow-md hover:shadow-[0_20px_50px_-20px_rgba(16,185,129,0.25)] relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
                 <div className="relative z-10 space-y-4 max-w-3xl">
-                  <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-zinc-400">
-                    <span className="flex items-center gap-1.5 text-emerald-400">
+                  <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                    <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
                       <Calendar className="w-3.5 h-3.5" />
                       {heroArticle.date}
                     </span>
                     <span>•</span>
-                    <span className="flex items-center gap-1.5 text-zinc-400">
+                    <span className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
                       <Clock className="w-3.5 h-3.5" />
                       {heroArticle.readTime}
                     </span>
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white group-hover:text-emerald-300 transition-colors tracking-tight leading-tight">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-zinc-950 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors tracking-tight leading-tight">
                     {language === "vi" && heroArticle.titleVi ? heroArticle.titleVi : heroArticle.title}
                   </h2>
 
-                  <p className="text-base text-zinc-300 leading-relaxed font-normal">
+                  <p className="text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
                     {language === "vi" && heroArticle.summaryVi ? heroArticle.summaryVi : heroArticle.summary}
                   </p>
 
@@ -192,14 +192,14 @@ function WritingContent() {
                     {heroArticle.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2.5 py-1 text-xs font-mono rounded-md bg-zinc-900 text-zinc-300 border border-zinc-800"
+                        className="px-2.5 py-1 text-xs font-mono rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  <div className="pt-4 flex items-center gap-2 text-sm font-semibold text-emerald-400 group-hover:underline">
+                  <div className="pt-4 flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 group-hover:underline">
                     <span>{t.writing.readArticle}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -211,9 +211,9 @@ function WritingContent() {
 
         {/* Empty state */}
         {gridArticles.length === 0 && !heroArticle && (
-          <div className="text-center py-20 rounded-2xl bg-zinc-950/40 border border-dashed border-zinc-800 p-8">
-            <Layers className="w-10 h-10 text-zinc-600 mx-auto mb-4" />
-            <p className="text-base text-zinc-400 font-mono">
+          <div className="text-center py-20 rounded-2xl bg-white/60 dark:bg-zinc-950/40 border border-dashed border-zinc-200 dark:border-zinc-800 p-8 shadow-sm">
+            <Layers className="w-10 h-10 text-zinc-400 dark:text-zinc-600 mx-auto mb-4" />
+            <p className="text-base text-zinc-600 dark:text-zinc-400 font-mono">
               {language === "vi" ? "Không tìm thấy bài viết phù hợp." : "No matching articles found."}
             </p>
             <button
@@ -221,7 +221,7 @@ function WritingContent() {
                 setSearchQuery("");
                 setSelectedTag("All");
               }}
-              className="mt-4 px-4 py-2 text-xs font-mono bg-zinc-900 hover:bg-zinc-800 text-emerald-400 rounded-lg border border-zinc-800 transition-colors"
+              className="mt-4 px-4 py-2 text-xs font-mono bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-emerald-600 dark:text-emerald-400 rounded-lg border border-zinc-200 dark:border-zinc-800 transition-colors shadow-sm"
             >
               Reset filters
             </button>
@@ -231,7 +231,7 @@ function WritingContent() {
         {/* Articles List Header (when grid is present) */}
         {gridArticles.length > 0 && heroArticle && (
           <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-400">
+            <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
               {t.writing.allArticles} ({gridArticles.length})
             </h3>
           </div>
@@ -248,31 +248,31 @@ function WritingContent() {
               <MotionWrapper key={article.slug} delay={0.1 + idx * 0.05}>
                 <Link
                   href={`/writing/${article.slug}`}
-                  className="group h-full flex flex-col justify-between rounded-2xl bg-zinc-950/80 border border-zinc-800/90 hover:border-emerald-500/40 p-6 sm:p-8 transition-all duration-300 hover:shadow-[0_20px_40px_-20px_rgba(16,185,129,0.2)]"
+                  className="group h-full flex flex-col justify-between rounded-2xl bg-white/90 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/90 hover:border-emerald-500/50 dark:hover:border-emerald-500/40 p-6 sm:p-8 transition-all duration-300 shadow-sm hover:shadow-[0_20px_40px_-20px_rgba(16,185,129,0.2)]"
                 >
                   <div>
                     {/* Meta Bar */}
                     <div className="flex items-center gap-3 text-xs font-mono text-zinc-500 mb-4">
-                      <span className="flex items-center gap-1.5 text-zinc-400">
-                        <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
+                        <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         {article.date}
                       </span>
                       <span>•</span>
-                      <span className="text-emerald-400/80">{language === "vi" ? editorial.formatVi : editorial.format}</span>
+                      <span className="text-emerald-600 dark:text-emerald-400/80 font-semibold">{language === "vi" ? editorial.formatVi : editorial.format}</span>
                       <span>•</span>
-                      <span className="flex items-center gap-1.5 text-zinc-400">
-                        <Clock className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
+                        <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         {article.readTime}
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-xl sm:text-2xl font-bold text-white group-hover:text-emerald-300 transition-colors tracking-tight mb-3 leading-snug">
+                    <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors tracking-tight mb-3 leading-snug">
                       {articleTitle}
                     </h2>
 
                     {/* Summary */}
-                    <p className="text-sm text-zinc-400 leading-relaxed mb-6 font-normal">
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6 font-normal">
                       {articleSummary}
                     </p>
                     <p className="text-[11px] font-mono text-zinc-500 mb-5">
@@ -282,11 +282,11 @@ function WritingContent() {
 
                   <div>
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5 pt-4 border-t border-zinc-800/80 mb-4">
+                    <div className="flex flex-wrap gap-1.5 pt-4 border-t border-zinc-100 dark:border-zinc-800/80 mb-4">
                       {article.tags.map((tag, tagIdx) => (
                         <span
                           key={tagIdx}
-                          className="px-2 py-0.5 text-xs font-mono rounded bg-zinc-900 text-zinc-400 border border-zinc-800"
+                          className="px-2 py-0.5 text-xs font-mono rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800"
                         >
                           {tag}
                         </span>
@@ -294,7 +294,7 @@ function WritingContent() {
                     </div>
 
                     {/* Read Action */}
-                    <div className="flex items-center justify-between text-xs font-mono text-emerald-400 group-hover:underline">
+                    <div className="flex items-center justify-between text-xs font-mono text-emerald-600 dark:text-emerald-400 group-hover:underline">
                       <span>{t.writing.readArticle}</span>
                       <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                     </div>
@@ -315,9 +315,5 @@ function WritingContent() {
 }
 
 export default function WritingIndexPage() {
-  return (
-    <LanguageProvider>
-      <WritingContent />
-    </LanguageProvider>
-  );
+  return <WritingContent />;
 }

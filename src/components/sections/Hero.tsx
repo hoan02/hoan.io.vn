@@ -47,29 +47,29 @@ export function Hero({ onOpenAI }: HeroProps) {
 
       {/* Availability Status Badge */}
       <MotionWrapper delay={0.1}>
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/80 border border-zinc-800 text-xs font-mono text-zinc-300 mb-6 backdrop-blur-sm shadow-inner">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-xs font-mono text-zinc-700 dark:text-zinc-300 mb-6 backdrop-blur-sm shadow-sm">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
           <span>{language === "vi" ? PERSONAL_INFO.statusVi : PERSONAL_INFO.status}</span>
-          <span className="text-zinc-600">/</span>
-          <span className="text-zinc-400 flex items-center gap-1">
-            <MapPin className="w-3 h-3 text-emerald-400" /> {t.hero.location}
+          <span className="text-zinc-300 dark:text-zinc-600">/</span>
+          <span className="text-zinc-500 dark:text-zinc-400 flex items-center gap-1">
+            <MapPin className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> {t.hero.location}
           </span>
         </div>
       </MotionWrapper>
 
       {/* Main Name & Title */}
       <MotionWrapper delay={0.2}>
-        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-4 leading-[1.05]">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-zinc-950 dark:text-white mb-4 leading-[1.05]">
           {language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}
         </h1>
       </MotionWrapper>
 
       <MotionWrapper delay={0.3}>
-        <div className="flex flex-wrap items-center gap-3 text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-400 mb-4">
-          <span className="text-zinc-100">{t.hero.title}</span>
+        <div className="flex flex-wrap items-center gap-3 text-xl sm:text-2xl md:text-3xl font-semibold text-zinc-600 dark:text-zinc-400 mb-4">
+          <span className="text-zinc-900 dark:text-zinc-100">{t.hero.title}</span>
         </div>
       </MotionWrapper>
 
@@ -89,7 +89,7 @@ export function Hero({ onOpenAI }: HeroProps) {
 
       {/* Bio / Summary Paragraph */}
       <MotionWrapper delay={0.4}>
-        <p className="text-base sm:text-lg md:text-xl text-zinc-400 max-w-3xl leading-relaxed mb-10 font-normal">
+        <p className="text-base sm:text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-3xl leading-relaxed mb-10 font-normal">
           {language === "vi" ? PERSONAL_INFO.bioVi : PERSONAL_INFO.bio}
         </p>
       </MotionWrapper>
@@ -109,18 +109,18 @@ export function Hero({ onOpenAI }: HeroProps) {
           {/* Secondary CTA: Download CV */}
           <button
             onClick={handleDownloadCV}
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 font-medium text-sm border border-zinc-800 hover:border-zinc-700 transition-all active:scale-95 shadow-sm"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-zinc-100 text-zinc-800 dark:bg-zinc-900/90 dark:hover:bg-zinc-800 dark:text-zinc-200 font-medium text-sm border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all active:scale-95 shadow-sm"
           >
-            <FileText className="w-4 h-4 text-emerald-400" />
+            <FileText className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>{t.hero.downloadCv}</span>
           </button>
 
           {/* Quick AI query trigger chip */}
           <button
             onClick={onOpenAI}
-            className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-zinc-950/60 hover:bg-emerald-500/10 text-zinc-400 hover:text-emerald-300 font-mono text-xs border border-zinc-800/80 hover:border-emerald-500/30 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-white/70 hover:bg-emerald-50 text-zinc-600 hover:text-emerald-700 dark:bg-zinc-950/60 dark:hover:bg-emerald-500/10 dark:text-zinc-400 dark:hover:text-emerald-300 font-mono text-xs border border-zinc-200 dark:border-zinc-800/80 hover:border-emerald-500/30 transition-all shadow-sm"
           >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 animate-pulse" />
             <span>{t.hero.askAiStack}</span>
           </button>
         </div>
@@ -128,14 +128,14 @@ export function Hero({ onOpenAI }: HeroProps) {
 
       {/* Social & Contact Strip */}
       <MotionWrapper delay={0.6}>
-        <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-zinc-900 text-xs font-mono text-zinc-500">
-          <span className="uppercase tracking-widest text-zinc-600">{t.hero.connect}</span>
+        <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-zinc-200 dark:border-zinc-900 text-xs font-mono text-zinc-500 dark:text-zinc-500">
+          <span className="uppercase tracking-widest text-zinc-400 dark:text-zinc-600">{t.hero.connect}</span>
           
           <a
             href={PERSONAL_INFO.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors link-hover-effect"
+            className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white transition-colors link-hover-effect"
           >
             <GithubIcon className="w-4 h-4" />
             <span>github.com/hoan02</span>
@@ -145,7 +145,7 @@ export function Hero({ onOpenAI }: HeroProps) {
             href={PERSONAL_INFO.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors link-hover-effect"
+            className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white transition-colors link-hover-effect"
           >
             <LinkedinIcon className="w-4 h-4" />
             <span>linkedin.com/in/hoan02</span>
@@ -155,24 +155,24 @@ export function Hero({ onOpenAI }: HeroProps) {
             href={PERSONAL_INFO.facebook}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors link-hover-effect"
+            className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white transition-colors link-hover-effect"
           >
-            <FacebookIcon className="w-4 h-4 text-blue-400" />
+            <FacebookIcon className="w-4 h-4 text-blue-500" />
             <span>facebook.com/hoanit02</span>
           </a>
 
           <button
             onClick={handleCopyEmail}
-            className="flex items-center gap-1.5 text-zinc-400 hover:text-emerald-400 transition-colors link-hover-effect"
+            className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors link-hover-effect"
           >
             <Mail className="w-4 h-4" />
             <span>{PERSONAL_INFO.email}</span>
             {copied ? (
-              <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-1 rounded flex items-center gap-0.5">
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1 rounded flex items-center gap-0.5">
                 <Check className="w-2.5 h-2.5" /> {t.hero.copied}
               </span>
             ) : (
-              <span className="text-[10px] text-zinc-600">{t.hero.clickToCopy}</span>
+              <span className="text-[10px] text-zinc-400 dark:text-zinc-600">{t.hero.clickToCopy}</span>
             )}
           </button>
         </div>

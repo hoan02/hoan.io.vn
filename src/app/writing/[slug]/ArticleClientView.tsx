@@ -43,7 +43,7 @@ import {
   Terminal
 } from "lucide-react";
 
-import { LanguageProvider, useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ArticleClientViewProps {
   article: Article;
@@ -142,9 +142,9 @@ function ArticleReader({ article }: ArticleClientViewProps) {
   }, [tocItems]);
 
   return (
-    <main className="relative min-h-screen bg-[#090a0f] text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black">
+    <main className="relative min-h-screen bg-slate-50 dark:bg-[#090a0f] text-slate-900 dark:text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black transition-colors duration-200">
       {/* Top Reading Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-zinc-900">
+      <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-zinc-200 dark:bg-zinc-900">
         <div
           className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-150 ease-out"
           style={{ width: `${readingProgress}%` }}
@@ -152,8 +152,8 @@ function ArticleReader({ article }: ArticleClientViewProps) {
       </div>
 
       {/* Ambient glow */}
-      <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-emerald-500/[0.04] rounded-full blur-[160px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/3 right-1/4 w-[500px] h-[500px] bg-teal-500/[0.03] rounded-full blur-[160px] pointer-events-none -z-10" />
+      <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-emerald-500/[0.04] dark:bg-emerald-500/[0.04] rounded-full blur-[160px] pointer-events-none -z-10" />
+      <div className="fixed bottom-1/3 right-1/4 w-[500px] h-[500px] bg-teal-500/[0.03] dark:bg-teal-500/[0.03] rounded-full blur-[160px] pointer-events-none -z-10" />
 
       <CustomCursor />
       <Navbar onOpenAI={handleOpenAI} />
@@ -162,26 +162,26 @@ function ArticleReader({ article }: ArticleClientViewProps) {
         {/* Navigation Breadcrumb & Share */}
         <MotionWrapper delay={0.05}>
           <div className="flex items-center justify-between gap-4 mb-8">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
-              <Link href="/" className="hover:text-emerald-400 transition-colors">
+            <div className="flex items-center gap-2 text-xs font-mono text-zinc-500 dark:text-zinc-400">
+              <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                 Home
               </Link>
-              <span className="text-zinc-600">/</span>
-              <Link href="/writing" className="hover:text-emerald-400 transition-colors">
+              <span className="text-zinc-400 dark:text-zinc-600">/</span>
+              <Link href="/writing" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                 Writing
               </Link>
-              <span className="text-zinc-600">/</span>
-              <span className="text-zinc-500 truncate max-w-[180px] sm:max-w-xs">{article.slug}</span>
+              <span className="text-zinc-400 dark:text-zinc-600">/</span>
+              <span className="text-zinc-600 dark:text-zinc-500 truncate max-w-[180px] sm:max-w-xs">{article.slug}</span>
             </div>
 
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 transition-colors shadow-sm"
             >
               {copiedShare ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-400">{language === "vi" ? "Đã copy link" : "Link copied!"}</span>
+                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span className="text-emerald-600 dark:text-emerald-400">{language === "vi" ? "Đã copy link" : "Link copied!"}</span>
                 </>
               ) : (
                 <>
@@ -195,28 +195,28 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
         {/* Article Header */}
         <MotionWrapper delay={0.1}>
-          <div className="border-b border-zinc-800/80 pb-8 mb-10">
+          <div className="border-b border-zinc-200 dark:border-zinc-800/80 pb-8 mb-10">
             {/* Meta bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-zinc-500 mb-4">
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1.5 text-zinc-400">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
+                  <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   {article.date}
                 </span>
                 <span>•</span>
-                <span className="flex items-center gap-1.5 text-zinc-400">
-                  <Clock className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
+                  <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   {article.readTime}
                 </span>
                 {article.project && (
                   <>
                     <span>•</span>
-                    <span className="text-emerald-400 uppercase font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                    <span className="text-emerald-600 dark:text-emerald-400 uppercase font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                       {article.project === "arda" ? "ARDA Labs" : article.project === "puchi" ? "Puchidemy" : article.project.toUpperCase()}
                     </span>
                   </>
                 )}
-                <span className="text-emerald-400/80 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+                <span className="text-emerald-600 dark:text-emerald-400/80 bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800">
                   {language === "vi" ? editorial.formatVi : editorial.format}
                 </span>
               </div>
@@ -226,9 +226,9 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                   href={article.repositoryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-emerald-400 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                 >
-                  <GitBranch className="w-3.5 h-3.5 text-emerald-400" />
+                  <GitBranch className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Inspect Source Code</span>
                   <ExternalLink className="w-3 h-3 ml-0.5" />
                 </a>
@@ -236,12 +236,12 @@ function ArticleReader({ article }: ArticleClientViewProps) {
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6 leading-[1.15]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-zinc-950 dark:text-white tracking-tight mb-6 leading-[1.15]">
               {articleTitle}
             </h1>
 
             {/* Lead Paragraph Summary */}
-            <p className="text-lg sm:text-xl text-zinc-300 leading-relaxed font-normal mb-8 max-w-4xl">
+            <p className="text-lg sm:text-xl text-zinc-600 dark:text-zinc-300 leading-relaxed font-normal mb-8 max-w-4xl">
               {articleSummary}
             </p>
 
@@ -250,7 +250,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               {article.tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="px-2.5 py-1 text-xs font-mono rounded-md bg-zinc-900 text-zinc-300 border border-zinc-800"
+                  className="px-2.5 py-1 text-xs font-mono rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800"
                 >
                   #{tag}
                 </span>
@@ -264,12 +264,12 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
         {/* 30-Second Key Insights Callout Box */}
         <MotionWrapper delay={0.12}>
-          <div className="mb-12 p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-emerald-950/30 via-zinc-950/80 to-zinc-950 border border-emerald-500/30 shadow-[0_10px_30px_-15px_rgba(16,185,129,0.15)] relative overflow-hidden">
-            <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider mb-3">
+          <div className="mb-12 p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-emerald-50 via-white to-zinc-50 dark:from-emerald-950/30 dark:via-zinc-950/80 dark:to-zinc-950 border border-emerald-500/30 shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(16,185,129,0.15)] relative overflow-hidden">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-3">
               <Sparkles className="w-4 h-4" />
               <span>{t.writing.keyInsights}</span>
             </div>
-            <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
+            <p className="text-sm sm:text-base text-zinc-800 dark:text-zinc-200 leading-relaxed">
               {language === "vi"
                 ? `${editorial.formatVi}: ${article.summaryVi || article.summary}`
                 : `${editorial.format}: ${article.summary}`}
@@ -280,8 +280,8 @@ function ArticleReader({ article }: ArticleClientViewProps) {
         {/* Hero Image Illustration Banner (if configured) */}
         {article.heroImage && (
           <MotionWrapper delay={0.14}>
-            <div className="mb-12 rounded-2xl overflow-hidden border border-zinc-800 bg-[#09090B] p-2 sm:p-4 shadow-2xl relative group">
-              <div className="relative w-full h-64 sm:h-96 md:h-[420px] rounded-xl overflow-hidden bg-zinc-950 flex items-center justify-center">
+            <div className="mb-12 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#09090B] p-2 sm:p-4 shadow-xl relative group">
+              <div className="relative w-full h-64 sm:h-96 md:h-[420px] rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-950 flex items-center justify-center">
                 <Image
                   src={article.heroImage}
                   alt={articleTitle}
@@ -293,15 +293,15 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                 <button
                   type="button"
                   onClick={() => setImageModalOpen(true)}
-                  className="absolute bottom-3 right-3 p-2 rounded-lg bg-black/80 hover:bg-black text-zinc-300 hover:text-white border border-zinc-700 transition-colors flex items-center gap-1.5 text-xs font-mono backdrop-blur-sm"
+                  className="absolute bottom-3 right-3 p-2 rounded-lg bg-white/80 dark:bg-black/80 hover:bg-white dark:hover:bg-black text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center gap-1.5 text-xs font-mono backdrop-blur-sm shadow-md"
                   title="Expand architecture image"
                 >
-                  <Maximize2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <Maximize2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span className="hidden sm:inline">Zoom</span>
                 </button>
               </div>
               {(article.heroImageCaption || article.heroImageCaptionVi) && (
-                <p className="mt-3 text-center text-xs text-zinc-400 font-mono italic">
+                <p className="mt-3 text-center text-xs text-zinc-500 dark:text-zinc-400 font-mono italic">
                   {language === "vi" && article.heroImageCaptionVi ? article.heroImageCaptionVi : article.heroImageCaption}
                 </p>
               )}
@@ -312,27 +312,27 @@ function ArticleReader({ article }: ArticleClientViewProps) {
         {/* Main Grid: Article Content + Sticky Sidebar */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Article Main Body */}
-          <article className="lg:col-span-8 space-y-12 text-zinc-300 leading-relaxed font-normal">
+          <article className="lg:col-span-8 space-y-12 text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
             {/* Key Highlights Metric Grid (if available) */}
             {article.highlights && article.highlights.length > 0 && (
               <section id="highlights" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                  <Zap className="w-5 h-5 text-emerald-400" />
+                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                  <Zap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   <span>{language === "vi" ? "Chỉ số Kiến trúc Nổi bật" : "Architectural Highlights & Guarantees"}</span>
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                   {article.highlights.map((item, idx) => (
                     <div
                       key={idx}
-                      className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/40 transition-colors space-y-1"
+                      className="p-4 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/40 transition-colors space-y-1 shadow-sm"
                     >
-                      <div className="text-lg sm:text-2xl font-black font-mono text-emerald-400 tracking-tight">
+                      <div className="text-lg sm:text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400 tracking-tight">
                         {item.value}
                       </div>
-                      <div className="text-xs font-semibold text-zinc-200">
+                      <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
                         {language === "vi" && item.labelVi ? item.labelVi : item.label}
                       </div>
-                      <div className="text-[11px] text-zinc-400 leading-tight">
+                      <div className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-tight">
                         {language === "vi" && item.detailVi ? item.detailVi : item.detail}
                       </div>
                     </div>
@@ -343,11 +343,11 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
             {/* 1. Problem Context */}
             <section id="context" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                <AlertCircle className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                <AlertCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>{t.writing.problemContext}</span>
               </h2>
-              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 text-base leading-relaxed text-zinc-300">
+              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
                 {problemStatement}
               </div>
             </section>
@@ -355,14 +355,14 @@ function ArticleReader({ article }: ArticleClientViewProps) {
             {/* Side-by-Side Comparison Card (Naive vs Solution) */}
             {article.comparison && (
               <section id="comparison" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                  <Layers className="w-5 h-5 text-emerald-400" />
+                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                  <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   <span>{language === "vi" ? "Phân tích So sánh Kiến trúc" : "Architectural Trade-offs: Naive vs Engineered"}</span>
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Naive card */}
-                  <div className="p-5 rounded-2xl bg-rose-950/15 border border-rose-500/20 space-y-3">
-                    <div className="flex items-center gap-2 text-rose-400 text-sm font-bold font-mono">
+                  <div className="p-5 rounded-2xl bg-rose-50 dark:bg-rose-950/15 border border-rose-200 dark:border-rose-500/20 space-y-3 shadow-sm">
+                    <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-sm font-bold font-mono">
                       <XCircle className="w-4 h-4 shrink-0" />
                       <span>
                         {language === "vi" && article.comparison.naiveTitleVi
@@ -370,13 +370,13 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                           : article.comparison.naiveTitle}
                       </span>
                     </div>
-                    <ul className="space-y-2 text-xs sm:text-sm text-zinc-300">
+                    <ul className="space-y-2 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300">
                       {(language === "vi" && article.comparison.naivePointsVi
                         ? article.comparison.naivePointsVi
                         : article.comparison.naivePoints
                       ).map((pt, ptIdx) => (
                         <li key={ptIdx} className="flex items-start gap-2">
-                          <span className="text-rose-400 font-bold shrink-0 mt-0.5">•</span>
+                          <span className="text-rose-500 font-bold shrink-0 mt-0.5">•</span>
                           <span>{pt}</span>
                         </li>
                       ))}
@@ -384,8 +384,8 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                   </div>
 
                   {/* Solution card */}
-                  <div className="p-5 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-3">
-                    <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold font-mono">
+                  <div className="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-500/30 space-y-3 shadow-sm">
+                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-sm font-bold font-mono">
                       <CheckCircle2 className="w-4 h-4 shrink-0" />
                       <span>
                         {language === "vi" && article.comparison.solutionTitleVi
@@ -393,13 +393,13 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                           : article.comparison.solutionTitle}
                       </span>
                     </div>
-                    <ul className="space-y-2 text-xs sm:text-sm text-zinc-200">
+                    <ul className="space-y-2 text-xs sm:text-sm text-zinc-800 dark:text-zinc-200">
                       {(language === "vi" && article.comparison.solutionPointsVi
                         ? article.comparison.solutionPointsVi
                         : article.comparison.solutionPoints
                       ).map((pt, ptIdx) => (
                         <li key={ptIdx} className="flex items-start gap-2">
-                          <span className="text-emerald-400 font-bold shrink-0 mt-0.5">✓</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-bold shrink-0 mt-0.5">✓</span>
                           <span>{pt}</span>
                         </li>
                       ))}
@@ -421,11 +421,11 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               if (article.architectureDiagram) {
                 return (
                   <section id="architecture-diagram" className="space-y-4">
-                    <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                      <Layers className="w-5 h-5 text-emerald-400" />
+                    <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                      <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                       <span>System Architecture Topology</span>
                     </h2>
-                    <div className="p-4 sm:p-6 rounded-2xl bg-black/90 border border-zinc-800 font-mono text-[11px] sm:text-xs text-emerald-400 overflow-x-auto leading-relaxed shadow-2xl">
+                    <div className="p-4 sm:p-6 rounded-2xl bg-zinc-900 dark:bg-black border border-zinc-200 dark:border-zinc-800 font-mono text-[11px] sm:text-xs text-emerald-400 overflow-x-auto leading-relaxed shadow-xl">
                       <pre>{article.architectureDiagram}</pre>
                     </div>
                   </section>
@@ -436,37 +436,37 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
             {/* 3. Architectural Design */}
             <section id="design" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                <Layers className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>{t.writing.architecturalSolution}</span>
               </h2>
-              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 text-base leading-relaxed text-zinc-300">
+              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
                 {architectureDesign}
               </div>
             </section>
 
             {/* 4. Technical Decisions */}
             <section id="decisions" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>{t.writing.technicalDecisions}</span>
               </h2>
               <div className="space-y-3">
                 {technicalDecisions.map((decision, idx) => (
                   <div
                     key={idx}
-                    className="p-5 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 flex items-start gap-4 hover:border-zinc-700 transition-colors"
+                    className="p-5 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 flex items-start gap-4 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors shadow-sm"
                   >
-                    <span className="text-emerald-400 font-mono font-bold shrink-0 mt-0.5 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 text-xs">
+                    <span className="text-emerald-600 dark:text-emerald-400 font-mono font-bold shrink-0 mt-0.5 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 text-xs">
                       0{idx + 1}
                     </span>
-                    <span className="text-sm sm:text-base text-zinc-300 leading-relaxed">{decision}</span>
+                    <span className="text-sm sm:text-base text-zinc-800 dark:text-zinc-300 leading-relaxed">{decision}</span>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* 5. Custom Deep-Dive Sections (if any) */}
+            {/* 5. Custom Deep-Dive Sections */}
             {article.sections && article.sections.map((sec) => {
               const secTitle = language === "vi" && sec.titleVi ? sec.titleVi : sec.title;
               const secContent = language === "vi" && sec.contentVi ? sec.contentVi : sec.content;
@@ -474,27 +474,27 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
               return (
                 <section key={sec.id} id={sec.id} className="space-y-4">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                    <BookOpen className="w-5 h-5 text-emerald-400" />
+                  <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                    <BookOpen className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     <span>{secTitle}</span>
                   </h2>
-                  <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 text-base leading-relaxed text-zinc-300">
+                  <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
                     <p className="whitespace-pre-line">{secContent}</p>
                   </div>
                   {calloutText && (
                     <div className={`p-5 rounded-2xl flex items-start gap-3.5 text-sm leading-relaxed ${
                       sec.callout?.type === "warning"
-                        ? "bg-amber-950/30 border border-amber-500/30 text-amber-200"
+                        ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-500/30 text-amber-900 dark:text-amber-200"
                         : sec.callout?.type === "tip"
-                        ? "bg-emerald-950/30 border border-emerald-500/30 text-emerald-200"
-                        : "bg-blue-950/30 border border-blue-500/30 text-blue-200"
+                        ? "bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-200"
+                        : "bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 text-blue-900 dark:text-blue-200"
                     }`}>
                       {sec.callout?.type === "warning" ? (
-                        <AlertTriangle className="w-5 h-5 shrink-0 text-amber-400 mt-0.5" />
+                        <AlertTriangle className="w-5 h-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
                       ) : sec.callout?.type === "tip" ? (
-                        <Lightbulb className="w-5 h-5 shrink-0 text-emerald-400 mt-0.5" />
+                        <Lightbulb className="w-5 h-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
                       ) : (
-                        <Info className="w-5 h-5 shrink-0 text-blue-400 mt-0.5" />
+                        <Info className="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400 mt-0.5" />
                       )}
                       <span>{calloutText}</span>
                     </div>
@@ -503,20 +503,20 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               );
             })}
 
-            {/* 6. Code Implementation (Enhanced Tabbed Code Box) */}
+            {/* 6. Code Implementation */}
             {article.content.codeSnippet && (
               <section id="implementation" className="space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
-                    <Code2 className="w-5 h-5 text-emerald-400" />
+                <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                  <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5">
+                    <Code2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     <span>{t.writing.codeImplementation}</span>
                   </h2>
-                  <span className="text-xs font-mono text-emerald-400 uppercase bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 font-bold">
+                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 uppercase bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 font-bold">
                     {article.content.codeSnippet.language}
                   </span>
                 </div>
 
-                <div className="relative rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-950 shadow-2xl">
+                <div className="relative rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-950 shadow-xl">
                   {/* Header bar */}
                   <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/90 border-b border-zinc-800 text-xs font-mono text-zinc-400">
                     <div className="flex items-center gap-2">
@@ -549,38 +549,38 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               </section>
             )}
 
-            {/* 7. Verified Evidence in Public Repositories */}
+            {/* 7. Verified Evidence */}
             {verifiedEvidence.length > 0 && (
               <section id="evidence" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                  <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                  <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   <span>{language === "vi" ? "Bằng chứng Kỹ thuật Khách quan" : "Verified Repository Evidence"}</span>
                 </h2>
                 <div className="space-y-3">
                   {verifiedEvidence.map((ev) => (
                     <div
                       key={ev.id}
-                      className="p-5 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 space-y-2.5"
+                      className="p-5 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 space-y-2.5 shadow-sm"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
+                        <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
                           {ev.category.toUpperCase()} • {ev.confidence.toUpperCase()}
                         </span>
                         <a
                           href={ev.evidence[0]?.repository}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1"
+                          className="text-xs font-mono text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1"
                         >
                           <span>{ev.evidence[0]?.repository.replace("https://github.com/", "")}</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       </div>
-                      <p className="text-sm text-zinc-200 font-medium">
+                      <p className="text-sm text-zinc-800 dark:text-zinc-200 font-medium">
                         {language === "vi" ? ev.claimVi : ev.claim}
                       </p>
                       {ev.evidence[0]?.description && (
-                        <p className="text-xs text-zinc-400 font-mono">
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
                           ↳ {ev.evidence[0]?.description}
                         </p>
                       )}
@@ -590,11 +590,11 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               </section>
             )}
 
-            {/* 7.5 Media & Practical Documentation Embeds */}
+            {/* 7.5 Media Embeds */}
             {article.embeds && article.embeds.length > 0 && (
               <section id="media-embeds" className="space-y-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                  <Video className="w-5 h-5 text-emerald-400" />
+                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                  <Video className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   <span>{language === "vi" ? "Tư liệu & Video Hoạt động Thực tế" : "Media, Videos & Practical Records"}</span>
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
@@ -605,10 +605,10 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                     if (emb.type === "youtube") {
                       const ytId = emb.url?.replace(/.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/, "$1") || "ASVxal2cwXo";
                       return (
-                        <div key={idx} className="md:col-span-2 rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-950 p-4 space-y-3 shadow-2xl">
+                        <div key={idx} className="md:col-span-2 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl">
                           {title && (
-                            <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                              <Play className="w-4 h-4 text-emerald-400" />
+                            <h4 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                              <Play className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                               <span>{title}</span>
                             </h4>
                           )}
@@ -621,17 +621,17 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                               className="absolute inset-0 w-full h-full border-0"
                             />
                           </div>
-                          {caption && <p className="text-xs text-zinc-400 font-mono italic">{caption}</p>}
+                          {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic">{caption}</p>}
                         </div>
                       );
                     }
 
                     if (emb.type === "facebook-video") {
                       return (
-                        <div key={idx} className="flex flex-col items-center rounded-2xl border border-zinc-800 bg-zinc-950 p-4 space-y-3 shadow-2xl">
+                        <div key={idx} className="flex flex-col items-center rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl">
                           {title && (
-                            <h4 className="text-sm font-bold text-white self-start flex items-center gap-2">
-                              <Video className="w-4 h-4 text-emerald-400" />
+                            <h4 className="text-sm font-bold text-zinc-900 dark:text-white self-start flex items-center gap-2">
+                              <Video className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                               <span>{title}</span>
                             </h4>
                           )}
@@ -647,20 +647,20 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                             />
                           </div>
-                          {caption && <p className="text-xs text-zinc-400 font-mono italic text-center">{caption}</p>}
+                          {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic text-center">{caption}</p>}
                         </div>
                       );
                     }
 
                     return (
-                      <div key={idx} className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4 space-y-3 shadow-2xl overflow-hidden flex flex-col items-center">
+                      <div key={idx} className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl overflow-hidden flex flex-col items-center">
                         {title && (
-                          <h4 className="text-sm font-bold text-white self-start flex items-center gap-2">
-                            <ExternalLink className="w-4 h-4 text-emerald-400" />
+                          <h4 className="text-sm font-bold text-zinc-900 dark:text-white self-start flex items-center gap-2">
+                            <ExternalLink className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                             <span>{title}</span>
                           </h4>
                         )}
-                        <div className="w-full max-w-[500px] overflow-hidden rounded-xl bg-white/5 flex justify-center">
+                        <div className="w-full max-w-[500px] overflow-hidden rounded-xl bg-black/5 dark:bg-white/5 flex justify-center">
                           <iframe
                             src={emb.src}
                             width={emb.width || "500"}
@@ -672,7 +672,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                             allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                           />
                         </div>
-                        {caption && <p className="text-xs text-zinc-400 font-mono italic text-center">{caption}</p>}
+                        {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic text-center">{caption}</p>}
                       </div>
                     );
                   })}
@@ -682,14 +682,14 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
             {/* 8. Key Takeaways */}
             <section id="takeaways" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-800">
-                <Sparkles className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>{t.writing.keyTakeaways}</span>
               </h2>
-              <div className="p-6 sm:p-7 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 space-y-3.5">
+              <div className="p-6 sm:p-7 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-500/20 space-y-3.5 shadow-sm">
                 {keyTakeaways.map((takeaway, idx) => (
-                  <div key={idx} className="flex items-start gap-3 text-sm sm:text-base text-zinc-200">
-                    <Check className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                  <div key={idx} className="flex items-start gap-3 text-sm sm:text-base text-zinc-800 dark:text-zinc-200">
+                    <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                     <span>{takeaway}</span>
                   </div>
                 ))}
@@ -698,15 +698,15 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
             {/* Related Project Card */}
             {relatedProject && (
-              <div className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
                 <div>
-                  <span className="text-xs font-mono text-emerald-400 uppercase tracking-wider block mb-1">
+                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1 font-semibold">
                     Related System
                   </span>
-                  <h3 className="text-lg font-bold text-white">
+                  <h3 className="text-lg font-bold text-zinc-900 dark:text-white">
                     {language === "vi" && relatedProject.titleVi ? relatedProject.titleVi : relatedProject.title}
                   </h3>
-                  <p className="text-xs text-zinc-400 mt-1 line-clamp-1">
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 line-clamp-1">
                     {language === "vi" && relatedProject.subtitleVi ? relatedProject.subtitleVi : relatedProject.subtitle}
                   </p>
                 </div>
@@ -721,17 +721,17 @@ function ArticleReader({ article }: ArticleClientViewProps) {
             )}
 
             {/* Next / Previous Article Footer Links */}
-            <div className="pt-10 border-t border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="pt-10 border-t border-zinc-200 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {prevArticle ? (
                 <Link
                   href={`/writing/${prevArticle.slug}`}
-                  className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-zinc-700 transition-all group text-left"
+                  className="p-5 rounded-2xl bg-white dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group text-left shadow-sm"
                 >
                   <span className="text-xs font-mono text-zinc-500 flex items-center gap-1 mb-1">
                     <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
                     {t.writing.prevArticle}
                   </span>
-                  <p className="text-sm font-bold text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-1">
+                  <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
                     {language === "vi" && prevArticle.titleVi ? prevArticle.titleVi : prevArticle.title}
                   </p>
                 </Link>
@@ -740,13 +740,13 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               {nextArticle && (
                 <Link
                   href={`/writing/${nextArticle.slug}`}
-                  className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-zinc-700 transition-all group text-right ml-auto w-full"
+                  className="p-5 rounded-2xl bg-white dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group text-right ml-auto w-full shadow-sm"
                 >
                   <span className="text-xs font-mono text-zinc-500 inline-flex items-center gap-1 mb-1">
                     {t.writing.nextArticle}
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </span>
-                  <p className="text-sm font-bold text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-1">
+                  <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
                     {language === "vi" && nextArticle.titleVi ? nextArticle.titleVi : nextArticle.title}
                   </p>
                 </Link>
@@ -758,8 +758,8 @@ function ArticleReader({ article }: ArticleClientViewProps) {
           <aside className="lg:col-span-4 space-y-8">
             {/* Table of Contents */}
             <div className="sticky top-28 space-y-6">
-              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 backdrop-blur-sm">
-                <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-emerald-400 mb-4 pb-2 border-b border-zinc-800">
+              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm shadow-sm">
+                <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-4 pb-2 border-b border-zinc-200 dark:border-zinc-800 font-semibold">
                   <div className="flex items-center gap-2">
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>{t.writing.tableOfContents}</span>
@@ -775,11 +775,11 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                         href={`#${item.id}`}
                         className={`block text-xs font-mono py-1.5 px-2 rounded-lg transition-all truncate ${
                           isActive
-                            ? "bg-emerald-500/10 text-emerald-400 font-bold border-l-2 border-emerald-400"
-                            : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border-l-2 border-emerald-500"
+                            : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900"
                         }`}
                       >
-                        <span className="text-zinc-600 mr-2">0{idx + 1}.</span>
+                        <span className="text-zinc-400 dark:text-zinc-600 mr-2">0{idx + 1}.</span>
                         {item.label}
                       </a>
                     );
@@ -788,27 +788,27 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               </div>
 
               {/* Author & System Builder Card */}
-              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 backdrop-blur-sm space-y-3">
+              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm space-y-3 shadow-sm">
                 <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
                   Author & Builder
                 </div>
-                <div className="font-bold text-white text-base">
+                <div className="font-bold text-zinc-900 dark:text-white text-base">
                   {language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}
                 </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
                   {language === "vi"
                     ? "Kỹ sư Full-stack & System Builder. Tốt nghiệp loại Giỏi ĐH Giao thông Vận tải. Chuyên sâu về vi dịch vụ, micro-frontend và hệ thống phân tán."
                     : "Full-stack Engineer & System Builder. Graduated with Distinction from UTC. Building cloud-native multi-tenant architectures and distributed platforms."}
                 </p>
-                <div className="pt-2 border-t border-zinc-800 flex items-center justify-between text-xs font-mono">
-                  <Link href="/#contact" className="text-emerald-400 hover:underline">
+                <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
+                  <Link href="/#contact" className="text-emerald-600 dark:text-emerald-400 hover:underline">
                     Get in touch →
                   </Link>
                   <a
                     href="https://github.com/hoan02"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-400 hover:text-white"
+                    className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
                   >
                     GitHub
                   </a>
@@ -817,7 +817,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 
               {/* Other Related Notes */}
               {otherArticles.length > 0 && (
-                <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 backdrop-blur-sm space-y-3">
+                <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm space-y-3 shadow-sm">
                   <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
                     {language === "vi" ? "Gợi ý Đọc tiếp" : "Recommended Notes"}
                   </div>
@@ -826,9 +826,9 @@ function ArticleReader({ article }: ArticleClientViewProps) {
                       <Link
                         key={other.slug}
                         href={`/writing/${other.slug}`}
-                        className="block group p-2.5 rounded-xl hover:bg-zinc-900 transition-colors"
+                        className="block group p-2.5 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
                       >
-                        <h4 className="text-xs font-semibold text-zinc-200 group-hover:text-emerald-400 transition-colors line-clamp-2">
+                        <h4 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
                           {language === "vi" && other.titleVi ? other.titleVi : other.title}
                         </h4>
                         <span className="text-[10px] font-mono text-zinc-500 mt-1 block">
@@ -870,11 +870,7 @@ function ArticleReader({ article }: ArticleClientViewProps) {
 }
 
 export function ArticleClientView({ article }: ArticleClientViewProps) {
-  return (
-    <LanguageProvider>
-      <ArticleReader article={article} />
-    </LanguageProvider>
-  );
+  return <ArticleReader article={article} />;
 }
 
 export default ArticleClientView;

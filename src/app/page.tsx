@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
-import { LanguageProvider } from "@/context/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
@@ -31,18 +30,18 @@ function PortfolioContent() {
   const handleCloseAI = () => setAiModalOpen(false);
 
   return (
-    <main className="relative min-h-screen bg-[#090a0f] text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black pb-16 md:pb-0">
-      {/* Ambient lighting layers (hidden on mobile to eliminate composite lag) */}
-      <div className="hidden sm:block fixed top-0 left-1/4 w-96 h-96 bg-emerald-500/[0.03] rounded-full blur-[100px] pointer-events-none -z-10" />
-      <div className="hidden sm:block fixed bottom-1/4 right-1/4 w-[400px] h-[400px] bg-teal-500/[0.02] rounded-full blur-[120px] pointer-events-none -z-10" />
+    <main className="relative min-h-screen bg-slate-50 dark:bg-[#090a0f] text-slate-900 dark:text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black pb-16 md:pb-0 transition-colors duration-200">
+      {/* Ambient lighting layers */}
+      <div className="hidden sm:block fixed top-0 left-1/4 w-96 h-96 bg-emerald-500/[0.04] dark:bg-emerald-500/[0.03] rounded-full blur-[100px] pointer-events-none -z-10" />
+      <div className="hidden sm:block fixed bottom-1/4 right-1/4 w-[400px] h-[400px] bg-teal-500/[0.03] dark:bg-teal-500/[0.02] rounded-full blur-[120px] pointer-events-none -z-10" />
 
       {/* Custom Desktop Cursor */}
       <CustomCursor />
 
-      {/* Floating Navigation Bar with Language Switcher */}
+      {/* Floating Navigation Bar with Language & Theme Switcher */}
       <Navbar onOpenAI={handleOpenAI} />
 
-      {/* Main Portfolio Sections — Streamlined Flow */}
+      {/* Main Portfolio Sections */}
       <Hero onOpenAI={handleOpenAI} />
       <SelectedWork />
       <Experience />
@@ -62,9 +61,5 @@ function PortfolioContent() {
 }
 
 export default function HomePage() {
-  return (
-    <LanguageProvider>
-      <PortfolioContent />
-    </LanguageProvider>
-  );
+  return <PortfolioContent />;
 }
