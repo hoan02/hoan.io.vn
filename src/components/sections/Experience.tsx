@@ -87,12 +87,12 @@ export function Experience() {
 
       {/* Feature 2: Career Milestones Progression Bar */}
       <MotionWrapper delay={0.08}>
-        <div className="mb-14 p-6 sm:p-8 rounded-3xl bg-zinc-950 border border-zinc-800 shadow-xl text-zinc-100 relative overflow-hidden">
+        <div className="mb-14 p-6 sm:p-8 rounded-3xl bg-zinc-50/80 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-xl text-zinc-900 dark:text-zinc-100 relative overflow-hidden transition-colors">
           <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px] opacity-10 pointer-events-none" />
 
-          <div className="flex items-center gap-2 pb-4 mb-6 border-b border-zinc-800 text-xs font-mono">
-            <TrendingUp className="w-4 h-4 text-emerald-400" />
-            <span className="font-bold text-white tracking-wider">
+          <div className="flex items-center gap-2 pb-4 mb-6 border-b border-zinc-200 dark:border-zinc-800 text-xs font-mono">
+            <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span className="font-bold text-zinc-900 dark:text-white tracking-wider">
               {language === "vi" ? "LỘ TRÌNH SỰ NGHIỆP & TỔ CHỨC" : "CAREER & ORGANIZATIONAL MILESTONES"}
             </span>
           </div>
@@ -105,30 +105,30 @@ export function Experience() {
                   key={idx}
                   className={`p-4 sm:p-5 rounded-2xl border transition-all flex flex-col justify-between ${
                     m.isCurrent
-                      ? "bg-emerald-950/20 border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
-                      : "bg-zinc-900/60 border-zinc-800/90"
+                      ? "bg-emerald-500/10 dark:bg-emerald-950/20 border-emerald-500/40 dark:border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                      : "bg-white dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-800/90 shadow-xs dark:shadow-none"
                   }`}
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-semibold">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 font-semibold border border-zinc-200/70 dark:border-transparent">
                         {m.year}
                       </span>
                       {m.isCurrent && (
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
                       )}
                     </div>
                     <div className="flex items-center gap-2 pt-1">
-                      <Icon className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <h4 className="text-sm font-bold text-white leading-tight">
+                      <Icon className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <h4 className="text-sm font-bold text-zinc-900 dark:text-white leading-tight">
                         {language === "vi" ? m.titleVi : m.title}
                       </h4>
                     </div>
-                    <p className="text-xs font-mono text-emerald-400 font-medium">
+                    <p className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium">
                       {m.org}
                     </p>
                   </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed mt-3.5 pt-2.5 border-t border-zinc-800/60">
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed mt-3.5 pt-2.5 border-t border-zinc-200/70 dark:border-zinc-800/60">
                     {language === "vi" ? m.scopeVi : m.scope}
                   </p>
                 </div>
