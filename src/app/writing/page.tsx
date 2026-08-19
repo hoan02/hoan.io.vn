@@ -91,8 +91,8 @@ function WritingContent() {
         {/* Heading */}
         <MotionWrapper delay={0.1}>
           <div className="mb-12 border-b border-zinc-200 dark:border-zinc-800/80 pb-8">
-            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-mono tracking-widest uppercase mb-3">
-              <BookOpen className="w-4 h-4" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-semibold mb-4">
+              <BookOpen className="w-3.5 h-3.5" />
               <span>{t.writing.badge}</span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-zinc-950 dark:text-white tracking-tight mb-4">

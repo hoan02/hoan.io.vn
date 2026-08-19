@@ -7,16 +7,16 @@ import { PERSONAL_INFO } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
-import { Sparkles, Command, Menu, X, ArrowUpRight, Sun, Moon } from "lucide-react";
+import { Menu, X, ArrowUpRight, Sun, Moon } from "lucide-react";
 
 interface NavbarProps {
-  onOpenAI: () => void;
+  onOpenAI?: () => void;
 }
 
 export function Navbar({ onOpenAI }: NavbarProps) {
   const pathname = usePathname() || "/";
   const { language, setLanguage } = useLanguage();
-  const { resolvedTheme, toggleTheme, theme, setTheme } = useTheme();
+  const { resolvedTheme, toggleTheme } = useTheme();
   const t = UI_TRANSLATIONS[language];
 
   const [scrolled, setScrolled] = useState(false);
@@ -108,7 +108,7 @@ export function Navbar({ onOpenAI }: NavbarProps) {
           })}
         </div>
 
-        {/* Actions (Language Switcher + Theme Toggle + Ask AI + Contact) */}
+        {/* Actions (Language Switcher + Theme Toggle + Contact) */}
         <div className="flex items-center gap-2">
           {/* Language Switcher Pill */}
           <div className="flex items-center rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-0.5 text-[11px] font-mono">
@@ -161,23 +161,10 @@ export function Navbar({ onOpenAI }: NavbarProps) {
             )}
           </button>
 
-          {/* Ask AI Command Button */}
-          <button
-            onClick={onOpenAI}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 transition-all hover:scale-105 active:scale-95"
-            title="Ask AI Assistant (Ctrl+K)"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">{t.nav.askAi}</span>
-            <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
-              <Command className="w-2.5 h-2.5" />K
-            </kbd>
-          </button>
-
           {/* Quick Contact CTA */}
           <Link
             href="#contact"
-            className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-full bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors shadow-sm"
+            className="hidden sm:inline-flex items-center gap-1 px-3.5 py-1.5 text-xs font-semibold rounded-full bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 transition-colors shadow-sm"
           >
             <span>{t.nav.letsTalk}</span>
             <ArrowUpRight className="w-3 h-3" />
@@ -258,16 +245,6 @@ export function Navbar({ onOpenAI }: NavbarProps) {
             </Link>
           ))}
           <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-2">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenAI();
-              }}
-              className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-medium rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              {t.nav.askAi}
-            </button>
             <Link
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}

@@ -24,7 +24,7 @@ export const UI_TRANSLATIONS = {
       clickToCopy: "(click to copy)"
     },
     selectedWork: {
-      badge: "02 / Selected Work",
+      badge: "Selected Work",
       title: "Featured Systems & Architecture",
       subtitle: "Professional systems, products, and infrastructure—each connected to the engineering notes behind its important decisions.",
       all: "All",
@@ -50,7 +50,7 @@ export const UI_TRANSLATIONS = {
       roleAndTimeline: "Role & Timeline"
     },
     writing: {
-      badge: "03 / Engineering Notes",
+      badge: "Engineering Notes",
       title: "Technical Writing & Architecture Notes",
       subtitle: "A project-linked engineering journal: enterprise reality, product decisions, infrastructure field notes, and systems experiments.",
       viewAll: "View all technical writing",
@@ -77,7 +77,7 @@ export const UI_TRANSLATIONS = {
       keyInsights: "Key Insights in 30 Seconds"
     },
     about: {
-      badge: "04 / Engineering Focus",
+      badge: "Engineering Focus",
       title: "System Building Mindset",
       subtitle: "Bridging complex enterprise domains with lean, maintainable architectures and pragmatic execution.",
       storyTitle: "Full-stack Engineer & System Builder",
@@ -98,19 +98,19 @@ export const UI_TRANSLATIONS = {
       tenet3Desc: "Strict static typing, reusable component libraries, and automated CI/CD validation."
     },
     experience: {
-      badge: "05 / Career Journey",
+      badge: "Career Journey",
       title: "Work Experience",
       subtitle: "Track record of delivering enterprise-grade web platforms and cloud-native infrastructure."
     },
     techStack: {
-      badge: "06 / Technical Capabilities",
+      badge: "Tech Stack",
       title: "Tech Stack & Tooling",
       subtitle: "Technologies applied in production systems, structured by what was built with each tool.",
       technologiesCount: "technologies",
       coreTag: "Core"
     },
     contact: {
-      badge: "07 / Get in Touch",
+      badge: "Get in Touch",
       titleStart: "Let's build something",
       titleHighlight: "valuable",
       titleEnd: "together.",
@@ -161,7 +161,7 @@ export const UI_TRANSLATIONS = {
       clickToCopy: "(nhấp để chép email)"
     },
     selectedWork: {
-      badge: "02 / Dự án chọn lọc",
+      badge: "Dự án Chọn lọc",
       title: "Hệ thống & Kiến trúc tiêu biểu",
       subtitle: "Hệ thống chuyên nghiệp, sản phẩm tự xây dựng và hạ tầng tự vận hành — mỗi dự án gắn với những ghi chép về các quyết định quan trọng phía sau.",
       all: "Tất cả",
@@ -187,7 +187,7 @@ export const UI_TRANSLATIONS = {
       roleAndTimeline: "Vai trò & Thời gian"
     },
     writing: {
-      badge: "03 / Ghi chép Kỹ thuật",
+      badge: "Ghi chép Kỹ thuật",
       title: "Ghi chép & Báo cáo Kiến trúc",
       subtitle: "Nhật ký kỹ thuật gắn với từng dự án: thực tế enterprise, quyết định product, field note về hạ tầng và các thử nghiệm hệ thống.",
       viewAll: "Xem tất cả bài viết kỹ thuật",
@@ -214,7 +214,7 @@ export const UI_TRANSLATIONS = {
       keyInsights: "Tóm tắt Nhanh trong 30 Giây"
     },
     about: {
-      badge: "04 / Tư duy Kỹ thuật",
+      badge: "Tư duy Kỹ thuật",
       title: "Tư duy & Cách tiếp cận",
       subtitle: "Giải quyết các bài toán doanh nghiệp phức tạp bằng kiến trúc rõ ràng, dễ bảo trì và thực dụng.",
       storyTitle: "Full-stack Engineer & System Builder",
@@ -235,19 +235,19 @@ export const UI_TRANSLATIONS = {
       tenet3Desc: "Strict typing với TypeScript, chuẩn hóa component dùng chung và kiểm thử tự động qua CI/CD."
     },
     experience: {
-      badge: "05 / Hành trình Sự nghiệp",
+      badge: "Hành trình Sự nghiệp",
       title: "Kinh nghiệm Làm việc",
       subtitle: "Quá trình xây dựng và vận hành các nền tảng web và hạ tầng cloud-native thực tế."
     },
     techStack: {
-      badge: "06 / Năng lực Kỹ thuật",
+      badge: "Năng lực Kỹ thuật",
       title: "Tech Stack & Công cụ",
       subtitle: "Các công nghệ thực chiến, thể hiện qua những gì tôi đã thực sự triển khai trong dự án.",
       technologiesCount: "công nghệ",
       coreTag: "Cốt lõi"
     },
     contact: {
-      badge: "07 / Kết nối & Hợp tác",
+      badge: "Kết nối & Hợp tác",
       titleStart: "Cùng nhau xây dựng những hệ thống",
       titleHighlight: "chất lượng",
       titleEnd: "và bền vững.",

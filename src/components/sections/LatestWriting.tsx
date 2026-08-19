@@ -39,20 +39,20 @@ export function LatestWriting() {
   const flagshipEditorial = getArticleEditorial(flagshipArticle);
 
   return (
-    <section id="writing" className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+    <section id="writing" className="py-28 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Section Heading */}
       <MotionWrapper>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-zinc-200 dark:border-zinc-800/80 pb-6">
-          <div>
-            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-mono tracking-widest uppercase mb-2">
-              <BookOpen className="w-4 h-4" />
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-8 border-b border-zinc-200/80 dark:border-zinc-800/80">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-semibold">
+              <BookOpen className="w-3.5 h-3.5" />
               <span>{t.writing.badge}</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-950 dark:text-white tracking-tight">
               {t.writing.title}
             </h2>
           </div>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-md font-normal leading-relaxed">
             {t.writing.subtitle}
           </p>
         </div>

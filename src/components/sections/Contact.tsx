@@ -45,7 +45,8 @@ export function Contact() {
           <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Section Indicator */}
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-mono tracking-widest uppercase mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-semibold mb-6">
+            <Mail className="w-3.5 h-3.5" />
             <span>{t.contact.badge}</span>
           </div>
 
