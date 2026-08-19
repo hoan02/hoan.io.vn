@@ -1,7 +1,6 @@
-import { streamText, stepCountIs } from "ai";
+import { streamText } from "ai";
 import { getChatModel } from "@/ai/model";
 import { SYSTEM_PROMPT } from "@/ai/system-prompt";
-import { aiTools } from "@/ai/tools";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { NextResponse } from "next/server";
 
@@ -17,7 +16,7 @@ export async function POST(req: Request) {
       req.headers.get("x-real-ip") ||
       "anonymous";
 
-    const rateLimit = checkRateLimit(ip, 25, 60 * 1000);
+    const rateLimit = checkRateLimit(ip, 30, 60 * 1000);
     if (!rateLimit.allowed) {
       return NextResponse.json(
         {
@@ -37,31 +36,31 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { messages, query, history } = body;
 
-    // Normalizing messages format - Keep concise history (last 3 messages, max 400 chars each) to save TPM
+    // Normalizing messages format - Keep concise history
     let formattedMessages: { role: "user" | "assistant" | "system"; content: string }[] = [];
 
     if (Array.isArray(messages) && messages.length > 0) {
       formattedMessages = messages
         .filter((m) => m && typeof m.content === "string")
-        .slice(-4)
+        .slice(-6)
         .map((m) => ({
           role: (m.role === "system" ? "system" : m.role === "assistant" ? "assistant" : "user") as "user" | "assistant" | "system",
-          content: m.content.trim().slice(0, 500),
+          content: m.content.trim().slice(0, 1000),
         }));
     } else if (typeof query === "string" && query.trim()) {
       const sanitizedHistory = Array.isArray(history)
         ? history
             .filter((m) => m && typeof m.content === "string")
-            .slice(-3)
+            .slice(-4)
             .map((m) => ({
               role: (m.role === "assistant" ? "assistant" : "user") as "assistant" | "user",
-              content: m.content.trim().slice(0, 400),
+              content: m.content.trim().slice(0, 800),
             }))
         : [];
 
       formattedMessages = [
         ...sanitizedHistory,
-        { role: "user", content: query.trim().slice(0, 400) },
+        { role: "user", content: query.trim().slice(0, 800) },
       ];
     } else {
       return NextResponse.json({ error: "Missing query or messages." }, { status: 400 });
@@ -70,19 +69,17 @@ export async function POST(req: Request) {
     // 3. Obtain AI Model
     const model = getChatModel();
 
-    // 4. Stream response with Tools & Reasoning
+    // 4. Fast streaming response directly grounded in full SSOT context
     const result = streamText({
       model,
       system: SYSTEM_PROMPT,
       messages: formattedMessages,
-      tools: aiTools,
-      stopWhen: stepCountIs(4),
-      maxOutputTokens: 1000,
-      temperature: 0.4,
+      maxOutputTokens: 1500,
+      temperature: 0.45,
       onFinish: ({ usage }) => {
         const duration = Date.now() - startTime;
         console.log(
-          `[Chat API] Handled request in ${duration}ms | Tokens: total=${usage?.totalTokens}`
+          `[Chat API] Streamed response in ${duration}ms | Tokens: total=${usage?.totalTokens}`
         );
       },
     });
@@ -93,7 +90,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error:
-          "Hệ thống AI đang tạm thời bận do vượt hạn mức tức thời. Bạn vui lòng thử lại sau vài giây nhé.",
+          "Hệ thống AI đang tạm thời bận. Bạn vui lòng thử lại sau vài giây nhé.",
       },
       { status: 500 }
     );

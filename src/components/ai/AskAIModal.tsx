@@ -70,6 +70,10 @@ const CATEGORY_PROMPTS: PromptCategory[] = [
         badge: "CamRelay & Rust",
         text: "Why did Hoan build CamRelay in Rust to bridge P2P camera streams into RTSP?",
       },
+      {
+        badge: "B4S Desktop & BLE",
+        text: "How did Hoan develop the B4S Bluetooth LE headphone companion with Tauri v2 and Rust?",
+      },
     ],
     promptsVi: [
       {
@@ -87,6 +91,10 @@ const CATEGORY_PROMPTS: PromptCategory[] = [
       {
         badge: "CamRelay & Rust",
         text: "Tại sao Hoan xây dựng CamRelay bằng Rust để chuyển đổi luồng camera P2P sang RTSP?",
+      },
+      {
+        badge: "B4S Desktop & BLE",
+        text: "Hoan đã phát triển ứng dụng B4S điều khiển tai nghe Bluetooth LE bằng Tauri v2 và Rust ra sao?",
       },
     ],
   },
@@ -320,6 +328,18 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
         : [
             "Why did Hoan build CamRelay with Rust instead of Python?",
             "How does CamRelay stream Dahua P2P cameras into Home Assistant?",
+          ];
+    }
+
+    if (combined.includes("b4s") || combined.includes("bluetooth") || combined.includes("tauri") || combined.includes("ble")) {
+      return isVi
+        ? [
+            "Tại sao Hoan chọn Tauri v2 + SolidJS thay vì Electron?",
+            "Cách B4S tương tác GATT Bluetooth LE bằng crate btleplug trong Rust?",
+          ]
+        : [
+            "Why did Hoan choose Tauri v2 + SolidJS over Electron?",
+            "How does B4S interact with Bluetooth LE GATT characteristics using btleplug in Rust?",
           ];
     }
 
