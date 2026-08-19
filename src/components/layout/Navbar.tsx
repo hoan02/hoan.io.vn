@@ -58,6 +58,9 @@ export function Navbar({ onOpenAI }: NavbarProps) {
   const handleLogoClick = (e: React.MouseEvent) => {
     if (pathname === "/") {
       e.preventDefault();
+      if (typeof window !== "undefined" && window.location.hash) {
+        window.history.pushState(null, "", window.location.pathname);
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };

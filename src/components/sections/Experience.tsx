@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { EXPERIENCES_DATA } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
@@ -13,7 +13,53 @@ import {
   Building2,
   CheckCircle2,
   FolderGit2,
+  TrendingUp,
+  Sparkles,
+  Award,
+  ArrowRight
 } from "lucide-react";
+
+interface CareerMilestone {
+  year: string;
+  title: string;
+  titleVi: string;
+  org: string;
+  scope: string;
+  scopeVi: string;
+  icon: React.ComponentType<{ className?: string }>;
+  isCurrent?: boolean;
+}
+
+const CAREER_MILESTONES: CareerMilestone[] = [
+  {
+    year: "10/2020 – 08/2024",
+    title: "Engineer Degree (Distinction)",
+    titleVi: "Kỹ sư CNTT (Loại Giỏi)",
+    org: "University of Transport and Communications",
+    scope: "Core CS, Distributed Systems, Networking & Systems Engineering",
+    scopeVi: "Nền tảng CS, hệ thống phân tán, mạng máy tính & kỹ thuật hệ thống",
+    icon: Award,
+  },
+  {
+    year: "03/2024 – 08/2024",
+    title: "Frontend Developer",
+    titleVi: "Frontend Developer",
+    org: "MochiMochi",
+    scope: "Next.js App Router, Learning Web Apps & Performance",
+    scopeVi: "Next.js App Router, ứng dụng học ngoại ngữ & tối ưu hiệu năng",
+    icon: Building2,
+  },
+  {
+    year: "12/2024 – Present",
+    title: "Full-stack Engineer",
+    titleVi: "Kỹ sư Full-stack",
+    org: "NGV Group",
+    scope: "Angular Micro-Frontends, Java Spring Boot & Enterprise Workflows",
+    scopeVi: "Angular Micro-Frontend, Spring Boot & quy trình doanh nghiệp",
+    icon: Briefcase,
+    isCurrent: true,
+  },
+];
 
 export function Experience() {
   const { language } = useLanguage();
@@ -23,7 +69,7 @@ export function Experience() {
     <section id="experience" className="py-28 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Section Heading */}
       <MotionWrapper>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 pb-8 border-b border-zinc-200/80 dark:border-zinc-800/80">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-8 border-b border-zinc-200/80 dark:border-zinc-800/80">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-semibold">
               <Briefcase className="w-3.5 h-3.5" />
@@ -36,6 +82,59 @@ export function Experience() {
           <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-md font-normal leading-relaxed">
             {t.experience.subtitle}
           </p>
+        </div>
+      </MotionWrapper>
+
+      {/* Feature 2: Career Milestones Progression Bar */}
+      <MotionWrapper delay={0.08}>
+        <div className="mb-14 p-6 sm:p-8 rounded-3xl bg-zinc-950 border border-zinc-800 shadow-xl text-zinc-100 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px] opacity-10 pointer-events-none" />
+
+          <div className="flex items-center gap-2 pb-4 mb-6 border-b border-zinc-800 text-xs font-mono">
+            <TrendingUp className="w-4 h-4 text-emerald-400" />
+            <span className="font-bold text-white tracking-wider">
+              {language === "vi" ? "LỘ TRÌNH SỰ NGHIỆP & TỔ CHỨC" : "CAREER & ORGANIZATIONAL MILESTONES"}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 relative z-10">
+            {CAREER_MILESTONES.map((m, idx) => {
+              const Icon = m.icon;
+              return (
+                <div
+                  key={idx}
+                  className={`p-4 sm:p-5 rounded-2xl border transition-all flex flex-col justify-between ${
+                    m.isCurrent
+                      ? "bg-emerald-950/20 border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                      : "bg-zinc-900/60 border-zinc-800/90"
+                  }`}
+                >
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-semibold">
+                        {m.year}
+                      </span>
+                      {m.isCurrent && (
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 pt-1">
+                      <Icon className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <h4 className="text-sm font-bold text-white leading-tight">
+                        {language === "vi" ? m.titleVi : m.title}
+                      </h4>
+                    </div>
+                    <p className="text-xs font-mono text-emerald-400 font-medium">
+                      {m.org}
+                    </p>
+                  </div>
+                  <p className="text-xs text-zinc-400 leading-relaxed mt-3.5 pt-2.5 border-t border-zinc-800/60">
+                    {language === "vi" ? m.scopeVi : m.scope}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </MotionWrapper>
 
@@ -79,7 +178,7 @@ export function Experience() {
 
                     {/* Role and Organization */}
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors flex items-center gap-3">
+                      <h3 className="text-2xl sm:text-3xl font-extrabold text-zinc-950 dark:text-white tracking-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors flex items-center gap-3">
                         <Building2 className="w-7 h-7 text-emerald-600 dark:text-emerald-400 shrink-0" />
                         <span>{expRole}</span>
                       </h3>
@@ -162,12 +261,14 @@ export function Experience() {
                               ))}
                             </div>
 
-                            {/* Project specific tech pills */}
-                            <div className="flex flex-wrap gap-1.5 pt-2">
-                              {proj.techStack.map((tech, tIdx) => (
-                                <TechBadge key={tIdx} name={tech} size="xs" />
-                              ))}
-                            </div>
+                            {/* Project Tech Stack Badges */}
+                            {proj.techStack && proj.techStack.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-zinc-200 dark:border-zinc-800/60">
+                                {proj.techStack.map((tech, tIdx) => (
+                                  <TechBadge key={tIdx} name={tech} size="xs" />
+                                ))}
+                              </div>
+                            )}
                           </div>
                         );
                       })}

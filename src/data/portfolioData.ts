@@ -315,7 +315,7 @@ Internet / Cloudflare Tunnel
       "Chuẩn hóa mã nguồn frontend với kiến trúc component module hóa và strict typing."
     ],
     role: "Frontend Developer (MochiMochi)",
-    roleVi: "Kỹ sư Frontend (MochiMochi)",
+    roleVi: "Frontend Developer (MochiMochi)",
     year: "03/2024 – 08/2024",
     techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "SEO Optimization", "SSR"],
     category: "Frontend",
@@ -2002,7 +2002,7 @@ export const EXPERIENCES_DATA: ExperienceItem[] = [
     period: "03/2024 — 08/2024",
     periodVi: "03/2024 — 08/2024",
     role: "Frontend Developer",
-    roleVi: "Kỹ sư Frontend Developer",
+    roleVi: "Frontend Developer",
     company: "MochiMochi",
     companyVi: "MochiMochi",
     companyDescription: "EdTech Platform Specializing in Spaced-Repetition Japanese & Chinese Learning",

@@ -19,21 +19,21 @@ import {
 export function TechStack() {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
-  const [activeCategoryIdx, setActiveCategoryIdx] = useState<number>(1);
+  const [activeCategoryIdx, setActiveCategoryIdx] = useState<number>(0);
 
   const categories = [
+    { title: language === "vi" ? "Tất cả" : "All Domains", icon: Sparkles },
     { title: language === "vi" ? "Frontend & MFE" : "Frontend & MFE", icon: Terminal },
     { title: language === "vi" ? "Backend Microservices" : "Backend & Services", icon: Server },
     { title: language === "vi" ? "Cơ sở Dữ liệu" : "Databases & Cache", icon: Database },
     { title: language === "vi" ? "DevOps & Cloud" : "DevOps & Cloud", icon: Cloud },
-    { title: language === "vi" ? "Tất cả" : "All Domains", icon: Sparkles },
   ];
 
   const displayedCategories = useMemo(() => {
-    if (activeCategoryIdx === 4) {
+    if (activeCategoryIdx === 0) {
       return TECH_CATEGORIES;
     }
-    return [TECH_CATEGORIES[activeCategoryIdx]];
+    return [TECH_CATEGORIES[activeCategoryIdx - 1]];
   }, [activeCategoryIdx]);
 
   return (
@@ -57,7 +57,7 @@ export function TechStack() {
       </MotionWrapper>
 
       {/* Category Filter Pills */}
-      <MotionWrapper delay={0.05}>
+      <MotionWrapper delay={0.08}>
         <div className="flex flex-wrap items-center gap-2 mb-12">
           {categories.map((cat, idx) => {
             const Icon = cat.icon;

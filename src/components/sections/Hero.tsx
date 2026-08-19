@@ -26,18 +26,7 @@ export function Hero({ onOpenAI }: HeroProps) {
   const t = UI_TRANSLATIONS[language];
   const [copied, setCopied] = useState(false);
 
-  const handleDownloadCV = async () => {
-    try {
-      const confetti = (await import("canvas-confetti")).default;
-      confetti({
-        particleCount: 40,
-        spread: 60,
-        origin: { y: 0.8 },
-        colors: ["#10b981", "#34d399", "#ffffff"]
-      });
-    } catch {
-      // ignore
-    }
+  const handleViewCV = () => {
     window.open(PERSONAL_INFO.cvUrl, "_blank");
   };
 
@@ -114,13 +103,13 @@ export function Hero({ onOpenAI }: HeroProps) {
             <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
           </Link>
 
-          {/* Secondary CTA: Download CV */}
+          {/* Secondary CTA: View CV */}
           <button
-            onClick={handleDownloadCV}
+            onClick={handleViewCV}
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-zinc-100 text-zinc-800 dark:bg-zinc-900/90 dark:hover:bg-zinc-800 dark:text-zinc-200 font-medium text-sm border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all active:scale-95 shadow-sm"
           >
             <FileText className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>{t.hero.downloadCv}</span>
+            <span>{t.hero.viewCv}</span>
           </button>
 
           {/* Quick AI query trigger chip */}

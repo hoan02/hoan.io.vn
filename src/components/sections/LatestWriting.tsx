@@ -15,7 +15,11 @@ import {
   Sparkles,
   Clock,
   Calendar,
-  Terminal
+  Terminal,
+  Layers,
+  Cpu,
+  ShieldCheck,
+  Zap
 } from "lucide-react";
 
 export function LatestWriting() {
@@ -67,17 +71,15 @@ export function LatestWriting() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Column: Context, Title, Highlights */}
             <div className="lg:col-span-7 space-y-5">
-              {/* Meta Pill */}
+              {/* Meta Pill & Architecture Tag */}
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>{language === "vi" ? flagshipEditorial.formatVi : flagshipEditorial.format}</span>
                 </span>
-                <span className="flex items-center gap-1 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-                  <Calendar className="w-3 h-3 text-zinc-400 dark:text-zinc-500" />
-                  {flagshipArticle.date}
+                <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800">
+                  {language === "vi" ? "Pattern: Luồng Giao dịch Ngân hàng" : "Pattern: Enterprise Transaction Inbox"}
                 </span>
-                <span className="text-zinc-300 dark:text-zinc-600">•</span>
                 <span className="flex items-center gap-1 text-xs font-mono text-zinc-500 dark:text-zinc-400">
                   <Clock className="w-3 h-3 text-zinc-400 dark:text-zinc-500" />
                   {flagshipArticle.readTime}
@@ -120,7 +122,7 @@ export function LatestWriting() {
 
               {/* Tech Stack Badges */}
               <div className="flex flex-wrap gap-2 pt-2">
-                  {flagshipArticle.tags.slice(0, 5).map((tech, idx) => (
+                {flagshipArticle.tags.slice(0, 5).map((tech, idx) => (
                   <TechBadge key={idx} name={tech} size="xs" />
                 ))}
               </div>
@@ -137,12 +139,12 @@ export function LatestWriting() {
               </div>
             </div>
 
-            {/* Right Column: The engineering thread behind the note */}
+            {/* Right Column: Architectural Solution Box */}
             <div className="lg:col-span-5 bg-zinc-50 dark:bg-zinc-900/60 rounded-2xl p-5 sm:p-6 border border-zinc-200 dark:border-zinc-800/80 space-y-4 shadow-inner">
               <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800/80 text-xs font-mono text-zinc-500 dark:text-zinc-400">
                 <div className="flex items-center gap-2">
                   <Terminal className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-zinc-900 dark:text-zinc-200 font-semibold">{language === "vi" ? "Bài viết này đào sâu" : "This note goes deeper into"}</span>
+                  <span className="text-zinc-900 dark:text-zinc-200 font-semibold">{language === "vi" ? "Bài toán Kỹ thuật Đào sâu" : "Engineering Architecture Deep-Dive"}</span>
                 </div>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">{language === "vi" ? flagshipEditorial.seriesVi : flagshipEditorial.series}</span>
               </div>
@@ -150,8 +152,8 @@ export function LatestWriting() {
               <div className="space-y-3 text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
                 <div className="p-3 rounded-xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/60">
                   {language === "vi"
-                    ? "Một quyết định kỹ thuật cụ thể và bối cảnh nghiệp vụ phía sau nó — thay vì một danh sách công nghệ độc lập."
-                    : "One concrete engineering decision and the business context around it—instead of a disconnected technology list."}
+                    ? "Phân tích ranh giới module giữa Shell MFE, Spring Boot backend và luồng phê duyệt tín dụng tuân thủ quy chuẩn kiểm toán."
+                    : "Analyzing module boundaries between Shell MFE, Spring Boot backend, and compliant lending approval audit trails."}
                 </div>
                 {flagshipArticle.tags.slice(0, 4).map((tag) => (
                   <div key={tag} className="flex items-center gap-2 text-xs font-mono text-zinc-700 dark:text-zinc-300">
@@ -161,11 +163,11 @@ export function LatestWriting() {
                 ))}
               </div>
 
-              {/* Naive vs Solution Quote */}
+              {/* Whitepaper Quote */}
               <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-500/20 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed italic">
                 {language === "vi"
-                  ? "💡 Các bài viết ở đây được viết từ những điểm nổi bật cụ thể trong dự án, không phải để lặp lại toàn bộ README kiến trúc."
-                  : "💡 Each note starts from a concrete project highlight rather than repeating the whole architecture README."}
+                  ? "💡 Trực tiếp giải quyết bài toán đồng bộ trạng thái giao dịch giữa nhiều tổ chức tín dụng."
+                  : "💡 Direct engineering solution for transaction synchronization across credit institutions."}
               </div>
             </div>
           </div>
@@ -177,6 +179,14 @@ export function LatestWriting() {
         {secondaryArticles.map((article, idx) => {
           const title = language === "vi" && article.titleVi ? article.titleVi : article.title;
           const summary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
+          const patternTag =
+            article.slug === "designing-arda-cloud-native-finops-platform"
+              ? language === "vi"
+                ? "Pattern: 9 Go Services + NATS Outbox"
+                : "Pattern: 9 Go Services + NATS Outbox"
+              : language === "vi"
+              ? "Pattern: Opaque Sessions + Kratos v3"
+              : "Pattern: Opaque Sessions + Kratos v3";
 
           return (
             <MotionWrapper key={article.slug} delay={0.2 + idx * 0.1}>
@@ -185,13 +195,11 @@ export function LatestWriting() {
                 className="group h-full flex flex-col justify-between rounded-2xl bg-white/90 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/90 hover:border-emerald-500/50 dark:hover:border-emerald-500/40 p-6 sm:p-7 transition-all duration-300 shadow-sm hover:shadow-[0_15px_35px_-15px_rgba(16,185,129,0.15)]"
               >
                 <div className="space-y-3">
-                  {/* Meta Strip */}
-                  <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-zinc-500">
-                    <span className="flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
-                      <Calendar className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                      {article.date}
+                  {/* Meta Strip & Pattern Badge */}
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-zinc-500">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold">
+                      {patternTag}
                     </span>
-                    <span>•</span>
                     <span className="flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
                       <Clock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                       {article.readTime}
