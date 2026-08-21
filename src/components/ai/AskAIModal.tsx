@@ -216,14 +216,18 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Focus on input when opened
+  // Focus on input when opened and lock body scroll safely
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 120);
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    if (!isOpen) return;
+    
+    const timer = setTimeout(() => inputRef.current?.focus(), 120);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = originalOverflow || "";
+    };
   }, [isOpen]);
 
   // Scroll to bottom when messages update

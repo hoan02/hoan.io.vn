@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useLanguage } from "@/context/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -9,12 +10,20 @@ import { PROJECTS_DATA } from "@/data/portfolioData";
 import { getProjectEditorial } from "@/data/projectEditorial";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
-import { CustomCursor } from "@/components/common/CustomCursor";
 import { GithubIcon } from "@/components/common/Icons";
 import { TechBadge } from "@/components/common/TechIcon";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
-import { AskAIModal } from "@/components/ai/AskAIModal";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
+
+const AskAIModal = dynamic(
+  () => import("@/components/ai/AskAIModal").then((mod) => mod.AskAIModal),
+  { ssr: false }
+);
+
+const CustomCursor = dynamic(
+  () => import("@/components/common/CustomCursor").then((mod) => mod.CustomCursor),
+  { ssr: false }
+);
 import {
   FolderGit2,
   ArrowRight,

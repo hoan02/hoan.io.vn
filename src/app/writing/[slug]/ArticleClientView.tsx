@@ -7,14 +7,23 @@ import { Article } from "@/types";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { UI_TRANSLATIONS } from "@/data/translations";
+import dynamic from "next/dynamic";
 import { PROJECTS_DATA, ARTICLES_DATA, PERSONAL_INFO } from "@/data/portfolioData";
 import { ENGINEERING_EVIDENCE } from "@/data/engineeringEvidence";
 import { getArticleEditorial } from "@/data/articleEditorial";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
-import { CustomCursor } from "@/components/common/CustomCursor";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
-import { AskAIModal } from "@/components/ai/AskAIModal";
 import { DIAGRAM_MAP } from "@/components/diagrams/ArchitectureDiagrams";
+
+const AskAIModal = dynamic(
+  () => import("@/components/ai/AskAIModal").then((mod) => mod.AskAIModal),
+  { ssr: false }
+);
+
+const CustomCursor = dynamic(
+  () => import("@/components/common/CustomCursor").then((mod) => mod.CustomCursor),
+  { ssr: false }
+);
 import {
   Calendar,
   Clock,

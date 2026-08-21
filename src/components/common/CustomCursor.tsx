@@ -19,30 +19,36 @@ export function CustomCursor() {
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     if (isTouchDevice) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+    let rafId: number | null = null;
 
-      const target = e.target as HTMLElement | null;
-      if (target) {
-        const isClickable =
-          target.tagName === "BUTTON" ||
-          target.tagName === "A" ||
-          target.closest("button") !== null ||
-          target.closest("a") !== null ||
-          target.getAttribute("role") === "button" ||
-          window.getComputedStyle(target).cursor === "pointer";
-        setIsPointer(isClickable);
-      }
+    const handleMouseMove = (e: MouseEvent) => {
+      if (rafId) return;
+
+      rafId = requestAnimationFrame(() => {
+        mouseX.set(e.clientX);
+        mouseY.set(e.clientY);
+        if (!isVisible) setIsVisible(true);
+
+        const target = e.target as HTMLElement | null;
+        if (target) {
+          const isClickable = Boolean(
+            target.closest(
+              'a, button, [role="button"], input, select, textarea, label, [data-clickable="true"]'
+            )
+          );
+          setIsPointer(isClickable);
+        }
+        rafId = null;
+      });
     };
 
     const handleMouseLeave = () => setIsVisible(false);
 
-    window.addEventListener("mousemove", handleMouseMove);
-    document.body.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.body.addEventListener("mouseleave", handleMouseLeave, { passive: true });
 
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener("mousemove", handleMouseMove);
       document.body.removeEventListener("mouseleave", handleMouseLeave);
     };
