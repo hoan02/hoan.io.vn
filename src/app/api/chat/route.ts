@@ -5,15 +5,16 @@ import { getChatModel, getChatModelId, MissingApiKeyError } from "@/ai/model";
 import { SYSTEM_PROMPT } from "@/ai/system-prompt";
 import { checkRateLimit } from "@/lib/rateLimit";
 
-// Long Vietnamese answers can stream for well over 30s; on Vercel this caps the whole response.
-export const maxDuration = 60;
+// Very long answers stream for minutes; on Vercel this caps the whole response (plan limits apply).
+export const maxDuration = 300;
 
 // --- Limits (best-effort: in-memory, so they are per server instance) -------
 const MAX_QUERY_CHARS = 800;
 const MAX_HISTORY_MESSAGES = 6;
 const MAX_HISTORY_CHARS = 1500;
 // Vietnamese costs roughly 2–3x the tokens of English, so small caps cut answers mid-sentence.
-const MAX_OUTPUT_TOKENS = Number(process.env.AI_MAX_OUTPUT_TOKENS) || 4096;
+// Claude Haiku 5.5 allows up to 128K output tokens; answers stream, so a high cap is safe.
+const MAX_OUTPUT_TOKENS = Number(process.env.AI_MAX_OUTPUT_TOKENS) || 128_000;
 
 // Appended to the text stream so the reader knows the answer did not end naturally.
 const NOTES = {
