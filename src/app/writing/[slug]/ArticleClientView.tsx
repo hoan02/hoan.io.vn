@@ -3,17 +3,33 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Copy,
+  ExternalLink,
+  GitBranch,
+  Maximize2,
+  Play,
+  Share2,
+  Terminal,
+  Video,
+} from "lucide-react";
 import { Article } from "@/types";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { UI_TRANSLATIONS } from "@/data/translations";
-import dynamic from "next/dynamic";
-import { PROJECTS_DATA, ARTICLES_DATA, PERSONAL_INFO } from "@/data/portfolioData";
+import { PROJECTS_DATA, ARTICLES_DATA } from "@/data/portfolioData";
 import { ENGINEERING_EVIDENCE } from "@/data/engineeringEvidence";
 import { getArticleEditorial } from "@/data/articleEditorial";
-import { MotionWrapper } from "@/components/common/MotionWrapper";
+import { getArticle, getLinePosition, getStopInfo, getTransfers, getInterchange } from "@/data/transitMap";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
 import { DIAGRAM_MAP } from "@/components/diagrams/ArchitectureDiagrams";
+import { HoanBot, LineBadge, StationDot, Sticker, TransitTrain } from "@/components/writing/Toon";
+import { RecruiterCard } from "@/components/writing/RecruiterCard";
+import { useLanguage } from "@/context/LanguageContext";
 
 const AskAIModal = dynamic(
   () => import("@/components/ai/AskAIModal").then((mod) => mod.AskAIModal),
@@ -24,43 +40,24 @@ const CustomCursor = dynamic(
   () => import("@/components/common/CustomCursor").then((mod) => mod.CustomCursor),
   { ssr: false }
 );
-import {
-  Calendar,
-  Clock,
-  ArrowLeft,
-  ArrowRight,
-  Layers,
-  AlertCircle,
-  CheckCircle2,
-  Code2,
-  Copy,
-  Check,
-  BookOpen,
-  Sparkles,
-  ExternalLink,
-  GitBranch,
-  ShieldCheck,
-  XCircle,
-  Zap,
-  Info,
-  AlertTriangle,
-  Lightbulb,
-  Maximize2,
-  Video,
-  Play,
-  Share2,
-  Terminal
-} from "lucide-react";
-
-import { useLanguage } from "@/context/LanguageContext";
 
 interface ArticleClientViewProps {
   article: Article;
 }
 
+const H2 = "font-display scroll-mt-28 text-2xl font-bold tracking-tight text-[var(--ink)] sm:text-[34px] sm:leading-tight";
+
+const CALLOUT_STYLES = {
+  tip: { label: "Design principle", labelVi: "Nguyên tắc", accent: "var(--line-a)", bg: "bg-emerald-50 dark:bg-[#052E1F]" },
+  info: { label: "Good to know", labelVi: "Cần biết", accent: "#38BDF8", bg: "bg-sky-50 dark:bg-[#0C1A2E]" },
+  warning: { label: "Watch out", labelVi: "Lưu ý", accent: "var(--line-b)", bg: "bg-amber-50 dark:bg-[#2A1A05]" },
+} as const;
+
 function ArticleReader({ article }: ArticleClientViewProps) {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
+  const tt = t.writing.transit;
+  const vi = language === "vi";
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
   const [aiModalOpen, setAiModalOpen] = useState(false);
@@ -71,69 +68,74 @@ function ArticleReader({ article }: ArticleClientViewProps) {
   const handleOpenAI = () => setAiModalOpen(true);
   const handleCloseAI = () => setAiModalOpen(false);
 
-  const articleTitle = language === "vi" && article.titleVi ? article.titleVi : article.title;
-  const articleSummary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
-  const problemStatement = language === "vi" && article.content.problemStatementVi ? article.content.problemStatementVi : article.content.problemStatement;
-  const architectureDesign = language === "vi" && article.content.architectureDesignVi ? article.content.architectureDesignVi : article.content.architectureDesign;
-  const technicalDecisions = language === "vi" && article.content.technicalDecisionsVi ? article.content.technicalDecisionsVi : article.content.technicalDecisions;
-  const keyTakeaways = language === "vi" && article.content.keyTakeawaysVi ? article.content.keyTakeawaysVi : article.content.keyTakeaways;
+  const articleTitle = vi && article.titleVi ? article.titleVi : article.title;
+  const articleSummary = vi && article.summaryVi ? article.summaryVi : article.summary;
+  const problemStatement = vi && article.content.problemStatementVi ? article.content.problemStatementVi : article.content.problemStatement;
+  const architectureDesign = vi && article.content.architectureDesignVi ? article.content.architectureDesignVi : article.content.architectureDesign;
+  const technicalDecisions = vi && article.content.technicalDecisionsVi ? article.content.technicalDecisionsVi : article.content.technicalDecisions;
+  const keyTakeaways = vi && article.content.keyTakeawaysVi ? article.content.keyTakeawaysVi : article.content.keyTakeaways;
   const editorial = getArticleEditorial(article);
 
-  // Find related project if exists
-  const relatedProject = article.relatedProject
-    ? PROJECTS_DATA.find((p) => p.id === article.relatedProject)
-    : null;
-
-  // Find verified evidence
+  const relatedProject = article.relatedProject ? PROJECTS_DATA.find((p) => p.id === article.relatedProject) : null;
   const verifiedEvidence = article.evidenceIds
     ? ENGINEERING_EVIDENCE.filter((ev) => article.evidenceIds?.includes(ev.id))
     : [];
 
-  // Next & Previous Articles
-  const currentIndex = ARTICLES_DATA.findIndex((a) => a.slug === article.slug);
-  const prevArticle = currentIndex > 0 ? ARTICLES_DATA[currentIndex - 1] : null;
-  const nextArticle = currentIndex < ARTICLES_DATA.length - 1 ? ARTICLES_DATA[currentIndex + 1] : null;
-  const otherArticles = ARTICLES_DATA.filter((a) => a.slug !== article.slug).slice(0, 3);
+  // Position on the transit map; articles off the map fall back to list order.
+  const position = getLinePosition(article.slug);
+  const line = position?.line ?? null;
+  const stopIndex = position?.index ?? 0;
+  const lineColor = line?.color ?? "#10B981";
+  const interchange = getInterchange(article.slug);
+  const transfers = getTransfers(article.slug);
+  const listIndex = ARTICLES_DATA.findIndex((a) => a.slug === article.slug);
+  const prevArticle = line
+    ? stopIndex > 0 ? getArticle(line.stops[stopIndex - 1]) ?? null : null
+    : listIndex > 0 ? ARTICLES_DATA[listIndex - 1] : null;
+  const nextArticle = line
+    ? stopIndex < line.stops.length - 1 ? getArticle(line.stops[stopIndex + 1]) ?? null : null
+    : listIndex < ARTICLES_DATA.length - 1 ? ARTICLES_DATA[listIndex + 1] : null;
 
-  const handleCopyCode = (codeText: string) => {
-    navigator.clipboard.writeText(codeText);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+  const handleCopyCode = async (codeText: string) => {
+    try {
+      await navigator.clipboard.writeText(codeText);
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    } catch {}
   };
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopiedShare(true);
-    setTimeout(() => setCopiedShare(false), 2000);
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 2000);
+    } catch {}
   };
 
   const DiagramComponent = DIAGRAM_MAP[article.slug] || (article.diagramKey ? DIAGRAM_MAP[article.diagramKey] : null);
   const hasDiagram = Boolean(DiagramComponent);
 
   const tocItems = useMemo(() => [
-    ...(article.highlights && article.highlights.length > 0 ? [{ id: "highlights", label: language === "vi" ? "Chỉ số kiến trúc" : "Key Highlights" }] : []),
+    ...(article.highlights && article.highlights.length > 0 ? [{ id: "highlights", label: vi ? "Chỉ số kiến trúc" : "Key Highlights" }] : []),
     { id: "context", label: t.writing.problemContext },
-    ...(article.comparison ? [{ id: "comparison", label: language === "vi" ? "So sánh giải pháp" : "Architecture Comparison" }] : []),
-    ...(hasDiagram || article.architectureDiagram ? [{ id: "architecture-diagram", label: language === "vi" ? "Sơ đồ hệ thống" : "Architecture Topology" }] : []),
+    ...(article.comparison ? [{ id: "comparison", label: vi ? "So sánh giải pháp" : "Architecture Comparison" }] : []),
+    ...(hasDiagram || article.architectureDiagram ? [{ id: "architecture-diagram", label: vi ? "Sơ đồ hệ thống" : "Architecture Topology" }] : []),
     { id: "design", label: t.writing.architecturalSolution },
     { id: "decisions", label: t.writing.technicalDecisions },
-    ...(article.sections && article.sections.length > 0 ? article.sections.map((s) => ({ id: s.id, label: language === "vi" && s.titleVi ? s.titleVi : s.title })) : []),
+    ...(article.sections && article.sections.length > 0 ? article.sections.map((s) => ({ id: s.id, label: vi && s.titleVi ? s.titleVi : s.title })) : []),
     ...(article.content.codeSnippet ? [{ id: "implementation", label: t.writing.codeImplementation }] : []),
-    ...(verifiedEvidence.length > 0 ? [{ id: "evidence", label: language === "vi" ? "Bằng chứng Repository" : "Verified Evidence" }] : []),
-    ...(article.embeds && article.embeds.length > 0 ? [{ id: "media-embeds", label: language === "vi" ? "Tư liệu & Video thực tế" : "Media & Video Records" }] : []),
+    ...(verifiedEvidence.length > 0 ? [{ id: "evidence", label: vi ? "Bằng chứng Repository" : "Verified Evidence" }] : []),
+    ...(article.embeds && article.embeds.length > 0 ? [{ id: "media-embeds", label: vi ? "Tư liệu & Video thực tế" : "Media & Video Records" }] : []),
     { id: "takeaways", label: t.writing.keyTakeaways },
-  ], [article, language, verifiedEvidence.length, hasDiagram, t.writing.architecturalSolution, t.writing.codeImplementation, t.writing.keyTakeaways, t.writing.problemContext, t.writing.technicalDecisions]);
+  ], [article, vi, verifiedEvidence.length, hasDiagram, t.writing.architecturalSolution, t.writing.codeImplementation, t.writing.keyTakeaways, t.writing.problemContext, t.writing.technicalDecisions]);
 
-  // Track Reading Progress & Scroll Spy
+  // Reading progress & scroll spy
   useEffect(() => {
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (totalHeight > 0) {
-        const progress = Math.min(100, Math.max(0, (window.scrollY / totalHeight) * 100));
-        setReadingProgress(progress);
+        setReadingProgress(Math.min(100, Math.max(0, (window.scrollY / totalHeight) * 100)));
       }
-
-      // Scroll Spy for TOC
       for (const item of tocItems) {
         const el = document.getElementById(item.id);
         if (el) {
@@ -145,272 +147,216 @@ function ArticleReader({ article }: ArticleClientViewProps) {
         }
       }
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [tocItems]);
 
-  return (
-    <main className="relative min-h-screen bg-slate-50 dark:bg-[#090a0f] text-slate-900 dark:text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black transition-colors duration-200">
-      {/* Top Reading Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-zinc-200 dark:bg-zinc-900">
-        <div
-          className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-150 ease-out"
-          style={{ width: `${readingProgress}%` }}
-        />
-      </div>
+  const activeIndex = Math.max(0, tocItems.findIndex((i) => i.id === activeSectionId));
+  const stopCount = line?.stops.length ?? 1;
+  // The train sits at this stop and rolls toward the next one as you read.
+  const trainPct = stopCount > 1 ? Math.min(100, ((stopIndex + readingProgress / 100) / (stopCount - 1)) * 100) : readingProgress;
+  const stopLabel = String(stopIndex + 1).padStart(2, "0");
 
-      {/* Ambient glow */}
-      <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-emerald-500/[0.04] dark:bg-emerald-500/[0.04] rounded-full blur-[160px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/3 right-1/4 w-[500px] h-[500px] bg-teal-500/[0.03] dark:bg-teal-500/[0.03] rounded-full blur-[160px] pointer-events-none -z-10" />
+  return (
+    <main className="transit relative min-h-screen bg-slate-50 dark:bg-[#090a0f] bg-dots-pattern text-[var(--ink)] transition-colors duration-200">
+      {/* Reading rail */}
+      <div className="fixed left-0 right-0 top-0 z-50 h-1 bg-[var(--rail)]" aria-hidden="true">
+        <div className="h-full transition-[width] duration-150 ease-out" style={{ width: `${readingProgress}%`, background: lineColor }} />
+      </div>
 
       <CustomCursor />
       <Navbar onOpenAI={handleOpenAI} />
 
-      <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        {/* Navigation Breadcrumb & Share */}
-        <MotionWrapper delay={0.05}>
-          <div className="flex items-center justify-between gap-4 mb-8">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-              <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                Home
+      <div className="mx-auto max-w-6xl px-4 pb-24 pt-32 sm:px-6 lg:px-8">
+        {/* Breadcrumb & share */}
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-2 font-mono text-xs text-[var(--muted)]">
+            <Link href="/" className="hover:text-[var(--ink)]">Home</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/writing" className="hover:text-[var(--ink)]">Writing</Link>
+            <span aria-hidden="true">/</span>
+            <span className="max-w-[160px] truncate sm:max-w-xs">{article.slug}</span>
+          </nav>
+          <button
+            type="button"
+            onClick={handleShare}
+            className="toon-btn inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-xl bg-[var(--paper)] px-3 font-mono text-xs font-bold"
+          >
+            {copiedShare ? <Check className="h-3.5 w-3.5" /> : <Share2 className="h-3.5 w-3.5" />}
+            <span>{copiedShare ? (vi ? "Đã copy link" : "Link copied!") : t.writing.shareNote}</span>
+          </button>
+        </div>
+
+        {/* Journey bar */}
+        {line && (
+          <div className="toon px-5 pb-5 pt-4 sm:px-6">
+            <div className="mb-7 flex flex-wrap items-center gap-3 font-mono text-xs text-[var(--muted)]">
+              <LineBadge id={line.id} color={line.color} className="!px-2.5 !text-sm" />
+              <Link href="/writing" className="font-bold text-[var(--ink)] hover:underline">
+                {vi ? line.nameVi : line.name}
               </Link>
-              <span className="text-zinc-400 dark:text-zinc-600">/</span>
-              <Link href="/writing" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                Writing
-              </Link>
-              <span className="text-zinc-400 dark:text-zinc-600">/</span>
-              <span className="text-zinc-600 dark:text-zinc-500 truncate max-w-[180px] sm:max-w-xs">{article.slug}</span>
+              <span>
+                {tt.stop} {stopLabel} {tt.of} {String(stopCount).padStart(2, "0")}
+              </span>
+              <span className="ml-auto">
+                {Math.round(readingProgress)}% {tt.ofTheRide}
+              </span>
             </div>
-
-            <button
-              onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 transition-colors shadow-sm"
-            >
-              {copiedShare ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-emerald-600 dark:text-emerald-400">{language === "vi" ? "Đã copy link" : "Link copied!"}</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5 text-zinc-400" />
-                  <span>{t.writing.shareNote}</span>
-                </>
-              )}
-            </button>
+            <div className="relative">
+              <span aria-hidden="true" className="absolute left-3 right-3 top-[9px] h-1.5 rounded-full bg-[var(--rail)]" />
+              <span
+                aria-hidden="true"
+                className="absolute left-3 top-[9px] h-1.5 rounded-full transition-[width] duration-150"
+                style={{ width: `calc((100% - 24px) * ${trainPct / 100})`, background: line.color }}
+              />
+              <span
+                className="absolute -top-[18px] transition-[left] duration-150"
+                style={{ left: `clamp(0px, calc(12px + (100% - 24px) * ${trainPct / 100} - 32px), calc(100% - 64px))` }}
+              >
+                <TransitTrain color={line.color} />
+              </span>
+              <ol className="relative flex justify-between">
+              {line.stops.map((slug, i) => {
+                const stopArticle = getArticle(slug);
+                const info = getStopInfo(slug);
+                const label = vi ? info.shortVi : info.short;
+                return (
+                  <li key={slug} className="relative flex w-6 flex-col items-center gap-2.5">
+                    <Link
+                      href={`/writing/${slug}`}
+                      className="toon-station block"
+                      aria-label={`${tt.stop} ${i + 1}: ${stopArticle ? label : slug}`}
+                      aria-current={i === stopIndex ? "page" : undefined}
+                    >
+                      <StationDot color={line.color} current={i === stopIndex} interchange={i !== stopIndex && Boolean(getInterchange(slug))} />
+                    </Link>
+                    <span className="font-mono text-[11px] text-[var(--subtle)]">0{i + 1}</span>
+                  </li>
+                );
+              })}
+              </ol>
+            </div>
           </div>
-        </MotionWrapper>
+        )}
 
-        {/* Article Header */}
-        <MotionWrapper delay={0.1}>
-          <div className="border-b border-zinc-200 dark:border-zinc-800/80 pb-8 mb-10">
-            {/* Meta bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-zinc-500 mb-4">
-              <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  {article.date}
-                </span>
-                <span>•</span>
-                <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
-                  <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  {article.readTime}
-                </span>
-                {article.project && (
-                  <>
-                    <span>•</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 uppercase font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                      {article.project === "arda" ? "ARDA Labs" : article.project === "puchi" ? "Puchidemy" : article.project.toUpperCase()}
-                    </span>
-                  </>
-                )}
-                <span className="text-emerald-600 dark:text-emerald-400/80 bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800">
-                  {language === "vi" ? editorial.formatVi : editorial.format}
-                </span>
-              </div>
-
+        {/* Header */}
+        <header className="mt-14 flex flex-wrap items-end gap-10">
+          <div className="min-w-0 flex-[999_1_600px]">
+            <Sticker color={lineColor}>
+              {line ? `${tt.stop.toUpperCase()} ${stopLabel} · ` : ""}
+              {(vi ? editorial.formatVi : editorial.format).toUpperCase()}
+            </Sticker>
+            <h1 className="font-display mt-7 text-4xl font-bold leading-[1.02] tracking-[-0.035em] sm:text-6xl lg:text-[68px]">
+              <span className="toon-pop">{articleTitle}</span>
+            </h1>
+            <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[var(--muted)] sm:text-xl">{articleSummary}</p>
+            <div className="mt-6 flex flex-wrap items-center gap-2.5 font-mono text-xs">
+              <span className="rounded-full border-2 border-[var(--rail)] px-3 py-1.5 text-[var(--muted)]">{article.date}</span>
+              <span className="rounded-full border-2 border-[var(--rail)] px-3 py-1.5 text-[var(--muted)]">{article.readTime}</span>
+              <span className="rounded-full border-2 border-[var(--rail)] px-3 py-1.5 text-[var(--muted)]">{vi ? editorial.seriesVi : editorial.series}</span>
               {article.repositoryUrl && (
                 <a
                   href={article.repositoryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                  className="toon-btn inline-flex items-center gap-1.5 rounded-full bg-[var(--paper)] px-3 py-1.5 font-bold"
                 >
-                  <GitBranch className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span>Inspect Source Code</span>
-                  <ExternalLink className="w-3 h-3 ml-0.5" />
+                  <GitBranch className="h-3.5 w-3.5" />
+                  {article.repositoryUrl.replace("https://github.com/", "")}
+                  <ExternalLink className="h-3 w-3" />
                 </a>
               )}
             </div>
-
-            {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-zinc-950 dark:text-white tracking-tight mb-6 leading-[1.15]">
-              {articleTitle}
-            </h1>
-
-            {/* Lead Paragraph Summary */}
-            <p className="text-lg sm:text-xl text-zinc-600 dark:text-zinc-300 leading-relaxed font-normal mb-8 max-w-4xl">
-              {articleSummary}
-            </p>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {article.tags.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="px-2.5 py-1 text-xs font-mono rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800"
-                >
-                  #{tag}
-                </span>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {article.tags.map((tag) => (
+                <span key={tag} className="font-mono text-xs text-[var(--subtle)]">#{tag}</span>
               ))}
             </div>
-            <div className="mt-4 text-xs font-mono text-zinc-500">
-              {language === "vi" ? editorial.seriesVi : editorial.series}
-            </div>
           </div>
-        </MotionWrapper>
-
-        {/* 30-Second Key Insights Callout Box */}
-        <MotionWrapper delay={0.12}>
-          <div className="mb-12 p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-emerald-50 via-white to-zinc-50 dark:from-emerald-950/30 dark:via-zinc-950/80 dark:to-zinc-950 border border-emerald-500/30 shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(16,185,129,0.15)] relative overflow-hidden">
-            <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-3">
-              <Sparkles className="w-4 h-4" />
-              <span>{t.writing.keyInsights}</span>
-            </div>
-            <p className="text-sm sm:text-base text-zinc-800 dark:text-zinc-200 leading-relaxed">
-              {language === "vi"
-                ? `${editorial.formatVi}: ${article.summaryVi || article.summary}`
-                : `${editorial.format}: ${article.summary}`}
-            </p>
+          <div className="hidden max-w-[240px] flex-[1_1_200px] md:block">
+            <HoanBot size="sm" message={tt.botArticle} label={t.nav.askAi} onClick={handleOpenAI} />
           </div>
-        </MotionWrapper>
+        </header>
 
-        {/* Hero Image Illustration Banner (if configured) */}
+        {/* Key insights */}
+        <div className="toon relative mt-12 p-6 pt-8 sm:p-7 sm:pt-9">
+          <Sticker color="var(--line-a)" className="absolute -top-4 left-5">{t.writing.keyInsights}</Sticker>
+          <p className="text-base leading-relaxed sm:text-lg">
+            {vi ? `${editorial.formatVi}: ${articleSummary}` : `${editorial.format}: ${article.summary}`}
+          </p>
+        </div>
+
+        {/* Hero image */}
         {article.heroImage && (
-          <MotionWrapper delay={0.14}>
-            <div className="mb-12 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#09090B] p-2 sm:p-4 shadow-xl relative group">
-              <div className="relative w-full h-64 sm:h-96 md:h-[420px] rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-950 flex items-center justify-center">
-                <Image
-                  src={article.heroImage}
-                  alt={articleTitle}
-                  fill
-                  className="object-contain p-2 sm:p-4 transition-transform duration-500 group-hover:scale-[1.02]"
-                  sizes="(max-width: 1200px) 100vw, 1200px"
-                  priority
-                />
-                <button
-                  type="button"
-                  onClick={() => setImageModalOpen(true)}
-                  className="absolute bottom-3 right-3 p-2 rounded-lg bg-white/80 dark:bg-black/80 hover:bg-white dark:hover:bg-black text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center gap-1.5 text-xs font-mono backdrop-blur-sm shadow-md"
-                  title="Expand architecture image"
-                >
-                  <Maximize2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="hidden sm:inline">Zoom</span>
-                </button>
-              </div>
-              {(article.heroImageCaption || article.heroImageCaptionVi) && (
-                <p className="mt-3 text-center text-xs text-zinc-500 dark:text-zinc-400 font-mono italic">
-                  {language === "vi" && article.heroImageCaptionVi ? article.heroImageCaptionVi : article.heroImageCaption}
-                </p>
-              )}
+          <figure className="toon mt-12 overflow-hidden p-2 sm:p-4">
+            <div className="relative flex h-64 w-full items-center justify-center overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-950 sm:h-96 md:h-[420px]">
+              <Image src={article.heroImage} alt={articleTitle} fill className="object-contain p-2 sm:p-4" sizes="(max-width: 1200px) 100vw, 1200px" priority />
+              <button
+                type="button"
+                onClick={() => setImageModalOpen(true)}
+                className="toon-btn absolute bottom-3 right-3 flex min-h-10 items-center gap-1.5 rounded-lg bg-[var(--paper)] px-3 font-mono text-xs font-bold"
+                aria-label="Expand architecture image"
+              >
+                <Maximize2 className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Zoom</span>
+              </button>
             </div>
-          </MotionWrapper>
+            {(article.heroImageCaption || article.heroImageCaptionVi) && (
+              <figcaption className="mt-3 text-center font-mono text-xs text-[var(--muted)]">
+                {vi && article.heroImageCaptionVi ? article.heroImageCaptionVi : article.heroImageCaption}
+              </figcaption>
+            )}
+          </figure>
         )}
 
-        {/* Main Grid: Article Content + Sticky Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Article Main Body */}
-          <article className="lg:col-span-8 space-y-12 text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
-            {/* Key Highlights Metric Grid (if available) */}
+        {/* Body + sidebar */}
+        <div className="mt-16 grid grid-cols-1 gap-14 lg:grid-cols-12">
+          <article className="space-y-16 text-[17px] leading-8 text-zinc-700 dark:text-zinc-300 lg:col-span-8">
             {article.highlights && article.highlights.length > 0 && (
-              <section id="highlights" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <Zap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{language === "vi" ? "Chỉ số Kiến trúc Nổi bật" : "Architectural Highlights & Guarantees"}</span>
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              <section id="highlights" className="space-y-6">
+                <h2 className={H2}>{vi ? "Chỉ số kiến trúc nổi bật" : "Architectural highlights"}</h2>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                   {article.highlights.map((item, idx) => (
                     <div
                       key={idx}
-                      className="p-4 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/40 transition-colors space-y-1 shadow-sm"
+                      className="rounded-2xl border-2 border-[var(--ink)] bg-[var(--paper)] p-4"
+                      style={{ boxShadow: `4px 4px 0 ${["var(--line-a)", "var(--line-b)", "#38BDF8", "#F472B6"][idx % 4]}` }}
                     >
-                      <div className="text-lg sm:text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400 tracking-tight">
-                        {item.value}
-                      </div>
-                      <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                        {language === "vi" && item.labelVi ? item.labelVi : item.label}
-                      </div>
-                      <div className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-tight">
-                        {language === "vi" && item.detailVi ? item.detailVi : item.detail}
-                      </div>
+                      <div className="font-display text-xl font-bold tracking-tight text-[var(--ink)] sm:text-2xl">{item.value}</div>
+                      <div className="mt-1 text-xs font-semibold leading-snug text-[var(--ink)]">{vi && item.labelVi ? item.labelVi : item.label}</div>
+                      <div className="mt-1 text-[11px] leading-tight text-[var(--muted)]">{vi && item.detailVi ? item.detailVi : item.detail}</div>
                     </div>
                   ))}
                 </div>
               </section>
             )}
 
-            {/* 1. Problem Context */}
-            <section id="context" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <AlertCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>{t.writing.problemContext}</span>
-              </h2>
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
-                {problemStatement}
-              </div>
+            <section id="context" className="space-y-5">
+              <h2 className={H2}>{t.writing.problemContext}</h2>
+              <p>{problemStatement}</p>
             </section>
 
-            {/* Side-by-Side Comparison Card (Naive vs Solution) */}
             {article.comparison && (
-              <section id="comparison" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{language === "vi" ? "Phân tích So sánh Kiến trúc" : "Architectural Trade-offs: Naive vs Engineered"}</span>
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Naive card */}
-                  <div className="p-5 rounded-2xl bg-rose-50 dark:bg-rose-950/15 border border-rose-200 dark:border-rose-500/20 space-y-3 shadow-sm">
-                    <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-sm font-bold font-mono">
-                      <XCircle className="w-4 h-4 shrink-0" />
-                      <span>
-                        {language === "vi" && article.comparison.naiveTitleVi
-                          ? article.comparison.naiveTitleVi
-                          : article.comparison.naiveTitle}
-                      </span>
-                    </div>
-                    <ul className="space-y-2 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300">
-                      {(language === "vi" && article.comparison.naivePointsVi
-                        ? article.comparison.naivePointsVi
-                        : article.comparison.naivePoints
-                      ).map((pt, ptIdx) => (
-                        <li key={ptIdx} className="flex items-start gap-2">
-                          <span className="text-rose-500 font-bold shrink-0 mt-0.5">•</span>
-                          <span>{pt}</span>
-                        </li>
+              <section id="comparison" className="space-y-6">
+                <h2 className={H2}>{vi ? "So sánh kiến trúc" : "Naive approach vs. engineered"}</h2>
+                <div className="grid grid-cols-1 gap-6 text-[15px] leading-relaxed md:grid-cols-2">
+                  <div className="rounded-2xl border-2 border-[var(--ink)] bg-[var(--paper)] p-6" style={{ boxShadow: "5px 5px 0 #FB923C" }}>
+                    <p className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400">
+                      ✕ {vi && article.comparison.naiveTitleVi ? article.comparison.naiveTitleVi : article.comparison.naiveTitle}
+                    </p>
+                    <ul className="list-disc space-y-2 pl-5">
+                      {(vi && article.comparison.naivePointsVi ? article.comparison.naivePointsVi : article.comparison.naivePoints).map((pt, i) => (
+                        <li key={i}>{pt}</li>
                       ))}
                     </ul>
                   </div>
-
-                  {/* Solution card */}
-                  <div className="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-500/30 space-y-3 shadow-sm">
-                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-sm font-bold font-mono">
-                      <CheckCircle2 className="w-4 h-4 shrink-0" />
-                      <span>
-                        {language === "vi" && article.comparison.solutionTitleVi
-                          ? article.comparison.solutionTitleVi
-                          : article.comparison.solutionTitle}
-                      </span>
-                    </div>
-                    <ul className="space-y-2 text-xs sm:text-sm text-zinc-800 dark:text-zinc-200">
-                      {(language === "vi" && article.comparison.solutionPointsVi
-                        ? article.comparison.solutionPointsVi
-                        : article.comparison.solutionPoints
-                      ).map((pt, ptIdx) => (
-                        <li key={ptIdx} className="flex items-start gap-2">
-                          <span className="text-emerald-600 dark:text-emerald-400 font-bold shrink-0 mt-0.5">✓</span>
-                          <span>{pt}</span>
-                        </li>
+                  <div className="rounded-2xl border-2 border-[var(--ink)] bg-[var(--paper)] p-6" style={{ boxShadow: "5px 5px 0 var(--line-a)" }}>
+                    <p className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                      ✓ {vi && article.comparison.solutionTitleVi ? article.comparison.solutionTitleVi : article.comparison.solutionTitle}
+                    </p>
+                    <ul className="list-disc space-y-2 pl-5">
+                      {(vi && article.comparison.solutionPointsVi ? article.comparison.solutionPointsVi : article.comparison.solutionPoints).map((pt, i) => (
+                        <li key={i}>{pt}</li>
                       ))}
                     </ul>
                   </div>
@@ -418,180 +364,118 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               </section>
             )}
 
-            {/* 2. Visual & Dynamic Architecture Diagram */}
-            {(() => {
-              if (DiagramComponent) {
-                return (
-                  <section id="architecture-diagram" className="space-y-4">
-                    <DiagramComponent caption={articleTitle} />
-                  </section>
-                );
-              }
-              if (article.architectureDiagram) {
-                return (
-                  <section id="architecture-diagram" className="space-y-4">
-                    <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                      <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                      <span>System Architecture Topology</span>
-                    </h2>
-                    <div className="p-4 sm:p-6 rounded-2xl bg-zinc-900 dark:bg-black border border-zinc-200 dark:border-zinc-800 font-mono text-[11px] sm:text-xs text-emerald-400 overflow-x-auto leading-relaxed shadow-xl">
-                      <pre>{article.architectureDiagram}</pre>
-                    </div>
-                  </section>
-                );
-              }
-              return null;
-            })()}
+            {DiagramComponent ? (
+              <section id="architecture-diagram" className="scroll-mt-28">
+                <DiagramComponent caption={articleTitle} />
+              </section>
+            ) : article.architectureDiagram ? (
+              <section id="architecture-diagram" className="space-y-5">
+                <h2 className={H2}>{vi ? "Sơ đồ hệ thống" : "System topology"}</h2>
+                <div className="toon overflow-x-auto bg-[#09090B] p-5 font-mono text-xs leading-relaxed text-emerald-400">
+                  <pre>{article.architectureDiagram}</pre>
+                </div>
+              </section>
+            ) : null}
 
-            {/* 3. Architectural Design */}
-            <section id="design" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>{t.writing.architecturalSolution}</span>
-              </h2>
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
-                {architectureDesign}
-              </div>
+            <section id="design" className="space-y-5">
+              <h2 className={H2}>{t.writing.architecturalSolution}</h2>
+              <p>{architectureDesign}</p>
             </section>
 
-            {/* 4. Technical Decisions */}
-            <section id="decisions" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>{t.writing.technicalDecisions}</span>
-              </h2>
-              <div className="space-y-3">
+            <section id="decisions" className="space-y-6">
+              <h2 className={H2}>{t.writing.technicalDecisions}</h2>
+              <ol className="space-y-5">
                 {technicalDecisions.map((decision, idx) => (
-                  <div
-                    key={idx}
-                    className="p-5 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 flex items-start gap-4 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors shadow-sm"
-                  >
-                    <span className="text-emerald-600 dark:text-emerald-400 font-mono font-bold shrink-0 mt-0.5 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 text-xs">
-                      0{idx + 1}
+                  <li key={idx} className="grid grid-cols-[48px_minmax(0,1fr)] items-start gap-4">
+                    <span className="toon-sm font-display flex h-10 w-10 items-center justify-center rounded-full bg-[var(--line-a)] text-[15px] font-bold text-[#09090B]">
+                      {idx + 1}
                     </span>
-                    <span className="text-sm sm:text-base text-zinc-800 dark:text-zinc-300 leading-relaxed">{decision}</span>
-                  </div>
+                    <span className="text-base leading-relaxed">{decision}</span>
+                  </li>
                 ))}
-              </div>
+              </ol>
             </section>
 
-            {/* 5. Custom Deep-Dive Sections */}
-            {article.sections && article.sections.map((sec) => {
-              const secTitle = language === "vi" && sec.titleVi ? sec.titleVi : sec.title;
-              const secContent = language === "vi" && sec.contentVi ? sec.contentVi : sec.content;
-              const calloutText = sec.callout ? (language === "vi" && sec.callout.textVi ? sec.callout.textVi : sec.callout.text) : null;
-
+            {article.sections?.map((sec) => {
+              const secTitle = vi && sec.titleVi ? sec.titleVi : sec.title;
+              const secContent = vi && sec.contentVi ? sec.contentVi : sec.content;
+              const calloutText = sec.callout ? (vi && sec.callout.textVi ? sec.callout.textVi : sec.callout.text) : null;
+              const style = CALLOUT_STYLES[sec.callout?.type ?? "info"];
               return (
-                <section key={sec.id} id={sec.id} className="space-y-4">
-                  <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                    <BookOpen className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                    <span>{secTitle}</span>
-                  </h2>
-                  <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
-                    <p className="whitespace-pre-line">{secContent}</p>
-                  </div>
+                <section key={sec.id} id={sec.id} className="space-y-5">
+                  <h2 className={H2}>{secTitle}</h2>
+                  <p className="whitespace-pre-line">{secContent}</p>
                   {calloutText && (
-                    <div className={`p-5 rounded-2xl flex items-start gap-3.5 text-sm leading-relaxed ${
-                      sec.callout?.type === "warning"
-                        ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-500/30 text-amber-900 dark:text-amber-200"
-                        : sec.callout?.type === "tip"
-                        ? "bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-200"
-                        : "bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 text-blue-900 dark:text-blue-200"
-                    }`}>
-                      {sec.callout?.type === "warning" ? (
-                        <AlertTriangle className="w-5 h-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-                      ) : sec.callout?.type === "tip" ? (
-                        <Lightbulb className="w-5 h-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-                      ) : (
-                        <Info className="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400 mt-0.5" />
-                      )}
-                      <span>{calloutText}</span>
-                    </div>
+                    <aside
+                      className={`relative mt-8 rounded-2xl border-2 border-[var(--ink)] px-6 pb-5 pt-7 text-base leading-relaxed text-[var(--ink)] ${style.bg}`}
+                      style={{ boxShadow: `5px 5px 0 ${style.accent}` }}
+                    >
+                      <Sticker color={style.accent} className="absolute -top-4 left-5 !text-[11px]">
+                        {(vi ? style.labelVi : style.label).toUpperCase()}
+                      </Sticker>
+                      {calloutText}
+                    </aside>
                   )}
                 </section>
               );
             })}
 
-            {/* 6. Code Implementation */}
             {article.content.codeSnippet && (
-              <section id="implementation" className="space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5">
-                    <Code2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                    <span>{t.writing.codeImplementation}</span>
-                  </h2>
-                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 uppercase bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 font-bold">
-                    {article.content.codeSnippet.language}
-                  </span>
-                </div>
-
-                <div className="relative rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-950 shadow-xl">
-                  {/* Header bar */}
-                  <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/90 border-b border-zinc-800 text-xs font-mono text-zinc-400">
-                    <div className="flex items-center gap-2">
-                      <Terminal className="w-4 h-4 text-emerald-400" />
-                      <span className="text-zinc-200 font-semibold">{article.content.codeSnippet.title}</span>
-                    </div>
-                    <button
-                      onClick={() => handleCopyCode(article.content.codeSnippet!.code)}
-                      className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
-                      title="Copy code"
-                    >
-                      {copiedCode ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400 font-semibold">Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>Copy</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  <pre className="p-5 font-mono text-xs sm:text-sm text-zinc-200 overflow-x-auto leading-relaxed bg-[#09090B] custom-scrollbar">
+              <section id="implementation" className="space-y-6">
+                <h2 className={H2}>{t.writing.codeImplementation}</h2>
+                <figure className="toon overflow-hidden !bg-[#0C0C0E]">
+                  <figcaption className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-[var(--ink)] bg-zinc-900 px-4 py-2.5 font-mono text-xs text-zinc-300">
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-orange-400" />
+                      <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+                      <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                      <Terminal className="ml-2 h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                      <span className="truncate font-semibold text-zinc-100">{article.content.codeSnippet.title}</span>
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="uppercase text-zinc-400">{article.content.codeSnippet.language}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyCode(article.content.codeSnippet!.code)}
+                        className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border-2 border-zinc-100 bg-emerald-500 px-2.5 font-bold text-zinc-950"
+                      >
+                        {copiedCode ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                        {copiedCode ? "Copied" : "Copy"}
+                      </button>
+                    </span>
+                  </figcaption>
+                  <pre className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-zinc-200 sm:text-[13px]">
                     <code>{article.content.codeSnippet.code}</code>
                   </pre>
-                </div>
+                </figure>
               </section>
             )}
 
-            {/* 7. Verified Evidence */}
             {verifiedEvidence.length > 0 && (
-              <section id="evidence" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{language === "vi" ? "Bằng chứng Kỹ thuật Khách quan" : "Verified Repository Evidence"}</span>
-                </h2>
-                <div className="space-y-3">
+              <section id="evidence" className="space-y-6">
+                <h2 className={H2}>{vi ? "Bằng chứng kỹ thuật" : "Verified repository evidence"}</h2>
+                <div className="space-y-4">
                   {verifiedEvidence.map((ev) => (
-                    <div
-                      key={ev.id}
-                      className="p-5 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 space-y-2.5 shadow-sm"
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
-                          {ev.category.toUpperCase()} • {ev.confidence.toUpperCase()}
+                    <div key={ev.id} className="toon-sm space-y-2 rounded-2xl bg-[var(--paper)] p-5">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="rounded-md bg-[var(--line-a)] px-2 py-0.5 font-mono text-[11px] font-bold text-[#09090B]">
+                          {ev.category.toUpperCase()} · {ev.confidence.toUpperCase()}
                         </span>
-                        <a
-                          href={ev.evidence[0]?.repository}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs font-mono text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1"
-                        >
-                          <span>{ev.evidence[0]?.repository.replace("https://github.com/", "")}</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
+                        {ev.evidence[0]?.repository && (
+                          <a
+                            href={ev.evidence[0].repository}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 font-mono text-xs text-[var(--muted)] hover:text-[var(--ink)]"
+                          >
+                            {ev.evidence[0].repository.replace("https://github.com/", "")}
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        )}
                       </div>
-                      <p className="text-sm text-zinc-800 dark:text-zinc-200 font-medium">
-                        {language === "vi" ? ev.claimVi : ev.claim}
-                      </p>
+                      <p className="text-[15px] font-medium leading-relaxed text-[var(--ink)]">{vi ? ev.claimVi : ev.claim}</p>
                       {ev.evidence[0]?.description && (
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
-                          ↳ {ev.evidence[0]?.description}
-                        </p>
+                        <p className="font-mono text-xs text-[var(--muted)]">↳ {ev.evidence[0].description}</p>
                       )}
                     </div>
                   ))}
@@ -599,89 +483,82 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               </section>
             )}
 
-            {/* 7.5 Media Embeds */}
             {article.embeds && article.embeds.length > 0 && (
               <section id="media-embeds" className="space-y-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <Video className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{language === "vi" ? "Tư liệu & Video Hoạt động Thực tế" : "Media, Videos & Practical Records"}</span>
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                <h2 className={H2}>{vi ? "Tư liệu & video thực tế" : "Media & practical records"}</h2>
+                <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
                   {article.embeds.map((emb, idx) => {
-                    const title = language === "vi" && emb.titleVi ? emb.titleVi : emb.title;
-                    const caption = language === "vi" && emb.captionVi ? emb.captionVi : emb.caption;
-
+                    const title = vi && emb.titleVi ? emb.titleVi : emb.title;
+                    const caption = vi && emb.captionVi ? emb.captionVi : emb.caption;
                     if (emb.type === "youtube") {
                       const ytId = emb.url?.replace(/.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/, "$1") || "ASVxal2cwXo";
                       return (
-                        <div key={idx} className="md:col-span-2 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl">
+                        <div key={idx} className="toon space-y-3 p-4 md:col-span-2">
                           {title && (
-                            <h4 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-                              <Play className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                              <span>{title}</span>
-                            </h4>
+                            <h3 className="flex items-center gap-2 text-sm font-bold text-[var(--ink)]">
+                              <Play className="h-4 w-4" />
+                              {title}
+                            </h3>
                           )}
-                          <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-black">
+                          <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
                             <iframe
                               src={emb.src || `https://www.youtube-nocookie.com/embed/${ytId}`}
                               title={title || "YouTube video"}
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                               allowFullScreen
-                              className="absolute inset-0 w-full h-full border-0"
+                              className="absolute inset-0 h-full w-full border-0"
                             />
                           </div>
-                          {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic">{caption}</p>}
+                          {caption && <p className="font-mono text-xs italic text-[var(--muted)]">{caption}</p>}
                         </div>
                       );
                     }
-
                     if (emb.type === "facebook-video") {
                       return (
-                        <div key={idx} className="flex flex-col items-center rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl">
+                        <div key={idx} className="toon flex flex-col items-center space-y-3 p-4">
                           {title && (
-                            <h4 className="text-sm font-bold text-zinc-900 dark:text-white self-start flex items-center gap-2">
-                              <Video className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                              <span>{title}</span>
-                            </h4>
+                            <h3 className="flex items-center gap-2 self-start text-sm font-bold text-[var(--ink)]">
+                              <Video className="h-4 w-4" />
+                              {title}
+                            </h3>
                           )}
-                          <div className="w-[267px] max-w-full h-[476px] rounded-xl overflow-hidden bg-black flex justify-center">
+                          <div className="flex h-[476px] w-[267px] max-w-full justify-center overflow-hidden rounded-xl bg-black">
                             <iframe
                               src={emb.src}
+                              title={title || "Facebook video"}
                               width="267"
                               height="476"
                               style={{ border: "none", overflow: "hidden" }}
                               scrolling="no"
-                              frameBorder="0"
-                              allowFullScreen={true}
+                              allowFullScreen
                               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                             />
                           </div>
-                          {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic text-center">{caption}</p>}
+                          {caption && <p className="text-center font-mono text-xs italic text-[var(--muted)]">{caption}</p>}
                         </div>
                       );
                     }
-
                     return (
-                      <div key={idx} className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl overflow-hidden flex flex-col items-center">
+                      <div key={idx} className="toon flex flex-col items-center space-y-3 overflow-hidden p-4">
                         {title && (
-                          <h4 className="text-sm font-bold text-zinc-900 dark:text-white self-start flex items-center gap-2">
-                            <ExternalLink className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                            <span>{title}</span>
-                          </h4>
+                          <h3 className="flex items-center gap-2 self-start text-sm font-bold text-[var(--ink)]">
+                            <ExternalLink className="h-4 w-4" />
+                            {title}
+                          </h3>
                         )}
-                        <div className="w-full max-w-[500px] overflow-hidden rounded-xl bg-black/5 dark:bg-white/5 flex justify-center">
+                        <div className="flex w-full max-w-[500px] justify-center overflow-hidden rounded-xl bg-black/5 dark:bg-white/5">
                           <iframe
                             src={emb.src}
+                            title={title || "Embedded post"}
                             width={emb.width || "500"}
                             height={emb.height || "250"}
                             style={{ border: "none", overflow: "hidden", maxWidth: "100%" }}
                             scrolling="no"
-                            frameBorder="0"
-                            allowFullScreen={true}
+                            allowFullScreen
                             allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                           />
                         </div>
-                        {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic text-center">{caption}</p>}
+                        {caption && <p className="text-center font-mono text-xs italic text-[var(--muted)]">{caption}</p>}
                       </div>
                     );
                   })}
@@ -689,184 +566,138 @@ function ArticleReader({ article }: ArticleClientViewProps) {
               </section>
             )}
 
-            {/* 8. Key Takeaways */}
-            <section id="takeaways" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>{t.writing.keyTakeaways}</span>
-              </h2>
-              <div className="p-6 sm:p-7 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-500/20 space-y-3.5 shadow-sm">
+            <section id="takeaways" className="space-y-5">
+              <h2 className={H2}>{t.writing.keyTakeaways}</h2>
+              <ul className="space-y-3">
                 {keyTakeaways.map((takeaway, idx) => (
-                  <div key={idx} className="flex items-start gap-3 text-sm sm:text-base text-zinc-800 dark:text-zinc-200">
-                    <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <li key={idx} className="flex items-start gap-3">
+                    <Check className="mt-1.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
                     <span>{takeaway}</span>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
 
-            {/* Related Project Card */}
             {relatedProject && (
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+              <div className="toon flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
                 <div>
-                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1 font-semibold">
-                    Related System
-                  </span>
-                  <h3 className="text-lg font-bold text-zinc-900 dark:text-white">
-                    {language === "vi" && relatedProject.titleVi ? relatedProject.titleVi : relatedProject.title}
-                  </h3>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 line-clamp-1">
-                    {language === "vi" && relatedProject.subtitleVi ? relatedProject.subtitleVi : relatedProject.subtitle}
-                  </p>
+                  <span className="mb-1 block font-mono text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Related system</span>
+                  <h3 className="font-display text-lg font-bold text-[var(--ink)]">{vi && relatedProject.titleVi ? relatedProject.titleVi : relatedProject.title}</h3>
+                  <p className="mt-1 line-clamp-1 text-sm text-[var(--muted)]">{vi && relatedProject.subtitleVi ? relatedProject.subtitleVi : relatedProject.subtitle}</p>
                 </div>
                 <Link
                   href={`/projects/${relatedProject.id}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold shrink-0 transition-colors"
+                  className="toon-btn inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-[var(--line-a)] px-4 text-sm font-bold text-[#09090B]"
                 >
-                  <span>{t.selectedWork.viewArchitecture}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  {t.selectedWork.viewArchitecture}
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             )}
 
-            {/* Next / Previous Article Footer Links */}
-            <div className="pt-10 border-t border-zinc-200 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {prevArticle ? (
-                <Link
-                  href={`/writing/${prevArticle.slug}`}
-                  className="p-5 rounded-2xl bg-white dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group text-left shadow-sm"
-                >
-                  <span className="text-xs font-mono text-zinc-500 flex items-center gap-1 mb-1">
-                    <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-                    {t.writing.prevArticle}
-                  </span>
-                  <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
-                    {language === "vi" && prevArticle.titleVi ? prevArticle.titleVi : prevArticle.title}
-                  </p>
+            {/* Where to next */}
+            <section aria-label={tt.endOfStop} className="pt-4">
+              <p className="font-hand mb-6 -rotate-2 text-[34px]" style={{ color: "var(--line-b)" }}>
+                {nextArticle ? tt.endOfStop : tt.endOfLine}
+              </p>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {nextArticle && (
+                  <Link href={`/writing/${nextArticle.slug}`} className="toon toon-lift flex flex-col gap-3.5 overflow-hidden p-6">
+                    <span className="font-mono text-xs font-bold" style={{ color: lineColor }}>
+                      {tt.nextStop.toUpperCase()}
+                      {line ? ` · ${line.id} · 0${stopIndex + 2}` : ""} →
+                    </span>
+                    <span className="font-display text-xl font-bold leading-tight text-[var(--ink)]">
+                      {vi && nextArticle.titleVi ? nextArticle.titleVi : nextArticle.title}
+                    </span>
+                    <TransitTrain color={lineColor} smoke={false} className="mt-1 w-16" />
+                  </Link>
+                )}
+                {transfers.map((tr) => {
+                  const trPos = getLinePosition(tr.slug);
+                  return (
+                    <Link key={tr.slug} href={`/writing/${tr.slug}`} className="toon toon-lift flex flex-col gap-3.5 p-6">
+                      <span className="font-mono text-xs font-bold" style={{ color: trPos?.line.color }}>
+                        ⇄ {tt.changeHere.toUpperCase()}
+                        {trPos ? ` · ${trPos.line.id} · 0${trPos.index + 1}` : ""}
+                      </span>
+                      <span className="font-display text-xl font-bold leading-tight text-[var(--ink)]">{vi && tr.titleVi ? tr.titleVi : tr.title}</span>
+                      {interchange && (
+                        <span className="font-hand text-[22px] text-[var(--muted)]">
+                          {vi ? interchange.topicVi : interchange.topic}: {tt.sameProblem.replace("⇄ = ", "")}
+                        </span>
+                      )}
+                    </Link>
+                  );
+                })}
+                {prevArticle && (
+                  <Link href={`/writing/${prevArticle.slug}`} className="toon toon-lift flex flex-col gap-3.5 p-6">
+                    <span className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[var(--muted)]">
+                      <ArrowLeft className="h-3.5 w-3.5" />
+                      {tt.prevStop.toUpperCase()}
+                    </span>
+                    <span className="font-display text-lg font-bold leading-tight text-[var(--ink)]">
+                      {vi && prevArticle.titleVi ? prevArticle.titleVi : prevArticle.title}
+                    </span>
+                  </Link>
+                )}
+                <Link href="/writing" className="toon toon-lift flex flex-col justify-center gap-2 p-6">
+                  <span className="font-mono text-xs font-bold text-[var(--muted)]">← {tt.lineOverview.toUpperCase()}</span>
+                  <span className="font-display text-lg font-bold text-[var(--ink)]">{line ? (vi ? line.nameVi : line.name) : t.writing.backToWriting}</span>
                 </Link>
-              ) : <div />}
+              </div>
+            </section>
 
-              {nextArticle && (
-                <Link
-                  href={`/writing/${nextArticle.slug}`}
-                  className="p-5 rounded-2xl bg-white dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group text-right ml-auto w-full shadow-sm"
-                >
-                  <span className="text-xs font-mono text-zinc-500 inline-flex items-center gap-1 mb-1">
-                    {t.writing.nextArticle}
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
-                    {language === "vi" && nextArticle.titleVi ? nextArticle.titleVi : nextArticle.title}
-                  </p>
-                </Link>
-              )}
-            </div>
+            <RecruiterCard />
           </article>
 
-          {/* Sticky Sidebar (TOC + Author + Other Articles) */}
-          <aside className="lg:col-span-4 space-y-8">
-            {/* Table of Contents */}
-            <div className="sticky top-28 space-y-6">
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm shadow-sm">
-                <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-4 pb-2 border-b border-zinc-200 dark:border-zinc-800 font-semibold">
-                  <div className="flex items-center gap-2">
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>{t.writing.tableOfContents}</span>
-                  </div>
-                  <span className="text-[10px] text-zinc-500">{Math.round(readingProgress)}%</span>
-                </div>
-                <nav className="space-y-1.5 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
+          {/* Sidebar */}
+          <aside className="lg:col-span-4">
+            <div className="space-y-10 lg:sticky lg:top-28">
+              <nav aria-label={tt.stationsOnPage} className="toon p-5">
+                <h2 className="mb-4 flex items-center justify-between font-mono text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+                  <span>{tt.stationsOnPage}</span>
+                  <span>{Math.round(readingProgress)}%</span>
+                </h2>
+                <ol className="relative max-h-[50vh] space-y-1 overflow-y-auto bg-[linear-gradient(var(--rail),var(--rail))] bg-[length:4px_calc(100%-24px)] bg-[position:7px_12px] bg-no-repeat">
                   {tocItems.map((item, idx) => {
-                    const isActive = activeSectionId === item.id;
+                    const passed = idx <= activeIndex && activeSectionId !== "";
+                    const isActive = item.id === activeSectionId;
                     return (
-                      <a
-                        key={item.id}
-                        href={`#${item.id}`}
-                        className={`block text-xs font-mono py-1.5 px-2 rounded-lg transition-all truncate ${
-                          isActive
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border-l-2 border-emerald-500"
-                            : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900"
-                        }`}
-                      >
-                        <span className="text-zinc-400 dark:text-zinc-600 mr-2">0{idx + 1}.</span>
-                        {item.label}
-                      </a>
+                      <li key={item.id} className="relative">
+                        <a
+                          href={`#${item.id}`}
+                          aria-current={isActive ? "location" : undefined}
+                          className={`flex min-h-9 items-center gap-3 text-sm transition-colors ${isActive ? "font-bold text-[var(--ink)]" : passed ? "text-[var(--ink)]" : "text-[var(--muted)] hover:text-[var(--ink)]"}`}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="relative block h-[18px] w-[18px] shrink-0 rounded-full"
+                            style={{ border: `4px solid ${passed ? "var(--ink)" : lineColor}`, background: passed ? lineColor : "var(--paper)" }}
+                          />
+                          <span className="line-clamp-1">{item.label}</span>
+                        </a>
+                      </li>
                     );
                   })}
-                </nav>
-              </div>
-
-              {/* Author & System Builder Card */}
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm space-y-3 shadow-sm">
-                <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
-                  Author & Builder
-                </div>
-                <div className="font-bold text-zinc-900 dark:text-white text-base">
-                  {language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}
-                </div>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  {language === "vi"
-                    ? "Kỹ sư Full-stack & System Builder. Tốt nghiệp loại Giỏi ĐH Giao thông Vận tải. Chuyên sâu về vi dịch vụ, micro-frontend và hệ thống phân tán."
-                    : "Full-stack Engineer & System Builder. Graduated with Distinction from UTC. Building cloud-native multi-tenant architectures and distributed platforms."}
-                </p>
-                <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
-                  <Link href="/#contact" className="text-emerald-600 dark:text-emerald-400 hover:underline">
-                    Get in touch →
-                  </Link>
-                  <a
-                    href="https://github.com/hoan02"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
-                  >
-                    GitHub
-                  </a>
-                </div>
-              </div>
-
-              {/* Other Related Notes */}
-              {otherArticles.length > 0 && (
-                <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm space-y-3 shadow-sm">
-                  <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
-                    {language === "vi" ? "Gợi ý Đọc tiếp" : "Recommended Notes"}
-                  </div>
-                  <div className="space-y-3">
-                    {otherArticles.map((other) => (
-                      <Link
-                        key={other.slug}
-                        href={`/writing/${other.slug}`}
-                        className="block group p-2.5 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
-                      >
-                        <h4 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
-                          {language === "vi" && other.titleVi ? other.titleVi : other.title}
-                        </h4>
-                        <span className="text-[10px] font-mono text-zinc-500 mt-1 block">
-                          {other.readTime} • {other.date}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
+                </ol>
+              </nav>
+              <RecruiterCard variant="compact" />
             </div>
           </aside>
         </div>
       </div>
 
-      {/* Lightbox Modal for Hero Image */}
       {imageModalOpen && article.heroImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
           onClick={() => setImageModalOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={articleTitle}
         >
-          <div className="relative max-w-5xl max-h-[90vh] w-full h-[80vh] flex items-center justify-center">
-            <Image
-              src={article.heroImage}
-              alt={articleTitle}
-              fill
-              className="object-contain"
-              sizes="100vw"
-            />
+          <div className="relative flex h-[80vh] max-h-[90vh] w-full max-w-5xl items-center justify-center">
+            <Image src={article.heroImage} alt={articleTitle} fill className="object-contain" sizes="100vw" />
           </div>
         </div>
       )}

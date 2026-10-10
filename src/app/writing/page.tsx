@@ -3,15 +3,34 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { Search } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ARTICLES_DATA } from "@/data/portfolioData";
-import { getArticleEditorial } from "@/data/articleEditorial";
 import { UI_TRANSLATIONS } from "@/data/translations";
-import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
+import {
+  TRANSIT_LINES,
+  LineId,
+  getArticle,
+  getInterchange,
+  getLinePosition,
+  getStopInfo,
+} from "@/data/transitMap";
+import {
+  HoanBot,
+  LineBadge,
+  MiniFlow,
+  RequestTrace,
+  Sparkle,
+  Squiggle,
+  StationDot,
+  Sticker,
+  TransitTrain,
+} from "@/components/writing/Toon";
+import { RecruiterCard } from "@/components/writing/RecruiterCard";
 
 const AskAIModal = dynamic(
   () => import("@/components/ai/AskAIModal").then((mod) => mod.AskAIModal),
@@ -22,296 +41,272 @@ const CustomCursor = dynamic(
   () => import("@/components/common/CustomCursor").then((mod) => mod.CustomCursor),
   { ssr: false }
 );
-import {
-  BookOpen,
-  Calendar,
-  Clock,
-  ArrowRight,
-  ArrowLeft,
-  Search,
-  Layers,
-  Flame
-} from "lucide-react";
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// "Feb 2026" → sortable number
+function dateKey(date: string) {
+  const [m, y] = date.split(" ");
+  return Number(y) * 12 + Math.max(0, MONTHS.indexOf(m));
+}
+
+const TRACE_NODES = ["Browser", "Traefik · ForwardAuth", "auth-gateway BFF", "9 Go services", "CloudNativePG"];
 
 function WritingContent() {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
-  const [selectedTag, setSelectedTag] = useState<string>("All");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const tt = t.writing.transit;
+  const [lineFilter, setLineFilter] = useState<LineId | "all">("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [aiModalOpen, setAiModalOpen] = useState(false);
 
   const handleOpenAI = () => setAiModalOpen(true);
   const handleCloseAI = () => setAiModalOpen(false);
 
-  // Collect unique tags
-  const allTags = useMemo(() => {
-    return ["All", ...Array.from(new Set(ARTICLES_DATA.flatMap((a) => a.tags)))];
-  }, []);
-
-  // Filtered articles
-  const filteredArticles = useMemo(() => {
+  const departures = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
     return ARTICLES_DATA.filter((article) => {
+      const pos = getLinePosition(article.slug);
+      if (lineFilter !== "all" && pos?.line.id !== lineFilter) return false;
+      if (!q) return true;
       const title = language === "vi" && article.titleVi ? article.titleVi : article.title;
       const summary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
-
-      const matchesTag = selectedTag === "All" || article.tags.includes(selectedTag);
-
-      const q = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        !q ||
+      return (
         title.toLowerCase().includes(q) ||
         summary.toLowerCase().includes(q) ||
-        article.tags.some((tag) => tag.toLowerCase().includes(q));
+        article.tags.some((tag) => tag.toLowerCase().includes(q))
+      );
+    }).sort((a, b) => dateKey(b.date) - dateKey(a.date));
+  }, [searchQuery, lineFilter, language]);
 
-      return matchesTag && matchesSearch;
-    });
-  }, [searchQuery, selectedTag, language]);
-
-  // Featured hero article (first featured post when not searching)
-  const isDefaultView = selectedTag === "All" && !searchQuery;
-  const heroArticle = isDefaultView
-    ? ARTICLES_DATA.find((a) => a.slug === "epas-transaction-inbox-and-compliance-boundaries") || ARTICLES_DATA.find((a) => a.featured) || ARTICLES_DATA[0]
-    : null;
-  const gridArticles = isDefaultView && heroArticle
-    ? filteredArticles.filter((a) => a.slug !== heroArticle.slug)
-    : filteredArticles;
+  const heroWords = tt.heroLead.split(" ");
+  const accentWords = tt.heroAccent.split(" ");
 
   return (
-    <main className="relative min-h-screen bg-slate-50 dark:bg-[#090a0f] text-slate-900 dark:text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black transition-colors duration-200">
-      {/* Ambient lighting */}
-      <div className="fixed top-0 left-1/3 w-[500px] h-[500px] bg-emerald-500/[0.04] dark:bg-emerald-500/[0.04] rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/3 right-1/4 w-[450px] h-[450px] bg-teal-500/[0.03] dark:bg-teal-500/[0.03] rounded-full blur-[140px] pointer-events-none -z-10" />
-      
+    <main className="transit relative min-h-screen bg-slate-50 dark:bg-[#090a0f] bg-dots-pattern text-[var(--ink)] transition-colors duration-200">
       <CustomCursor />
       <Navbar onOpenAI={handleOpenAI} />
 
-      <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        {/* Breadcrumb Back link */}
-        <MotionWrapper delay={0.05}>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 mb-8 transition-colors group"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-            <span>{t.writing.backToHome}</span>
-          </Link>
-        </MotionWrapper>
-
-        {/* Heading */}
-        <MotionWrapper delay={0.1}>
-          <div className="mb-12 border-b border-zinc-200 dark:border-zinc-800/80 pb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-semibold mb-4">
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>{t.writing.badge}</span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-zinc-950 dark:text-white tracking-tight mb-4">
-              {t.writing.title}
+      <div className="mx-auto max-w-6xl px-4 pb-28 pt-32 sm:px-6 lg:px-8">
+        {/* Hero */}
+        <section className="flex flex-wrap items-end justify-between gap-10">
+          <div className="min-w-0 flex-[999_1_600px]">
+            <Sticker color="var(--line-b)">
+              {tt.boarding.toUpperCase()} · {ARTICLES_DATA.length} {tt.fieldNotes}
+            </Sticker>
+            <h1 className="font-display relative mt-8 text-5xl font-bold leading-[0.95] tracking-[-0.04em] sm:text-7xl lg:text-[96px]">
+              <Sparkle color="var(--line-b)" size={28} style={{ right: "6%", top: -20 }} />
+              <Sparkle color="var(--ink)" size={18} style={{ right: "1%", top: 44 }} delay={0.7} />
+              <Sparkle color="var(--line-a)" size={22} style={{ left: -26, bottom: 24 }} delay={1.4} />
+              {heroWords.map((w, i) => (
+                <React.Fragment key={`h${i}`}>
+                  <span className="toon-pop" style={{ animationDelay: `${i * 0.12}s` }}>
+                    {w}
+                  </span>{" "}
+                </React.Fragment>
+              ))}
+              <br />
+              {accentWords.map((w, i) => (
+                <React.Fragment key={`a${i}`}>
+                  <span
+                    className="toon-pop font-serif-accent text-[var(--line-a)]"
+                    style={{ animationDelay: `${(heroWords.length + i) * 0.12}s` }}
+                  >
+                    {w}
+                  </span>{" "}
+                </React.Fragment>
+              ))}
             </h1>
-            <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-3xl font-normal leading-relaxed">
-              {t.writing.subtitle}
-            </p>
+            <Squiggle color="var(--line-b)" className="mt-2" />
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--muted)]">{tt.heroSub}</p>
           </div>
-        </MotionWrapper>
+          <div className="hidden max-w-[260px] flex-[1_1_220px] sm:block">
+            <HoanBot message={tt.botHello} label={t.nav.askAi} onClick={handleOpenAI} />
+          </div>
+        </section>
 
-        {/* Search & Tag Filters */}
-        <MotionWrapper delay={0.15}>
-          <div className="space-y-6 mb-12">
-            {/* Search Bar */}
-            <div className="relative max-w-xl">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+        {/* Request trace */}
+        <figure className="toon mt-16 px-5 py-7 sm:px-7">
+          <div role="img" aria-label={TRACE_NODES.join(" → ")}>
+            <RequestTrace nodes={TRACE_NODES} highlight={2} />
+          </div>
+          <figcaption className="mt-5 flex flex-wrap justify-between gap-2 font-mono text-xs text-[var(--muted)]">
+            <span>{tt.traceCaption}</span>
+            <span>{tt.traceHint} ↗</span>
+          </figcaption>
+        </figure>
+
+        {/* Network */}
+        <section className="mt-28" aria-labelledby="network-title">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 id="network-title" className="font-display text-4xl font-bold tracking-[-0.03em] sm:text-6xl">
+              {tt.networkTitle}{" "}
+              <span className="font-serif-accent relative inline-block">
+                {tt.network}
+                <svg className="absolute -bottom-1.5 left-0 h-3.5 w-full" viewBox="0 0 200 14" preserveAspectRatio="none" fill="none" aria-hidden="true">
+                  <path d="M2 8 C 30 2, 60 13, 100 7 S 170 2, 198 8" stroke="var(--line-a)" strokeWidth="4" strokeLinecap="round" />
+                </svg>
+              </span>
+            </h2>
+            <p className="max-w-sm text-[15px] leading-relaxed text-[var(--muted)]">{tt.networkSub}</p>
+          </div>
+
+          <div className="mt-12 space-y-9">
+            {TRANSIT_LINES.map((line, lineIdx) => (
+              <div key={line.id} className="toon overflow-x-auto px-5 pb-8 pt-6 sm:px-7">
+                <div className="mb-11 flex flex-wrap items-center gap-3.5">
+                  <LineBadge id={line.id} color={line.color} />
+                  <span className="font-display text-2xl font-bold">{language === "vi" ? line.nameVi : line.name}</span>
+                  <span className="font-mono text-xs text-[var(--muted)]">
+                    {line.stops.length} {tt.stops} · {language === "vi" ? line.metaVi : line.meta}
+                  </span>
+                  {lineIdx === 0 && (
+                    <span className="toon-nudge ml-auto hidden items-center gap-1.5 md:inline-flex" aria-hidden="true">
+                      <span className="font-hand -rotate-3 text-[28px]" style={{ color: "var(--line-b)" }}>
+                        {tt.startHere}
+                      </span>
+                      <svg width="46" height="40" viewBox="0 0 46 40" fill="none">
+                        <path d="M40 4 C 30 10, 18 18, 8 34 M8 34 l2 -12 M8 34 l11 -4" stroke="var(--line-b)" strokeWidth="3" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                  )}
+                  {lineIdx === 1 && (
+                    <span className="font-hand ml-auto hidden rotate-2 text-[26px] md:inline" aria-hidden="true">
+                      {tt.sameProblem}
+                    </span>
+                  )}
+                </div>
+                <div className="relative" style={{ minWidth: line.stops.length * 140 }}>
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 right-0 top-[7px] h-2.5 rounded-full border-2 border-[var(--ink)]"
+                    style={{ background: line.color }}
+                  />
+                  {line.stops.length >= 3 && (
+                    <span className="toon-ride absolute -top-[18px]" style={{ animationDuration: `${8 + lineIdx * 2}s` }}>
+                      <TransitTrain color={line.color} />
+                    </span>
+                  )}
+                  <ol className="relative flex">
+                  {line.stops.map((slug, i) => {
+                    const article = getArticle(slug);
+                    if (!article) return null;
+                    const info = getStopInfo(slug);
+                    const ix = getInterchange(slug);
+                    return (
+                      <li key={slug} className="relative min-w-0 flex-1">
+                        <Link href={`/writing/${slug}`} className="toon-station group flex flex-col gap-3.5 pr-4">
+                          <StationDot color={line.color} interchange={Boolean(ix)} current={lineIdx === 0 && i === 0} />
+                          <span className="font-mono text-[11px] text-[var(--subtle)]">
+                            0{i + 1} · {article.readTime.replace(" read", "")}
+                          </span>
+                          <span className="text-[15px] font-medium leading-snug text-[var(--muted)] transition-colors group-hover:text-[var(--ink)]">
+                            {language === "vi" ? info.shortVi : info.short}
+                          </span>
+                          {ix && (
+                            <span className="self-start rounded-full border-2 border-[var(--ink)] bg-[var(--ink)] px-2 py-0.5 font-mono text-[11px] font-bold text-[var(--paper)]">
+                              ⇄ {language === "vi" ? ix.topicVi : ix.topic}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                  </ol>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Departures */}
+        <section className="mt-28" aria-labelledby="departures-title">
+          <h2 id="departures-title" className="font-display text-4xl font-bold tracking-[-0.03em] sm:text-6xl">
+            {tt.departuresTitle} <span className="font-serif-accent">{tt.departures}</span>
+          </h2>
+
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <label htmlFor="writing-search" className="sr-only">
+              {t.writing.searchPlaceholder}
+            </label>
+            <div className="relative min-w-0 flex-[1_1_280px]">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <input
-                type="text"
+                id="writing-search"
+                type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.writing.searchPlaceholder}
-                className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/40 transition-all font-mono shadow-sm"
+                className="toon-sm min-h-12 w-full rounded-xl bg-[var(--paper)] pl-11 pr-4 font-mono text-sm text-[var(--ink)] placeholder:text-[var(--subtle)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--line-a)]"
               />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 px-2 py-1"
-                >
-                  Clear
-                </button>
+            </div>
+            <div className="flex flex-wrap gap-2" role="group" aria-label={tt.allLines}>
+              {[{ id: "all" as const, label: tt.allLines, color: "var(--ink)" }, ...TRANSIT_LINES.map((l) => ({ id: l.id, label: l.id, color: l.color }))].map(
+                (f) => {
+                  const active = lineFilter === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => setLineFilter(f.id)}
+                      className="toon-btn min-h-11 min-w-11 rounded-full px-4 font-mono text-sm font-bold"
+                      style={
+                        active
+                          ? { background: f.id === "all" ? "var(--ink)" : f.color, color: f.id === "all" ? "var(--paper)" : "#09090B" }
+                          : { background: "var(--paper)", color: "var(--ink)" }
+                      }
+                    >
+                      {f.label}
+                    </button>
+                  );
+                }
               )}
             </div>
-
-            {/* Tag Filter Pills */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-mono text-zinc-500 mr-1">{t.writing.filterByTag}</span>
-              {allTags.map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => setSelectedTag(tag)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                    selectedTag === tag
-                      ? "bg-emerald-500 text-zinc-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]"
-                      : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-sm"
-                  }`}
-                >
-                  {tag === "All" ? t.writing.allTags : tag}
-                </button>
-              ))}
-            </div>
           </div>
-        </MotionWrapper>
 
-        {/* Featured Hero Article (when in default view) */}
-        {heroArticle && (
-          <MotionWrapper delay={0.2}>
-            <div className="mb-12">
-              {(() => {
-                const editorial = getArticleEditorial(heroArticle);
-                return (
-              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-mono uppercase tracking-wider mb-3">
-                <Flame className="w-4 h-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
-                <span>{language === "vi" ? `${editorial.seriesVi} · ${editorial.formatVi}` : `${editorial.series} · ${editorial.format}`}</span>
-              </div>
-                );
-              })()}
-
-              <Link
-                href={`/writing/${heroArticle.slug}`}
-                className="group block rounded-3xl bg-gradient-to-b from-white via-zinc-50 to-zinc-100 dark:from-zinc-900/90 dark:to-zinc-950 border border-zinc-200 dark:border-emerald-500/30 hover:border-emerald-500/60 p-8 sm:p-10 lg:p-12 transition-all duration-300 shadow-md hover:shadow-[0_20px_50px_-20px_rgba(16,185,129,0.25)] relative overflow-hidden"
+          {departures.length === 0 ? (
+            <div className="toon mt-10 p-10 text-center">
+              <p className="font-mono text-[var(--muted)]">{tt.noResults}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("");
+                  setLineFilter("all");
+                }}
+                className="toon-btn mt-5 min-h-11 rounded-xl bg-[var(--line-a)] px-5 font-mono text-sm font-bold text-[#09090B]"
               >
-                <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity pointer-events-none" />
-
-                <div className="relative z-10 space-y-4 max-w-3xl">
-                  <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-                    <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
-                      <Calendar className="w-3.5 h-3.5" />
-                      {heroArticle.date}
-                    </span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
-                      <Clock className="w-3.5 h-3.5" />
-                      {heroArticle.readTime}
-                    </span>
-                  </div>
-
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-zinc-950 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors tracking-tight leading-tight">
-                    {language === "vi" && heroArticle.titleVi ? heroArticle.titleVi : heroArticle.title}
-                  </h2>
-
-                  <p className="text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
-                    {language === "vi" && heroArticle.summaryVi ? heroArticle.summaryVi : heroArticle.summary}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {heroArticle.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-1 text-xs font-mono rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="pt-4 flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 group-hover:underline">
-                    <span>{t.writing.readArticle}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </Link>
+                {tt.reset}
+              </button>
             </div>
-          </MotionWrapper>
-        )}
-
-        {/* Empty state */}
-        {gridArticles.length === 0 && !heroArticle && (
-          <div className="text-center py-20 rounded-2xl bg-white/60 dark:bg-zinc-950/40 border border-dashed border-zinc-200 dark:border-zinc-800 p-8 shadow-sm">
-            <Layers className="w-10 h-10 text-zinc-400 dark:text-zinc-600 mx-auto mb-4" />
-            <p className="text-base text-zinc-600 dark:text-zinc-400 font-mono">
-              {language === "vi" ? "Không tìm thấy bài viết phù hợp." : "No matching articles found."}
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedTag("All");
-              }}
-              className="mt-4 px-4 py-2 text-xs font-mono bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-emerald-600 dark:text-emerald-400 rounded-lg border border-zinc-200 dark:border-zinc-800 transition-colors shadow-sm"
-            >
-              Reset filters
-            </button>
-          </div>
-        )}
-
-        {/* Articles List Header (when grid is present) */}
-        {gridArticles.length > 0 && heroArticle && (
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-              {t.writing.allArticles} ({gridArticles.length})
-            </h3>
-          </div>
-        )}
-
-        {/* Articles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {gridArticles.map((article, idx) => {
-            const articleTitle = language === "vi" && article.titleVi ? article.titleVi : article.title;
-            const articleSummary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
-            const editorial = getArticleEditorial(article);
-
-            return (
-              <MotionWrapper key={article.slug} delay={0.1 + idx * 0.05}>
-                <Link
-                  href={`/writing/${article.slug}`}
-                  className="group h-full flex flex-col justify-between rounded-2xl bg-white/90 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/90 hover:border-emerald-500/50 dark:hover:border-emerald-500/40 p-6 sm:p-8 transition-all duration-300 shadow-sm hover:shadow-[0_20px_40px_-20px_rgba(16,185,129,0.2)]"
-                >
-                  <div>
-                    {/* Meta Bar */}
-                    <div className="flex items-center gap-3 text-xs font-mono text-zinc-500 mb-4">
-                      <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
-                        <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        {article.date}
-                      </span>
-                      <span>•</span>
-                      <span className="text-emerald-600 dark:text-emerald-400/80 font-semibold">{language === "vi" ? editorial.formatVi : editorial.format}</span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
-                        <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        {article.readTime}
+          ) : (
+            <div className="mt-10 grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
+              {departures.map((article) => {
+                const pos = getLinePosition(article.slug);
+                const info = getStopInfo(article.slug);
+                const title = language === "vi" && article.titleVi ? article.titleVi : article.title;
+                return (
+                  <Link key={article.slug} href={`/writing/${article.slug}`} className="toon toon-lift flex flex-col gap-4 p-6">
+                    <div className="flex items-center justify-between gap-3">
+                      {pos ? <LineBadge id={pos.line.id} color={pos.line.color} /> : <span />}
+                      <span className="font-mono text-xs text-[var(--muted)]">
+                        {article.date} · {article.readTime}
                       </span>
                     </div>
+                    <h3 className="font-display text-xl font-bold leading-tight tracking-tight sm:text-2xl">{title}</h3>
+                    <MiniFlow nodes={info.flow} />
+                    <span className="mt-auto pt-2 font-mono text-[13px] font-bold" style={{ color: "var(--line-a)" }}>
+                      {tt.board}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </section>
 
-                    {/* Title */}
-                    <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors tracking-tight mb-3 leading-snug">
-                      {articleTitle}
-                    </h2>
-
-                    {/* Summary */}
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6 font-normal">
-                      {articleSummary}
-                    </p>
-                    <p className="text-[11px] font-mono text-zinc-500 mb-5">
-                      {language === "vi" ? editorial.seriesVi : editorial.series}
-                    </p>
-                  </div>
-
-                  <div>
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5 pt-4 border-t border-zinc-100 dark:border-zinc-800/80 mb-4">
-                      {article.tags.map((tag, tagIdx) => (
-                        <span
-                          key={tagIdx}
-                          className="px-2 py-0.5 text-xs font-mono rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Read Action */}
-                    <div className="flex items-center justify-between text-xs font-mono text-emerald-600 dark:text-emerald-400 group-hover:underline">
-                      <span>{t.writing.readArticle}</span>
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </Link>
-              </MotionWrapper>
-            );
-          })}
+        <div className="mt-28">
+          <RecruiterCard />
         </div>
       </div>
 
