@@ -65,15 +65,26 @@ npm install
 ```
 
 ### 2. Configure environment variables
-Copy the template and fill in `OPENROUTER_API_KEY` (the other two are optional):
+Copy the template and fill in `OPENROUTER_API_KEY` (the rest are optional):
 ```bash
-cp .env.example .env.local
+cp .env.example .env.development.local
 ```
 See [`.env.example`](.env.example) for what each variable does.
 
 ### 3. Run development server
 ```bash
 npm run dev
+```
+
+### 4. Deploy to Cloudflare Workers
+The site runs on Cloudflare Workers through [OpenNext](https://opennext.js.org/cloudflare) (`wrangler.jsonc`, `open-next.config.ts`).
+```bash
+npm run preview   # build and run in the local Workers runtime
+npm run deploy    # build, check the bundle for secrets, deploy
+```
+Set the API key once per Worker (it is never read from `.env` files in production):
+```bash
+npx wrangler secret put OPENROUTER_API_KEY
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 

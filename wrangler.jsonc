@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hoan-io-vn",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": [
+    // Node.js APIs for the Next.js server
+    "nodejs_compat",
+    // Only allow fetch() to public URLs
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      // Must match "name" above
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "hoan-io-vn"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+  // Secrets (OPENROUTER_API_KEY) are set with `npx wrangler secret put`, never here.
+  // The custom domain hoan.io.vn is attached after the workers.dev deploy is verified.
+}
