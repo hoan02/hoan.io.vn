@@ -3,252 +3,50 @@
 import React from "react";
 import Link from "next/link";
 import { ARTICLES_DATA } from "@/data/portfolioData";
-import { getArticleEditorial } from "@/data/articleEditorial";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
-import { MotionWrapper } from "@/components/common/MotionWrapper";
-import { TechBadge } from "@/components/common/TechIcon";
-import {
-  BookOpen,
-  ArrowRight,
-  ArrowUpRight,
-  Sparkles,
-  Clock,
-  Calendar,
-  Terminal,
-  Layers,
-  Cpu,
-  ShieldCheck,
-  Zap
-} from "lucide-react";
+import { SectionHeader } from "@/components/common/SectionHeader";
 
 export function LatestWriting() {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
 
-  // 1. Primary Spotlight Flagship Article
-  const flagshipArticle = ARTICLES_DATA.find(
-    (a) => a.slug === "epas-transaction-inbox-and-compliance-boundaries"
-  ) || ARTICLES_DATA[0];
-
-  // 2. Secondary Companion Articles (2 selected deep-dives)
-  const secondaryArticles = ARTICLES_DATA.filter(
-    (a) =>
-      a.slug === "designing-arda-cloud-native-finops-platform" ||
-      a.slug === "building-puchi-product-idea-to-service-architecture"
-  ).slice(0, 2);
-
-  const flagshipTitle = language === "vi" && flagshipArticle.titleVi ? flagshipArticle.titleVi : flagshipArticle.title;
-  const flagshipSummary = language === "vi" && flagshipArticle.summaryVi ? flagshipArticle.summaryVi : flagshipArticle.summary;
-  const flagshipEditorial = getArticleEditorial(flagshipArticle);
+  // Featured pieces first, then the rest in source order.
+  const articles = [...ARTICLES_DATA]
+    .sort((a, b) => Number(b.featured) - Number(a.featured))
+    .slice(0, 6);
 
   return (
-    <section id="writing" className="py-28 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-      {/* Section Heading */}
-      <MotionWrapper>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-8 border-b border-zinc-200/80 dark:border-zinc-800/80">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-semibold">
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>{t.writing.badge}</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-950 dark:text-white tracking-tight">
-              {t.writing.title}
-            </h2>
-          </div>
-          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-md font-normal leading-relaxed">
-            {t.writing.subtitle}
-          </p>
-        </div>
-      </MotionWrapper>
+    <section id="writing" className="page-wrap py-14">
+      <SectionHeader
+        label={t.writing.badge}
+        title={t.writing.title}
+        intro={t.writing.subtitle}
+        action={<Link href="/writing" className="link">{t.writing.viewAll} →</Link>}
+      />
 
-      {/* Flagship Spotlight Article Card */}
-      <MotionWrapper delay={0.1}>
-        <div className="group relative rounded-3xl bg-white/90 dark:bg-zinc-950/90 border border-zinc-200 dark:border-zinc-800/90 hover:border-emerald-500/50 dark:hover:border-emerald-500/40 p-6 sm:p-8 lg:p-10 transition-all duration-300 shadow-sm hover:shadow-[0_25px_60px_-20px_rgba(16,185,129,0.18)] mb-8 overflow-hidden">
-          {/* Ambient Glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none" />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Column: Context, Title, Highlights */}
-            <div className="lg:col-span-7 space-y-5">
-              {/* Meta Pill & Architecture Tag */}
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>{language === "vi" ? flagshipEditorial.formatVi : flagshipEditorial.format}</span>
-                </span>
-                <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800">
-                  {language === "vi" ? "Pattern: Luồng Giao dịch Ngân hàng" : "Pattern: Enterprise Transaction Inbox"}
-                </span>
-                <span className="flex items-center gap-1 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-                  <Clock className="w-3 h-3 text-zinc-400 dark:text-zinc-500" />
-                  {flagshipArticle.readTime}
-                </span>
-              </div>
-
-              {/* Title */}
-              <Link href={`/writing/${flagshipArticle.slug}`} className="block group/title">
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-zinc-900 dark:text-white group-hover/title:text-emerald-600 dark:group-hover/title:text-emerald-300 transition-colors tracking-tight leading-tight">
-                  {flagshipTitle}
-                </h3>
-              </Link>
-
-              {/* Detailed Summary */}
-              <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 leading-relaxed font-normal">
-                {flagshipSummary}
+      <ol className="divide-y divide-rule border-y border-rule">
+        {articles.map((a) => (
+          <li key={a.slug}>
+            <Link
+              href={`/writing/${a.slug}`}
+              className="group grid gap-1 sm:gap-6 sm:grid-cols-[9rem_1fr] py-6"
+            >
+              <p className="eyebrow pt-1.5">
+                {a.date} · {a.readTime.replace(" read", "")}
               </p>
-
-              {/* Key Metrics Grid */}
-              {flagshipArticle.highlights && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
-                  {flagshipArticle.highlights.map((h, hIdx) => {
-                    const label = language === "vi" && h.labelVi ? h.labelVi : h.label;
-                    return (
-                      <div
-                        key={hIdx}
-                        className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-center space-y-0.5"
-                      >
-                        <span className="block text-sm sm:text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">
-                          {h.value}
-                        </span>
-                        <span className="block text-[11px] font-mono text-zinc-500 dark:text-zinc-400 truncate">
-                          {label}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Tech Stack Badges */}
-              <div className="flex flex-wrap gap-2 pt-2">
-                {flagshipArticle.tags.slice(0, 5).map((tech, idx) => (
-                  <TechBadge key={idx} name={tech} size="xs" />
-                ))}
+              <div>
+                <h3 className="text-xl sm:text-2xl group-hover:text-accent transition-colors">
+                  {language === "vi" && a.titleVi ? a.titleVi : a.title}
+                </h3>
+                <p className="mt-2 text-muted max-w-2xl">
+                  {language === "vi" && a.summaryVi ? a.summaryVi : a.summary}
+                </p>
               </div>
-
-              {/* Primary Action Button */}
-              <div className="pt-2">
-                <Link
-                  href={`/writing/${flagshipArticle.slug}`}
-                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-sm transition-all shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:scale-105 active:scale-95"
-                >
-                  <span>{t.writing.readArticle}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Column: Architectural Solution Box */}
-            <div className="lg:col-span-5 bg-zinc-50 dark:bg-zinc-900/60 rounded-2xl p-5 sm:p-6 border border-zinc-200 dark:border-zinc-800/80 space-y-4 shadow-inner">
-              <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800/80 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-                <div className="flex items-center gap-2">
-                  <Terminal className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-zinc-900 dark:text-zinc-200 font-semibold">{language === "vi" ? "Bài toán Kỹ thuật Đào sâu" : "Engineering Architecture Deep-Dive"}</span>
-                </div>
-                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">{language === "vi" ? flagshipEditorial.seriesVi : flagshipEditorial.series}</span>
-              </div>
-
-              <div className="space-y-3 text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                <div className="p-3 rounded-xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/60">
-                  {language === "vi"
-                    ? "Phân tích ranh giới module giữa Shell MFE, Spring Boot backend và luồng phê duyệt tín dụng tuân thủ quy chuẩn kiểm toán."
-                    : "Analyzing module boundaries between Shell MFE, Spring Boot backend, and compliant lending approval audit trails."}
-                </div>
-                {flagshipArticle.tags.slice(0, 4).map((tag) => (
-                  <div key={tag} className="flex items-center gap-2 text-xs font-mono text-zinc-700 dark:text-zinc-300">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0" />
-                    <span>{tag}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Whitepaper Quote */}
-              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-500/20 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed italic">
-                {language === "vi"
-                  ? "💡 Trực tiếp giải quyết bài toán đồng bộ trạng thái giao dịch giữa nhiều tổ chức tín dụng."
-                  : "💡 Direct engineering solution for transaction synchronization across credit institutions."}
-              </div>
-            </div>
-          </div>
-        </div>
-      </MotionWrapper>
-
-      {/* Secondary Companion Articles Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        {secondaryArticles.map((article, idx) => {
-          const title = language === "vi" && article.titleVi ? article.titleVi : article.title;
-          const summary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
-          const patternTag =
-            article.slug === "designing-arda-cloud-native-finops-platform"
-              ? language === "vi"
-                ? "Pattern: 9 Go Services + NATS Outbox"
-                : "Pattern: 9 Go Services + NATS Outbox"
-              : language === "vi"
-              ? "Pattern: Opaque Sessions + Kratos v3"
-              : "Pattern: Opaque Sessions + Kratos v3";
-
-          return (
-            <MotionWrapper key={article.slug} delay={0.2 + idx * 0.1}>
-              <Link
-                href={`/writing/${article.slug}`}
-                className="group h-full flex flex-col justify-between rounded-2xl bg-white/90 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/90 hover:border-emerald-500/50 dark:hover:border-emerald-500/40 p-6 sm:p-7 transition-all duration-300 shadow-sm hover:shadow-[0_15px_35px_-15px_rgba(16,185,129,0.15)]"
-              >
-                <div className="space-y-3">
-                  {/* Meta Strip & Pattern Badge */}
-                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-zinc-500">
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold">
-                      {patternTag}
-                    </span>
-                    <span className="flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
-                      <Clock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                      {article.readTime}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h4 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors tracking-tight leading-snug">
-                    {title}
-                  </h4>
-
-                  {/* Summary */}
-                  <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-3">
-                    {summary}
-                  </p>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-zinc-200 dark:border-zinc-800/80 space-y-3">
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {article.tags.slice(0, 4).map((tag, tagIdx) => (
-                      <TechBadge key={tagIdx} name={tag} size="xs" />
-                    ))}
-                  </div>
-
-                  {/* Read Link */}
-                  <div className="flex items-center justify-between text-xs font-mono text-emerald-600 dark:text-emerald-400 group-hover:underline pt-1">
-                    <span>{t.writing.readArticle}</span>
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </div>
-              </Link>
-            </MotionWrapper>
-          );
-        })}
-      </div>
-
-      {/* View All Writing CTA Banner */}
-      <MotionWrapper delay={0.4}>
-        <div className="text-center">
-          <Link
-            href="/writing"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-white dark:bg-zinc-900/90 hover:bg-emerald-500 hover:text-zinc-950 dark:hover:bg-emerald-500 dark:hover:text-zinc-950 text-sm font-bold text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500 transition-all duration-300 shadow-md group"
-          >
-            <span>{t.writing.viewAll} ({ARTICLES_DATA.length}+ {language === "vi" ? "Bài viết" : "Articles"})</span>
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-          </Link>
-        </div>
-      </MotionWrapper>
+            </Link>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }

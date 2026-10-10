@@ -8,10 +8,10 @@ export const CAMRELAY_PROJECT: Project = {
   period: "2024",
   year: "2024",
   summary:
-    "Cầu nối video hiệu năng cao viết bằng Rust async (Tokio), chuyển đổi luồng P2P độc quyền từ camera Dahua/Imou/easy4ip thành luồng RTSP nội bộ cho Frigate NVR & Home Assistant, hỗ trợ FFmpeg ghi hình và rclone tự động sao lưu Google Drive.",
+    "Service Rust/Tokio đưa camera chỉ truy cập được qua đường P2P của hãng vào mạng riêng: TCP tunnel phía sau proxy xác thực RTSP trên loopback, kèm ghi hình FFmpeg (-c copy) và lưu trữ rclone tùy chọn. Đây là tunnel, không phải RTSP server.",
   problem:
     "Nhiều dòng camera IP gia đình bị khoá luồng P2P độc quyền trên cloud nhà sản xuất, không mở cổng RTSP trực tiếp hoặc bị giới hạn băng thông, gây khó khăn cho việc tích hợp vào hệ thống Smarthome và NVR cục bộ.",
-  techStack: ["Rust", "Tokio", "RTSP", "FFmpeg", "P2P Protocols", "Docker", "Home Assistant", "Frigate NVR"],
+  techStack: ["Rust", "Tokio", "RTSP", "FFmpeg", "P2P Protocols", "rclone"],
   domains: ["IoT & Systems", "Video Streaming", "Home Automation", "Network Protocols", "Embedded & Edge"],
   competencies: [
     "Rust Systems Programming & Async Networking (Tokio)",
@@ -20,20 +20,20 @@ export const CAMRELAY_PROJECT: Project = {
     "Home Assistant & Frigate NVR Integration",
   ],
   architecture: [
-    "Rust Async Core: Sử dụng Tokio runtime để duy trì kết nối P2P liên tục, nhận frame nhị phân và đóng gói lại thành luồng RTSP chuẩn.",
-    "Recording & Backup Pipeline: Tích hợp FFmpeg phân đoạn video theo block thời gian và kích hoạt rclone đồng bộ lên Google Drive.",
-    "Containerized Edge Deployment: Đóng gói Docker image siêu nhẹ chạy trực tiếp trên Raspberry Pi hoặc Linux homelab.",
+    "Rust Async Core: Tokio runtime giữ session P2P và tunnel TCP tới camera theo realm.",
+    "Recording & Archive: FFmpeg -c copy (không re-encode) theo phân đoạn, rclone để lưu trữ.",
+    "RTSP auth proxy: proxy xác thực trên loopback để consumer dùng URL RTSP thường kèm credential.",
   ],
   challenges: [
-    "Giải mã luồng dữ liệu nhị phân P2P với độ trễ tối thiểu mà không gây tràn bộ nhớ.",
-    "Xử lý tự động reconnect khi đường truyền camera bị ngắt quãng mà không làm crash stream RTSP của NVR.",
+    "Tách logic P2P đặc thù của hãng khỏi contract RTSP nội bộ.",
+    "Phân biệt path đã xác minh với khả năng tương thích phổ quát (có device validation matrix trong repo).",
   ],
   solutions: [
-    "Tận dụng quyền sở hữu bộ nhớ an toàn (memory safety) và zero-cost abstractions của Rust.",
-    "Xây dựng state-machine quản lý reconnect và buffering dữ liệu thông minh.",
+    "Cô lập protocol trong một lớp riêng, chỉ lộ ra TCP tunnel.",
+    "Giữ ghi hình và archive là tùy chọn để relay không phụ thuộc chính sách lưu trữ.",
   ],
   outcomes: [
-    "Cung cấp giải pháp self-hosted miễn phí, bảo mật quyền riêng tư cho camera an ninh gia đình.",
+    "Giải pháp self-hosted cho camera path đã xác minh; hạn chế đã biết (login admin mặc định, địa chỉ bind của tunnel, trạng thái treo khi session chết) được nêu trong bài viết.",
   ],
   repositories: [{ name: "camrelay (Rust P2P RTSP Bridge)", url: "https://github.com/hoan02/camrelay" }],
   links: [{ label: "GitHub Repo", url: "https://github.com/hoan02/camrelay" }],
@@ -41,8 +41,8 @@ export const CAMRELAY_PROJECT: Project = {
     {
       id: "ev-camrelay-01",
       type: "github",
-      claim: "Kỹ năng lập trình hệ thống bằng ngôn ngữ Rust",
-      statement: "Repository hoan02/camrelay trên GitHub viết hoàn toàn bằng Rust với Tokio async streaming.",
+      claim: "Lập trình hệ thống bằng Rust",
+      statement: "Repository hoan02/camrelay trên GitHub viết bằng Rust với Tokio.",
       source: "https://github.com/hoan02/camrelay",
       technologies: ["Rust", "Tokio", "RTSP", "FFmpeg"],
       confidence: "verified",

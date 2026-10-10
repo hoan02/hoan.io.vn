@@ -6,7 +6,8 @@ Le Cong Hoan is a Full-stack Engineer and System Builder experienced in developi
 
 ## Technical Notes & Articles
 
-- [Designing Arda: A Cloud-Native Financial Operations Platform](https://hoan.io.vn/writing/designing-arda-cloud-native-finops-platform): Comprehensive system design of Arda (arda.io.vn) — 9 Go microservices, synchronous gRPC, NATS domain events, BFF auth-gateway proxy, CloudNativePG HA, Zeebe workflow, and K3s GitOps.
+- [Letting an LLM act inside a financial platform: Arda's AI service boundary](https://hoan.io.vn/writing/arda-ai-service-agent-boundary): AG-UI-style SSE boundary, sandboxed tool catalog, server-enforced human-in-the-loop approvals, tenant-owned model profiles, quotas and tenant-scoped RAG, written from the arda-be code.
+- [Designing Arda: A Cloud-Native Financial Operations Platform](https://hoan.io.vn/writing/designing-arda-cloud-native-finops-platform): Comprehensive system design of Arda (arda.io.vn) — 15 Go microservices, synchronous gRPC, NATS domain events, BFF auth-gateway proxy, CloudNativePG HA, Zeebe workflow, and K3s GitOps.
 - [Authentication Beyond JWT: Designing Arda's Identity Architecture](https://hoan.io.vn/writing/authentication-beyond-jwt-arda-identity-architecture): Deep dive into why browsers shouldn't juggle raw JWTs: Traefik ForwardAuth, auth-gateway BFF, Ory Kratos (Identity), Ory Hydra (OAuth2/OIDC), and downstream header injection.
 - [Reliable Domain Events with NATS and the Transactional Outbox Pattern](https://hoan.io.vn/writing/reliable-domain-events-nats-transactional-outbox): Solving the dual-write hazard in distributed Go services: writing business state and domain events atomically in PostgreSQL, relaying via NATS JetStream, and enforcing idempotent consumer deduplication.
 - [Putting BPMN Behind a Workflow Service Boundary](https://hoan.io.vn/writing/bpmn-workflow-service-boundary-zeebe): Why domain services shouldn't talk directly to Zeebe: Designing a clean gRPC/HTTP workflow-service facade for case lifecycles, user tasks, SLA timers, and domain error handling.
@@ -21,12 +22,12 @@ Le Cong Hoan is a Full-stack Engineer and System Builder experienced in developi
 
 ## Featured Systems & Projects
 
-- [Arda — Multi-Tenant Financial Operations Platform](https://arda.io.vn): Cloud-native platform with 9 Go microservices (gRPC & NATS), React Module Federation (7 remotes), Ory IAM, and CloudNativePG on 3-node K3s.
-- [Puchi — Vietnamese Language Learning Platform](https://puchi.io.vn): Next.js PWA with 5 Go microservices (Kratos v3), Limen Auth, NATS event bus, and declarative ArgoCD GitOps on K3s.
+- [Arda — Multi-Tenant Financial Operations Platform](https://arda.io.vn): Cloud-native platform with 15 Go microservices (gRPC & NATS), React Module Federation (13 remotes), Ory IAM, and CloudNativePG on 3-node K3s.
+- [Puchi — Vietnamese Language Learning Platform](https://puchi.io.vn): Next.js PWA with 5 Go microservices (Kratos v3), Limen sessions, NATS event bus, and declarative ArgoCD GitOps on K3s.
 - [EPAS — Enterprise Process Automation System](https://hoan.io.vn/#selected-work): Enterprise-scale micro-frontend and microservice platform with CRM/BPM workflow automation built on Angular, Nx, Spring Boot, Kafka, Keycloak, and Kubernetes.
 - [Enterprise CI/CD & Kubernetes Homelab Infrastructure](https://hoan.io.vn/#selected-work): Automated container pipelines, private registry, Longhorn distributed storage, and multi-node K3s cluster orchestration.
-- [Camrelay — P2P IP Camera to RTSP Stream Relay](https://github.com/hoan02/camrelay): High-performance Rust bridge tunneling proprietary Dahua/easy4ip P2P cameras into local RTSP streams for Frigate & Home Assistant, with FFmpeg recording and rclone Google Drive archiving.
-- [B4S — Desktop Companion for Baseus Headphones](https://github.com/hoan02/b4s): Lightweight cross-platform desktop companion (Tauri v2 + Rust + SolidJS) for local Bluetooth LE headphone control (ANC, 10-band EQ, battery telemetry) without third-party cloud accounts.
+- [Camrelay — P2P IP Camera to RTSP Stream Relay](https://github.com/hoan02/camrelay): Rust/Tokio service that makes a camera reachable only through a vendor P2P path usable on a private network: a TCP tunnel behind a loopback RTSP auth proxy, with optional FFmpeg (-c copy) recording and rclone archiving.
+- [B4S — Desktop Companion for Baseus Headphones](https://github.com/hoan02/b4s): Unofficial desktop app for Baseus earbuds (Tauri v2, Rust btleplug, SolidJS): local Bluetooth LE control, two wire framings, 124 catalog profiles of which 7 can send commands. Tested on Windows. Article: https://hoan.io.vn/writing/b4s-reverse-engineering-a-local-ble-companion
 - [Zalo OA Integration & Message Management Platform](https://hoan.io.vn/#selected-work): Enterprise communication console for conversation filtering, broadcast template administration, and Spring Boot REST integration.
 - [MochiMochi Language Learning Platform](https://hoan.io.vn/#selected-work): Learner-facing web applications with Next.js App Router, Core Web Vitals optimization, and modular TypeScript components.
 

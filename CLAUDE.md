@@ -14,7 +14,7 @@
 ## Key Technical Architecture
 - **Framework**: Next.js 16 (App Router with Turbopack), React 19, TypeScript, Tailwind CSS.
 - **Evidence-Driven Engineering Case Studies**: 10 deep-dive articles with SVG architecture diagrams, comparison matrices, metric cards, callouts, and verified GitHub repository evidence.
-- **AI Assistant**: Hoan AI powered by Gemini 2.5 Flash (`@google/genai`), bottom-pinned chat bar with dynamic contextual follow-ups grounded in `ENGINEERING_EVIDENCE`.
+- **AI Assistant**: Hoan AI powered by `anthropic/claude-haiku-5.5` via OpenRouter (single provider, `src/ai/model.ts`), bottom-pinned chat bar with dynamic contextual follow-ups grounded in `ENGINEERING_EVIDENCE`.
 - **Theme**: Dark minimalist palette (`#09090B`, `#18181B`, `#27272A`, `#10B981`).
 
 ## Development Commands

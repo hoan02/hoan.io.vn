@@ -9,13 +9,13 @@ export const SEED_KNOWLEDGE_DOCUMENTS: KnowledgeDocument[] = [
     tags: ["Go", "gRPC", "NATS", "Module Federation", "Kubernetes", "K3s", "Ory Kratos", "Ory Hydra"],
     url: "/writing/designing-arda-cloud-native-finops-platform",
     summary:
-      "Phân tích chuyên sâu kiến trúc nền tảng Arda: 9 Go microservices, event bus NATS JetStream với Transactional Outbox, React Module Federation (7 remotes) và hệ thống IAM phân tán bằng Ory Kratos/Hydra trên K3s.",
+      "Phân tích chuyên sâu kiến trúc nền tảng Arda: 15 Go microservices, event bus NATS JetStream với Transactional Outbox, React Module Federation (13 remotes) và hệ thống IAM phân tán bằng Ory Kratos/Hydra trên K3s.",
     content: `Arda là nền tảng FinOps và SaaS đa người dùng giải quyết bài toán quản lý tài chính đám mây và quy trình vận hành phức tạp.
 Điểm nổi bật:
-- 9 Go Microservices: Tách biệt domain rõ ràng (iam, platform, finance, workflow, crm, hrm, notification, media, mdm).
+- 15 Go Microservices: Tách biệt domain rõ ràng (auth-gateway, iam, platform, finance, workflow, crm, hrm, notification, media, mdm, loan, deposit, capital, statistical, ai).
 - Giao tiếp đồng bộ qua gRPC (Protobuf contracts) và giao tiếp bất đồng bộ qua NATS JetStream.
 - Áp dụng Transactional Outbox Pattern để bảo đảm an toàn dữ liệu phân tán.
-- Frontend React Module Federation gồm 1 Shell và 7 Remotes chia sẻ Design System (@workspace/*).
+- Frontend React Module Federation gồm 1 Shell và 13 Remotes chia sẻ Design System (@workspace/*).
 - Triển khai trên cụm 3-node bare-metal K3s với CloudNativePG HA và Traefik ForwardAuth Ingress.`,
   },
   {
@@ -26,11 +26,11 @@ export const SEED_KNOWLEDGE_DOCUMENTS: KnowledgeDocument[] = [
     tags: ["Go", "Kratos", "Next.js", "PWA", "NATS", "ArgoCD", "GitOps", "Cloudflare R2"],
     url: "/writing/puchi-vietnamese-learning-platform-architecture",
     summary:
-      "Kiến trúc nền tảng học tiếng Việt Puchidemy: Go Kratos v3 microservices, Next.js Progressive Web App, Limen Auth opaque sessions, và GitOps pipeline tự động trên Kubernetes.",
+      "Kiến trúc nền tảng học tiếng Việt Puchidemy: Go Kratos v3 microservices, Next.js Progressive Web App, Limen sessions opaque sessions, và GitOps pipeline tự động trên Kubernetes.",
     content: `Puchidemy được xây dựng nhằm đem lại trải nghiệm học ngôn ngữ mượt mà và tương tác cao:
 - 5 Go Microservices monorepo phát triển theo chuẩn Go Kratos v3 framework.
 - Next.js Progressive Web App (PWA) với tính năng cache audio thông minh trên Cloudflare R2 (zero egress cost).
-- Cơ chế bảo mật Limen Auth sử dụng Opaque Session cookies bảo vệ an toàn API.
+- Cơ chế bảo mật Limen sessions sử dụng Opaque Session cookies bảo vệ an toàn API.
 - Tự động hoá triển khai 100% bằng ArgoCD GitOps trên cụm K3s.`,
   },
   {
