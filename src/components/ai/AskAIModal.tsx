@@ -6,6 +6,9 @@ import { UI_TRANSLATIONS } from "@/data/translations";
 import { ChatMessageRenderer } from "@/components/ai/ChatMessageRenderer";
 import { readDataStream } from "@/lib/streamHelper";
 import { BotFace } from "@/components/common/Doodles";
+import { Maximize2, Minimize2 } from "lucide-react";
+
+const EXPANDED_KEY = "hoan-ai-expanded";
 
 interface AskAIModalProps {
   isOpen: boolean;
@@ -56,6 +59,21 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
+  // Side panel by default; the reader can blow it up to a centred window. Remembered per browser.
+  const [expanded, setExpanded] = useState(() => {
+    try {
+      return typeof window !== "undefined" && window.localStorage.getItem(EXPANDED_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
+  const toggleExpanded = () =>
+    setExpanded((v) => {
+      try {
+        window.localStorage.setItem(EXPANDED_KEY, v ? "0" : "1");
+      } catch {}
+      return !v;
+    });
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
@@ -329,14 +347,16 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-end">
+    <div className={`fixed inset-0 z-[100] flex ${expanded ? "items-center justify-center p-3 sm:p-8" : "justify-end"}`}>
       <div className="absolute inset-0 bg-ink/30" onClick={onClose} aria-hidden="true" />
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="ask-ai-title"
-        className="relative flex h-full w-full flex-col bg-[var(--code-bg)] text-ink shadow-[var(--shadow)] md:max-w-xl lg:max-w-2xl"
+        className={`relative flex w-full flex-col bg-[var(--code-bg)] text-ink shadow-[var(--shadow)] ${
+          expanded ? "h-full max-h-[94vh] max-w-5xl rounded-md" : "h-full md:max-w-xl lg:max-w-2xl"
+        }`}
       >
         <header className="flex items-center gap-3 border-b-2 border-dashed border-rule px-5 py-3.5">
           <BotFace />
@@ -346,6 +366,16 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
             </h2>
             <p className="hand text-base">{t.ai.botNote}</p>
           </div>
+          <button
+            type="button"
+            onClick={toggleExpanded}
+            aria-label={expanded ? t.ai.collapse : t.ai.expand}
+            aria-pressed={expanded}
+            title={expanded ? t.ai.collapse : t.ai.expand}
+            className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-ink text-ink hover:bg-marker sm:flex"
+          >
+            {expanded ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+          </button>
           <button
             type="button"
             onClick={onClose}

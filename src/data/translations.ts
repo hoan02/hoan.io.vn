@@ -186,7 +186,9 @@ export const UI_TRANSLATIONS = {
       errorGeneric: "Something went wrong. Please try again.",
       sources: "Related",
       emptyIntro: "Ask about projects, stack, experience or background.",
-      close: "Close"
+      close: "Close",
+      expand: "Expand to full screen",
+      collapse: "Back to side panel"
     }
   },
   vi: {
@@ -376,7 +378,9 @@ export const UI_TRANSLATIONS = {
       errorGeneric: "Có lỗi xảy ra. Vui lòng thử lại.",
       sources: "Liên quan",
       emptyIntro: "Hỏi về dự án, stack, kinh nghiệm hoặc nền tảng của Hoan.",
-      close: "Đóng"
+      close: "Đóng",
+      expand: "Phóng to giữa màn hình",
+      collapse: "Thu về bên phải"
     }
   }
 };
