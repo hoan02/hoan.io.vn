@@ -4,54 +4,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Article } from "@/types";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { SiteShell } from "@/components/layout/SiteShell";
+import { ArticleMarkdown } from "@/components/common/ArticleMarkdown";
 import { UI_TRANSLATIONS } from "@/data/translations";
-import dynamic from "next/dynamic";
 import { PROJECTS_DATA, ARTICLES_DATA, PERSONAL_INFO } from "@/data/portfolioData";
 import { ENGINEERING_EVIDENCE } from "@/data/engineeringEvidence";
 import { getArticleEditorial } from "@/data/articleEditorial";
-import { MotionWrapper } from "@/components/common/MotionWrapper";
-import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
 import { DIAGRAM_MAP } from "@/components/diagrams/ArchitectureDiagrams";
-
-const AskAIModal = dynamic(
-  () => import("@/components/ai/AskAIModal").then((mod) => mod.AskAIModal),
-  { ssr: false }
-);
-
-const CustomCursor = dynamic(
-  () => import("@/components/common/CustomCursor").then((mod) => mod.CustomCursor),
-  { ssr: false }
-);
-import {
-  Calendar,
-  Clock,
-  ArrowLeft,
-  ArrowRight,
-  Layers,
-  AlertCircle,
-  CheckCircle2,
-  Code2,
-  Copy,
-  Check,
-  BookOpen,
-  Sparkles,
-  ExternalLink,
-  GitBranch,
-  ShieldCheck,
-  XCircle,
-  Zap,
-  Info,
-  AlertTriangle,
-  Lightbulb,
-  Maximize2,
-  Video,
-  Play,
-  Share2,
-  Terminal
-} from "lucide-react";
-
 import { useLanguage } from "@/context/LanguageContext";
 
 interface ArticleClientViewProps {
@@ -63,13 +22,9 @@ function ArticleReader({ article }: ArticleClientViewProps) {
   const t = UI_TRANSLATIONS[language];
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
-  const [aiModalOpen, setAiModalOpen] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
   const [activeSectionId, setActiveSectionId] = useState<string>("");
-
-  const handleOpenAI = () => setAiModalOpen(true);
-  const handleCloseAI = () => setAiModalOpen(false);
 
   const articleTitle = language === "vi" && article.titleVi ? article.titleVi : article.title;
   const articleSummary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
@@ -150,731 +105,457 @@ function ArticleReader({ article }: ArticleClientViewProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [tocItems]);
 
+  const h2 = "text-2xl sm:text-3xl border-t border-rule pt-6 mb-5";
+  const projectLabel = article.project
+    ? article.project === "arda" ? "ARDA Labs" : article.project === "puchi" ? "Puchidemy" : article.project.toUpperCase()
+    : null;
+
   return (
-    <main className="relative min-h-screen bg-slate-50 dark:bg-[#090a0f] text-slate-900 dark:text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black transition-colors duration-200">
-      {/* Top Reading Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-zinc-200 dark:bg-zinc-900">
-        <div
-          className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-150 ease-out"
-          style={{ width: `${readingProgress}%` }}
-        />
+    <SiteShell>
+      <div
+        className="fixed top-0 left-0 right-0 z-50 h-[2px]"
+        role="progressbar"
+        aria-label={t.writing.readingProgress}
+        aria-valuenow={Math.round(readingProgress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div className="h-full bg-accent" style={{ width: `${readingProgress}%` }} />
       </div>
 
-      {/* Ambient glow */}
-      <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-emerald-500/[0.04] dark:bg-emerald-500/[0.04] rounded-full blur-[160px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/3 right-1/4 w-[500px] h-[500px] bg-teal-500/[0.03] dark:bg-teal-500/[0.03] rounded-full blur-[160px] pointer-events-none -z-10" />
-
-      <CustomCursor />
-      <Navbar onOpenAI={handleOpenAI} />
-
-      <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        {/* Navigation Breadcrumb & Share */}
-        <MotionWrapper delay={0.05}>
-          <div className="flex items-center justify-between gap-4 mb-8">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-              <Link href="/" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                Home
-              </Link>
-              <span className="text-zinc-400 dark:text-zinc-600">/</span>
-              <Link href="/writing" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                Writing
-              </Link>
-              <span className="text-zinc-400 dark:text-zinc-600">/</span>
-              <span className="text-zinc-600 dark:text-zinc-500 truncate max-w-[180px] sm:max-w-xs">{article.slug}</span>
-            </div>
-
-            <button
-              onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 transition-colors shadow-sm"
-            >
-              {copiedShare ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-emerald-600 dark:text-emerald-400">{language === "vi" ? "Đã copy link" : "Link copied!"}</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5 text-zinc-400" />
-                  <span>{t.writing.shareNote}</span>
-                </>
-              )}
-            </button>
+      <div className="page-wrap pt-12 pb-24">
+        <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-4 mb-10 font-mono text-xs text-muted">
+          <div className="flex items-center gap-2 min-w-0">
+            <Link href="/" className="link">Home</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/writing" className="link">Writing</Link>
           </div>
-        </MotionWrapper>
+          <button type="button" onClick={handleShare} className="link shrink-0">
+            {copiedShare ? (language === "vi" ? "Đã copy link" : "Link copied") : t.writing.shareNote}
+          </button>
+        </nav>
 
-        {/* Article Header */}
-        <MotionWrapper delay={0.1}>
-          <div className="border-b border-zinc-200 dark:border-zinc-800/80 pb-8 mb-10">
-            {/* Meta bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-zinc-500 mb-4">
-              <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  {article.date}
-                </span>
-                <span>•</span>
-                <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
-                  <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  {article.readTime}
-                </span>
-                {article.project && (
-                  <>
-                    <span>•</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 uppercase font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                      {article.project === "arda" ? "ARDA Labs" : article.project === "puchi" ? "Puchidemy" : article.project.toUpperCase()}
-                    </span>
-                  </>
-                )}
-                <span className="text-emerald-600 dark:text-emerald-400/80 bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800">
-                  {language === "vi" ? editorial.formatVi : editorial.format}
-                </span>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-[13rem_minmax(0,1fr)] gap-x-12 gap-y-8">
+          {/* Table of contents */}
+          <aside className="lg:row-start-1 lg:col-start-1 order-2 lg:order-none lg:row-span-2">
+            <div className="lg:sticky lg:top-24">
+              <p className="eyebrow border-t border-ink pt-3 mb-3">{t.writing.tableOfContents}</p>
+              <nav aria-label={t.writing.tableOfContents}>
+                <ol className="space-y-1.5 font-mono text-xs">
+                  {tocItems.map((item, idx) => {
+                    const isActive = activeSectionId === item.id;
+                    return (
+                      <li key={item.id}>
+                        <a
+                          href={`#${item.id}`}
+                          aria-current={isActive ? "true" : undefined}
+                          className={`block py-0.5 ${isActive ? "text-ink underline underline-offset-4 decoration-accent" : "text-muted hover:text-ink"}`}
+                        >
+                          <span className="text-faint mr-2">{String(idx + 1).padStart(2, "0")}</span>
+                          {item.label}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </nav>
+              <p className="mt-4 font-mono text-xs text-faint">{Math.round(readingProgress)}%</p>
+            </div>
+          </aside>
 
+          <div className="min-w-0 lg:col-start-2 order-1 lg:order-none">
+            {/* Header */}
+            <header className="border-t border-ink pt-4 pb-8 mb-10 border-b border-b-rule">
+              <p className="eyebrow mb-4">
+                {[article.date, article.updated ? `${language === "vi" ? "Cập nhật" : "Updated"} ${article.updated}` : null, article.readTime, projectLabel, language === "vi" ? editorial.formatVi : editorial.format]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5">{articleTitle}</h1>
+              <p className="text-lg text-muted max-w-2xl">{articleSummary}</p>
+              <p className="mt-5 font-mono text-xs text-faint">
+                {language === "vi" ? editorial.seriesVi : editorial.series}
+                {" · "}
+                {article.tags.map((tag) => `#${tag}`).join(" ")}
+              </p>
               {article.repositoryUrl && (
-                <a
-                  href={article.repositoryUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
-                >
-                  <GitBranch className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span>Inspect Source Code</span>
-                  <ExternalLink className="w-3 h-3 ml-0.5" />
-                </a>
-              )}
-            </div>
-
-            {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-zinc-950 dark:text-white tracking-tight mb-6 leading-[1.15]">
-              {articleTitle}
-            </h1>
-
-            {/* Lead Paragraph Summary */}
-            <p className="text-lg sm:text-xl text-zinc-600 dark:text-zinc-300 leading-relaxed font-normal mb-8 max-w-4xl">
-              {articleSummary}
-            </p>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {article.tags.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="px-2.5 py-1 text-xs font-mono rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-            <div className="mt-4 text-xs font-mono text-zinc-500">
-              {language === "vi" ? editorial.seriesVi : editorial.series}
-            </div>
-          </div>
-        </MotionWrapper>
-
-        {/* 30-Second Key Insights Callout Box */}
-        <MotionWrapper delay={0.12}>
-          <div className="mb-12 p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-emerald-50 via-white to-zinc-50 dark:from-emerald-950/30 dark:via-zinc-950/80 dark:to-zinc-950 border border-emerald-500/30 shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(16,185,129,0.15)] relative overflow-hidden">
-            <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-3">
-              <Sparkles className="w-4 h-4" />
-              <span>{t.writing.keyInsights}</span>
-            </div>
-            <p className="text-sm sm:text-base text-zinc-800 dark:text-zinc-200 leading-relaxed">
-              {language === "vi"
-                ? `${editorial.formatVi}: ${article.summaryVi || article.summary}`
-                : `${editorial.format}: ${article.summary}`}
-            </p>
-          </div>
-        </MotionWrapper>
-
-        {/* Hero Image Illustration Banner (if configured) */}
-        {article.heroImage && (
-          <MotionWrapper delay={0.14}>
-            <div className="mb-12 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#09090B] p-2 sm:p-4 shadow-xl relative group">
-              <div className="relative w-full h-64 sm:h-96 md:h-[420px] rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-950 flex items-center justify-center">
-                <Image
-                  src={article.heroImage}
-                  alt={articleTitle}
-                  fill
-                  className="object-contain p-2 sm:p-4 transition-transform duration-500 group-hover:scale-[1.02]"
-                  sizes="(max-width: 1200px) 100vw, 1200px"
-                  priority
-                />
-                <button
-                  type="button"
-                  onClick={() => setImageModalOpen(true)}
-                  className="absolute bottom-3 right-3 p-2 rounded-lg bg-white/80 dark:bg-black/80 hover:bg-white dark:hover:bg-black text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center gap-1.5 text-xs font-mono backdrop-blur-sm shadow-md"
-                  title="Expand architecture image"
-                >
-                  <Maximize2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="hidden sm:inline">Zoom</span>
-                </button>
-              </div>
-              {(article.heroImageCaption || article.heroImageCaptionVi) && (
-                <p className="mt-3 text-center text-xs text-zinc-500 dark:text-zinc-400 font-mono italic">
-                  {language === "vi" && article.heroImageCaptionVi ? article.heroImageCaptionVi : article.heroImageCaption}
+                <p className="mt-3 font-mono text-xs">
+                  <a href={article.repositoryUrl} target="_blank" rel="noopener noreferrer" className="link">
+                    Inspect Source Code ↗
+                  </a>
                 </p>
               )}
-            </div>
-          </MotionWrapper>
-        )}
+            </header>
 
-        {/* Main Grid: Article Content + Sticky Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Article Main Body */}
-          <article className="lg:col-span-8 space-y-12 text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
-            {/* Key Highlights Metric Grid (if available) */}
-            {article.highlights && article.highlights.length > 0 && (
-              <section id="highlights" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <Zap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{language === "vi" ? "Chỉ số Kiến trúc Nổi bật" : "Architectural Highlights & Guarantees"}</span>
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                  {article.highlights.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="p-4 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/40 transition-colors space-y-1 shadow-sm"
-                    >
-                      <div className="text-lg sm:text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400 tracking-tight">
-                        {item.value}
-                      </div>
-                      <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                        {language === "vi" && item.labelVi ? item.labelVi : item.label}
-                      </div>
-                      <div className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-tight">
-                        {language === "vi" && item.detailVi ? item.detailVi : item.detail}
-                      </div>
-                    </div>
-                  ))}
+            {/* Hero image */}
+            {article.heroImage && (
+              <figure className="mb-12">
+                <div className="relative w-full h-64 sm:h-96 border border-rule bg-paper-2">
+                  <Image
+                    src={article.heroImage}
+                    alt={articleTitle}
+                    fill
+                    className="object-contain p-2"
+                    sizes="(max-width: 1200px) 100vw, 1200px"
+                    priority
+                  />
                 </div>
-              </section>
-            )}
-
-            {/* 1. Problem Context */}
-            <section id="context" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <AlertCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>{t.writing.problemContext}</span>
-              </h2>
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
-                {problemStatement}
-              </div>
-            </section>
-
-            {/* Side-by-Side Comparison Card (Naive vs Solution) */}
-            {article.comparison && (
-              <section id="comparison" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{language === "vi" ? "Phân tích So sánh Kiến trúc" : "Architectural Trade-offs: Naive vs Engineered"}</span>
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Naive card */}
-                  <div className="p-5 rounded-2xl bg-rose-50 dark:bg-rose-950/15 border border-rose-200 dark:border-rose-500/20 space-y-3 shadow-sm">
-                    <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-sm font-bold font-mono">
-                      <XCircle className="w-4 h-4 shrink-0" />
-                      <span>
-                        {language === "vi" && article.comparison.naiveTitleVi
-                          ? article.comparison.naiveTitleVi
-                          : article.comparison.naiveTitle}
-                      </span>
-                    </div>
-                    <ul className="space-y-2 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300">
-                      {(language === "vi" && article.comparison.naivePointsVi
-                        ? article.comparison.naivePointsVi
-                        : article.comparison.naivePoints
-                      ).map((pt, ptIdx) => (
-                        <li key={ptIdx} className="flex items-start gap-2">
-                          <span className="text-rose-500 font-bold shrink-0 mt-0.5">•</span>
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Solution card */}
-                  <div className="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-500/30 space-y-3 shadow-sm">
-                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-sm font-bold font-mono">
-                      <CheckCircle2 className="w-4 h-4 shrink-0" />
-                      <span>
-                        {language === "vi" && article.comparison.solutionTitleVi
-                          ? article.comparison.solutionTitleVi
-                          : article.comparison.solutionTitle}
-                      </span>
-                    </div>
-                    <ul className="space-y-2 text-xs sm:text-sm text-zinc-800 dark:text-zinc-200">
-                      {(language === "vi" && article.comparison.solutionPointsVi
-                        ? article.comparison.solutionPointsVi
-                        : article.comparison.solutionPoints
-                      ).map((pt, ptIdx) => (
-                        <li key={ptIdx} className="flex items-start gap-2">
-                          <span className="text-emerald-600 dark:text-emerald-400 font-bold shrink-0 mt-0.5">✓</span>
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* 2. Visual & Dynamic Architecture Diagram */}
-            {(() => {
-              if (DiagramComponent) {
-                return (
-                  <section id="architecture-diagram" className="space-y-4">
-                    <DiagramComponent caption={articleTitle} />
-                  </section>
-                );
-              }
-              if (article.architectureDiagram) {
-                return (
-                  <section id="architecture-diagram" className="space-y-4">
-                    <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                      <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                      <span>System Architecture Topology</span>
-                    </h2>
-                    <div className="p-4 sm:p-6 rounded-2xl bg-zinc-900 dark:bg-black border border-zinc-200 dark:border-zinc-800 font-mono text-[11px] sm:text-xs text-emerald-400 overflow-x-auto leading-relaxed shadow-xl">
-                      <pre>{article.architectureDiagram}</pre>
-                    </div>
-                  </section>
-                );
-              }
-              return null;
-            })()}
-
-            {/* 3. Architectural Design */}
-            <section id="design" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>{t.writing.architecturalSolution}</span>
-              </h2>
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
-                {architectureDesign}
-              </div>
-            </section>
-
-            {/* 4. Technical Decisions */}
-            <section id="decisions" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>{t.writing.technicalDecisions}</span>
-              </h2>
-              <div className="space-y-3">
-                {technicalDecisions.map((decision, idx) => (
-                  <div
-                    key={idx}
-                    className="p-5 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 flex items-start gap-4 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors shadow-sm"
-                  >
-                    <span className="text-emerald-600 dark:text-emerald-400 font-mono font-bold shrink-0 mt-0.5 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 text-xs">
-                      0{idx + 1}
-                    </span>
-                    <span className="text-sm sm:text-base text-zinc-800 dark:text-zinc-300 leading-relaxed">{decision}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* 5. Custom Deep-Dive Sections */}
-            {article.sections && article.sections.map((sec) => {
-              const secTitle = language === "vi" && sec.titleVi ? sec.titleVi : sec.title;
-              const secContent = language === "vi" && sec.contentVi ? sec.contentVi : sec.content;
-              const calloutText = sec.callout ? (language === "vi" && sec.callout.textVi ? sec.callout.textVi : sec.callout.text) : null;
-
-              return (
-                <section key={sec.id} id={sec.id} className="space-y-4">
-                  <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                    <BookOpen className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                    <span>{secTitle}</span>
-                  </h2>
-                  <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 text-base leading-relaxed text-zinc-700 dark:text-zinc-300 shadow-sm">
-                    <p className="whitespace-pre-line">{secContent}</p>
-                  </div>
-                  {calloutText && (
-                    <div className={`p-5 rounded-2xl flex items-start gap-3.5 text-sm leading-relaxed ${
-                      sec.callout?.type === "warning"
-                        ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-500/30 text-amber-900 dark:text-amber-200"
-                        : sec.callout?.type === "tip"
-                        ? "bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-200"
-                        : "bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 text-blue-900 dark:text-blue-200"
-                    }`}>
-                      {sec.callout?.type === "warning" ? (
-                        <AlertTriangle className="w-5 h-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-                      ) : sec.callout?.type === "tip" ? (
-                        <Lightbulb className="w-5 h-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-                      ) : (
-                        <Info className="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400 mt-0.5" />
-                      )}
-                      <span>{calloutText}</span>
-                    </div>
-                  )}
-                </section>
-              );
-            })}
-
-            {/* 6. Code Implementation */}
-            {article.content.codeSnippet && (
-              <section id="implementation" className="space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5">
-                    <Code2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                    <span>{t.writing.codeImplementation}</span>
-                  </h2>
-                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 uppercase bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 font-bold">
-                    {article.content.codeSnippet.language}
+                <figcaption className="mt-2 flex items-start justify-between gap-4 font-mono text-xs text-muted">
+                  <span>
+                    {(article.heroImageCaption || article.heroImageCaptionVi) &&
+                      (language === "vi" && article.heroImageCaptionVi ? article.heroImageCaptionVi : article.heroImageCaption)}
                   </span>
-                </div>
+                  <button
+                    type="button"
+                    onClick={() => setImageModalOpen(true)}
+                    className="link shrink-0"
+                    aria-label="Expand architecture image"
+                  >
+                    Zoom
+                  </button>
+                </figcaption>
+              </figure>
+            )}
 
-                <div className="relative rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-950 shadow-xl">
-                  {/* Header bar */}
-                  <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/90 border-b border-zinc-800 text-xs font-mono text-zinc-400">
-                    <div className="flex items-center gap-2">
-                      <Terminal className="w-4 h-4 text-emerald-400" />
-                      <span className="text-zinc-200 font-semibold">{article.content.codeSnippet.title}</span>
+            <article className="prose-editorial space-y-12">
+              {/* At a glance */}
+              {article.highlights && article.highlights.length > 0 && (
+                <section id="highlights" className="scroll-mt-24">
+                  <h2 className={h2}>{language === "vi" ? "Chỉ số Kiến trúc Nổi bật" : "At a glance"}</h2>
+                  <dl className="divide-y divide-rule border-y border-rule">
+                    {article.highlights.map((item, idx) => (
+                      <div key={idx} className="grid gap-1 sm:grid-cols-[10rem_1fr] sm:gap-6 py-3">
+                        <dt className="font-mono text-sm text-ink">{item.value}</dt>
+                        <dd className="m-0 text-sm text-muted">
+                          <span className="text-ink">{language === "vi" && item.labelVi ? item.labelVi : item.label}</span>
+                          {(language === "vi" && item.detailVi ? item.detailVi : item.detail) && (
+                            <> — {language === "vi" && item.detailVi ? item.detailVi : item.detail}</>
+                          )}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
+              )}
+
+              {/* Key insights callout */}
+              <aside className="border-l-2 border-accent bg-accent-soft p-4 not-prose">
+                <p className="eyebrow mb-2">{t.writing.keyInsights}</p>
+                <p className="text-sm text-ink">
+                  {language === "vi"
+                    ? `${editorial.formatVi}: ${article.summaryVi || article.summary}`
+                    : `${editorial.format}: ${article.summary}`}
+                </p>
+              </aside>
+
+              {/* Problem */}
+              <section id="context" className="scroll-mt-24">
+                <h2 className={h2}>{t.writing.problemContext}</h2>
+                <p>{problemStatement}</p>
+              </section>
+
+              {/* Comparison */}
+              {article.comparison && (
+                <section id="comparison" className="scroll-mt-24">
+                  <h2 className={h2}>{language === "vi" ? "Phân tích So sánh Kiến trúc" : "Architectural Trade-offs: Naive vs Engineered"}</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 border border-rule md:divide-x divide-y md:divide-y-0 divide-rule">
+                    <div className="p-4">
+                      <p className="eyebrow mb-3">
+                        {language === "vi" && article.comparison.naiveTitleVi ? article.comparison.naiveTitleVi : article.comparison.naiveTitle}
+                      </p>
+                      <ul className="space-y-2 text-sm text-muted list-none p-0 m-0">
+                        {(language === "vi" && article.comparison.naivePointsVi ? article.comparison.naivePointsVi : article.comparison.naivePoints).map((pt, i) => (
+                          <li key={i} className="flex gap-2"><span aria-hidden="true" className="font-mono text-faint">–</span><span>{pt}</span></li>
+                        ))}
+                      </ul>
                     </div>
+                    <div className="p-4">
+                      <p className="eyebrow mb-3 text-accent">
+                        {language === "vi" && article.comparison.solutionTitleVi ? article.comparison.solutionTitleVi : article.comparison.solutionTitle}
+                      </p>
+                      <ul className="space-y-2 text-sm text-ink list-none p-0 m-0">
+                        {(language === "vi" && article.comparison.solutionPointsVi ? article.comparison.solutionPointsVi : article.comparison.solutionPoints).map((pt, i) => (
+                          <li key={i} className="flex gap-2"><span aria-hidden="true" className="font-mono text-accent">+</span><span>{pt}</span></li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {/* Diagram */}
+              {DiagramComponent ? (
+                <section id="architecture-diagram" className="scroll-mt-24">
+                  <DiagramComponent caption={articleTitle} />
+                </section>
+              ) : article.architectureDiagram ? (
+                <section id="architecture-diagram" className="scroll-mt-24">
+                  <h2 className={h2}>System Architecture Topology</h2>
+                  <pre className="bg-code border border-rule p-4 font-mono text-xs overflow-x-auto">{article.architectureDiagram}</pre>
+                </section>
+              ) : null}
+
+              {/* Design */}
+              <section id="design" className="scroll-mt-24">
+                <h2 className={h2}>{t.writing.architecturalSolution}</h2>
+                <p>{architectureDesign}</p>
+              </section>
+
+              {/* Decisions */}
+              <section id="decisions" className="scroll-mt-24">
+                <h2 className={h2}>{t.writing.technicalDecisions}</h2>
+                <ol className="divide-y divide-rule border-y border-rule list-none p-0 m-0">
+                  {technicalDecisions.map((decision, idx) => (
+                    <li key={idx} className="grid grid-cols-[2.5rem_1fr] gap-2 py-3 m-0">
+                      <span className="font-mono text-xs text-faint pt-1">{String(idx + 1).padStart(2, "0")}</span>
+                      <span>{decision}</span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+
+              {/* Custom sections */}
+              {article.sections && article.sections.map((sec) => {
+                const secTitle = language === "vi" && sec.titleVi ? sec.titleVi : sec.title;
+                const secContent = language === "vi" && sec.contentVi ? sec.contentVi : sec.content;
+                const calloutText = sec.callout ? (language === "vi" && sec.callout.textVi ? sec.callout.textVi : sec.callout.text) : null;
+                return (
+                  <section key={sec.id} id={sec.id} className="scroll-mt-24">
+                    <h2 className={h2}>{secTitle}</h2>
+                    <ArticleMarkdown>{secContent}</ArticleMarkdown>
+                    {calloutText && (
+                      <aside className="mt-5 border-l-2 border-accent bg-accent-soft p-4 text-sm text-ink">
+                        <p className="eyebrow mb-1">{sec.callout?.type === "warning" ? "Warning" : sec.callout?.type === "tip" ? "Tip" : "Note"}</p>
+                        <p className="m-0">{calloutText}</p>
+                      </aside>
+                    )}
+                  </section>
+                );
+              })}
+
+              {/* Code */}
+              {article.content.codeSnippet && (
+                <section id="implementation" className="scroll-mt-24">
+                  <h2 className={h2}>{t.writing.codeImplementation}</h2>
+                  <div className="flex items-center justify-between gap-4 border border-rule border-b-0 bg-code px-4 py-2 font-mono text-xs text-muted">
+                    <span className="truncate">{article.content.codeSnippet.title} · {article.content.codeSnippet.language}</span>
                     <button
+                      type="button"
                       onClick={() => handleCopyCode(article.content.codeSnippet!.code)}
-                      className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
-                      title="Copy code"
+                      className="link shrink-0"
+                      aria-label="Copy code"
                     >
-                      {copiedCode ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400 font-semibold">Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>Copy</span>
-                        </>
-                      )}
+                      {copiedCode ? "Copied" : "Copy"}
                     </button>
                   </div>
-
-                  <pre className="p-5 font-mono text-xs sm:text-sm text-zinc-200 overflow-x-auto leading-relaxed bg-[#09090B] custom-scrollbar">
+                  <pre className="bg-code border border-rule p-4 font-mono text-xs sm:text-sm overflow-x-auto mt-0">
                     <code>{article.content.codeSnippet.code}</code>
                   </pre>
-                </div>
-              </section>
-            )}
+                </section>
+              )}
 
-            {/* 7. Verified Evidence */}
-            {verifiedEvidence.length > 0 && (
-              <section id="evidence" className="space-y-4">
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{language === "vi" ? "Bằng chứng Kỹ thuật Khách quan" : "Verified Repository Evidence"}</span>
-                </h2>
-                <div className="space-y-3">
-                  {verifiedEvidence.map((ev) => (
-                    <div
-                      key={ev.id}
-                      className="p-5 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 space-y-2.5 shadow-sm"
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
-                          {ev.category.toUpperCase()} • {ev.confidence.toUpperCase()}
-                        </span>
-                        <a
-                          href={ev.evidence[0]?.repository}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs font-mono text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1"
-                        >
-                          <span>{ev.evidence[0]?.repository.replace("https://github.com/", "")}</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      </div>
-                      <p className="text-sm text-zinc-800 dark:text-zinc-200 font-medium">
-                        {language === "vi" ? ev.claimVi : ev.claim}
-                      </p>
-                      {ev.evidence[0]?.description && (
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
-                          ↳ {ev.evidence[0]?.description}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
+              {/* Evidence */}
+              {verifiedEvidence.length > 0 && (
+                <section id="evidence" className="scroll-mt-24">
+                  <h2 className={h2}>{language === "vi" ? "Bằng chứng Kỹ thuật Khách quan" : "Verified Repository Evidence"}</h2>
+                  <ul className="divide-y divide-rule border-y border-rule list-none p-0 m-0">
+                    {verifiedEvidence.map((ev) => (
+                      <li key={ev.id} className="py-4 m-0">
+                        <p className="eyebrow mb-1">{ev.category} · {ev.confidence}</p>
+                        <p className="text-ink m-0">{language === "vi" ? ev.claimVi : ev.claim}</p>
+                        {ev.evidence[0]?.description && (
+                          <p className="mt-1 font-mono text-xs text-muted">↳ {ev.evidence[0]?.description}</p>
+                        )}
+                        {ev.evidence[0]?.repository && (
+                          <a href={ev.evidence[0].repository} target="_blank" rel="noopener noreferrer" className="link font-mono text-xs">
+                            {ev.evidence[0].repository.replace("https://github.com/", "")} ↗
+                          </a>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
 
-            {/* 7.5 Media Embeds */}
-            {article.embeds && article.embeds.length > 0 && (
-              <section id="media-embeds" className="space-y-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                  <Video className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{language === "vi" ? "Tư liệu & Video Hoạt động Thực tế" : "Media, Videos & Practical Records"}</span>
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                  {article.embeds.map((emb, idx) => {
-                    const title = language === "vi" && emb.titleVi ? emb.titleVi : emb.title;
-                    const caption = language === "vi" && emb.captionVi ? emb.captionVi : emb.caption;
+              {/* Embeds */}
+              {article.embeds && article.embeds.length > 0 && (
+                <section id="media-embeds" className="scroll-mt-24">
+                  <h2 className={h2}>{language === "vi" ? "Tư liệu & Video Hoạt động Thực tế" : "Media, Videos & Practical Records"}</h2>
+                  <div className="space-y-8">
+                    {article.embeds.map((emb, idx) => {
+                      const title = language === "vi" && emb.titleVi ? emb.titleVi : emb.title;
+                      const caption = language === "vi" && emb.captionVi ? emb.captionVi : emb.caption;
 
-                    if (emb.type === "youtube") {
-                      const ytId = emb.url?.replace(/.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/, "$1") || "ASVxal2cwXo";
+                      if (emb.type === "youtube") {
+                        const ytId = emb.url?.replace(/.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/, "$1") || "ASVxal2cwXo";
+                        return (
+                          <figure key={idx} className="m-0">
+                            {title && <p className="eyebrow mb-2">{title}</p>}
+                            <div className="relative aspect-video w-full bg-code border border-rule">
+                              <iframe
+                                src={emb.src || `https://www.youtube-nocookie.com/embed/${ytId}`}
+                                title={title || "YouTube video"}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                                className="absolute inset-0 w-full h-full border-0"
+                              />
+                            </div>
+                            {caption && <figcaption className="mt-2 font-mono text-xs text-muted">{caption}</figcaption>}
+                          </figure>
+                        );
+                      }
+
+                      if (emb.type === "facebook-video") {
+                        return (
+                          <figure key={idx} className="m-0">
+                            {title && <p className="eyebrow mb-2">{title}</p>}
+                            <div className="w-[267px] max-w-full h-[476px] bg-code border border-rule flex justify-center overflow-hidden">
+                              <iframe
+                                src={emb.src}
+                                width="267"
+                                height="476"
+                                title={title || "Video"}
+                                style={{ border: "none", overflow: "hidden" }}
+                                scrolling="no"
+                                frameBorder="0"
+                                allowFullScreen={true}
+                                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                              />
+                            </div>
+                            {caption && <figcaption className="mt-2 font-mono text-xs text-muted">{caption}</figcaption>}
+                          </figure>
+                        );
+                      }
+
                       return (
-                        <div key={idx} className="md:col-span-2 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl">
-                          {title && (
-                            <h4 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-                              <Play className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                              <span>{title}</span>
-                            </h4>
-                          )}
-                          <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-black">
-                            <iframe
-                              src={emb.src || `https://www.youtube-nocookie.com/embed/${ytId}`}
-                              title={title || "YouTube video"}
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                              allowFullScreen
-                              className="absolute inset-0 w-full h-full border-0"
-                            />
-                          </div>
-                          {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic">{caption}</p>}
-                        </div>
-                      );
-                    }
-
-                    if (emb.type === "facebook-video") {
-                      return (
-                        <div key={idx} className="flex flex-col items-center rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl">
-                          {title && (
-                            <h4 className="text-sm font-bold text-zinc-900 dark:text-white self-start flex items-center gap-2">
-                              <Video className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                              <span>{title}</span>
-                            </h4>
-                          )}
-                          <div className="w-[267px] max-w-full h-[476px] rounded-xl overflow-hidden bg-black flex justify-center">
+                        <figure key={idx} className="m-0">
+                          {title && <p className="eyebrow mb-2">{title}</p>}
+                          <div className="w-full max-w-[500px] overflow-hidden border border-rule bg-code flex justify-center">
                             <iframe
                               src={emb.src}
-                              width="267"
-                              height="476"
-                              style={{ border: "none", overflow: "hidden" }}
+                              width={emb.width || "500"}
+                              height={emb.height || "250"}
+                              title={title || "Embedded media"}
+                              style={{ border: "none", overflow: "hidden", maxWidth: "100%" }}
                               scrolling="no"
                               frameBorder="0"
                               allowFullScreen={true}
                               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                             />
                           </div>
-                          {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic text-center">{caption}</p>}
-                        </div>
+                          {caption && <figcaption className="mt-2 font-mono text-xs text-muted">{caption}</figcaption>}
+                        </figure>
                       );
-                    }
-
-                    return (
-                      <div key={idx} className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 shadow-xl overflow-hidden flex flex-col items-center">
-                        {title && (
-                          <h4 className="text-sm font-bold text-zinc-900 dark:text-white self-start flex items-center gap-2">
-                            <ExternalLink className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                            <span>{title}</span>
-                          </h4>
-                        )}
-                        <div className="w-full max-w-[500px] overflow-hidden rounded-xl bg-black/5 dark:bg-white/5 flex justify-center">
-                          <iframe
-                            src={emb.src}
-                            width={emb.width || "500"}
-                            height={emb.height || "250"}
-                            style={{ border: "none", overflow: "hidden", maxWidth: "100%" }}
-                            scrolling="no"
-                            frameBorder="0"
-                            allowFullScreen={true}
-                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                          />
-                        </div>
-                        {caption && <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono italic text-center">{caption}</p>}
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
-
-            {/* 8. Key Takeaways */}
-            <section id="takeaways" className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight flex items-center gap-2.5 pb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>{t.writing.keyTakeaways}</span>
-              </h2>
-              <div className="p-6 sm:p-7 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-500/20 space-y-3.5 shadow-sm">
-                {keyTakeaways.map((takeaway, idx) => (
-                  <div key={idx} className="flex items-start gap-3 text-sm sm:text-base text-zinc-800 dark:text-zinc-200">
-                    <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                    <span>{takeaway}</span>
+                    })}
                   </div>
-                ))}
-              </div>
-            </section>
+                </section>
+              )}
 
-            {/* Related Project Card */}
+              {/* Takeaways */}
+              <section id="takeaways" className="scroll-mt-24">
+                <h2 className={h2}>{t.writing.keyTakeaways}</h2>
+                <ul>
+                  {keyTakeaways.map((takeaway, idx) => (
+                    <li key={idx}>{takeaway}</li>
+                  ))}
+                </ul>
+              </section>
+            </article>
+
+            {/* Related project */}
             {relatedProject && (
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-                <div>
-                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1 font-semibold">
-                    Related System
-                  </span>
-                  <h3 className="text-lg font-bold text-zinc-900 dark:text-white">
-                    {language === "vi" && relatedProject.titleVi ? relatedProject.titleVi : relatedProject.title}
-                  </h3>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 line-clamp-1">
-                    {language === "vi" && relatedProject.subtitleVi ? relatedProject.subtitleVi : relatedProject.subtitle}
-                  </p>
-                </div>
-                <Link
-                  href={`/projects/${relatedProject.id}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold shrink-0 transition-colors"
-                >
-                  <span>{t.selectedWork.viewArchitecture}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+              <aside className="mt-12 border-t border-rule pt-6">
+                <p className="eyebrow mb-2">Related System</p>
+                <h3 className="text-xl">
+                  {language === "vi" && relatedProject.titleVi ? relatedProject.titleVi : relatedProject.title}
+                </h3>
+                <p className="mt-1 text-sm text-muted">
+                  {language === "vi" && relatedProject.subtitleVi ? relatedProject.subtitleVi : relatedProject.subtitle}
+                </p>
+                <Link href={`/projects/${relatedProject.id}`} className="link text-sm mt-3 inline-block">
+                  {t.selectedWork.viewArchitecture} →
                 </Link>
-              </div>
+              </aside>
             )}
 
-            {/* Next / Previous Article Footer Links */}
-            <div className="pt-10 border-t border-zinc-200 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Author */}
+            <aside className="mt-12 border-t border-rule pt-6 text-sm text-muted">
+              <p className="eyebrow mb-2">Author</p>
+              <p className="text-ink">{language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}</p>
+              <p className="mt-1 max-w-xl">
+                {language === "vi"
+                  ? "Kỹ sư Full-stack & System Builder. Tốt nghiệp loại Giỏi ĐH Giao thông Vận tải. Chuyên sâu về vi dịch vụ, micro-frontend và hệ thống phân tán."
+                  : "Full-stack Engineer & System Builder. Graduated with Distinction from UTC. Building cloud-native multi-tenant architectures and distributed platforms."}
+              </p>
+              <p className="mt-2 font-mono text-xs flex gap-4">
+                <Link href="/#contact" className="link">Get in touch →</Link>
+                <a href="https://github.com/hoan02" target="_blank" rel="noopener noreferrer" className="link">GitHub ↗</a>
+              </p>
+            </aside>
+
+            {/* Prev / next */}
+            <nav aria-label="Article navigation" className="mt-12 border-t border-ink pt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
               {prevArticle ? (
-                <Link
-                  href={`/writing/${prevArticle.slug}`}
-                  className="p-5 rounded-2xl bg-white dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group text-left shadow-sm"
-                >
-                  <span className="text-xs font-mono text-zinc-500 flex items-center gap-1 mb-1">
-                    <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-                    {t.writing.prevArticle}
-                  </span>
-                  <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
+                <Link href={`/writing/${prevArticle.slug}`} className="group block">
+                  <span className="eyebrow">← {t.writing.prevArticle}</span>
+                  <span className="mt-1 block font-serif text-lg group-hover:text-accent">
                     {language === "vi" && prevArticle.titleVi ? prevArticle.titleVi : prevArticle.title}
-                  </p>
+                  </span>
                 </Link>
               ) : <div />}
-
               {nextArticle && (
-                <Link
-                  href={`/writing/${nextArticle.slug}`}
-                  className="p-5 rounded-2xl bg-white dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group text-right ml-auto w-full shadow-sm"
-                >
-                  <span className="text-xs font-mono text-zinc-500 inline-flex items-center gap-1 mb-1">
-                    {t.writing.nextArticle}
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
+                <Link href={`/writing/${nextArticle.slug}`} className="group block sm:text-right">
+                  <span className="eyebrow">{t.writing.nextArticle} →</span>
+                  <span className="mt-1 block font-serif text-lg group-hover:text-accent">
                     {language === "vi" && nextArticle.titleVi ? nextArticle.titleVi : nextArticle.title}
-                  </p>
+                  </span>
                 </Link>
               )}
-            </div>
-          </article>
+            </nav>
 
-          {/* Sticky Sidebar (TOC + Author + Other Articles) */}
-          <aside className="lg:col-span-4 space-y-8">
-            {/* Table of Contents */}
-            <div className="sticky top-28 space-y-6">
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm shadow-sm">
-                <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-4 pb-2 border-b border-zinc-200 dark:border-zinc-800 font-semibold">
-                  <div className="flex items-center gap-2">
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>{t.writing.tableOfContents}</span>
-                  </div>
-                  <span className="text-[10px] text-zinc-500">{Math.round(readingProgress)}%</span>
-                </div>
-                <nav className="space-y-1.5 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
-                  {tocItems.map((item, idx) => {
-                    const isActive = activeSectionId === item.id;
-                    return (
-                      <a
-                        key={item.id}
-                        href={`#${item.id}`}
-                        className={`block text-xs font-mono py-1.5 px-2 rounded-lg transition-all truncate ${
-                          isActive
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border-l-2 border-emerald-500"
-                            : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900"
-                        }`}
-                      >
-                        <span className="text-zinc-400 dark:text-zinc-600 mr-2">0{idx + 1}.</span>
-                        {item.label}
-                      </a>
-                    );
-                  })}
-                </nav>
-              </div>
-
-              {/* Author & System Builder Card */}
-              <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm space-y-3 shadow-sm">
-                <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
-                  Author & Builder
-                </div>
-                <div className="font-bold text-zinc-900 dark:text-white text-base">
-                  {language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}
-                </div>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  {language === "vi"
-                    ? "Kỹ sư Full-stack & System Builder. Tốt nghiệp loại Giỏi ĐH Giao thông Vận tải. Chuyên sâu về vi dịch vụ, micro-frontend và hệ thống phân tán."
-                    : "Full-stack Engineer & System Builder. Graduated with Distinction from UTC. Building cloud-native multi-tenant architectures and distributed platforms."}
-                </p>
-                <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
-                  <Link href="/#contact" className="text-emerald-600 dark:text-emerald-400 hover:underline">
-                    Get in touch →
-                  </Link>
-                  <a
-                    href="https://github.com/hoan02"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
-                  >
-                    GitHub
-                  </a>
-                </div>
-              </div>
-
-              {/* Other Related Notes */}
-              {otherArticles.length > 0 && (
-                <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-sm space-y-3 shadow-sm">
-                  <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">
-                    {language === "vi" ? "Gợi ý Đọc tiếp" : "Recommended Notes"}
-                  </div>
-                  <div className="space-y-3">
-                    {otherArticles.map((other) => (
-                      <Link
-                        key={other.slug}
-                        href={`/writing/${other.slug}`}
-                        className="block group p-2.5 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
-                      >
-                        <h4 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
+            {otherArticles.length > 0 && (
+              <section className="mt-10 border-t border-rule pt-6">
+                <p className="eyebrow mb-3">{language === "vi" ? "Gợi ý Đọc tiếp" : "Recommended Notes"}</p>
+                <ul className="divide-y divide-rule border-y border-rule">
+                  {otherArticles.map((other) => (
+                    <li key={other.slug}>
+                      <Link href={`/writing/${other.slug}`} className="group block py-3">
+                        <span className="font-serif text-lg group-hover:text-accent">
                           {language === "vi" && other.titleVi ? other.titleVi : other.title}
-                        </h4>
-                        <span className="text-[10px] font-mono text-zinc-500 mt-1 block">
-                          {other.readTime} • {other.date}
                         </span>
+                        <span className="block font-mono text-xs text-faint mt-1">{other.date} · {other.readTime}</span>
                       </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </aside>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Lightbox Modal for Hero Image */}
       {imageModalOpen && article.heroImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/90"
+          role="dialog"
+          aria-modal="true"
+          aria-label={articleTitle}
           onClick={() => setImageModalOpen(false)}
         >
-          <div className="relative max-w-5xl max-h-[90vh] w-full h-[80vh] flex items-center justify-center">
-            <Image
-              src={article.heroImage}
-              alt={articleTitle}
-              fill
-              className="object-contain"
-              sizes="100vw"
-            />
+          <button
+            type="button"
+            onClick={() => setImageModalOpen(false)}
+            aria-label="Close"
+            className="absolute top-4 right-4 font-mono text-xs text-paper underline"
+          >
+            Close
+          </button>
+          <div className="relative max-w-5xl w-full h-[80vh] bg-paper">
+            <Image src={article.heroImage} alt={articleTitle} fill className="object-contain" sizes="100vw" />
           </div>
         </div>
       )}
-
-      <AskAIFloatingButton onClick={handleOpenAI} />
-      {aiModalOpen && <AskAIModal isOpen={aiModalOpen} onClose={handleCloseAI} />}
-      <Footer />
-    </main>
+    </SiteShell>
   );
 }
 

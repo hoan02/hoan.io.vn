@@ -134,6 +134,8 @@ export interface Article {
   summary: string;
   summaryVi?: string;
   date: string;
+  /** Last time the article was checked against the code it describes, e.g. "Oct 2026". */
+  updated?: string;
   readTime: string;
   tags: string[];
   featured: boolean;

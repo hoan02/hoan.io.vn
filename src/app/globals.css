@@ -2,167 +2,232 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Design tokens, editorial palette.
+ * Warm paper + ink, one restrained accent, hairline rules instead of cards.
+ * Use the semantic utilities (bg-paper, text-ink, text-muted, border-rule,
+ * text-accent ...) instead of raw zinc/emerald colours.
+ */
+:root {
+  --paper: #fbfaf7;
+  --paper-2: #f3f1ea;
+  --ink: #1b1a17;
+  --muted: #5e5a50;
+  --faint: #8c877a;
+  --rule: #e2ded2;
+  --accent: #9a3412;
+  --accent-soft: #f6e6dc;
+  --code-bg: #f1eee6;
+}
+
+.dark {
+  --paper: #131210;
+  --paper-2: #1b1a17;
+  --ink: #edeae2;
+  --muted: #a8a398;
+  --faint: #7a766b;
+  --rule: #2c2a26;
+  --accent: #e59a6f;
+  --accent-soft: #2a1f18;
+  --code-bg: #1b1a17;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-code: var(--code-bg);
+
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
 @layer base {
-  :root {
-    --background: #f8fafc;
-    --background-subtle: #f1f5f9;
-    --card-bg: rgba(255, 255, 255, 0.9);
-    --card-border: rgba(0, 0, 0, 0.08);
-    --card-border-hover: rgba(16, 185, 129, 0.45);
-    --foreground: #0f172a;
-    --foreground-muted: #64748b;
-    --foreground-subtle: #94a3b8;
-    --accent: #059669;
-    --accent-glow: rgba(16, 185, 129, 0.12);
-    --accent-light: #10b981;
-  }
-
-  .dark {
-    --background: #090a0f;
-    --background-subtle: #0f111a;
-    --card-bg: rgba(18, 20, 29, 0.7);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --card-border-hover: rgba(16, 185, 129, 0.35);
-    --foreground: #f4f4f5;
-    --foreground-muted: #a1a1aa;
-    --foreground-subtle: #71717a;
-    --accent: #10b981;
-    --accent-glow: rgba(16, 185, 129, 0.15);
-    --accent-light: #34d399;
-  }
-
   html {
     scroll-behavior: smooth;
-    background-color: var(--background);
-    color: var(--foreground);
-    selection-background-color: #10b981;
-    selection-color: #000000;
-  }
-
-  ::selection {
-    background: #10b981;
-    color: #090a0f;
+    background-color: var(--paper);
+    color: var(--ink);
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
     overflow-x: hidden;
-    transition: background-color 0.25s ease, color 0.25s ease;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  a {
+    text-underline-offset: 3px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
-/* Background grid styling */
-.bg-grid-pattern {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+/* Small mono label used above sections and in metadata rows */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
 }
 
-.dark .bg-grid-pattern {
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+/* Text link with an underline that only shows the accent on hover */
+.link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
+}
+.link:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
 }
 
-.bg-dots-pattern {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1px);
-  background-size: 24px 24px;
+/* Layout widths: wide for lists, narrow reading column for articles */
+.page-wrap {
+  width: 100%;
+  max-width: 68rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px) {
+  .page-wrap {
+    padding-inline: 2rem;
+  }
+}
+.reading-wrap {
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
 }
 
-.dark .bg-dots-pattern {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+/* Long-form article typography */
+.prose-editorial {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--ink);
+}
+.prose-editorial > * + * {
+  margin-top: 1.25em;
+}
+.prose-editorial h2 {
+  font-size: 1.65rem;
+  margin-top: 2.4em;
+}
+.prose-editorial h3 {
+  font-size: 1.25rem;
+  margin-top: 2em;
+}
+.prose-editorial a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.prose-editorial ul,
+.prose-editorial ol {
+  padding-left: 1.25em;
+}
+.prose-editorial ul {
+  list-style: disc;
+}
+.prose-editorial ol {
+  list-style: decimal;
+}
+.prose-editorial li + li {
+  margin-top: 0.4em;
+}
+.prose-editorial blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1em;
+  color: var(--muted);
+  font-family: var(--font-serif);
+  font-size: 1.15em;
+}
+.prose-editorial code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+.prose-editorial pre {
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1em 1.1em;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.prose-editorial pre code {
+  background: none;
+  padding: 0;
+}
+.prose-editorial table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.prose-editorial th,
+.prose-editorial td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.5em 0.75em 0.5em 0;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-editorial th {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--faint);
+  font-weight: 500;
 }
 
-/* Glassmorphism utility */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.dark .glass-panel {
-  background: rgba(15, 17, 26, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.glass-panel-hover {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-panel-hover:hover {
-  border-color: rgba(16, 185, 129, 0.4);
-  box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.12);
-  transform: translateY(-2px);
-}
-
-/* Custom Scrollbar */
+/* Scrollbar: quiet */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 8px;
+  height: 8px;
 }
-
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: #090a0f;
-}
-
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--rule);
   border-radius: 9999px;
 }
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #27272a;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
-}
-
-/* Animated subtle underline */
-.link-hover-effect {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-}
-
-.link-hover-effect::after {
-  content: '';
-  position: absolute;
-  width: 0%;
-  height: 1px;
-  bottom: -2px;
-  left: 0;
-  background-color: #10b981;
-  transition: width 0.3s ease;
-}
-
-.link-hover-effect:hover::after {
-  width: 100%;
-}
-
-/* Ambient glow orb */
-.emerald-ambient-glow {
-  position: absolute;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0) 70%);
-  filter: blur(60px);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Portfolio of Le Cong Hoan, Senior Full-stack Developer in Hanoi, Vietnam.",
     start_url: "/",
     display: "standalone",
-    background_color: "#090a0f",
-    theme_color: "#090a0f",
+    background_color: "#131210",
+    theme_color: "#131210",
     icons: [
       {
         src: "/images/logo-dark.svg",

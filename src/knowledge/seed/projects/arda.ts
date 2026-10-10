@@ -9,7 +9,7 @@ export const ARDA_PROJECT: Project = {
   period: "2024 – Hiện tại",
   year: "2024",
   summary:
-    "Nền tảng Cloud-native multi-tenant FinOps & Enterprise SaaS với kiến trúc 9 Go Microservices, React Module Federation (1 Shell + 7 Remotes), IAM Ory Kratos/Hydra, và cụm 3-node K3s tự vận hành.",
+    "Nền tảng Cloud-native multi-tenant FinOps & Enterprise SaaS với kiến trúc 15 Go Microservices, React Module Federation (1 Shell + 13 Remotes), IAM Ory Kratos/Hydra, và cụm 3-node K3s tự vận hành.",
   problem:
     "Các hệ thống SaaS quản trị tài chính & vận hành doanh nghiệp thường gặp khó khăn khi mở rộng theo chiều ngang, phụ thuộc vào monolithic backend, và giao diện cồng kềnh khó chia tách quyền sở hữu theo từng module.",
   techStack: [
@@ -42,13 +42,13 @@ export const ARDA_PROJECT: Project = {
     "GitOps Declarative Infrastructure (ArgoCD)",
   ],
   architecture: [
-    "Backend Monorepo (arda-be): 9 Go microservices độc lập (iam, platform, finance, workflow, crm, hrm, notification, media, mdm) giao tiếp đồng bộ qua gRPC nội bộ và bất đồng bộ qua NATS JetStream.",
+    "Backend Monorepo (arda-be): 15 Go microservices độc lập (auth-gateway, iam, platform, finance, workflow, crm, hrm, notification, media, mdm, loan, deposit, capital, statistical, ai) giao tiếp đồng bộ qua gRPC nội bộ và bất đồng bộ qua NATS JetStream.",
     "Data Consistency: Sử dụng Transactional Outbox Pattern kết hợp thư viện Go nội bộ (arda-events, arda-postgres) để đảm bảo tính nhất quán dữ liệu phân tán không bị mất mát message.",
-    "Frontend Monorepo (arda-mfe): React Module Federation gồm 1 Shell quản trị routing/auth và 7 Remote modules độc lập, chia sẻ thư viện UI nội bộ (@workspace/*).",
-    "Hạ tầng Bare-metal K3s (arda-infra): Cụm 3 nodes (192.168.100.201-203), sử dụng Traefik ForwardAuth cho Ingress, CloudNativePG cho High Availability PostgreSQL cluster, và ArgoCD quản lý GitOps.",
+    "Frontend Monorepo (arda-mfe): React Module Federation gồm 1 Shell quản trị routing/auth và 13 Remote modules độc lập, chia sẻ thư viện UI nội bộ (@workspace/*).",
+    "Hạ tầng K3s (arda-infra): ảnh chụp runtime gần nhất ghi nhận cụm 3 node; auth-gateway BFF là điểm vào chính (Traefik chỉ định tuyến một số service), CloudNativePG cho PostgreSQL và Argo CD quản lý GitOps.",
   ],
   challenges: [
-    "Xử lý phân tán authentication/authorization an toàn trên 9 services mà không tạo điểm nghẽn (bottleneck).",
+    "Xử lý phân tán authentication/authorization an toàn trên 15 services mà không tạo điểm nghẽn (bottleneck).",
     "Đồng bộ sự kiện tài chính giữa workflow engine (Zeebe) và finance service khi có sự cố mạng.",
     "Chia sẻ state và routing mượt mà giữa 7 React remotes mà không bị xung đột phiên bản dependencies.",
   ],
@@ -76,7 +76,7 @@ export const ARDA_PROJECT: Project = {
       id: "ev-arda-01",
       type: "github",
       claim: "Kinh nghiệm thực tế xây dựng Go Microservices & gRPC/NATS",
-      statement: "Repo arda-be công khai trên GitHub gồm 9 Go services với gRPC contracts, Protobuf definitions và NATS JetStream outbox.",
+      statement: "Repo arda-be công khai trên GitHub gồm 15 Go services với gRPC contracts, Protobuf definitions và NATS JetStream outbox.",
       source: "https://github.com/arda-labs/arda-be",
       technologies: ["Go", "gRPC", "NATS JetStream", "Protobuf"],
       confidence: "verified",
