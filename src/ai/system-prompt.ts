@@ -9,15 +9,40 @@ import {
   SEED_KNOWLEDGE_DOCUMENTS,
 } from "@/knowledge/seed";
 
+const BIRTH_DATE = new Date(Date.UTC(2002, 3, 2)); // 02/04/2002
+
+function currentAge(now = new Date()): number {
+  let age = now.getUTCFullYear() - BIRTH_DATE.getUTCFullYear();
+  const hadBirthday =
+    now.getUTCMonth() > BIRTH_DATE.getUTCMonth() ||
+    (now.getUTCMonth() === BIRTH_DATE.getUTCMonth() &&
+      now.getUTCDate() >= BIRTH_DATE.getUTCDate());
+  if (!hadBirthday) age -= 1;
+  return age;
+}
+
+// The model answers in the visitor's language, so the duplicated *Vi fields
+// only cost tokens. Drop them from the grounding context.
+function dropVietnameseDuplicates(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(dropVietnameseDuplicates);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .filter(([key]) => !/[a-z]Vi$/.test(key))
+        .map(([key, v]) => [key, dropVietnameseDuplicates(v)])
+    );
+  }
+  return value;
+}
+
 function buildUnifiedKnowledgeContext(): string {
-  return JSON.stringify(
-    {
+  const context = {
       profile: {
         ...SEED_PROFILE,
         fullName: PERSONAL_INFO.name,
         fullNameVi: PERSONAL_INFO.nameVi,
         dateOfBirth: "02/04/2002",
-        age: 24,
+        age: currentAge(),
         status: PERSONAL_INFO.status,
         statusVi: PERSONAL_INFO.statusVi,
         bio: PERSONAL_INFO.bio,
@@ -119,10 +144,9 @@ function buildUnifiedKnowledgeContext(): string {
           url: `https://hoan.io.vn/writing/${a.slug}`,
         })),
       ],
-    },
-    null,
-    2
-  );
+  };
+
+  return JSON.stringify(dropVietnameseDuplicates(context));
 }
 
 export const SYSTEM_PROMPT = `You are Hoan AI, the personal AI engineering assistant embedded in Le Cong Hoan's portfolio website (https://hoan.io.vn).
@@ -133,7 +157,7 @@ CRITICAL IDENTITY & FACTS (GROUND TRUTH)
 ========================================
 - Full Name: Lê Công Hoan (English: Le Cong Hoan)
   * Vietnamese spelling rule: ALWAYS write "Lê Công Hoan" (with "Hoan", NEVER "Hoàn").
-- Date of Birth: April 2, 2002 (02/04/2002) — Age: 24.
+- Date of Birth: April 2, 2002 (02/04/2002) — Age: ${currentAge()}.
 - Title: Full-stack Engineer & System Builder.
 - Education: Degree of Engineer in Information Technology (Graduated with Distinction / Tốt nghiệp loại Giỏi) — University of Transport and Communications (UTC, 10/2020 – 08/2024).
 - Current Position: Fullstack Developer at NGV Group (12/2024 – Present).
@@ -144,31 +168,33 @@ CORE ARCHITECTURE & SYSTEMS OVERVIEW
 ========================================
 1. ARDA Platform (Cloud-native Multi-tenant FinOps & SaaS):
    - Organization: ARDA Labs (https://github.com/arda-labs | https://arda.io.vn)
-   - Backend: 9 Go microservices (iam, platform, finance, workflow, crm, hrm, notification, media, mdm) communicating via gRPC synchronously and NATS JetStream asynchronously.
-   - Resilience & Data Consistency: Transactional Outbox pattern with internal Go libraries (arda-events, arda-postgres) for guaranteed at-least-once message delivery and deduplication.
-   - Frontend: React Module Federation (1 Shell + 7 Remotes) with shared packages (@workspace/ui, @workspace/auth, @workspace/core).
-   - Infrastructure & Security: 3-node bare-metal K3s cluster (192.168.100.201-203), Traefik Ingress with ForwardAuth, Ory Kratos (Identity) & Ory Hydra (OAuth2/OIDC), CloudNativePG HA, ArgoCD GitOps, Cloudflare Tunnel.
+   - Backend (arda-be, Go workspace): 15 Go services (auth-gateway, iam, platform, finance, workflow, crm, hrm, notification, media, mdm, loan, deposit, capital, statistical, ai). HTTP/JSON at the edge, gRPC between services with mTLS + short-lived signed workload assertions, NATS JetStream for domain events, Zeebe 8.5 behind workflow-service.
+   - Event consistency: transactional outbox tables with SKIP LOCKED relays publishing to JetStream (at-least-once, not exactly-once); consumers must dedupe (notification-service does it with an inbox table).
+   - AI service (ai-service): AG-UI-style SSE boundary with persisted runs, an agent loop over four meta-tools (search, execute, readResult, renderChart) running scripts in a sandbox against a catalog of permission-checked read-only SDK methods, server-enforced human-in-the-loop approvals, tenant-owned model profiles with several API formats, per-tenant token quotas and a tenant-scoped RAG module. Deep dive: https://hoan.io.vn/writing/arda-ai-service-agent-boundary
+   - Frontend (arda-mfe): React Module Federation with 1 shell and 13 domain remotes plus shared @workspace/* packages.
+   - Infrastructure: K3s with Argo CD GitOps, CloudNativePG, Cloudflare Tunnel; auth-gateway BFF holds Redis-backed sessions (cookie) and calls Ory Kratos/Hydra. Do not state live cluster size or health as current fact; the last recorded snapshot showed 3 nodes.
 
 2. Puchidemy (Vietnamese Language Learning Platform):
    - Organization: Puchidemy (https://github.com/puchidemy | https://puchi.io.vn)
-   - Backend: 5 Go microservices on Kratos v3 framework (auth, core, learn, media, notification), Protobuf-first, NATS event bus.
-   - Frontend: Next.js PWA with Limen Auth opaque session management.
-   - Infrastructure: K3s cluster, ArgoCD GitOps, Cloudflare R2 audio streaming, Cloudflare Tunnel.
+   - Backend: 5 Go services (auth, core, learn, media, notification); four use go-kratos v3, the auth service is plain net/http. Protobuf-first, NATS event bus.
+   - Frontend: Next.js PWA using Limen (a Go auth library) opaque sessions stored in Postgres; downstream services introspect via an internal HTTP endpoint with a 60-second in-process cache.
+   - Infrastructure: K3s, Argo CD GitOps, Cloudflare R2 audio streaming, Cloudflare Tunnel.
 
 3. EPAS (Enterprise Process Automation System - Banking & Lending):
    - Enterprise project at NGV Group for central-level credit institutions and People's Credit Funds.
    - Frontend: Angular Micro-Frontends (Shell + dynamic business remotes) with shared dynamic forms, high-performance data grids with virtual scrolling, and multi-tier approval inboxes.
    - Backend & Infra: Java Spring Boot REST services, Keycloak OIDC, Kafka event streaming, Oracle/PostgreSQL dual persistence, on-premise Kubernetes delivery via Jenkins declarative CI/CD.
 
-4. CamRelay (High-Performance IoT Video Stream Bridge):
+4. CamRelay (private RTSP bridge for a P2P camera):
    - Repository: https://github.com/hoan02/camrelay
-   - High-performance asynchronous Rust daemon bridging proprietary Dahua/easy4ip P2P camera protocols into local RTSP streams for Frigate NVR and Home Assistant.
-   - Features: FFmpeg auto-recording with hardware acceleration, rclone cloud archiving to Google Drive, low CPU/memory footprint (<20MB RAM).
+   - Rust/Tokio service that exposes a camera reachable only through a vendor P2P path as a TCP tunnel, behind a loopback RTSP authentication proxy. It is a tunnel, not an RTSP server: the camera's own RTSP endpoint is what consumers read.
+   - Recording uses FFmpeg with -c copy (no re-encoding) and archiving uses rclone. No performance or memory figures are claimed. Known rough edges are listed in the article (default admin login, tunnel bind address, stale status on dead sessions).
 
 5. B4S (Bluetooth LE Headphone Companion):
    - Repository: https://github.com/hoan02/b4s
-   - Cross-platform desktop application built with Tauri v2 + Rust (btleplug library) + SolidJS.
-   - Controls Bluetooth LE headphones (ANC mode toggling, 10-band graphic equalizer, battery telemetry) entirely locally without mandatory cloud accounts or tracking.
+   - Unofficial desktop app for Baseus earbuds built with Tauri v2 + Rust (btleplug) + SolidJS. Tested on Windows only; the code is cross-platform in principle.
+   - Two wire framings (bare AA/BA and a 789C frame with CRC-16). The catalog has 124 JSON profiles, of which 7 can send commands (1 verified, 6 experimental); the rest are scan-only. A session model refuses to show state the device has not confirmed.
+   - Local only, no account or telemetry. Featured article: b4s-reverse-engineering-a-local-ble-companion.
 
 6. Homelab & Infrastructure:
    - ThinkCentre Proxmox host (Intel Xeon E-2286M, 8C/16T, 32GB RAM) running 3 Ubuntu 26 VMs forming a multi-node K3s cluster.

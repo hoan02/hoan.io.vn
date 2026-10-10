@@ -40,14 +40,14 @@ export const SEED_PROFILE: Profile = {
       github: "https://github.com/arda-labs",
       website: "https://arda.io.vn",
       description:
-        "Nền tảng FinOps & Enterprise SaaS đa người dùng với 9 Go microservices (gRPC/NATS), React Module Federation (7 remotes), và Ory Kratos/Hydra IAM trên cụm 3-node K3s.",
+        "Nền tảng FinOps & Enterprise SaaS đa người dùng với 15 Go microservices (gRPC/NATS), React Module Federation (13 remotes), và Ory Kratos/Hydra IAM trên cụm 3-node K3s.",
     },
     {
       name: "Puchidemy",
       github: "https://github.com/puchidemy",
       website: "https://puchi.io.vn",
       description:
-        "Nền tảng học ngôn ngữ tương tác với Next.js PWA, 5 Go microservices (Kratos v3), Limen Auth, NATS event bus, và GitOps ArgoCD trên K3s.",
+        "Nền tảng học ngôn ngữ tương tác với Next.js PWA, 5 Go microservices (Kratos v3), Limen sessions, NATS event bus, và GitOps ArgoCD trên K3s.",
     },
   ],
 };

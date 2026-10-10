@@ -1,6 +1,6 @@
 # Le Cong Hoan (Lê Công Hoan) — Engineering Portfolio
 
-> Evidence-driven personal developer portfolio and architecture case study hub of **Lê Công Hoan** — Full-stack Developer & System Builder. Built with Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, and AI Assistant (Gemini 2.5 Flash).
+> Evidence-driven personal developer portfolio and architecture case study hub of **Lê Công Hoan** — Full-stack Developer & System Builder. Built with Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, and an AI assistant (Claude Haiku 5.5 via OpenRouter).
 
 🌐 **Live Website**: [https://hoan.io.vn](https://hoan.io.vn)  
 📄 **Engineering Notes**: [https://hoan.io.vn/writing](https://hoan.io.vn/writing)  
@@ -25,16 +25,16 @@
 
 ## 🏗️ Open Source Architecture Organizations
 
-- 🏢 **[ARDA Labs](https://github.com/arda-labs)** ([arda.io.vn](https://arda.io.vn)): Cloud-native multi-tenant FinOps platform featuring 9 Go microservices (synchronous gRPC + NATS JetStream events), React Module Federation (1 Shell + 7 Remotes), Ory Kratos/Hydra zero-trust identity with Traefik ForwardAuth, Zeebe 8.5 BPMN workflows, and CloudNativePG HA on a 3-node bare-metal K3s cluster.
-- 📚 **[Puchidemy](https://github.com/puchidemy)** ([puchi.io.vn](https://puchi.io.vn)): Modern Vietnamese language learning web platform featuring a Next.js PWA frontend, 5 Go microservices monorepo built on Kratos v3, Limen Auth opaque sessions, NATS event bus, Cloudflare R2 audio streaming, and declarative ArgoCD GitOps on K3s.
-- 📹 **[camrelay](https://github.com/hoan02/camrelay)**: High-performance asynchronous Rust daemon tunneling proprietary Dahua/easy4ip P2P cameras into local RTSP streams for Frigate NVR & Home Assistant with FFmpeg recording and rclone Google Drive archiving.
-- 🎧 **[b4s](https://github.com/hoan02/b4s)**: Cross-platform desktop companion (Tauri v2 + Rust btleplug + SolidJS) for local Bluetooth LE headphone control (ANC, 10-band EQ, battery telemetry) without third-party cloud apps.
+- 🏢 **[ARDA Labs](https://github.com/arda-labs)** ([arda.io.vn](https://arda.io.vn)): Cloud-native multi-tenant FinOps platform featuring 15 Go microservices (synchronous gRPC + NATS JetStream events), React Module Federation (1 Shell + 13 Remotes), Ory Kratos/Hydra zero-trust identity with Traefik ForwardAuth, Zeebe 8.5 BPMN workflows, and CloudNativePG HA on a 3-node bare-metal K3s cluster.
+- 📚 **[Puchidemy](https://github.com/puchidemy)** ([puchi.io.vn](https://puchi.io.vn)): Modern Vietnamese language learning web platform featuring a Next.js PWA frontend, 5 Go microservices monorepo built on Kratos v3, Limen sessions opaque sessions, NATS event bus, Cloudflare R2 audio streaming, and declarative ArgoCD GitOps on K3s.
+- 📹 **[camrelay](https://github.com/hoan02/camrelay)**: Rust/Tokio service that makes a camera reachable only through a vendor P2P path usable on a private network: a TCP tunnel behind a loopback RTSP auth proxy, with optional FFmpeg (-c copy) recording and rclone archiving.
+- 🎧 **[b4s](https://github.com/hoan02/b4s)**: Unofficial desktop app for Baseus earbuds (Tauri v2, Rust btleplug, SolidJS): local Bluetooth LE control, two wire framings, 124 catalog profiles of which 7 can send commands. Tested on Windows.
 
 ---
 
 ## 📚 10 Flagship Engineering Case Studies (`/writing`)
 
-1. **[Designing Arda: A Cloud-Native Financial Operations Platform](https://hoan.io.vn/writing/designing-arda-cloud-native-finops-platform)** — System design of 9 Go services, gRPC, NATS, auth-gateway, CloudNativePG HA, and K3s GitOps.
+1. **[Designing Arda: A Cloud-Native Financial Operations Platform](https://hoan.io.vn/writing/designing-arda-cloud-native-finops-platform)** — System design of 15 Go services, gRPC, NATS, auth-gateway, CloudNativePG HA, and K3s GitOps.
 2. **[Authentication Beyond JWT: Designing Arda's Identity Architecture](https://hoan.io.vn/writing/authentication-beyond-jwt-arda-identity-architecture)** — Edge Traefik ForwardAuth, auth-gateway BFF, Ory Kratos/Hydra, and downstream header injection.
 3. **[Reliable Domain Events with NATS and the Transactional Outbox Pattern](https://hoan.io.vn/writing/reliable-domain-events-nats-transactional-outbox)** — Solving dual-write hazards in distributed Go services with PostgreSQL atomic outbox tables and idempotent consumer deduplication.
 4. **[Putting BPMN Behind a Workflow Service Boundary](https://hoan.io.vn/writing/bpmn-workflow-service-boundary-zeebe)** — Clean gRPC workflow-service facade isolating Zeebe 8.5 process orchestration, SLA timers, and user tasks.
@@ -51,7 +51,7 @@
 
 - **Frontend Core**: Next.js 16 (App Router + Turbopack), React 19, TypeScript, Tailwind CSS.
 - **Visual Design**: Sleek dark aesthetic (`#09090B`, panel `#18181B`, border `#27272A`, emerald accent `#10B981`), interactive SVG architecture diagrams, image lightbox zoom, and side-by-side Naive vs Solution comparison cards.
-- **AI Assistant (Hoan AI)**: Contextual assistant powered by Gemini 2.5 Flash (`@google/genai`), bottom-pinned chat bar with dynamic contextual follow-ups grounded in `ENGINEERING_EVIDENCE`.
+- **AI Assistant (Hoan AI)**: Assistant powered by `anthropic/claude-haiku-5.5` through OpenRouter (Vercel AI SDK), bottom-pinned chat bar with dynamic contextual follow-ups grounded in `ENGINEERING_EVIDENCE`.
 - **SEO & AI Optimization (GEO/AIO)**: JSON-LD Person schema, dynamic `sitemap.xml`, `robots.txt`, and standard `/llms.txt` dossier.
 - **Bilingual**: Seamless instant switching between English & Tiếng Việt.
 
@@ -67,8 +67,11 @@ npm install
 ### 2. Configure environment variables
 Create `.env.local`:
 ```bash
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+# optional, defaults to anthropic/claude-haiku-5.5
+OPENROUTER_MODEL=anthropic/claude-haiku-5.5
+# optional daily request ceiling (cost circuit breaker), default 1000
+AI_DAILY_REQUEST_LIMIT=1000
 ```
 
 ### 3. Run development server

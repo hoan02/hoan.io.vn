@@ -8,32 +8,32 @@ export const B4S_PROJECT: Project = {
   period: "2024",
   year: "2024",
   summary:
-    "Ứng dụng desktop đa nền tảng (Tauri v2 + Rust btleplug + SolidJS) cho phép điều khiển tai nghe Bluetooth LE cục bộ (chống ồn chủ động ANC, tuỳ chỉnh 10-band EQ, theo dõi telemetry pin) mà không cần tài khoản cloud hay ứng dụng điện thoại.",
+    "App desktop không chính thức cho tai nghe Baseus (Tauri v2 + Rust btleplug + SolidJS): điều khiển Bluetooth LE cục bộ, không tài khoản, không telemetry. Hai kiểu framing (bare AA/BA và frame 789C có CRC-16); catalog 124 profile JSON, 7 profile gửi được lệnh (1 verified, 6 experimental), còn lại chỉ scan. Chỉ test trên Windows.",
   problem:
     "Nhiều thiết bị tai nghe không dây bắt buộc người dùng cài app di động kèm đăng ký tài khoản cloud để chỉnh EQ/ANC, gây bất tiện khi làm việc trên máy tính và tiềm ẩn rủi ro theo dõi quyền riêng tư.",
-  techStack: ["Tauri v2", "Rust", "btleplug", "SolidJS", "TypeScript", "Tailwind CSS", "BLE Protocols"],
+  techStack: ["Tauri v2", "Rust", "btleplug", "SolidJS", "TypeScript", "SCSS", "BLE Protocols"],
   domains: ["Desktop Apps", "Hardware Control", "Bluetooth LE", "Reverse Engineering", "Privacy-first"],
   competencies: [
-    "Cross-platform Desktop Development (Tauri v2 + Rust)",
+    "Desktop Development (Tauri v2 + Rust)",
     "Bluetooth Low Energy (BLE) Protocol Reverse-engineering",
-    "SolidJS Reactive UI & High-performance Audio EQ Control",
+    "SolidJS UI driven by per-model capability profiles",
     "Local-first Software Architecture without Cloud Dependencies",
   ],
   architecture: [
-    "Rust Backend Core: Sử dụng crate btleplug để scan, kết nối GATT services/characteristics và gửi opcode nhị phân tới tai nghe.",
-    "SolidJS Reactive Frontend: Giao diện trực quan cho phép kéo chỉnh 10 băng tần EQ, chuyển đổi chế độ ANC/Transparency thời gian thực.",
-    "IPC Communication: Tauri v2 bridge trao đổi dữ liệu binary/JSON siêu nhẹ giữa Rust core và giao diện SolidJS.",
+    "Rust Backend Core: dùng btleplug để scan, kết nối GATT và gửi frame nhị phân; session chỉ hiển thị state do thiết bị xác nhận.",
+    "SolidJS Frontend: render điều khiển theo capability của từng profile model trong catalog JSON.",
+    "IPC: Tauri v2 bridge giữa Rust core và giao diện SolidJS.",
   ],
   challenges: [
     "Dịch ngược (reverse-engineer) cấu trúc gói tin BLE độc quyền của nhà sản xuất.",
-    "Đảm bảo ứng dụng khởi động tức thì và chiếm dụng tài nguyên RAM cực thấp (< 30MB).",
+    "Không có tài liệu giao thức chính thức nên mỗi profile phải được phân loại verified / experimental / scan-only.",
   ],
   solutions: [
-    "Sử dụng Wireshark & Bluetooth HCI Snoop logs để phân tích opcode và checksum.",
-    "Kết hợp Tauri v2 và SolidJS giúp tối ưu kích thước file cài đặt và hiệu năng xử lý.",
+    "Mã hóa hai kiểu framing bằng codec có tài liệu và test; cổng cho phép gửi lệnh chỉ mở với profile đã review.",
+    "Session Rust từ chối hiển thị state cũ thay vì đoán.",
   ],
   outcomes: [
-    "Dự án mã nguồn mở hữu ích cho cộng đồng sử dụng tai nghe trên hệ điều hành Windows, macOS và Linux.",
+    "Điều khiển cục bộ cho các profile đã hiện thực; các giới hạn chưa xác minh được liệt kê trung thực trong bài viết.",
   ],
   repositories: [{ name: "b4s (Tauri v2 Bluetooth Companion)", url: "https://github.com/hoan02/b4s" }],
   links: [{ label: "GitHub Repo", url: "https://github.com/hoan02/b4s" }],
@@ -41,7 +41,7 @@ export const B4S_PROJECT: Project = {
     {
       id: "ev-b4s-01",
       type: "github",
-      claim: "Kỹ năng lập trình ứng dụng Desktop với Tauri v2, Rust & BLE",
+      claim: "Lập trình app desktop với Tauri v2, Rust & BLE",
       statement: "Repository hoan02/b4s mã nguồn mở kết hợp Tauri v2, Rust btleplug và SolidJS.",
       source: "https://github.com/hoan02/b4s",
       technologies: ["Tauri v2", "Rust", "SolidJS", "Bluetooth LE"],

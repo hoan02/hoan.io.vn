@@ -9,7 +9,7 @@ export const PUCHI_PROJECT: Project = {
   period: "2024 – Hiện tại",
   year: "2024",
   summary:
-    "Nền tảng học ngôn ngữ tương tác (Tiếng Việt) với Next.js Progressive Web App (PWA), 5 Go microservices dựa trên Go Kratos v3 framework, hệ thống xác thực Limen Auth, NATS event bus, và GitOps ArgoCD trên K3s.",
+    "Nền tảng học ngôn ngữ tương tác (Tiếng Việt) với Next.js Progressive Web App (PWA), 5 Go microservices dựa trên Go Kratos v3 framework, hệ thống xác thực Limen sessions, NATS event bus, và GitOps ArgoCD trên K3s.",
   problem:
     "Xây dựng trải nghiệm học tập đa phương tiện (audio streaming, bài học tương tác, theo dõi tiến độ thời gian thực) với kiến trúc microservices nhẹ, chịu tải tốt và chi phí hạ tầng tối ưu.",
   techStack: [
@@ -26,13 +26,13 @@ export const PUCHI_PROJECT: Project = {
     "Cloudflare R2",
     "Kubernetes (K3s)",
     "ArgoCD",
-    "Limen Auth",
+    "Limen sessions",
   ],
   domains: ["EdTech", "E-learning", "Microservices", "PWA", "Event-driven", "Audio Streaming"],
   competencies: [
     "Go Microservices with Kratos v3 (Protobuf-first)",
     "Next.js PWA & Audio Caching for Learning Flow",
-    "Opaque Session Authentication (Limen Auth)",
+    "Opaque Session Authentication (Limen sessions)",
     "Object Storage & CDN Integration (Cloudflare R2)",
     "Kubernetes K3s Deployment with ArgoCD GitOps",
   ],
@@ -47,7 +47,7 @@ export const PUCHI_PROJECT: Project = {
   ],
   solutions: [
     "Tích hợp Cloudflare R2 với presigned URLs và cache worker phía client.",
-    "Sử dụng Limen Auth với cơ chế opaque session token lưu trong cookie HttpOnly an toàn chống XSS/CSRF.",
+    "Sử dụng Limen sessions với cơ chế opaque session token lưu trong cookie HttpOnly an toàn chống XSS/CSRF.",
   ],
   outcomes: [
     "Nền tảng chạy ổn định trên hạ tầng K3s tự vận hành với pipeline GitOps tự động hoá 100%.",

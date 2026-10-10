@@ -1,5 +1,6 @@
 import { Project, ExperienceItem, TechCategory, BentoStat, Article } from "@/types";
 import { ADDITIONAL_ARTICLES } from "./additionalArticles";
+import { REWRITTEN_ARTICLES, NEW_ARTICLES } from "./articlesRewritten";
 
 export const PERSONAL_INFO = {
   name: "Le Cong Hoan",
@@ -350,10 +351,10 @@ Internet / Cloudflare Tunnel
     id: "arda-finops-platform",
     title: "Arda — Multi-Tenant Financial Operations Platform",
     titleVi: "Arda — Nền tảng FinOps & Vận hành Tài chính Đa Khách thuê",
-    subtitle: "Cloud-native platform with 9 Go microservices (gRPC & NATS), React Module Federation (7 remotes), and Ory IAM",
-    subtitleVi: "Kiến trúc FinOps đám mây với 9 Go Microservices (gRPC & NATS), React Module Federation (7 remotes) và Ory IAM",
-    description: "Architected a multi-tenant financial operations platform organized into 3 Git repositories: 9 Go microservices backend (arda-be), React Module Federation (arda-mfe), and GitOps-managed Kubernetes infrastructure (arda-infra) with Ory Kratos/Hydra authentication and CloudNativePG.",
-    descriptionVi: "Thiết kế nền tảng FinOps đa khách thuê gồm 3 repo: 9 Go Microservices (arda-be), React Module Federation 7 remote apps (arda-mfe) và hạ tầng Kubernetes GitOps (arda-infra) với xác thực Ory Kratos/Hydra và CloudNativePG.",
+    subtitle: "Cloud-native platform with 15 Go microservices (gRPC & NATS), React Module Federation (13 remotes), and Ory IAM",
+    subtitleVi: "Kiến trúc FinOps đám mây với 15 Go Microservices (gRPC & NATS), React Module Federation (13 remotes) và Ory IAM",
+    description: "Architected a multi-tenant financial operations platform organized into 3 Git repositories: 15 Go microservices backend (arda-be), React Module Federation (arda-mfe), and GitOps-managed Kubernetes infrastructure (arda-infra) with Ory Kratos/Hydra authentication and CloudNativePG.",
+    descriptionVi: "Thiết kế nền tảng FinOps đa khách thuê gồm 3 repo: 15 Go Microservices (arda-be), React Module Federation 13 remote apps (arda-mfe) và hạ tầng Kubernetes GitOps (arda-infra) với xác thực Ory Kratos/Hydra và CloudNativePG.",
     problem: "Financial operations demand strict multi-tenant data isolation, high-throughput microservices communication, unified zero-trust identity, and decoupled frontend release cycles across CRM, Finance, HRM, and Workflow domains.",
     problemVi: "Hệ thống vận hành tài chính yêu cầu cách ly dữ liệu đa khách thuê nghiêm ngặt, giao tiếp microservice hiệu năng cao, định danh zero-trust tập trung và phân tách chu kỳ release độc lập giữa các module Finance, CRM, HRM và Workflow.",
     architectureDiagram: `Browser / Client ──► Cloudflare Tunnel ──► Traefik (ForwardAuth)
@@ -363,20 +364,20 @@ Internet / Cloudflare Tunnel
     BFF Auth-Gateway ──► Ory Kratos + Hydra (Identity)                         React Shell + 7 MFE Remotes
            │                                                                   [@workspace/ui, api, auth]
            ▼
-    9 Go Microservices (HTTP/JSON + gRPC + NATS Events)
+    15 Go Microservices (HTTP/JSON + gRPC + NATS Events)
     [iam, platform, finance, workflow, crm, hrm, notification, media, mdm]
            │
            ▼
     CloudNativePG (HA Postgres) · Valkey · Garage S3 · Zeebe 8.5 BPMN`,
     contributionsDetailed: [
-      "Engineered 9 Go microservices sharing common libraries (arda-auth, arda-grpc, arda-events, arda-postgres) with standardized gRPC contracts.",
-      "Architected React Module Federation with a central shell and 7 remotes (mfe-iam, platform, finance, account, hrm, workflow, crm) using shared workspace packages.",
+      "Engineered 15 Go microservices sharing common libraries (arda-auth, arda-grpc, arda-events, arda-postgres) with standardized gRPC contracts.",
+      "Architected React Module Federation with a central shell and 13 remotes (iam, platform, finance, account, hrm, workflow, crm, mdm, loan, deposit, capital, statistical, ai) using shared workspace packages.",
       "Built zero-trust identity flow with Ory Kratos, Ory Hydra, Traefik ForwardAuth, and BFF session cookies.",
       "Orchestrated HA PostgreSQL with CloudNativePG, Valkey distributed cache, and Zeebe 8.5 BPMN workflow on a 3-node K3s cluster."
     ],
     contributionsDetailedVi: [
-      "Xây dựng 9 Go microservices sử dụng thư viện dùng chung (arda-auth, arda-grpc, arda-events) với contract gRPC được chuẩn hóa.",
-      "Thiết kế kiến trúc React Module Federation gồm Shell trung tâm và 7 remote apps dùng chung gói @workspace/* (shadcn UI, auth, API).",
+      "Xây dựng 15 Go microservices sử dụng thư viện dùng chung (arda-auth, arda-grpc, arda-events) với contract gRPC được chuẩn hóa.",
+      "Thiết kế kiến trúc React Module Federation gồm Shell trung tâm và 13 remote apps dùng chung gói @workspace/* (shadcn UI, auth, API).",
       "Thiết lập cơ chế bảo mật zero-trust với Ory Kratos, Ory Hydra, Traefik ForwardAuth và BFF session cookies.",
       "Vận hành CloudNativePG (PostgreSQL HA), Valkey cache và Zeebe 8.5 BPMN workflow trên cụm 3-node K3s."
     ],
@@ -398,24 +399,24 @@ Internet / Cloudflare Tunnel
     category: "Full-stack",
     categoryVi: "Full-stack",
     metrics: [
-      "9 Go Microservices with gRPC & NATS event streams",
-      "React Module Federation (Shell + 7 Remotes)",
+      "15 Go Microservices with gRPC & NATS event streams",
+      "React Module Federation (Shell + 13 Remotes)",
       "Zero-trust Ory Kratos/Hydra IAM & CloudNativePG HA"
     ],
     metricsVi: [
-      "9 Go Microservices giao tiếp qua gRPC và luồng sự kiện NATS",
+      "15 Go Microservices giao tiếp qua gRPC và luồng sự kiện NATS",
       "React Module Federation gồm Shell và 7 phân hệ Remotes",
       "Định danh Zero-trust Ory Kratos/Hydra và CSDL CloudNativePG HA"
     ],
     architecture: [
       "React Module Federation with shared @workspace packages",
-      "9 Go Microservices with gRPC inter-service calls & NATS domain events",
+      "15 Go Microservices with gRPC inter-service calls & NATS domain events",
       "Ory Kratos & Hydra zero-trust authentication via Traefik ForwardAuth",
       "CloudNativePG HA PostgreSQL cluster with Valkey distributed caching"
     ],
     architectureVi: [
       "React Module Federation với các gói dùng chung @workspace/*",
-      "9 Go Microservices kết nối gRPC và luồng sự kiện bất đồng bộ NATS",
+      "15 Go Microservices kết nối gRPC và luồng sự kiện bất đồng bộ NATS",
       "Xác thực Zero-trust qua Ory Kratos/Hydra và Traefik ForwardAuth",
       "Cụm CloudNativePG HA PostgreSQL và bộ nhớ đệm phân tán Valkey"
     ],
@@ -429,13 +430,13 @@ Internet / Cloudflare Tunnel
     id: "puchi-language-platform",
     title: "Puchi — Vietnamese Language Learning Platform",
     titleVi: "Puchi — Nền tảng Học tiếng Việt Trực tuyến",
-    subtitle: "Next.js PWA with 5 Go microservices (Kratos v3), Limen Auth, NATS events, and ArgoCD GitOps",
-    subtitleVi: "Ứng dụng Next.js PWA với 5 Go Microservices (Kratos v3), Limen Auth, NATS events và ArgoCD GitOps",
+    subtitle: "Next.js PWA with 5 Go microservices (Kratos v3), Limen sessions, NATS events, and ArgoCD GitOps",
+    subtitleVi: "Ứng dụng Next.js PWA với 5 Go Microservices (Kratos v3), Limen sessions, NATS events và ArgoCD GitOps",
     description: "Developed a modern Vietnamese learning web platform featuring a responsive Next.js PWA frontend, 5 Go microservices monorepo built on Kratos v3, Limen auth session exchange, NATS event bus, and automated ArgoCD GitOps deployments on K3s.",
-    descriptionVi: "Phát triển nền tảng học tiếng Việt hiện đại gồm Next.js PWA frontend, monorepo 5 Go microservices trên nền Kratos v3, xác thực Limen Auth, NATS event bus và CI/CD GitOps qua ArgoCD trên K3s.",
+    descriptionVi: "Phát triển nền tảng học tiếng Việt hiện đại gồm Next.js PWA frontend, monorepo 5 Go microservices trên nền Kratos v3, xác thực Limen sessions, NATS event bus và CI/CD GitOps qua ArgoCD trên K3s.",
     problem: "Online language learners need fast, offline-capable PWA experiences with instant lesson progress synchronization, audio pronunciation streaming, and resilient microservice APIs under traffic spikes.",
     problemVi: "Học viên học ngoại ngữ cần trải nghiệm PWA mượt mà hỗ trợ offline, đồng bộ tiến độ học, phát âm thanh bài học và hạ tầng microservice ổn định.",
-    architectureDiagram: `User ──► Cloudflare CDN ──► Next.js PWA (Limen Auth) ──► Envoy Gateway
+    architectureDiagram: `User ──► Cloudflare CDN ──► Next.js PWA (Limen sessions) ──► Envoy Gateway
                 │
                 ▼
        Go Services (Kratos v3) ──► PostgreSQL / NATS / Cloudflare R2
@@ -474,12 +475,12 @@ Internet / Cloudflare Tunnel
     categoryVi: "Full-stack",
     metrics: [
       "5 Go Microservices (Kratos v3) + NATS Event Bus",
-      "Next.js PWA with Limen Auth & Cloudflare R2",
+      "Next.js PWA with Limen sessions & Cloudflare R2",
       "Declarative ArgoCD GitOps on K3s Kubernetes"
     ],
     metricsVi: [
       "5 Go Microservices (Kratos v3) và luồng sự kiện NATS",
-      "Next.js PWA tích hợp Limen Auth và Cloudflare R2",
+      "Next.js PWA tích hợp Limen sessions và Cloudflare R2",
       "Triển khai GitOps tự động hóa với ArgoCD trên K3s"
     ],
     architecture: [
@@ -489,7 +490,7 @@ Internet / Cloudflare Tunnel
       "ArgoCD GitOps deployment pipeline on multi-node K3s cluster"
     ],
     architectureVi: [
-      "Next.js PWA quản lý phiên người dùng qua Limen Auth",
+      "Next.js PWA quản lý phiên người dùng qua Limen sessions",
       "5 Go Microservices (Kratos v3) xử lý sự kiện bất đồng bộ qua NATS",
       "Lưu trữ tệp âm thanh bài giảng trên Cloudflare R2",
       "Pipeline triển khai ArgoCD GitOps trên cụm K3s Kubernetes"
@@ -504,68 +505,68 @@ Internet / Cloudflare Tunnel
     id: "camrelay-p2p-rtsp-bridge",
     title: "Camrelay — P2P IP Camera to RTSP Stream Relay",
     titleVi: "Camrelay — Cầu nối Chuyển đổi P2P IP Camera sang RTSP Stream",
-    subtitle: "High-performance Rust bridge tunneling proprietary Dahua/easy4ip P2P cameras into local RTSP streams for Frigate & NVRs",
-    subtitleVi: "Hệ thống Rust hiệu năng cao chuyển đổi luồng P2P Dahua/easy4ip sang chuẩn RTSP nội bộ cho Frigate NVR & Home Assistant",
-    description: "Engineered a high-performance, asynchronous Rust bridge that handshakes with proprietary Dahua/P2P cloud signaling servers and tunnels video streams to local RTSP endpoints. Integrates seamlessly with Frigate NVR, Home Assistant, go2rtc, and features automatic FFmpeg segment recording with rclone Google Drive archiving.",
-    descriptionVi: "Phát triển giải pháp Rust hiệu năng cao kết nối giao thức bắt tay P2P đóng của Dahua/easy4ip và chuyển đổi thành luồng RTSP nội bộ. Tương thích hoàn hảo với Frigate NVR, Home Assistant, go2rtc, tích hợp tính năng ghi hình phân đoạn FFmpeg và tự động lưu trữ lên Google Drive qua rclone.",
+    subtitle: "Rust/Tokio tunnel that puts a P2P-only camera behind a private, authenticated RTSP endpoint",
+    subtitleVi: "Tunnel Rust/Tokio đưa camera chỉ truy cập được qua P2P vào một endpoint RTSP riêng, có xác thực",
+    description: "A Rust/Tokio service that carries TCP traffic to a camera reachable only through a vendor P2P path, and exposes it on a loopback RTSP authentication proxy so NVR software can read it. It is a tunnel, not an RTSP server. Optional recording uses FFmpeg with -c copy; archiving uses rclone. No performance figures are claimed.",
+    descriptionVi: "Service Rust/Tokio chuyển tiếp TCP tới camera chỉ truy cập được qua đường P2P của hãng, và mở ra qua một proxy xác thực RTSP trên loopback để NVR đọc được. Đây là tunnel, không phải RTSP server. Ghi hình tùy chọn dùng FFmpeg với -c copy; lưu trữ dùng rclone. Không công bố số liệu hiệu năng.",
     problem: "Proprietary IP cameras (Dahua, easy4ip) restrict access behind closed P2P cloud servers, preventing local integration into open-source NVR systems (Frigate, Home Assistant, Scrypted) without subscription fees or vulnerable open ports.",
     problemVi: "Các dòng camera IP sử dụng giao thức P2P đóng (Dahua, easy4ip) bị phụ thuộc vào máy chủ đám mây của hãng, gây khó khăn khi tích hợp vào hệ thống NVR mã nguồn mở (Frigate, Home Assistant) mà không phải trả phí thuê bao hay mở port router tiềm ẩn nguy cơ bảo mật.",
-    architectureDiagram: `IP Camera (P2P Cloud) ──► [ camrelay (Rust / Tokio) ] ──► Local RTSP Stream (:8551)
+    architectureDiagram: `IP Camera (vendor P2P path) ──► [ camrelay: TCP tunnel (Rust / Tokio) ] ──► loopback RTSP auth proxy
                                        │                              │
-                                       ├─► Web Dashboard & Probe      ├─► Frigate NVR / Home Assistant
-                                       └─► FFmpeg Segments (300s) ──► rclone ──► Google Drive Archive`,
+                                       ├─► Web UI & probe             ├─► RTSP consumers (e.g. NVR)
+                                       └─► FFmpeg -c copy segments ──► rclone archive`,
     contributionsDetailed: [
-      "Engineered an asynchronous Rust daemon with Tokio and Axum for high-throughput, low-latency video packet tunneling.",
-      "Implemented reverse-engineered Dahua/easy4ip P2P handshake signaling protocols to establish direct and relay UDP/TCP data sessions.",
-      "Exposed local multi-channel RTSP stream servers allowing drop-in ingestion for Frigate NVR, go2rtc, and Home Assistant.",
-      "Built optional background FFmpeg recording workers that segment video streams into JSON-indexed archives and sync to Google Drive via rclone.",
-      "Developed a clean embedded web management dashboard for camera onboarding, live tunnel health telemetry, and API token management."
+      "Built an asynchronous Rust daemon (Tokio, Axum) that tunnels TCP to the camera over a vendor P2P path, with realm-based tunnel sessions.",
+      "Implemented the P2P signaling and session setup needed to reach the camera without port forwarding, and kept it isolated from the local RTSP contract.",
+      "Put a loopback RTSP authentication proxy in front of the tunnel so consumers use a normal RTSP URL with credentials.",
+      "Built optional recording workers that run FFmpeg with -c copy (no re-encoding) into segments and archive them with rclone.",
+      "Added an embedded web UI for camera setup and tunnel status."
     ],
     contributionsDetailedVi: [
-      "Xây dựng daemon Rust bất đồng bộ với Tokio và Axum cho thông lượng cao, độ trễ cực thấp khi chuyển tiếp các gói tin video.",
-      "Hiện thực hóa giao thức bắt tay P2P của Dahua/easy4ip thiết lập phiên truyền nhận dữ liệu UDP/TCP direct và relay.",
-      "Cung cấp máy chủ RTSP nội bộ đa luồng cho phép cắm-và-chạy trực tiếp vào Frigate NVR, go2rtc và Home Assistant.",
-      "Phát triển worker ngầm tích hợp FFmpeg cắt phân đoạn video, lập chỉ mục JSON và tự động đồng bộ lên Google Drive qua rclone.",
-      "Xây dựng dashboard quản trị web nhúng gọn nhẹ để cấu hình camera, theo dõi trạng thái tunnel thời gian thực và quản lý token API."
+      "Xây dựng daemon Rust bất đồng bộ (Tokio, Axum) tunnel TCP tới camera qua đường P2P của hãng, với session tunnel theo realm.",
+      "Hiện thực signaling và thiết lập session P2P để tới camera mà không cần mở port, tách biệt khỏi contract RTSP nội bộ.",
+      "Đặt một proxy xác thực RTSP trên loopback trước tunnel để consumer dùng URL RTSP thường kèm credential.",
+      "Xây dựng worker ghi hình tùy chọn chạy FFmpeg với -c copy (không re-encode) theo phân đoạn và lưu trữ bằng rclone.",
+      "Thêm web UI nhúng để cấu hình camera và xem trạng thái tunnel."
     ],
     results: [
-      "A local relay path for supported camera streams and NVR consumers.",
+      "A private RTSP path for the one camera path validated so far (see the device validation matrix in the repo).",
       "A self-hosted alternative to depending on a vendor viewing workflow.",
-      "Optional off-site Google Drive archive synchronization with configurable retention policies."
+      "Optional off-site archiving with rclone."
     ],
     resultsVi: [
-      "Một relay nội bộ cho camera path được hỗ trợ và các consumer NVR.",
+      "Một đường RTSP riêng cho camera path đã được xác minh (xem device validation matrix trong repo).",
       "Giảm phụ thuộc vào workflow xem camera của vendor bằng một relay tự vận hành.",
-      "Đồng bộ archive tùy chọn lên Google Drive với chính sách xoay vòng dữ liệu cấu hình được."
+      "Lưu trữ off-site tùy chọn bằng rclone."
     ],
     relatedArticles: ["camrelay-from-proprietary-p2p-to-private-rtsp"],
     role: "Sole Creator & Systems Engineer",
     roleVi: "Tác giả & Kỹ sư Hệ thống",
     year: "2025 – Present",
-    techStack: ["Rust", "Tokio", "RTSP", "P2P Signaling", "FFmpeg", "rclone", "Axum", "Docker"],
+    techStack: ["Rust", "Tokio", "RTSP", "P2P Signaling", "FFmpeg", "rclone", "Axum"],
     category: "Systems & IoT",
     categoryVi: "Hệ thống & IoT",
     metrics: [
       "Rust Async Tokio relay core",
-      "Native Ingestion for Frigate NVR & Home Assistant",
-      "Automated FFmpeg Segments & Google Drive Sync"
+      "Loopback RTSP auth proxy in front of a TCP tunnel",
+      "FFmpeg -c copy segments + rclone archive"
     ],
     metricsVi: [
       "Nhân relay Rust Tokio bất đồng bộ",
-      "Tích hợp trực tiếp Frigate NVR & Home Assistant",
-      "Ghi hình phân đoạn FFmpeg và đồng bộ Google Drive"
+      "Proxy xác thực RTSP trên loopback trước TCP tunnel",
+      "Phân đoạn FFmpeg -c copy + lưu trữ rclone"
     ],
     architecture: [
-      "P2P handshake engine connecting to vendor signaling servers without port forwarding",
-      "Multi-threaded RTSP server exposing local video streams on dedicated ports",
-      "Continuous FFmpeg segment recorder with automated rclone cloud offloading",
-      "Token-authenticated HTTP REST management API & responsive dashboard"
+      "P2P session setup reaching the camera without port forwarding",
+      "TCP tunnel plus a loopback RTSP authentication proxy (not an RTSP server)",
+      "Optional FFmpeg -c copy segment recorder with rclone offloading",
+      "Embedded HTTP management API and web UI"
     ],
     architectureVi: [
-      "Engine bắt tay P2P kết nối tới signaling server mà không cần mở port NAT",
-      "Máy chủ RTSP đa luồng cung cấp luồng video trên từng cổng mạng nội bộ riêng",
-      "Bộ ghi hình phân đoạn FFmpeg liên tục tự động đẩy file qua rclone",
-      "REST API quản trị xác thực qua token và giao diện quản lý trực quan"
+      "Thiết lập session P2P tới camera mà không cần mở port",
+      "TCP tunnel kèm proxy xác thực RTSP trên loopback (không phải RTSP server)",
+      "Bộ ghi phân đoạn FFmpeg -c copy tùy chọn, đẩy file qua rclone",
+      "API quản trị HTTP và web UI nhúng"
     ],
     liveUrl: "https://github.com/hoan02/camrelay",
     githubUrl: "https://github.com/hoan02/camrelay",
@@ -577,68 +578,68 @@ Internet / Cloudflare Tunnel
     id: "b4s-baseus-desktop-companion",
     title: "B4S — Desktop Companion for Baseus Headphones",
     titleVi: "B4S — Ứng dụng Desktop Điều khiển Tai nghe Baseus",
-    subtitle: "Cross-platform desktop companion built with Tauri v2, Rust (btleplug), and SolidJS for local Bluetooth LE headphone control",
-    subtitleVi: "Ứng dụng Desktop đa nền tảng với Tauri v2, Rust (btleplug) và SolidJS điều khiển tai nghe Baseus qua Bluetooth LE",
-    description: "Built a lightweight, cross-platform desktop application (Windows, macOS, Linux) to control and customize Baseus Bluetooth headphones locally without third-party cloud apps. Implements direct GATT frame communication, ANC mode switching, 10-band Equalizer tuning, battery telemetry, and spatial audio modes.",
-    descriptionVi: "Xây dựng ứng dụng desktop đa nền tảng (Windows, macOS, Linux) gọn nhẹ cho phép điều khiển và tùy biến tai nghe Bluetooth Baseus hoàn toàn cục bộ không cần tài khoản đám mây. Tự giải mã giao thức GATT frame, chuyển đổi chế độ chống ồn ANC, tinh chỉnh Equalizer 10 dải tần và theo dõi dung lượng pin.",
-    problem: "Headphone manufacturers often only release mobile apps for EQ and ANC adjustments, leaving desktop users (Windows, macOS, Linux) unable to configure their devices without an Android/iOS phone and mandatory cloud accounts.",
-    problemVi: "Các hãng sản xuất tai nghe thường chỉ phát hành app di động để chỉnh EQ/ANC, khiến người dùng máy tính (Windows, macOS, Linux) không thể tùy biến thiết bị trên desktop mà bắt buộc phải dùng điện thoại và đăng ký tài khoản đám mây.",
-    architectureDiagram: `Desktop GUI (SolidJS + Tailwind) ──► Tauri v2 IPC Bridge
+    subtitle: "Unofficial desktop companion for Baseus earbuds: Tauri v2, Rust (btleplug), SolidJS",
+    subtitleVi: "App desktop không chính thức cho tai nghe Baseus: Tauri v2, Rust (btleplug), SolidJS",
+    description: "An unofficial desktop app that talks to Baseus earbuds over Bluetooth LE with no account and no telemetry. Two wire framings (bare AA/BA and a 789C frame with CRC-16), a Rust session model that only shows device-confirmed state, and a catalog of 124 JSON profiles of which 7 can send commands (1 verified, 6 experimental; the rest are scan-only). Tested on Windows only.",
+    descriptionVi: "App desktop không chính thức nói chuyện với tai nghe Baseus qua Bluetooth LE, không tài khoản, không telemetry. Hai kiểu framing (bare AA/BA và frame 789C có CRC-16), session Rust chỉ hiển thị state do thiết bị xác nhận, catalog 124 profile JSON trong đó 7 profile gửi được lệnh (1 verified, 6 experimental; còn lại chỉ scan). Chỉ test trên Windows.",
+    problem: "Headphone manufacturers often only release mobile apps for EQ and ANC adjustments, leaving desktop users unable to configure their devices without a phone and a vendor account.",
+    problemVi: "Các hãng sản xuất tai nghe thường chỉ phát hành app di động để chỉnh EQ/ANC, khiến người dùng máy tính không thể tùy biến thiết bị trên desktop mà phải dùng điện thoại và tài khoản của hãng.",
+    architectureDiagram: `Desktop GUI (SolidJS + SCSS) ──► Tauri v2 IPC Bridge
                                               │
                                               ▼
 Baseus Headphones (BLE) ◄─── GATT Frames ─── [ Rust Core (btleplug) ]`,
     contributionsDetailed: [
-      "Engineered a lightweight desktop application utilizing Tauri v2 and Rust, consuming less than 30MB RAM.",
-      "Implemented asynchronous Bluetooth Low Energy (BLE) scanning, GATT connection lifecycle, and event handling via btleplug.",
-      "Reverse-engineered proprietary Baseus protocol packet frames for reading battery levels, switching ANC/Transparency modes, and applying 10-band EQ curves.",
-      "Designed a responsive, modern dark-mode user interface using SolidJS, TypeScript, and Tailwind CSS.",
-      "Designed the core control flow for local operation without requiring user registration."
+      "Built a desktop application on Tauri v2 and Rust with the BLE lifecycle kept in native code.",
+      "Implemented BLE scanning, the GATT connection lifecycle and a handshake via btleplug, with a session that refuses stale state.",
+      "Worked out two Baseus wire framings (bare AA/BA and a 789C frame with CRC-16) and encoded them with documented, tested codecs.",
+      "Built the interface with SolidJS, TypeScript and SCSS, rendering controls from each model profile's capabilities.",
+      "Kept the app local-only: no account, no telemetry."
     ],
     contributionsDetailedVi: [
-      "Phát triển ứng dụng desktop gọn nhẹ trên nền Tauri v2 và Rust, ưu tiên vòng đời native rõ ràng.",
-      "Hiện thực hóa quá trình quét Bluetooth Low Energy (BLE), quản lý kết nối GATT và sự kiện qua thư viện btleplug.",
-      "Giải mã cấu trúc gói tin (GATT packet frames) của tai nghe Baseus để đọc dung lượng pin, chuyển chế độ ANC/Xuyên âm và nạp EQ 10 dải.",
-      "Thiết kế giao diện Dark Mode hiện đại, mượt mà với SolidJS, TypeScript và Tailwind CSS.",
-      "Thiết kế luồng điều khiển local, không yêu cầu đăng ký tài khoản cho các tính năng cốt lõi."
+      "Xây dựng app desktop trên Tauri v2 và Rust, giữ vòng đời BLE trong code native.",
+      "Hiện thực quét BLE, vòng đời kết nối GATT và handshake qua btleplug, với session từ chối state cũ.",
+      "Tìm ra hai kiểu framing của Baseus (bare AA/BA và frame 789C có CRC-16) và mã hóa bằng codec có tài liệu và test.",
+      "Xây dựng giao diện bằng SolidJS, TypeScript và SCSS, render điều khiển theo capability của từng profile model.",
+      "Giữ app hoàn toàn local: không tài khoản, không telemetry."
     ],
     results: [
-      "Native desktop control for Baseus headphone features previously exclusive to mobile apps.",
-      "A lightweight desktop footprint and a clear native/local control path.",
+      "Desktop control of the features implemented for the 7 command-capable profiles.",
+      "A native/local control path with explicit per-profile support status.",
       "Local Bluetooth LE communication without unnecessary telemetry."
     ],
     resultsVi: [
-      "Điều khiển trực tiếp các tính năng tai nghe Baseus trên desktop mà trước đây chỉ có trên mobile.",
-      "Ứng dụng desktop gọn nhẹ với luồng điều khiển native/local rõ ràng.",
+      "Điều khiển trên desktop các tính năng đã hiện thực cho 7 profile gửi được lệnh.",
+      "Luồng điều khiển native/local với trạng thái hỗ trợ rõ ràng theo từng profile.",
       "Giao tiếp Bluetooth LE local, không thêm telemetry không cần thiết."
     ],
     relatedArticles: ["b4s-reverse-engineering-a-local-ble-companion"],
     role: "Creator & Systems Developer",
     roleVi: "Tác giả & Lập trình viên Hệ thống",
     year: "2025 – Present",
-    techStack: ["Tauri v2", "Rust", "SolidJS", "Bluetooth LE", "btleplug", "TypeScript", "Tailwind CSS"],
+    techStack: ["Tauri v2", "Rust", "SolidJS", "Bluetooth LE", "btleplug", "TypeScript", "SCSS"],
     category: "Desktop & IoT",
     categoryVi: "Desktop & IoT",
     metrics: [
-      "Tauri v2 + Rust Core with < 30MB RAM Footprint",
+      "124 catalog profiles, 7 can send commands (1 verified)",
       "Direct Local Bluetooth LE (GATT) Protocol",
-      "Cross-Platform Support (Windows, macOS, Linux)"
+      "Tested on Windows only"
     ],
     metricsVi: [
-      "Nhân Tauri v2 + Rust tiêu thụ dưới 30MB RAM",
+      "Catalog 124 profile, 7 gửi được lệnh (1 verified)",
       "Giao thức Bluetooth LE (GATT) trực tiếp không qua mây",
-      "Hỗ trợ đa nền tảng (Windows, macOS, Linux)"
+      "Chỉ test trên Windows"
     ],
     architecture: [
       "Tauri v2 IPC bridge connecting SolidJS frontend to native Rust backend",
-      "Cross-platform Bluetooth LE GATT client using btleplug adapter abstraction",
-      "Structured Baseus packet codec for frame serialization and checksum verification",
-      "Decoupled model catalog supporting capability-based UI rendering per headphone profile"
+      "Bluetooth LE GATT client over btleplug",
+      "Two framings: bare AA/BA and a 789C frame with CRC-16",
+      "JSON model catalog driving capability-based UI per profile"
     ],
     architectureVi: [
       "Cầu nối IPC Tauri v2 kết nối giao diện SolidJS với backend Rust gốc",
-      "Client Bluetooth LE GATT đa nền tảng trừu tượng hóa qua btleplug",
-      "Bộ mã hóa/giải mã gói tin Baseus với kiểm tra checksum an toàn",
-      "Catalog model tách biệt tự động render giao diện theo tính năng của từng dòng tai nghe"
+      "Client Bluetooth LE GATT qua btleplug",
+      "Hai kiểu framing: bare AA/BA và frame 789C có CRC-16",
+      "Catalog model JSON điều khiển UI theo capability của từng profile"
     ],
     liveUrl: "https://github.com/hoan02/b4s",
     githubUrl: "https://github.com/hoan02/b4s",
@@ -648,612 +649,10 @@ Baseus Headphones (BLE) ◄─── GATT Frames ─── [ Rust Core (btleplug
   }
 ];
 
-export const ARTICLES_DATA: Article[] = [
+const LEGACY_ARTICLES: Article[] = [
   // ==========================================
   // ARDA LABS ARTICLES
   // ==========================================
-  {
-    slug: "designing-arda-cloud-native-finops-platform",
-    title: "Designing Arda: A Cloud-Native Financial Operations Platform",
-    titleVi: "Thiết kế Hệ thống Arda: Nền tảng FinOps Đám mây Đa Khách thuê",
-    summary: "Comprehensive system design of Arda (arda.io.vn) — 9 Go microservices, synchronous gRPC, NATS domain events, BFF auth-gateway proxy, CloudNativePG HA, Zeebe workflow, and K3s GitOps.",
-    summaryVi: "Chi tiết kiến trúc hệ thống vận hành tài chính Arda (arda.io.vn) — 9 Go microservices, gRPC đồng bộ, NATS domain events, BFF auth-gateway proxy, CloudNativePG HA, Zeebe workflow và K3s GitOps.",
-    date: "Feb 2026",
-    readTime: "12 min read",
-    tags: ["Arda Labs", "Go", "gRPC", "Microservices", "FinOps", "Architecture", "Distributed Systems"],
-    featured: true,
-    project: "arda",
-    relatedProject: "arda-finops-platform",
-    diagramKey: "designing-arda-cloud-native-finops-platform",
-    evidenceIds: ["arda-microservices-grpc", "arda-auth-zero-trust", "arda-transactional-outbox-nats"],
-    repositoryUrl: "https://github.com/arda-labs/arda-be",
-    heroImage: "https://raw.githubusercontent.com/arda-labs/.github/main/profile/assets/system-architecture.png",
-    heroImageCaption: "ARDA Labs System Architecture: Browser ──► Cloudflare ──► Traefik (ForwardAuth) ──► auth-gateway BFF ──► 9 Go Services ──► CloudNativePG / Zeebe",
-    heroImageCaptionVi: "Sơ đồ Kiến trúc ARDA Labs: Trình duyệt ──► Cloudflare ──► Traefik (ForwardAuth) ──► auth-gateway BFF ──► 9 Go Microservices ──► CloudNativePG / Zeebe",
-    highlights: [
-      {
-        value: "< 10ms",
-        label: "gRPC RPC Latency",
-        labelVi: "Độ trễ gRPC",
-        detail: "Synchronous intra-cluster calls",
-        detailVi: "Truy vấn nội bộ cụm cực nhanh"
-      },
-      {
-        value: "9 Services",
-        label: "Go Microservices",
-        labelVi: "Microservices Go",
-        detail: "Shared libs/go toolkit",
-        detailVi: "Dùng chung thư viện libs/go"
-      },
-      {
-        value: "7 Remotes",
-        label: "Module Federation",
-        labelVi: "Remote MFE",
-        detail: "Independent UI releases",
-        detailVi: "Phát hành giao diện độc lập"
-      },
-      {
-        value: "Zero Trust",
-        label: "Ory Kratos + Hydra",
-        labelVi: "Định danh Zero-Trust",
-        detail: "Edge ForwardAuth verification",
-        detailVi: "Xác thực biên mạng qua Traefik"
-      }
-    ],
-    comparison: {
-      naiveTitle: "Traditional Monolith or Uncontrolled Services",
-      naiveTitleVi: "Monolith Truyền thống hoặc Services Không Chuẩn hóa",
-      naivePoints: [
-        "Monolith release lockstep blocks independent feature delivery across Finance, CRM, and HRM.",
-        "Direct cross-service database access causes schema coupling and cascading failure modes.",
-        "Client browsers coordinate raw JWTs directly, creating security vulnerabilities and zero revocation control."
-      ],
-      naivePointsVi: [
-        "Chu kỳ release dính chùm làm nghẽn tiến độ giữa các nhóm Tài chính, CRM và Nhân sự.",
-        "Các service chọc chéo vào CSDL của nhau gây phụ thuộc schema và sập lan truyền.",
-        "Trình duyệt tự quản lý raw JWT tiềm ẩn rủi ro lộ lọt và không thể thu hồi phiên tức thì."
-      ],
-      solutionTitle: "ARDA Cloud-Native Architecture",
-      solutionTitleVi: "Kiến trúc ARDA FinOps Đám Mây Chuẩn Mực",
-      solutionPoints: [
-        "React Module Federation (7 remotes) and 9 Go microservices release independently via CI/CD.",
-        "Transactional Outbox + NATS JetStream guarantee atomic events with zero dual-write hazard.",
-        "Traefik ForwardAuth passes verified identity headers to services, eliminating JWT decoding overhead."
-      ],
-      solutionPointsVi: [
-        "React Module Federation (7 remotes) và 9 Go microservices phát hành độc lập hoàn toàn.",
-        "Transactional Outbox kết hợp NATS JetStream đảm bảo xuất bản sự kiện nguyên tử an toàn.",
-        "Traefik ForwardAuth inject header đã xác thực, giải phóng service khỏi việc decode JWT."
-      ]
-    },
-    sections: [
-      {
-        id: "service-boundaries",
-        title: "Service Boundaries & Domain Partitioning",
-        titleVi: "Phân Định Ranh Giới Service & Kiến trúc Hướng Miền (DDD)",
-        content: "Arda partitions financial operations into 9 distinct Go services: `iam-service` (identity & tenant policies), `platform-service` (organization hierarchy), `finance-service` (general ledger, billing, invoices), `workflow-service` (Zeebe 8.5 BPMN facade), `crm-service` (leads & accounts), `hrm-service` (personnel records), `notification-service` (emails & webhooks), `media-service` (Garage S3 uploads), and `mdm-service` (master data management).\n\nBy enforcing protobuf contracts and forbidding direct cross-database queries, each service retains complete ownership over its database schema.",
-        contentVi: "Arda phân chia nghiệp vụ tài chính thành 9 Go service độc lập: `iam-service` (phân quyền & chính sách tenant), `platform-service` (cơ cấu tổ chức), `finance-service` (sổ cái, hóa đơn, thanh toán), `workflow-service` (facade Zeebe 8.5 BPMN), `crm-service` (khách hàng), `hrm-service` (nhân sự), `notification-service` (thông báo & webhook), `media-service` (lưu trữ Garage S3) và `mdm-service` (dữ liệu danh mục).\n\nNhờ chuẩn hóa protobuf contract và cấm tuyệt đối việc gọi chéo database, mỗi service toàn quyền quản trị schema CSDL của mình.",
-        callout: {
-          type: "tip",
-          text: "Design Principle: High cohesion within service boundaries, loose coupling across networks via gRPC contracts and NATS domain events.",
-          textVi: "Nguyên tắc Thiết kế: Tính gắn kết cao bên trong ranh giới service, liên kết lỏng qua mạng bằng protobuf gRPC và sự kiện NATS."
-        }
-      },
-      {
-        id: "storage-reliability",
-        title: "High-Availability Storage & Failover Strategy",
-        titleVi: "Kiến trúc Lưu trữ Sẵn sàng Cao (HA) & Chiến lược Failover",
-        content: "Stateful reliability is achieved via the CloudNativePG operator running on the bare-metal 3-node K3s cluster. CloudNativePG coordinates PostgreSQL streaming replication across all 3 nodes with automated leader election and WAL archiving.\n\nTransient state, tenant session caches, and rate-limiting counters are hosted on Valkey, providing sub-millisecond in-memory lookups.",
-        contentVi: "Độ tin cậy của dữ liệu có trạng thái (stateful) được đảm bảo bởi operator CloudNativePG trên cụm bare-metal 3-node K3s. CloudNativePG điều phối streaming replication giữa cả 3 node với cơ chế tự động bầu chọn leader và lưu trữ WAL liên tục.\n\nBộ nhớ đệm phiên làm việc và giới hạn tần suất được lưu trữ trên Valkey, mang lại thời gian phản hồi dưới 1 mili-giây.",
-        callout: {
-          type: "info",
-          text: "CloudNativePG automatically triggers failover in under 10 seconds if the primary node stops heartbeating.",
-          textVi: "CloudNativePG tự động kích hoạt chuyển đổi dự phòng (failover) trong dưới 10 giây nếu node chính ngừng gửi tín hiệu heartbeat."
-        }
-      }
-    ],
-    content: {
-      problemStatement: "Financial operations platforms must provide strict multi-tenant isolation, unified auditability, dependable service communication, and independent release cycles across domain modules (Finance, IAM, CRM, HRM, Workflow). A traditional monolith suffers from release lockstep, while uncontrolled microservices lead to distributed transaction chaos.",
-      problemStatementVi: "Nền tảng vận hành tài chính đòi hỏi cách ly dữ liệu đa khách thuê nghiêm ngặt, kiểm toán thống nhất, giao tiếp microservice dưới 10ms và chu kỳ release độc lập giữa các phân hệ (Finance, IAM, CRM, HRM, Workflow). Kiến trúc monolith nguyên khối gây nghẽn phát hành, trong khi chia nhỏ microservices thiếu kỷ luật sẽ dẫn tới hỗn loạn transaction.",
-      architectureDesign: "Arda isolates concerns across 3 Git repositories: arda-be (9 Go microservices + shared libs/go), arda-mfe (React Module Federation 7 remotes), and arda-infra (3-node K3s GitOps). Client traffic routes through Cloudflare Tunnels to Traefik Ingress with ForwardAuth. The auth-gateway BFF validates sessions via Ory Kratos/Hydra and injects trusted identity headers. Go domain services communicate via gRPC for synchronous data and NATS JetStream for asynchronous domain events, backed by CloudNativePG HA PostgreSQL, Valkey cache, and Zeebe 8.5 BPMN.",
-      architectureDesignVi: "Arda phân tách ranh giới qua 3 repository: arda-be (9 Go microservices và libs/go), arda-mfe (React Module Federation 7 remotes) và arda-infra (K3s GitOps). Client kết nối qua Cloudflare Tunnel tới Traefik Ingress tích hợp ForwardAuth. auth-gateway BFF xác thực phiên qua Ory Kratos/Hydra và đính kèm identity header. Các Go microservices giao tiếp qua gRPC cho truy vấn đồng bộ và NATS JetStream cho sự kiện nghiệp vụ, lưu trữ trên CloudNativePG HA Postgres, Valkey cache và Zeebe 8.5 BPMN.",
-      technicalDecisions: [
-        "Internal Shared Library (libs/go): unified arda-auth, arda-grpc, arda-events, arda-postgres packages preventing drift across all 9 domain services.",
-        "Dual gRPC & NATS Protocol Strategy: gRPC for synchronous low-latency intra-cluster reads/writes; NATS JetStream for asynchronous domain event propagation.",
-        "BFF Auth Gateway Facade: abstracts authentication complexity from client browsers, managing session cookies, CSRF protection, and token exchanges.",
-        "High-Availability Bare-Metal Storage: CloudNativePG HA PostgreSQL with automated failover and local NVMe storage on a 3-node K3s cluster."
-      ],
-      technicalDecisionsVi: [
-        "Bộ thư viện nội bộ (libs/go): chuẩn hóa các package arda-auth, arda-grpc, arda-events, arda-postgres ngăn ngừa sự phân mảnh giữa 9 microservices.",
-        "Chiến lược giao tiếp kép gRPC & NATS: gRPC phục vụ đọc/ghi đồng bộ nội bộ cụm độ trễ thấp; NATS JetStream cho luồng sự kiện nghiệp vụ bất đồng bộ.",
-        "Mô hình BFF Auth Gateway: che giấu độ phức tạp xác thực khỏi trình duyệt, quản lý session cookie, CSRF và trao đổi token tập trung.",
-        "Lưu trữ sẵn sàng cao trên bare-metal: CloudNativePG HA PostgreSQL với cơ chế tự động failover trên cụm 3-node K3s."
-      ],
-      keyTakeaways: [
-        "Enforcing a strict protobuf-first gRPC contract eliminates API drift between backend microservices.",
-        "Decoupling the BFF from domain services allows frontend teams to iterate on composite APIs without touching core business logic.",
-        "Bare-metal K3s with CloudNativePG delivers production-like resilience at a fraction of cloud managed service costs."
-      ],
-      keyTakeawaysVi: [
-        "Áp dụng gRPC với Protobuf contract loại bỏ hoàn toàn tình trạng sai lệch schema giữa các backend microservices.",
-        "Tách biệt BFF khỏi domain services giúp frontend phát triển nhanh các API tổng hợp mà không cần sửa core logic.",
-        "Hạ tầng bare-metal K3s với CloudNativePG mang lại độ tin cậy tương đương môi trường production với chi phí tối ưu."
-      ],
-      codeSnippet: {
-        language: "go",
-        title: "Arda Shared gRPC Server Interceptor (libs/go/arda-grpc)",
-        code: `// UnaryServerInterceptor injecting trusted tenant & actor context
-func TenantContextUnaryServerInterceptor() grpc.UnaryServerInterceptor {
-    return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
-        md, ok := metadata.FromIncomingContext(ctx)
-        if !ok {
-            return nil, status.Error(codes.Unauthenticated, "missing grpc metadata")
-        }
-
-        tenantID := getHeaderValue(md, "x-tenant-id")
-        userID := getHeaderValue(md, "x-user-id")
-        if tenantID == "" || userID == "" {
-            return nil, status.Error(codes.Unauthenticated, "missing tenant or user context")
-        }
-
-        ctx = context.WithValue(ctx, TenantIDKey, tenantID)
-        ctx = context.WithValue(ctx, UserIDKey, userID)
-        return handler(ctx, req)
-    }
-}`
-      }
-    }
-  },
-  {
-    slug: "authentication-beyond-jwt-arda-identity-architecture",
-    title: "Authentication Beyond JWT: Designing Arda's Identity Architecture",
-    titleVi: "Bảo mật Vượt trên JWT: Thiết kế Kiến trúc Định danh Zero-Trust trong Arda",
-    summary: "Deep dive into why browsers shouldn't juggle raw JWTs: Traefik ForwardAuth, auth-gateway BFF, Ory Kratos (Identity), Ory Hydra (OAuth2/OIDC), and downstream header injection.",
-    summaryVi: "Phân tích vì sao trình duyệt không nên trực tiếp xử lý raw JWT: Traefik ForwardAuth, auth-gateway BFF, Ory Kratos (Identity), Ory Hydra (OAuth2/OIDC) và cơ chế inject header đáng tin cậy.",
-    date: "Feb 2026",
-    readTime: "10 min read",
-    tags: ["Arda Labs", "Auth", "Security", "Ory Kratos", "Ory Hydra", "ForwardAuth", "Zero-Trust"],
-    featured: false,
-    project: "arda",
-    relatedProject: "arda-finops-platform",
-    diagramKey: "authentication-beyond-jwt-arda-identity-architecture",
-    evidenceIds: ["arda-auth-zero-trust"],
-    repositoryUrl: "https://github.com/arda-labs/arda-be",
-    highlights: [
-      {
-        value: "HttpOnly",
-        label: "Cookie Security",
-        labelVi: "Bảo mật Cookie",
-        detail: "Zero client token leakage",
-        detailVi: "Không lộ token ra Javascript"
-      },
-      {
-        value: "Instant",
-        label: "Session Revocation",
-        labelVi: "Thu hồi Phiên Tức thì",
-        detail: "Centralized in Ory Kratos",
-        detailVi: "Quản lý tập trung tại Kratos"
-      },
-      {
-        value: "Edge Auth",
-        label: "Traefik ForwardAuth",
-        labelVi: "Xác thực Biên Mạng",
-        detail: "Zero backend verification cost",
-        detailVi: "Giải phóng tính toán backend"
-      },
-      {
-        value: "RBAC + IAM",
-        label: "Tenant Role Injection",
-        labelVi: "Phân quyền Đa Tenant",
-        detail: "Injected trusted headers",
-        detailVi: "Đính kèm header tin cậy"
-      }
-    ],
-    comparison: {
-      naiveTitle: "Client-Side JWT Management",
-      naiveTitleVi: "Quản lý JWT Truyền thống ở Trình duyệt",
-      naivePoints: [
-        "Tokens stored in localStorage/sessionStorage vulnerable to XSS exfiltration.",
-        "Impossible to revoke stolen JWTs before expiration without distributed blacklists.",
-        "Every downstream service must verify RSA/ECDSA public-key signatures on every RPC."
-      ],
-      naivePointsVi: [
-        "Lưu token trong localStorage/sessionStorage dễ bị đánh cắp qua tấn công XSS.",
-        "Không thể thu hồi JWT bị đánh cắp trước khi hết hạn nếu không dựng blacklist phân tán.",
-        "Mọi service nội bộ phải tự giải mã chữ ký RSA/ECDSA trên từng request gRPC."
-      ],
-      solutionTitle: "Arda Edge Zero-Trust Identity",
-      solutionTitleVi: "Định danh Zero-Trust Biên Mạng trong Arda",
-      solutionPoints: [
-        "HttpOnly SameSite opaque cookie completely invisible to browser JavaScript.",
-        "Instant session invalidation at Ory Kratos identity authority.",
-        "Traefik ForwardAuth injects trusted identity headers (X-User-Id, X-Tenant-Id, X-Roles) downstream."
-      ],
-      solutionPointsVi: [
-        "Cookie HttpOnly SameSite vô hình hoàn toàn trước mã JavaScript trình duyệt.",
-        "Hủy phiên làm việc ngay lập tức tại máy chủ định danh Ory Kratos.",
-        "Traefik ForwardAuth inject các header đáng tin cậy đã xác thực tới các service phía sau."
-      ]
-    },
-    sections: [
-      {
-        id: "why-not-client-jwt",
-        title: "The Pitfalls of Browser-Held JWTs in Enterprise Systems",
-        titleVi: "Hạn chế của Việc Lưu JWT ở Trình duyệt trong Hệ thống Lớn",
-        content: "While JWT is popular in simple tutorials, in high-compliance multi-tenant platforms it introduces severe operational issues:\n1. Revocation Delay: A compromised token remains valid until expiry unless complex Redis blacklists are checked on every request.\n2. Security Boundary: If client JavaScript has access to tokens, any third-party script vulnerability (XSS) can exfiltrate full credentials.\n3. Header Bloat: As tenant permissions and roles grow, the Authorization header balloons, degrading mobile network bandwidth.",
-        contentVi: "Dù JWT rất phổ biến trong các tutorial đơn giản, trong hệ thống tài chính đa khách thuê nó tạo ra nhiều rủi ro vận hành:\n1. Độ trễ thu hồi: Token bị lộ vẫn hợp lệ cho tới khi hết hạn trừ khi phải dựng thêm blacklist Redis.\n2. Lỗ hổng bảo mật: Khi JavaScript client đọc được token, bất kỳ lỗ hổng XSS nào cũng có thể làm lộ thông tin đăng nhập.\n3. Phình to kích thước header: Khi quyền hạn và vai trò tenant tăng lên, header Authorization phình to làm chậm đường truyền di động.",
-        callout: {
-          type: "warning",
-          text: "Never store credentials or unencrypted JWTs in localStorage for applications handling financial or enterprise data.",
-          textVi: "Tuyệt đối không lưu token hoặc JWT trong localStorage đối với các ứng dụng xử lý dữ liệu tài chính hoặc doanh nghiệp."
-        }
-      }
-    ],
-    content: {
-      problemStatement: "Storing raw JWTs in browser localStorage or cookies creates token leakage vulnerabilities, makes instant session revocation impossible without distributed blocklists, and forces every microservice to maintain complex public-key signature verification logic.",
-      problemStatementVi: "Lưu trữ raw JWT trong localStorage hoặc cookie trình duyệt tiềm ẩn nguy cơ rò rỉ token, khiến việc thu hồi phiên tức thì trở nên bất khả thi nếu không có blacklist phân tán, và buộc mọi microservice phải gánh logic xác thực chữ ký phức tạp.",
-      architectureDesign: "Arda shifts identity verification to the network edge: Browser requests carry an HttpOnly opaque session cookie to Traefik Ingress. Traefik's ForwardAuth middleware delegates inspection to auth-gateway. auth-gateway verifies the session against Ory Kratos and extracts tenant permissions via IAM. Once verified, auth-gateway responds with HTTP 200 and injects trusted identity headers (X-User-Id, X-Tenant-Id, X-Roles, X-Permissions) which Traefik forwards directly to downstream services.",
-      architectureDesignVi: "Arda chuyển việc xác thực định danh ra biên mạng: Request từ trình duyệt gửi kèm HttpOnly session cookie tới Traefik Ingress. Middleware ForwardAuth ủy quyền kiểm tra cho auth-gateway. auth-gateway đối soát phiên với Ory Kratos và phân quyền qua IAM. Khi hợp lệ, auth-gateway phản hồi HTTP 200 và đính kèm các header đã xác thực (X-User-Id, X-Tenant-Id, X-Roles, X-Permissions) để Traefik chuyển tiếp tới các service phía sau.",
-      technicalDecisions: [
-        "Separation of Identity (Kratos) vs OAuth2 (Hydra) vs Application RBAC (IAM Service): clear separation of concerns without coupling credentials to business permissions.",
-        "Edge ForwardAuth with Traefik: unauthorized requests are rejected at the ingress before consuming internal cluster compute.",
-        "HttpOnly SameSite Cookies: eliminates XSS token exfiltration risks by never exposing credentials to JavaScript execution.",
-        "Downstream Trust Boundary: internal Go services trust injected headers because external clients cannot bypass Traefik's header sanitization."
-      ],
-      technicalDecisionsVi: [
-        "Phân tách rõ ràng Định danh (Kratos) vs OAuth2 (Hydra) vs Phân quyền ứng dụng (IAM Service): không gộp thông tin xác thực với logic quyền hạn nghiệp vụ.",
-        "ForwardAuth tại Ingress Traefik: loại bỏ các request không hợp lệ ngay tại cổng vào, tiết kiệm tài nguyên tính toán bên trong cụm.",
-        "Cookie HttpOnly SameSite: ngăn chặn triệt để rủi ro đánh cắp token qua tấn công XSS do JavaScript client không thể đọc cookie.",
-        "Ranh giới tin cậy nội bộ: các Go microservice tin tưởng header được inject vì Traefik luôn xóa sạch các header giả mạo từ client bên ngoài."
-      ],
-      keyTakeaways: [
-        "Opaque cookies with edge ForwardAuth combine the security of instant revocation with the speed of internal header passing.",
-        "Microservices become simpler and faster because they do not verify cryptographic JWT signatures on every RPC.",
-        "Multi-factor authentication (MFA) and OAuth2 social logins are managed centrally in Kratos/Hydra without touching domain services."
-      ],
-      keyTakeawaysVi: [
-        "Opaque cookie kết hợp ForwardAuth mang lại khả năng thu hồi phiên tức thì cùng tốc độ xử lý header nội bộ cực nhanh.",
-        "Các microservice trở nên gọn nhẹ và tối ưu hơn do không phải xác thực chữ ký JWT trên từng request.",
-        "Xác thực 2 bước (MFA) và đăng nhập mạng xã hội được quản lý tập trung tại Kratos/Hydra mà không ảnh hưởng tới domain services."
-      ],
-      codeSnippet: {
-        language: "go",
-        title: "Arda ForwardAuth Handler in auth-gateway",
-        code: `func (g *Gateway) ForwardAuthHandler(w http.ResponseWriter, r *http.Request) {
-    session, err := g.kratosClient.ValidateSessionCookie(r.Context(), r)
-    if err != nil || !session.Active {
-        http.Error(w, "Unauthorized", http.StatusUnauthorized)
-        return
-    }
-
-    // Resolve tenant membership and RBAC permissions from iam-service
-    authCtx, err := g.iamClient.ResolveUserContext(r.Context(), session.Identity.Id)
-    if err != nil {
-        http.Error(w, "Forbidden", http.StatusForbidden)
-        return
-    }
-
-    // Inject trusted downstream identity headers
-    w.Header().Set("X-User-Id", authCtx.UserId)
-    w.Header().Set("X-Tenant-Id", authCtx.TenantId)
-    w.Header().Set("X-Roles", strings.Join(authCtx.Roles, ","))
-    w.Header().Set("X-Permissions", strings.Join(authCtx.Permissions, ","))
-    w.WriteHeader(http.StatusOK)
-}`
-      }
-    }
-  },
-  {
-    slug: "reliable-domain-events-nats-transactional-outbox",
-    title: "Reliable Domain Events with NATS and the Transactional Outbox Pattern",
-    titleVi: "Xuất bản Sự kiện Miền Tin cậy với NATS và Mẫu Transactional Outbox",
-    summary: "Solving the dual-write hazard in distributed Go services: writing business state and domain events atomically in PostgreSQL, relaying via NATS JetStream, and enforcing idempotent consumer deduplication.",
-    summaryVi: "Giải quyết rủi ro dual-write trong hệ thống Go phân tán: ghi nhận trạng thái nghiệp vụ và sự kiện miền nguyên tử trong PostgreSQL, chuyển tiếp qua NATS JetStream và xử lý deduplication ở consumer.",
-    date: "Jan 2026",
-    readTime: "11 min read",
-    tags: ["Arda Labs", "NATS JetStream", "Transactional Outbox", "Distributed Systems", "Go", "PostgreSQL", "Event-Driven"],
-    featured: true,
-    project: "arda",
-    relatedProject: "arda-finops-platform",
-    diagramKey: "reliable-domain-events-nats-transactional-outbox",
-    evidenceIds: ["arda-transactional-outbox-nats"],
-    repositoryUrl: "https://github.com/arda-labs/arda-be",
-    highlights: [
-      {
-        value: "Atomic",
-        label: "Zero Dual-Write",
-        labelVi: "Không Lỗi Dual-Write",
-        detail: "Co-located outbox table",
-        detailVi: "Bảng outbox trong cùng transaction"
-      },
-      {
-        value: "< 1ms",
-        label: "NATS JetStream",
-        labelVi: "Độ trễ NATS",
-        detail: "Disk-backed stream replay",
-        detailVi: "Lưu trữ bền vững trên đĩa"
-      },
-      {
-        value: "UUIDv7",
-        label: "Event ID Ordering",
-        labelVi: "Định danh UUIDv7",
-        detail: "Time-sortable event keys",
-        detailVi: "Sắp xếp theo thời gian tự nhiên"
-      },
-      {
-        value: "Idempotent",
-        label: "Deduplication Log",
-        labelVi: "Khử Trùng lặp",
-        detail: "At-least-once safety",
-        detailVi: "An toàn tuyệt đối khi phân phối"
-      }
-    ],
-    comparison: {
-      naiveTitle: "Direct DB Commit + Broker Publish",
-      naiveTitleVi: "Commit CSDL rồi Bắn Message Trực tiếp",
-      naivePoints: [
-        "If broker publish fails after DB commit, events are permanently lost with zero trace.",
-        "If DB transaction aborts after message dispatch, ghost events corrupt downstream systems.",
-        "Unversioned JSON payloads break downstream consumers during rapid schema evolution."
-      ],
-      naivePointsVi: [
-        "Nếu broker lỗi sau khi commit CSDL, sự kiện sẽ bị mất vĩnh viễn không dấu vết.",
-        "Nếu transaction CSDL bị rollback sau khi bắn tin, message ma làm hỏng dữ liệu downstream.",
-        "Payload JSON không đánh version sẽ làm sập consumer khi cập nhật schema."
-      ],
-      solutionTitle: "Transactional Outbox + NATS JetStream",
-      solutionTitleVi: "Transactional Outbox kết hợp NATS JetStream",
-      solutionPoints: [
-        "Outbox record is written in the same SQL transaction as the domain state.",
-        "Relay worker continuously sweeps unpublished events and acknowledges upon JetStream disk write.",
-        "Envelope[T] enforces UUIDv7 event IDs, schema versions, and consumer idempotency tables."
-      ],
-      solutionPointsVi: [
-        "Bản ghi outbox được ghi trong cùng transaction SQL với dữ liệu miền.",
-        "Worker quét sự kiện chưa gửi và chỉ xác nhận xóa khi NATS JetStream đã ghi đĩa an toàn.",
-        "Schema Envelope[T] chuẩn hóa UUIDv7, version và bảng log khử trùng lặp ở consumer."
-      ]
-    },
-    content: {
-      problemStatement: "In distributed microservices, performing a database commit and publishing a message to a broker in the same API handler creates a critical 'dual-write' hazard. If the broker publish fails after DB commit (or DB crashes after publish), data becomes permanently inconsistent across services.",
-      problemStatementVi: "Trong hệ thống microservices phân tán, việc vừa commit vào CSDL vừa bắn message sang broker trong cùng một API handler dẫn đến rủi ro 'dual-write' nghiêm trọng. Nếu bắn message thất bại sau khi đã commit CSDL (hoặc DB lỗi sau khi bắn message), dữ liệu giữa các service sẽ bị lệch lạc vĩnh viễn.",
-      architectureDesign: "Arda implements the Transactional Outbox pattern in `libs/go/arda-events`: Business data and a structured outbox record are committed within a single atomic PostgreSQL transaction. A background outbox worker polls unpublished records, wraps them into versioned `Envelope[T]` schemas with tenant and actor metadata, and publishes them to NATS JetStream. Downstream consumers maintain an idempotent processing log to discard duplicate deliveries.",
-      architectureDesignVi: "Arda áp dụng mẫu Transactional Outbox trong thư viện `libs/go/arda-events`: Dữ liệu nghiệp vụ và bản ghi outbox được ghi đồng thời trong cùng một transaction PostgreSQL nguyên tử. Một worker chạy ngầm sẽ quét các bản ghi chưa xuất bản, đóng gói vào schema `Envelope[T]` có version, tenant và actor metadata, rồi publish lên NATS JetStream. Phía consumer duy trì bảng log xử lý để loại bỏ các message trùng lặp.",
-      technicalDecisions: [
-        "Atomic Outbox Table: the `outbox_events` table is co-located in the service's PostgreSQL schema so the event write shares the business transaction.",
-        "Structured Event Envelope: `Envelope[T]` includes `event_id` (UUIDv7), `schema_version`, `tenant_id`, `actor_id`, `timestamp`, and strongly-typed JSON payload.",
-        "NATS JetStream Stream Persistence: JetStream stores messages on disk with file-based retention, ack policy, and consumer replay capabilities.",
-        "Idempotent Consumer Deduplication: consumers store processed `event_id` in a dedicated processed_events table inside their own local transaction."
-      ],
-      technicalDecisionsVi: [
-        "Bảng Outbox nguyên tử: bảng `outbox_events` nằm trong schema PostgreSQL của service để việc ghi sự kiện dùng chung transaction với dữ liệu nghiệp vụ.",
-        "Chuẩn hóa Envelope sự kiện: `Envelope[T]` chứa `event_id` (UUIDv7), `schema_version`, `tenant_id`, `actor_id`, `timestamp` và payload JSON.",
-        "Lưu trữ bền vững với NATS JetStream: JetStream lưu trữ message xuống đĩa với chính sách ACK rõ ràng và khả năng replay sự kiện.",
-        "Cơ chế Idempotent Consumer: consumer lưu `event_id` đã xử lý vào bảng deduplication nội bộ trong transaction riêng."
-      ],
-      keyTakeaways: [
-        "Guarantees at-least-once delivery without distributed 2-phase commits (2PC) or XA transactions.",
-        "Versioned event envelopes allow schema evolution without breaking downstream consumers.",
-        "NATS JetStream provides sub-millisecond pub/sub latency with low operational overhead compared to Kafka."
-      ],
-      keyTakeawaysVi: [
-        "Đảm bảo cơ chế phân phối ít nhất một lần (at-least-once) mà không cần dùng 2-phase commit (2PC) phức tạp.",
-        "Envelope có version cho phép nâng cấp cấu trúc sự kiện mà không làm lỗi các consumer đang chạy.",
-        "NATS JetStream mang lại độ trễ dưới 1 mili-giây cùng chi phí vận hành nhẹ hơn đáng kể so với Kafka."
-      ],
-      codeSnippet: {
-        language: "go",
-        title: "Transactional Outbox Helper in libs/go/arda-events",
-        code: `// Atomically inserts domain entity and outbox event in PostgreSQL
-func (r *OrderRepository) CreateOrderWithOutbox(ctx context.Context, tx pgx.Tx, order *Order) error {
-    // 1. Insert domain row
-    if err := r.insertOrder(ctx, tx, order); err != nil {
-        return fmt.Errorf("failed to insert order: %w", err)
-    }
-
-    // 2. Prepare structured event envelope
-    env := ardaevents.NewEnvelope("finance.order.created", "v1", order.TenantID, order.CreatedBy, order)
-
-    // 3. Insert into outbox_events table within the SAME transaction
-    query := \`INSERT INTO outbox_events (id, subject, payload, status, created_at) 
-              VALUES ($1, $2, $3, 'PENDING', NOW())\`
-    _, err := tx.Exec(ctx, query, env.ID, env.Subject, env.PayloadJSON())
-    return err
-}`
-      }
-    }
-  },
-  {
-    slug: "bpmn-workflow-service-boundary-zeebe",
-    title: "Putting BPMN Behind a Workflow Service Boundary",
-    titleVi: "Cô lập Quy trình BPMN Phía sau Phân hệ Workflow Service (Zeebe 8.5)",
-    summary: "Why domain services shouldn't talk directly to Zeebe: Designing a clean gRPC/HTTP workflow-service facade for case lifecycles, user tasks, SLA timers, and domain error handling.",
-    summaryVi: "Vì sao các domain service không nên kết nối trực tiếp vào Zeebe: Thiết kế facade workflow-service qua gRPC/HTTP quản lý vòng đời hồ sơ, user task, SLA timer và xử lý lỗi nghiệp vụ.",
-    date: "Jan 2026",
-    readTime: "9 min read",
-    tags: ["Arda Labs", "Zeebe", "BPMN", "Workflow", "Go", "gRPC", "Architecture"],
-    featured: false,
-    project: "arda",
-    relatedProject: "arda-finops-platform",
-    diagramKey: "bpmn-workflow-service-boundary-zeebe",
-    evidenceIds: ["arda-zeebe-workflow-boundary"],
-    repositoryUrl: "https://github.com/arda-labs/arda-be",
-    content: {
-      problemStatement: "Allowing multiple microservices (finance, crm, hrm) to import the Zeebe gRPC client directly tightly couples business domain code to workflow engine internals, leaks process variables, and scatters case lifecycle tracking across disparate codebases.",
-      problemStatementVi: "Nếu cho phép nhiều microservices (finance, crm, hrm) trực tiếp gọi Zeebe gRPC client sẽ làm mã nguồn nghiệp vụ bị phụ thuộc chặt chẽ vào engine workflow, rò rỉ biến quy trình và phân tán việc theo dõi vòng đời hồ sơ.",
-      architectureDesign: "Arda introduces a dedicated `workflow-service` as an architectural boundary in front of Zeebe 8.5. Domain services call standard gRPC endpoints (`CreateCase`, `SubmitCase`, `CancelCase`) without knowing Zeebe exists. The workflow-service handles BPMN process definitions, variable serialization, user task assignments, SLA timer events, and publishes NATS notifications upon workflow milestone completion.",
-      architectureDesignVi: "Arda xây dựng phân hệ `workflow-service` độc lập làm facade che chắn phía trước Zeebe 8.5. Các service nghiệp vụ chỉ gọi các endpoint gRPC chuẩn (`CreateCase`, `SubmitCase`, `CancelCase`). workflow-service chịu trách nhiệm nạp định nghĩa BPMN, chuyển đổi biến, phân công user task, bắt sự kiện timer SLA và phát thông báo qua NATS khi hoàn thành mốc quy trình.",
-      technicalDecisions: [
-        "Standardized Case Interface: domain services treat workflows as generic Case entities with status transitions (DRAFT -> SUBMITTED -> APPROVED -> REJECTED).",
-        "Encapsulated Zeebe Client: only workflow-service manages Zeebe connection pools, worker threads, and job streaming.",
-        "Asynchronous SLA Escalation: Zeebe timer boundary events trigger automated escalation tasks without custom cron jobs in domain services.",
-        "Unified Audit Log: all BPMN state changes are automatically recorded in an audit table and published to NATS for compliance."
-      ],
-      technicalDecisionsVi: [
-        "Chuẩn hóa Interface Case: các domain service coi workflow như các thực thể Case với các trạng thái chuẩn (DRAFT -> SUBMITTED -> APPROVED -> REJECTED).",
-        "Đóng gói Zeebe Client: chỉ duy nhất workflow-service quản lý kết nối Zeebe, worker pool và job streaming.",
-        "Xử lý Escalation SLA tự động: Timer boundary event trong BPMN tự động kích hoạt luồng cảnh báo mà không cần viết cron job thủ công ở domain service.",
-        "Audit Log tập trung: mọi thay đổi trạng thái BPMN đều được ghi nhận vào bảng kiểm toán và bắn sự kiện qua NATS."
-      ],
-      keyTakeaways: [
-        "Domain microservices remain decoupled from the workflow engine and can be tested with simple mock interfaces.",
-        "Business analysts can inspect and update BPMN models in Camunda Modeler without altering domain service code.",
-        "Centralized error handling prevents unhandled workflow panics from polluting business transaction logs."
-      ],
-      keyTakeawaysVi: [
-        "Các domain microservice hoàn toàn độc lập với workflow engine, dễ dàng viết unit test với mock interface.",
-        "Chuyên viên nghiệp vụ có thể chỉnh sửa mô hình BPMN trên Camunda Modeler mà không cần sửa code backend.",
-        "Xử lý lỗi tập trung ngăn ngừa các sự cố luồng workflow làm ảnh hưởng đến transaction của hệ thống."
-      ],
-      codeSnippet: {
-        language: "go",
-        title: "Workflow Service Facade Interface (app/workflow-service)",
-        code: `// gRPC Service definition isolating Zeebe orchestration
-type WorkflowServiceServer interface {
-    StartProcessInstance(ctx context.Context, req *pb.StartProcessRequest) (*pb.ProcessInstanceReply, error)
-    CompleteUserTask(ctx context.Context, req *pb.CompleteTaskRequest) (*pb.TaskReply, error)
-    GetCaseHistory(ctx context.Context, req *pb.CaseHistoryRequest) (*pb.CaseHistoryReply, error)
-}`
-      }
-    }
-  },
-  {
-    slug: "multi-remote-micro-frontend-platform-module-federation",
-    title: "What I Learned Building a Multi-Remote Micro Frontend Platform",
-    titleVi: "Bài học Thực chiến khi Xây dựng Nền tảng Micro-Frontend Đa Phân hệ với React Module Federation",
-    summary: "Architecting Arda's frontend with React Module Federation: 1 Shell host + 7 decoupled remotes (IAM, Platform, Finance, Account, HRM, Workflow, CRM) sharing @workspace packages and avoiding shared state traps.",
-    summaryVi: "Kiến trúc frontend Arda với React Module Federation: 1 Shell Host + 7 Remotes độc lập dùng chung gói @workspace/*, chuẩn hóa ranh giới và tránh bẫy chia sẻ state.",
-    date: "Feb 2026",
-    readTime: "11 min read",
-    tags: ["Arda Labs", "React", "Module Federation", "Micro-Frontend", "TypeScript", "Tailwind CSS"],
-    featured: true,
-    project: "arda",
-    relatedProject: "arda-finops-platform",
-    diagramKey: "multi-remote-micro-frontend-platform-module-federation",
-    evidenceIds: ["arda-react-module-federation"],
-    repositoryUrl: "https://github.com/arda-labs/arda-mfe",
-    highlights: [
-      {
-        value: "7 Remotes",
-        label: "Domain Remotes",
-        labelVi: "Remote Độc lập",
-        detail: "Finance, IAM, CRM, HRM, Workflow",
-        detailVi: "Tài chính, IAM, CRM, HRM, Quy trình"
-      },
-      {
-        value: "1 Host",
-        label: "Orchestration Shell",
-        labelVi: "Shell Điều phối",
-        detail: "Top-level layout & routing",
-        detailVi: "Khung layout & điều hướng chung"
-      },
-      {
-        value: "6 Packages",
-        label: "Shared @workspace",
-        labelVi: "Gói Dùng chung",
-        detail: "ui, api, auth, i18n, core, theme",
-        detailVi: "ui, api, auth, i18n, core, theme"
-      },
-      {
-        value: "Singleton",
-        label: "React 19 Runtime",
-        labelVi: "React Singleton",
-        detail: "Zero duplicate bundle bloat",
-        detailVi: "Tránh nạp trùng thư viện"
-      }
-    ],
-    comparison: {
-      naiveTitle: "Component-Level Micro-Frontends",
-      naiveTitleVi: "Micro-Frontend Cắt Nhỏ Cấp Component",
-      naivePoints: [
-        "Exporting individual buttons and modals creates cross-app CSS and state entanglement.",
-        "Sharing global state across remotes breaks independent team deployments.",
-        "MFE bundle version mismatches cause frequent runtime crashes."
-      ],
-      naivePointsVi: [
-        "Export từng nút bấm hay modal nhỏ khiến CSS và state bị dính chùm giữa các app.",
-        "Chia sẻ global state giữa các remote làm mất đi tính độc lập khi release.",
-        "Lệch phiên bản thư viện giữa các remote gây lỗi văng app khi chạy."
-      ],
-      solutionTitle: "Arda Route-Level Module Federation",
-      solutionTitleVi: "Module Federation Cấp Route Chuẩn Mực",
-      solutionPoints: [
-        "Remotes expose clean route trees (./Routes) rather than scattered micro-components.",
-        "State remains encapsulated within each remote; inter-app sync is handled via URL query params.",
-        "Shared dependencies (React, ReactDOM) configured as strict singletons via Module Federation."
-      ],
-      solutionPointsVi: [
-        "Các remote chỉ export cây route hoàn chỉnh (./Routes) thay vì phân mảnh component.",
-        "State được đóng gói trọn vẹn trong remote; liên kết giữa các app qua URL query param.",
-        "Các thư viện dùng chung (React, ReactDOM) được khóa singleton nghiêm ngặt."
-      ]
-    },
-    sections: [
-      {
-        id: "module-federation-rules",
-        title: "Golden Rules for Module Federation in Production",
-        titleVi: "Nguyên Tắc Vàng Khi Vận Hành Module Federation",
-        content: "1. Never export internal state: Remotes should own their stores (Zustand, React Query). Never import a store from another remote.\n2. Keep packages pure: `@workspace/ui` contains design components (shadcn) without business domain logic.\n3. Graceful degradation: Wrap remote imports in React Error Boundaries and Suspense fallback spinners.",
-        contentVi: "1. Tuyệt đối không export state nội bộ: Mỗi remote tự quản lý store của mình (Zustand, React Query). Không import store từ remote khác.\n2. Giữ các gói dùng chung thuần túy: `@workspace/ui` chỉ chứa UI component (shadcn) không chứa logic nghiệp vụ.\n3. Dự phòng sự cố: Luôn bọc các remote import bằng React Error Boundary và Suspense fallback spinner.",
-        callout: {
-          type: "tip",
-          text: "When updating shared @workspace packages, TypeScript project references in the monorepo provide instant compile-time feedback across all 7 remotes.",
-          textVi: "Khi cập nhật các gói @workspace/*, tính năng TypeScript Project References trong monorepo giúp phát hiện lỗi type trên cả 7 remote ngay lập tức."
-        }
-      }
-    ],
-    content: {
-      problemStatement: "Large enterprise dashboards built as single monolithic frontends result in slow CI/CD builds, tight coupling between feature teams, and risky all-or-nothing deployments. Conversely, poorly designed micro-frontends suffer from styling conflicts, duplicated npm bundles, and fragmented auth states.",
-      problemStatementVi: "Các dashboard doanh nghiệp lớn viết dưới dạng monolith dẫn tới thời gian build CI/CD kéo dài, phụ thuộc chéo giữa các team và rủi ro cao khi deploy. Ngược lại, chia MFE không khéo sẽ gây xung đột CSS, nạp trùng thư viện JS và phân mảnh trạng thái đăng nhập.",
-      architectureDesign: "Arda MFE organizes the frontend into a monorepo with an orchestration Shell and 7 domain remotes (`mfe-iam`, `platform`, `finance`, `account`, `hrm`, `workflow`, `crm`). Remotes expose only top-level route modules rather than arbitrary internal components. Cross-cutting concerns are factored into shared internal packages (`@workspace/ui` with shadcn, `@workspace/api`, `@workspace/auth`, `@workspace/i18n`, `@workspace/core`, and `@workspace/theme`).",
-      architectureDesignVi: "Arda MFE tổ chức frontend thành monorepo gồm Shell điều phối và 7 remote apps (`mfe-iam`, `platform`, `finance`, `account`, `hrm`, `workflow`, `crm`). Các remote chỉ export các module Route cấp cao thay vì export component nhỏ lẻ. Các phần dùng chung được đóng gói vào `@workspace/*` (shadcn UI, api, auth, i18n, core, theme).",
-      technicalDecisions: [
-        "Route-Level Module Exposing: remotes expose lazy-loaded page route trees (`./Routes`), ensuring remote internal state remains encapsulated.",
-        "Shared Workspace Packages: `@workspace/ui` enforces consistent design tokens without duplicating CSS stylesheets across remotes.",
-        "Strict Singleton Sharing: React, ReactDOM, and React Router are configured as strict singletons to prevent multiple React instance errors at runtime.",
-        "URL Query as Inter-App State: cross-module navigation uses standard browser URL query parameters instead of fragile global window event buses."
-      ],
-      technicalDecisionsVi: [
-        "Export Module ở cấp Route: các remote chỉ export route tree dạng lazy-load (`./Routes`), đảm bảo state nội bộ của remote không bị rò rỉ.",
-        "Bộ thư viện @workspace dùng chung: `@workspace/ui` đồng nhất design system mà không làm phình kích thước bundle CSS.",
-        "Chia sẻ Singleton nghiêm ngặt: React, ReactDOM, React Router được cấu hình singleton bắt buộc để tránh lỗi đa instance React khi chạy.",
-        "Đồng bộ State qua URL Query: việc điều hướng giữa các module sử dụng query param chuẩn của trình duyệt thay vì lạm dụng window event bus."
-      ],
-      keyTakeaways: [
-        "Do not share global Redux/Zustand state across micro-frontends — keep state scoped to individual remotes.",
-        "Exposing entire routes rather than micro-components provides the best balance of decoupling and performance.",
-        "Independent deployments allow the Finance team to release updates in seconds without rebuilding the IAM or HRM remotes."
-      ],
-      keyTakeawaysVi: [
-        "Không nên chia sẻ global store (Redux/Zustand) giữa các remote — hãy giữ state cục bộ trong từng module.",
-        "Export theo Route hoàn chỉnh mang lại sự phân tách ranh giới và hiệu năng tốt nhất so với export từng nút bấm nhỏ.",
-        "Quy trình release độc lập giúp team Finance phát hành tính năng chỉ trong vài giây mà không cần build lại IAM hay HRM."
-      ],
-      codeSnippet: {
-        language: "typescript",
-        title: "Arda Shell Dynamic Remote Route Loader",
-        code: `import React, { Suspense, lazy } from "react";
-import { Route, Routes } from "react-router-dom";
-import { LoadingSpinner } from "@workspace/ui";
-
-const FinanceApp = lazy(() => import("finance/Routes"));
-const IamApp = lazy(() => import("iam/Routes"));
-const WorkflowApp = lazy(() => import("workflow/Routes"));
-
-export function AppRoutes() {
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <Routes>
-        <Route path="/finance/*" element={<FinanceApp />} />
-        <Route path="/iam/*" element={<IamApp />} />
-        <Route path="/workflow/*" element={<WorkflowApp />} />
-      </Routes>
-    </Suspense>
-  );
-}`
-      }
-    }
-  },
   {
     slug: "production-like-platform-three-node-k3s-cluster",
     title: "Running a Production-Like Platform on a Three-Node K3s Cluster",
@@ -1348,9 +747,9 @@ spec:
         detailVi: "Chuẩn hóa Protobuf & gRPC/HTTP"
       },
       {
-        value: "< 1s PWA",
+        value: "PWA",
         label: "Mobile First Content",
-        labelVi: "Tốc độ Tải PWA",
+        labelVi: "Ứng dụng PWA",
         detail: "Edge CDN & IndexedDB cache",
         detailVi: "Cache IndexedDB & CDN Edge"
       },
@@ -1386,7 +785,7 @@ spec:
       solutionTitleVi: "Kiến trúc Nền tảng Học Ngoại ngữ Puchi Đám Mây",
       solutionPoints: [
         "Cloudflare R2 edge audio streaming keeps media delivery separate from backend request handling.",
-        "NATS event stream processes gamification in background, returning quiz results in <10ms.",
+        "NATS event stream processes gamification in background, returning quiz results without blocking the request.",
         "Domain separation: immutable curriculum tree decoupled from append-only learner progress logs."
       ],
       solutionPointsVi: [
@@ -1456,72 +855,6 @@ spec:
     _ = s.eventBus.Publish("learn.lesson.completed", event)
 
     return &pb.SubmitAttemptReply{Passed: result.Passed, Score: result.Score}, nil
-}`
-      }
-    }
-  },
-  {
-    slug: "why-puchi-uses-opaque-sessions-over-jwt",
-    title: "Why Puchi Uses Opaque Sessions Instead of JWT Everywhere",
-    titleVi: "Vì sao Puchi Sử dụng Opaque Session Thay vì Lạm dụng JWT",
-    summary: "Architecting authentication for language learners: opaque bearer tokens, centralized revocation authority, internal session introspection, and caching trade-offs.",
-    summaryVi: "Kiến trúc xác thực người dùng trong Puchi: opaque bearer token, khả năng thu hồi phiên tập trung, introspection nội bộ và chiến lược bộ nhớ đệm.",
-    date: "Jan 2026",
-    readTime: "9 min read",
-    tags: ["Puchidemy", "Auth", "Security", "Go", "Architecture"],
-    featured: false,
-    project: "puchi",
-    relatedProject: "puchi-language-platform",
-    diagramKey: "why-puchi-uses-opaque-sessions-over-jwt",
-    evidenceIds: ["puchi-opaque-session-auth"],
-    repositoryUrl: "https://github.com/puchidemy/puchi-backend",
-    content: {
-      problemStatement: "While stateless JWTs appear simple, they suffer from inability to immediately revoke compromised sessions, payload bloat on high-frequency mobile requests, and token expiration edge cases that disrupt learning flow.",
-      problemStatementVi: "Dù JWT stateless có vẻ tiện lợi, chúng lại gặp nhược điểm chí mạng là không thể thu hồi phiên ngay lập tức khi bị lộ, kích thước payload lớn làm nặng request di động và các lỗi hết hạn token làm gián đoạn bài học.",
-      architectureDesign: "Puchi's `auth-service` issues high-entropy opaque random strings as bearer session tokens to the Next.js PWA. Downstream services (`learn`, `core`, `media`) validate incoming tokens by introspecting against `auth-service` via gRPC, cached in Valkey for sub-millisecond repeated checks. Instant logout or session revocation deletes the key from Valkey/PostgreSQL immediately.",
-      architectureDesignVi: "Phân hệ `auth-service` của Puchi cấp phát chuỗi ngẫu nhiên có độ entropy cao (opaque session token) cho Next.js PWA. Các service phía sau (`learn`, `core`, `media`) kiểm tra tính hợp lệ của token qua lời gọi gRPC introspection tới `auth-service`, được cache trên Valkey dưới 1 mili-giây. Khi người dùng đăng xuất, key sẽ bị xóa ngay lập tức.",
-      technicalDecisions: [
-        "Opaque Random Bearer Tokens: client never parses or depends on token internals, preventing brittle frontend coupling.",
-        "Centralized Session Revocation: user logout or security resets take effect across all microservices instantly.",
-        "Valkey Session Cache: introspection latency is reduced to <1ms with a short TTL cache in memory.",
-        "OAuth2 Social Login Integration: Google, Facebook, and TikTok OAuth codes are exchanged centrally in `auth-service`."
-      ],
-      technicalDecisionsVi: [
-        "Opaque Bearer Token ngẫu nhiên: frontend không cần parse hay phụ thuộc vào cấu trúc bên trong của token.",
-        "Thu hồi phiên tập trung: khi người dùng đổi mật khẩu hoặc đăng xuất, phiên làm việc sẽ bị hủy ngay lập tức trên toàn bộ các service.",
-        "Cache phiên với Valkey: giảm độ trễ kiểm tra token xuống dưới 1ms với TTL ngắn trong RAM.",
-        "Tích hợp OAuth2 tập trung: luồng đăng nhập Google, Facebook, TikTok được xử lý duy nhất tại `auth-service`."
-      ],
-      keyTakeaways: [
-        "Opaque sessions offer superior security control for consumer applications where instant session revocation is required.",
-        "With proper Valkey caching, session introspection introduces negligible overhead compared to cryptographic JWT verification.",
-        "Simpler client code with no token refresh race conditions."
-      ],
-      keyTakeawaysVi: [
-        "Opaque session mang lại khả năng kiểm soát bảo mật tuyệt đối cho ứng dụng người dùng khi cần thu hồi phiên tức thì.",
-        "Với bộ nhớ đệm Valkey, việc kiểm tra token chỉ mất dưới 1ms, không hề thua kém việc giải mã chữ ký JWT.",
-        "Frontend trở nên đơn giản hơn nhiều do không phải xử lý race condition khi refresh token."
-      ],
-      codeSnippet: {
-        language: "go",
-        title: "Puchi Auth Token Introspection Middleware",
-        code: `func AuthMiddleware(authClient pb.AuthServiceClient) middleware.Middleware {
-    return func(handler middleware.Handler) middleware.Handler {
-        return func(ctx context.Context, req any) (any, error) {
-            token := extractBearerToken(ctx)
-            if token == "" {
-                return nil, errors.Unauthorized("UNAUTHORIZED", "missing bearer token")
-            }
-
-            reply, err := authClient.IntrospectToken(ctx, &pb.IntrospectRequest{Token: token})
-            if err != nil || !reply.Active {
-                return nil, errors.Unauthorized("INVALID_SESSION", "session expired or revoked")
-            }
-
-            ctx = context.WithValue(ctx, UserIDKey, reply.UserId)
-            return handler(ctx, req)
-        }
-    }
 }`
       }
     }
@@ -1896,6 +1229,9 @@ export const businessModules: RemoteDefinition[] = [
   },
   ...ADDITIONAL_ARTICLES
 ];
+
+/** Rewritten and new articles (src/data/articles) come first, then the older ones. */
+export const ARTICLES_DATA: Article[] = [...NEW_ARTICLES, ...REWRITTEN_ARTICLES, ...LEGACY_ARTICLES];
 
 export const EXPERIENCES_DATA: ExperienceItem[] = [
   {

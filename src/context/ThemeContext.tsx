@@ -17,14 +17,14 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const THEME_STORAGE_KEY = "portfolio_theme";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>("dark");
+  const [theme, setThemeState] = useState<Theme>("system");
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>("light");
   const [mounted, setMounted] = useState(false);
   const [, startTransition] = useTransition();
 
   // Determine system theme preference
   const getSystemTheme = (): ResolvedTheme => {
-    if (typeof window === "undefined") return "dark";
+    if (typeof window === "undefined") return "light";
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   };
 
@@ -49,13 +49,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null;
-      const initialTheme: Theme = saved === "light" || saved === "dark" || saved === "system" ? saved : "dark";
-      setThemeState(initialTheme);
-      applyTheme(initialTheme);
+      const initialTheme: Theme = saved === "light" || saved === "dark" || saved === "system" ? saved : "system";
+      queueMicrotask(() => {
+        setThemeState(initialTheme);
+        applyTheme(initialTheme);
+        setMounted(true);
+      });
     } catch {
-      applyTheme("dark");
+      queueMicrotask(() => {
+        applyTheme("system");
+        setMounted(true);
+      });
     }
-    setMounted(true);
   }, []);
 
   // Listen to OS system preference changes
@@ -92,7 +97,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <ThemeContext.Provider
       value={{
         theme,
-        resolvedTheme: mounted ? resolvedTheme : "dark",
+        resolvedTheme: mounted ? resolvedTheme : "light",
         setTheme,
         toggleTheme,
       }}

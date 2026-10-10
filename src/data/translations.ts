@@ -134,6 +134,17 @@ export const UI_TRANSLATIONS = {
       suggestedTitle: "Suggested questions",
       retrieving: "Retrieving technical data for",
       escToClose: "Press ESC to close",
+      title: "Ask Hoan",
+      subtitle: "AI assistant · answers from this portfolio",
+      send: "Send",
+      sending: "Writing...",
+      you: "You",
+      assistantLabel: "Hoan AI",
+      disclaimer: "AI answers can be wrong — check the sources linked in the portfolio.",
+      retry: "Try again",
+      errorGeneric: "Something went wrong. Please try again.",
+      sources: "Related",
+      emptyIntro: "Ask about projects, stack, experience or background.",
       close: "Close"
     }
   },
@@ -272,6 +283,17 @@ export const UI_TRANSLATIONS = {
       suggestedTitle: "Câu hỏi gợi ý",
       retrieving: "Đang truy xuất dữ liệu kỹ thuật cho",
       escToClose: "Nhấn ESC để đóng",
+      title: "Hỏi Hoan",
+      subtitle: "Trợ lý AI · trả lời dựa trên portfolio này",
+      send: "Gửi",
+      sending: "Đang viết...",
+      you: "Bạn",
+      assistantLabel: "Hoan AI",
+      disclaimer: "AI có thể trả lời sai — hãy đối chiếu với các nguồn được liên kết trong portfolio.",
+      retry: "Thử lại",
+      errorGeneric: "Có lỗi xảy ra. Vui lòng thử lại.",
+      sources: "Liên quan",
+      emptyIntro: "Hỏi về dự án, stack, kinh nghiệm hoặc nền tảng của Hoan.",
       close: "Đóng"
     }
   }

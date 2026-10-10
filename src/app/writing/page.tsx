@@ -2,324 +2,172 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { useLanguage } from "@/context/LanguageContext";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { SiteShell } from "@/components/layout/SiteShell";
 import { ARTICLES_DATA } from "@/data/portfolioData";
 import { getArticleEditorial } from "@/data/articleEditorial";
 import { UI_TRANSLATIONS } from "@/data/translations";
-import { MotionWrapper } from "@/components/common/MotionWrapper";
-import { AskAIFloatingButton } from "@/components/ai/AskAIFloatingButton";
-import { MobileTabBar } from "@/components/layout/MobileTabBar";
-
-const AskAIModal = dynamic(
-  () => import("@/components/ai/AskAIModal").then((mod) => mod.AskAIModal),
-  { ssr: false }
-);
-
-const CustomCursor = dynamic(
-  () => import("@/components/common/CustomCursor").then((mod) => mod.CustomCursor),
-  { ssr: false }
-);
-import {
-  BookOpen,
-  Calendar,
-  Clock,
-  ArrowRight,
-  ArrowLeft,
-  Search,
-  Layers,
-  Flame
-} from "lucide-react";
+import type { Article } from "@/types";
 
 function WritingContent() {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [aiModalOpen, setAiModalOpen] = useState(false);
 
-  const handleOpenAI = () => setAiModalOpen(true);
-  const handleCloseAI = () => setAiModalOpen(false);
+  const allTags = useMemo(
+    () => ["All", ...Array.from(new Set(ARTICLES_DATA.flatMap((a) => a.tags)))],
+    []
+  );
 
-  // Collect unique tags
-  const allTags = useMemo(() => {
-    return ["All", ...Array.from(new Set(ARTICLES_DATA.flatMap((a) => a.tags)))];
-  }, []);
-
-  // Filtered articles
   const filteredArticles = useMemo(() => {
     return ARTICLES_DATA.filter((article) => {
       const title = language === "vi" && article.titleVi ? article.titleVi : article.title;
       const summary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
-
       const matchesTag = selectedTag === "All" || article.tags.includes(selectedTag);
-
       const q = searchQuery.toLowerCase().trim();
       const matchesSearch =
         !q ||
         title.toLowerCase().includes(q) ||
         summary.toLowerCase().includes(q) ||
         article.tags.some((tag) => tag.toLowerCase().includes(q));
-
       return matchesTag && matchesSearch;
     });
   }, [searchQuery, selectedTag, language]);
 
-  // Featured hero article (first featured post when not searching)
   const isDefaultView = selectedTag === "All" && !searchQuery;
   const heroArticle = isDefaultView
-    ? ARTICLES_DATA.find((a) => a.slug === "epas-transaction-inbox-and-compliance-boundaries") || ARTICLES_DATA.find((a) => a.featured) || ARTICLES_DATA[0]
+    ? ARTICLES_DATA.find((a) => a.slug === "arda-ai-service-agent-boundary") ||
+      ARTICLES_DATA.find((a) => a.featured) ||
+      ARTICLES_DATA[0]
     : null;
-  const gridArticles = isDefaultView && heroArticle
-    ? filteredArticles.filter((a) => a.slug !== heroArticle.slug)
-    : filteredArticles;
+  const listArticles =
+    isDefaultView && heroArticle
+      ? filteredArticles.filter((a) => a.slug !== heroArticle.slug)
+      : filteredArticles;
+
+  const renderMeta = (a: Article) => {
+    const ed = getArticleEditorial(a);
+    return `${a.date} · ${a.readTime} · ${language === "vi" ? ed.formatVi : ed.format}`;
+  };
 
   return (
-    <main className="relative min-h-screen bg-slate-50 dark:bg-[#090a0f] text-slate-900 dark:text-[#f4f4f5] bg-grid-pattern selection:bg-emerald-500 selection:text-black transition-colors duration-200">
-      {/* Ambient lighting */}
-      <div className="fixed top-0 left-1/3 w-[500px] h-[500px] bg-emerald-500/[0.04] dark:bg-emerald-500/[0.04] rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/3 right-1/4 w-[450px] h-[450px] bg-teal-500/[0.03] dark:bg-teal-500/[0.03] rounded-full blur-[140px] pointer-events-none -z-10" />
-      
-      <CustomCursor />
-      <Navbar onOpenAI={handleOpenAI} />
+    <SiteShell>
+      <div className="page-wrap pt-16 pb-24">
+        <header className="border-t border-ink pt-4 mb-10 max-w-2xl space-y-3">
+          <p className="eyebrow">{t.writing.badge}</p>
+          <h1 className="text-4xl sm:text-5xl">{t.writing.title}</h1>
+          <p className="text-muted">{t.writing.subtitle}</p>
+        </header>
 
-      <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        {/* Breadcrumb Back link */}
-        <MotionWrapper delay={0.05}>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 mb-8 transition-colors group"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-            <span>{t.writing.backToHome}</span>
-          </Link>
-        </MotionWrapper>
-
-        {/* Heading */}
-        <MotionWrapper delay={0.1}>
-          <div className="mb-12 border-b border-zinc-200 dark:border-zinc-800/80 pb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-semibold mb-4">
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>{t.writing.badge}</span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-zinc-950 dark:text-white tracking-tight mb-4">
-              {t.writing.title}
-            </h1>
-            <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-3xl font-normal leading-relaxed">
-              {t.writing.subtitle}
-            </p>
+        <div className="mb-10 space-y-6">
+          <div className="relative max-w-xl">
+            <label htmlFor="writing-search" className="sr-only">
+              {t.writing.searchPlaceholder}
+            </label>
+            <input
+              id="writing-search"
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={t.writing.searchPlaceholder}
+              className="w-full bg-transparent border-0 border-b border-rule focus:border-ink rounded-none px-0 py-2 pr-16 text-sm font-mono text-ink placeholder:text-faint outline-none"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                aria-label="Clear search"
+                className="absolute right-0 top-1/2 -translate-y-1/2 eyebrow hover:text-ink"
+              >
+                Clear
+              </button>
+            )}
           </div>
-        </MotionWrapper>
 
-        {/* Search & Tag Filters */}
-        <MotionWrapper delay={0.15}>
-          <div className="space-y-6 mb-12">
-            {/* Search Bar */}
-            <div className="relative max-w-xl">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t.writing.searchPlaceholder}
-                className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-white dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/40 transition-all font-mono shadow-sm"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 px-2 py-1"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-
-            {/* Tag Filter Pills */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-mono text-zinc-500 mr-1">{t.writing.filterByTag}</span>
-              {allTags.map((tag) => (
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2" role="group" aria-label={t.writing.filterByTag}>
+            <span className="eyebrow">{t.writing.filterByTag}</span>
+            {allTags.map((tag) => {
+              const active = selectedTag === tag;
+              return (
                 <button
                   key={tag}
+                  type="button"
                   onClick={() => setSelectedTag(tag)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                    selectedTag === tag
-                      ? "bg-emerald-500 text-zinc-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]"
-                      : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-sm"
+                  aria-pressed={active}
+                  className={`font-mono text-xs ${
+                    active ? "text-ink underline underline-offset-4 decoration-accent" : "text-muted hover:text-ink"
                   }`}
                 >
                   {tag === "All" ? t.writing.allTags : tag}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        </MotionWrapper>
+        </div>
 
-        {/* Featured Hero Article (when in default view) */}
         {heroArticle && (
-          <MotionWrapper delay={0.2}>
-            <div className="mb-12">
-              {(() => {
-                const editorial = getArticleEditorial(heroArticle);
-                return (
-              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-mono uppercase tracking-wider mb-3">
-                <Flame className="w-4 h-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
-                <span>{language === "vi" ? `${editorial.seriesVi} · ${editorial.formatVi}` : `${editorial.series} · ${editorial.format}`}</span>
-              </div>
-                );
-              })()}
-
-              <Link
-                href={`/writing/${heroArticle.slug}`}
-                className="group block rounded-3xl bg-gradient-to-b from-white via-zinc-50 to-zinc-100 dark:from-zinc-900/90 dark:to-zinc-950 border border-zinc-200 dark:border-emerald-500/30 hover:border-emerald-500/60 p-8 sm:p-10 lg:p-12 transition-all duration-300 shadow-md hover:shadow-[0_20px_50px_-20px_rgba(16,185,129,0.25)] relative overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity pointer-events-none" />
-
-                <div className="relative z-10 space-y-4 max-w-3xl">
-                  <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-                    <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
-                      <Calendar className="w-3.5 h-3.5" />
-                      {heroArticle.date}
-                    </span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
-                      <Clock className="w-3.5 h-3.5" />
-                      {heroArticle.readTime}
-                    </span>
-                  </div>
-
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-zinc-950 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors tracking-tight leading-tight">
-                    {language === "vi" && heroArticle.titleVi ? heroArticle.titleVi : heroArticle.title}
-                  </h2>
-
-                  <p className="text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
-                    {language === "vi" && heroArticle.summaryVi ? heroArticle.summaryVi : heroArticle.summary}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {heroArticle.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-1 text-xs font-mono rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="pt-4 flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 group-hover:underline">
-                    <span>{t.writing.readArticle}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </Link>
-            </div>
-          </MotionWrapper>
+          <section className="mb-12" aria-label={t.writing.featuredArticle}>
+            <p className="eyebrow mb-3">{t.writing.featuredArticle}</p>
+            <Link href={`/writing/${heroArticle.slug}`} className="group block border-y border-rule py-8">
+              <p className="eyebrow mb-3">{renderMeta(heroArticle)}</p>
+              <h2 className="text-3xl sm:text-4xl max-w-3xl group-hover:text-accent">
+                {language === "vi" && heroArticle.titleVi ? heroArticle.titleVi : heroArticle.title}
+              </h2>
+              <p className="mt-4 text-muted max-w-2xl">
+                {language === "vi" && heroArticle.summaryVi ? heroArticle.summaryVi : heroArticle.summary}
+              </p>
+              <p className="mt-4 font-mono text-xs text-faint">{heroArticle.tags.join(" / ")}</p>
+              <p className="mt-4 text-sm link inline-block">{t.writing.readArticle} →</p>
+            </Link>
+          </section>
         )}
 
-        {/* Empty state */}
-        {gridArticles.length === 0 && !heroArticle && (
-          <div className="text-center py-20 rounded-2xl bg-white/60 dark:bg-zinc-950/40 border border-dashed border-zinc-200 dark:border-zinc-800 p-8 shadow-sm">
-            <Layers className="w-10 h-10 text-zinc-400 dark:text-zinc-600 mx-auto mb-4" />
-            <p className="text-base text-zinc-600 dark:text-zinc-400 font-mono">
+        {listArticles.length === 0 && !heroArticle && (
+          <div className="py-16 border-y border-rule">
+            <p className="font-mono text-sm text-muted">
               {language === "vi" ? "Không tìm thấy bài viết phù hợp." : "No matching articles found."}
             </p>
             <button
+              type="button"
               onClick={() => {
                 setSearchQuery("");
                 setSelectedTag("All");
               }}
-              className="mt-4 px-4 py-2 text-xs font-mono bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-emerald-600 dark:text-emerald-400 rounded-lg border border-zinc-200 dark:border-zinc-800 transition-colors shadow-sm"
+              className="mt-4 link text-sm"
             >
               Reset filters
             </button>
           </div>
         )}
 
-        {/* Articles List Header (when grid is present) */}
-        {gridArticles.length > 0 && heroArticle && (
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-              {t.writing.allArticles} ({gridArticles.length})
-            </h3>
-          </div>
+        {listArticles.length > 0 && (
+          <section aria-label={t.writing.allArticles}>
+            <p className="eyebrow mb-3">
+              {t.writing.allArticles} ({listArticles.length})
+            </p>
+            <ol className="divide-y divide-rule border-y border-rule">
+              {listArticles.map((a) => (
+                <li key={a.slug}>
+                  <Link href={`/writing/${a.slug}`} className="group grid gap-1 sm:gap-6 sm:grid-cols-[13rem_1fr] py-6">
+                    <p className="eyebrow pt-1.5">{renderMeta(a)}</p>
+                    <div>
+                      <h3 className="text-xl sm:text-2xl group-hover:text-accent">
+                        {language === "vi" && a.titleVi ? a.titleVi : a.title}
+                      </h3>
+                      <p className="mt-2 text-muted max-w-2xl">
+                        {language === "vi" && a.summaryVi ? a.summaryVi : a.summary}
+                      </p>
+                      <p className="mt-3 font-mono text-xs text-faint">{a.tags.join(" / ")}</p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </section>
         )}
-
-        {/* Articles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {gridArticles.map((article, idx) => {
-            const articleTitle = language === "vi" && article.titleVi ? article.titleVi : article.title;
-            const articleSummary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
-            const editorial = getArticleEditorial(article);
-
-            return (
-              <MotionWrapper key={article.slug} delay={0.1 + idx * 0.05}>
-                <Link
-                  href={`/writing/${article.slug}`}
-                  className="group h-full flex flex-col justify-between rounded-2xl bg-white/90 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800/90 hover:border-emerald-500/50 dark:hover:border-emerald-500/40 p-6 sm:p-8 transition-all duration-300 shadow-sm hover:shadow-[0_20px_40px_-20px_rgba(16,185,129,0.2)]"
-                >
-                  <div>
-                    {/* Meta Bar */}
-                    <div className="flex items-center gap-3 text-xs font-mono text-zinc-500 mb-4">
-                      <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
-                        <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        {article.date}
-                      </span>
-                      <span>•</span>
-                      <span className="text-emerald-600 dark:text-emerald-400/80 font-semibold">{language === "vi" ? editorial.formatVi : editorial.format}</span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
-                        <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        {article.readTime}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors tracking-tight mb-3 leading-snug">
-                      {articleTitle}
-                    </h2>
-
-                    {/* Summary */}
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6 font-normal">
-                      {articleSummary}
-                    </p>
-                    <p className="text-[11px] font-mono text-zinc-500 mb-5">
-                      {language === "vi" ? editorial.seriesVi : editorial.series}
-                    </p>
-                  </div>
-
-                  <div>
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5 pt-4 border-t border-zinc-100 dark:border-zinc-800/80 mb-4">
-                      {article.tags.map((tag, tagIdx) => (
-                        <span
-                          key={tagIdx}
-                          className="px-2 py-0.5 text-xs font-mono rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Read Action */}
-                    <div className="flex items-center justify-between text-xs font-mono text-emerald-600 dark:text-emerald-400 group-hover:underline">
-                      <span>{t.writing.readArticle}</span>
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </Link>
-              </MotionWrapper>
-            );
-          })}
-        </div>
       </div>
-
-      <Footer />
-      <AskAIFloatingButton onClick={handleOpenAI} />
-      <MobileTabBar onOpenAI={handleOpenAI} />
-      {aiModalOpen && <AskAIModal isOpen={aiModalOpen} onClose={handleCloseAI} />}
-    </main>
+    </SiteShell>
   );
 }
 
