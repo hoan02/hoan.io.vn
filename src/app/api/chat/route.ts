@@ -5,13 +5,30 @@ import { getChatModel, getChatModelId, MissingApiKeyError } from "@/ai/model";
 import { SYSTEM_PROMPT } from "@/ai/system-prompt";
 import { checkRateLimit } from "@/lib/rateLimit";
 
-export const maxDuration = 30;
+// Very long answers stream for minutes; on Vercel this caps the whole response (plan limits apply).
+export const maxDuration = 300;
 
 // --- Limits (best-effort: in-memory, so they are per server instance) -------
 const MAX_QUERY_CHARS = 800;
 const MAX_HISTORY_MESSAGES = 6;
-const MAX_HISTORY_CHARS = 800;
-const MAX_OUTPUT_TOKENS = 1024;
+const MAX_HISTORY_CHARS = 1500;
+// Vietnamese costs roughly 2–3x the tokens of English, so small caps cut answers mid-sentence.
+// OpenRouter reserves credits for the full cap before each call, so a 128K cap fails
+// (402) on a small balance even when the answer is short. 32K is still ~10k Vietnamese
+// words; raise it with AI_MAX_OUTPUT_TOKENS (Claude Haiku 5.5 allows up to 128K).
+const MAX_OUTPUT_TOKENS = Number(process.env.AI_MAX_OUTPUT_TOKENS) || 32_000;
+
+// Appended to the text stream so the reader knows the answer did not end naturally.
+const NOTES = {
+  length: {
+    en: '\n\n_(The answer hit the length limit. Ask "continue" for the rest.)_',
+    vi: '\n\n_(Câu trả lời chạm giới hạn độ dài. Hỏi "tiếp tục" để xem phần còn lại.)_',
+  },
+  error: {
+    en: "\n\n_(The connection to the assistant dropped mid-answer. Please try again.)_",
+    vi: "\n\n_(Kết nối với trợ lý bị ngắt giữa chừng. Bạn thử lại nhé.)_",
+  },
+};
 const PER_IP_PER_MINUTE = 8;
 const PER_IP_PER_DAY = 80;
 // Hard ceiling on total daily requests, a cost circuit breaker.
@@ -33,6 +50,7 @@ const bodySchema = z.object({
     .max(50)
     .optional()
     .default([]),
+  lang: z.enum(["en", "vi"]).optional().default("vi"),
 });
 
 function clientIp(req: Request): string {
@@ -86,18 +104,23 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return fail("Câu hỏi trống hoặc quá dài (tối đa 800 ký tự).", 400);
   }
-  const { query, history } = parsed.data;
+  const { query, history, lang } = parsed.data;
 
   const messages = [
-    ...history.slice(-MAX_HISTORY_MESSAGES).map((m) => ({
-      role: m.role,
-      content: m.content.trim().slice(0, MAX_HISTORY_CHARS),
-    })),
+    ...history.slice(-MAX_HISTORY_MESSAGES).map((m) => {
+      const content = m.content.trim();
+      // Keep the end of long assistant answers so "continue" picks up where it stopped.
+      return {
+        role: m.role,
+        content: m.role === "assistant" ? content.slice(-MAX_HISTORY_CHARS) : content.slice(0, MAX_HISTORY_CHARS),
+      };
+    }),
     { role: "user" as const, content: query },
   ];
 
   // 3. Stream the answer
   try {
+    let streamFailed = false;
     const result = streamText({
       model: getChatModel(),
       system: SYSTEM_PROMPT,
@@ -105,15 +128,36 @@ export async function POST(req: Request) {
       maxOutputTokens: MAX_OUTPUT_TOKENS,
       temperature: 0.3,
       onError: ({ error }) => {
+        streamFailed = true;
         console.error("[chat] stream error:", error);
       },
-      onFinish: ({ usage }) => {
+      onFinish: ({ usage, finishReason }) => {
         console.log(
-          `[chat] ${getChatModelId()} ${Date.now() - startedAt}ms in=${usage?.inputTokens} out=${usage?.outputTokens}`
+          `[chat] ${getChatModelId()} ${Date.now() - startedAt}ms in=${usage?.inputTokens} out=${usage?.outputTokens} finish=${finishReason}`
         );
       },
     });
-    return result.toTextStreamResponse();
+
+    // Plain text stream, plus a short note when the answer was cut off or broke.
+    const encoder = new TextEncoder();
+    const body = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        try {
+          for await (const text of result.textStream) {
+            controller.enqueue(encoder.encode(text));
+          }
+          const reason = await Promise.resolve(result.finishReason).catch(() => "error");
+          if (streamFailed || reason === "error") controller.enqueue(encoder.encode(NOTES.error[lang]));
+          else if (reason === "length") controller.enqueue(encoder.encode(NOTES.length[lang]));
+        } catch (error) {
+          console.error("[chat] stream error:", error);
+          controller.enqueue(encoder.encode(NOTES.error[lang]));
+        } finally {
+          controller.close();
+        }
+      },
+    });
+    return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
   } catch (error) {
     if (error instanceof MissingApiKeyError) {
       console.error("[chat] OPENROUTER_API_KEY is missing");

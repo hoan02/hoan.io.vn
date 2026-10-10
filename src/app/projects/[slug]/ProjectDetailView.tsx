@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Squiggle } from "@/components/common/Doodles";
 import Link from "next/link";
 import { Project } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
@@ -15,7 +16,7 @@ interface ProjectDetailViewProps {
 }
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-2xl sm:text-3xl border-t border-ink pt-4 mb-5">{children}</h2>;
+  return <h2 className="text-2xl sm:text-3xl pt-2 mb-5"><Squiggle className="mb-2" />{children}</h2>;
 }
 
 function Bullets({ items }: { items: string[] }) {
@@ -100,7 +101,7 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
 
         <header className="mb-12">
           <p className="eyebrow mb-4">{meta.join(" · ")}</p>
-          <h1 className="text-4xl sm:text-5xl leading-tight mb-4">{projectTitle}</h1>
+          <h1 className="text-4xl sm:text-5xl leading-tight mb-4"><span className="mark mark-draw">{projectTitle}</span></h1>
           <p className="text-lg text-muted mb-6">{projectSubtitle}</p>
           <p className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             {project.githubUrl && (
@@ -297,7 +298,7 @@ function ProjectDetailContent({ project }: ProjectDetailViewProps) {
 
         <nav
           aria-label={vi ? "Dự án khác" : "More projects"}
-          className="mt-16 pt-6 border-t border-ink grid gap-6 sm:grid-cols-2 text-sm"
+          className="mt-16 pt-6 border-t-2 border-dashed border-rule grid gap-6 sm:grid-cols-2 text-sm"
         >
           {prevProject ? (
             <Link href={`/projects/${prevProject.id}`} className="group block">

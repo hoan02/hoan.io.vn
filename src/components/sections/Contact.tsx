@@ -5,6 +5,7 @@ import { PERSONAL_INFO } from "@/data/portfolioData";
 import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { SectionHeader } from "@/components/common/SectionHeader";
+import { RecruiterCard } from "@/components/writing/RecruiterCard";
 
 export function Contact() {
   const { language } = useLanguage();
@@ -25,19 +26,22 @@ export function Contact() {
         intro={t.contact.subtitle}
       />
 
-      <dl className="divide-y divide-rule border-y border-rule">
-        {channels.map((c) => (
-          <div key={c.label} className="grid gap-1 sm:gap-6 sm:grid-cols-[9rem_1fr] py-4">
-            <dt className="eyebrow pt-1">{c.label}</dt>
-            <dd>
-              <a href={c.href} target={c.href.startsWith("mailto:") ? undefined : "_blank"} rel="noreferrer" className="link">
-                {c.value}
-              </a>
-            </dd>
-          </div>
-        ))}
-      </dl>
-      <p className="mt-4 text-sm text-faint">{t.contact.timezone}</p>
+      <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
+        <dl className="space-y-4">
+          {channels.map((c) => (
+            <div key={c.label} className="grid grid-cols-[6rem_1fr] items-baseline gap-4">
+              <dt className="hand text-lg">{c.label}</dt>
+              <dd>
+                <a href={c.href} target={c.href.startsWith("mailto:") ? undefined : "_blank"} rel="noreferrer" className="link">
+                  {c.value}
+                </a>
+              </dd>
+            </div>
+          ))}
+          <p className="hand pt-2 text-lg text-faint">{t.contact.timezone}</p>
+        </dl>
+        <RecruiterCard rotate={1.5} />
+      </div>
     </section>
   );
 }

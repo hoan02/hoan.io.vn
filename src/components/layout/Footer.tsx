@@ -11,12 +11,10 @@ export function Footer() {
   const t = UI_TRANSLATIONS[language];
 
   return (
-    <footer className="border-t border-rule mt-24">
-      <div className="page-wrap py-10 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between text-sm text-muted">
+    <footer className="mt-24 border-t-2 border-dashed border-rule">
+      <div className="page-wrap flex flex-col gap-6 py-10 text-sm text-muted sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1">
-          <p className="font-serif text-base text-ink">
-            {language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}
-          </p>
+          <p className="font-hand text-2xl text-ink">— {language === "vi" ? PERSONAL_INFO.nameVi : PERSONAL_INFO.name}</p>
           <p>
             {t.footer.role} · {t.footer.location}
           </p>

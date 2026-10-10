@@ -8,164 +8,181 @@ import { ARTICLES_DATA } from "@/data/portfolioData";
 import { getArticleEditorial } from "@/data/articleEditorial";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import type { Article } from "@/types";
+import { TRANSIT_LINES, LineId, getArticle, getLinePosition } from "@/data/transitMap";
+import { ChapterSwatch, MiniFlow, SeeAlso, chapterNumber, pageNumber } from "@/components/writing/Notebook";
+import { RecruiterCard } from "@/components/writing/RecruiterCard";
+import { HandArrow } from "@/components/common/Doodles";
 
 function WritingContent() {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
-  const [selectedTag, setSelectedTag] = useState<string>("All");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const nb = t.writing.notebook;
+  const vi = language === "vi";
+  const [chapter, setChapter] = useState<LineId | "all">("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const allTags = useMemo(
-    () => ["All", ...Array.from(new Set(ARTICLES_DATA.flatMap((a) => a.tags)))],
-    []
-  );
-
-  const filteredArticles = useMemo(() => {
-    return ARTICLES_DATA.filter((article) => {
-      const title = language === "vi" && article.titleVi ? article.titleVi : article.title;
-      const summary = language === "vi" && article.summaryVi ? article.summaryVi : article.summary;
-      const matchesTag = selectedTag === "All" || article.tags.includes(selectedTag);
-      const q = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        !q ||
+  const q = searchQuery.toLowerCase().trim();
+  const matches = useMemo(() => {
+    return (a: Article) => {
+      if (!q) return true;
+      const title = vi && a.titleVi ? a.titleVi : a.title;
+      const summary = vi && a.summaryVi ? a.summaryVi : a.summary;
+      return (
         title.toLowerCase().includes(q) ||
         summary.toLowerCase().includes(q) ||
-        article.tags.some((tag) => tag.toLowerCase().includes(q));
-      return matchesTag && matchesSearch;
-    });
-  }, [searchQuery, selectedTag, language]);
+        a.tags.some((tag) => tag.toLowerCase().includes(q))
+      );
+    };
+  }, [q, vi]);
 
-  const isDefaultView = selectedTag === "All" && !searchQuery;
-  const heroArticle = isDefaultView
-    ? ARTICLES_DATA.find((a) => a.slug === "arda-ai-service-agent-boundary") ||
-      ARTICLES_DATA.find((a) => a.featured) ||
-      ARTICLES_DATA[0]
-    : null;
-  const listArticles =
-    isDefaultView && heroArticle
-      ? filteredArticles.filter((a) => a.slug !== heroArticle.slug)
-      : filteredArticles;
+  const chapters = TRANSIT_LINES.filter((l) => chapter === "all" || l.id === chapter)
+    .map((line) => ({
+      line,
+      entries: line.stops.map((s) => getArticle(s)).filter((a): a is Article => Boolean(a)).filter(matches),
+    }))
+    .filter((c) => c.entries.length > 0);
 
-  const renderMeta = (a: Article) => {
+  // Articles that sit on no chapter still need a place in the notebook.
+  const loose = ARTICLES_DATA.filter((a) => !getLinePosition(a.slug) && chapter === "all" && matches(a));
+  const empty = chapters.length === 0 && loose.length === 0;
+
+  const renderEntry = (a: Article, num: string | null) => {
     const ed = getArticleEditorial(a);
-    return `${a.date} · ${a.readTime} · ${language === "vi" ? ed.formatVi : ed.format}`;
+    return (
+      <li key={a.slug}>
+        <Link
+          href={`/writing/${a.slug}`}
+          className="group -mx-3 grid grid-cols-[3.25rem_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-sm px-3 py-3.5 transition-colors hover:bg-marker/40 sm:grid-cols-[3.25rem_minmax(0,1fr)_auto]"
+        >
+          <span className="hand pt-0.5 text-xl text-faint">{num ?? "·"}</span>
+          <span className="min-w-0">
+            <span className="block text-lg font-semibold leading-snug text-ink group-hover:underline group-hover:decoration-marker group-hover:decoration-[6px] group-hover:underline-offset-[-1px]">
+              {vi && a.titleVi ? a.titleVi : a.title}
+            </span>
+            <span className="mt-1 block">
+              <MiniFlow slug={a.slug} />
+            </span>
+            <SeeAlso slug={a.slug} language={language} size="sm" />
+          </span>
+          <span className="col-start-2 font-mono text-xs text-faint sm:col-start-auto sm:whitespace-nowrap sm:pt-1.5">
+            {a.date} · {a.readTime.replace(" read", "")} · {vi ? ed.formatVi : ed.format}
+          </span>
+        </Link>
+      </li>
+    );
   };
 
   return (
     <SiteShell>
-      <div className="page-wrap pt-16 pb-24">
-        <header className="border-t border-ink pt-4 mb-10 max-w-2xl space-y-3">
-          <p className="eyebrow">{t.writing.badge}</p>
-          <h1 className="text-4xl sm:text-5xl">{t.writing.title}</h1>
-          <p className="text-muted">{t.writing.subtitle}</p>
-        </header>
+      <div className="page-wrap pb-24 pt-12">
+        <div className="flex flex-wrap items-start gap-12">
+          <div className="min-w-0 flex-[999_1_640px]">
+            <header className="max-w-2xl">
+              <p className="eyebrow -rotate-2">
+                {nb.tocLabel} — {ARTICLES_DATA.length} {nb.posts}, {TRANSIT_LINES.length} {nb.chapters}
+              </p>
+              <h1 className="mt-2 text-4xl sm:text-6xl">
+                <span className="mark mark-draw">{t.writing.title}</span>
+              </h1>
+              <p className="mt-4 text-lg text-muted">{nb.intro}</p>
+            </header>
 
-        <div className="mb-10 space-y-6">
-          <div className="relative max-w-xl">
-            <label htmlFor="writing-search" className="sr-only">
-              {t.writing.searchPlaceholder}
-            </label>
-            <input
-              id="writing-search"
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t.writing.searchPlaceholder}
-              className="w-full bg-transparent border-0 border-b border-rule focus:border-ink rounded-none px-0 py-2 pr-16 text-sm font-mono text-ink placeholder:text-faint outline-none"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                aria-label="Clear search"
-                className="absolute right-0 top-1/2 -translate-y-1/2 eyebrow hover:text-ink"
-              >
-                Clear
-              </button>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <label htmlFor="writing-search" className="sr-only">
+                {nb.searchPlaceholder}
+              </label>
+              <input
+                id="writing-search"
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={nb.searchPlaceholder}
+                className="hand min-h-11 min-w-0 flex-[1_1_16rem] border-0 border-b-2 border-ink bg-transparent px-1 text-xl text-ink placeholder:text-faint focus:border-accent focus:outline-none"
+              />
+              <div className="flex flex-wrap gap-2" role="group" aria-label={nb.chapters}>
+                {[{ id: "all" as const, label: nb.all }, ...TRANSIT_LINES.map((l) => ({ id: l.id, label: `${nb.chapter} ${chapterNumber(l)}` }))].map((f) => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    aria-pressed={chapter === f.id}
+                    onClick={() => setChapter(f.id)}
+                    className={`hand sketch min-h-10 px-3.5 text-lg ${chapter === f.id ? "bg-ink text-paper" : "text-ink hover:bg-marker/50"}`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {empty && (
+              <div className="mt-14">
+                <p className="hand text-2xl text-muted">{nb.noResults}</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setChapter("all");
+                  }}
+                  className="btn mt-4"
+                >
+                  {nb.reset}
+                </button>
+              </div>
+            )}
+
+            {chapters.map(({ line, entries }) => (
+              <section key={line.id} className="mt-14" aria-labelledby={`chapter-${line.id}`}>
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <span className="hand text-xl">
+                    {nb.chapter} {chapterNumber(line)}
+                  </span>
+                  <h2 id={`chapter-${line.id}`} className="text-2xl sm:text-3xl">
+                    {vi ? line.nameVi : line.name}
+                  </h2>
+                  <ChapterSwatch line={line} />
+                  <span className="hand text-lg text-faint">
+                    {vi ? line.metaVi : line.meta} · {line.stops.length} {nb.posts}
+                  </span>
+                </div>
+                <ol className="mt-3">{entries.map((a) => renderEntry(a, pageNumber(a.slug)))}</ol>
+              </section>
+            ))}
+
+            {loose.length > 0 && (
+              <section className="mt-14">
+                <ol>{loose.map((a) => renderEntry(a, null))}</ol>
+              </section>
+            )}
+
+            {!empty && chapter === "all" && !q && (
+              <div className="mt-10 flex items-center gap-3 pl-6">
+                <HandArrow />
+                <p className="hand text-xl">↪ = {nb.sameProblem}</p>
+              </div>
             )}
           </div>
 
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2" role="group" aria-label={t.writing.filterByTag}>
-            <span className="eyebrow">{t.writing.filterByTag}</span>
-            {allTags.map((tag) => {
-              const active = selectedTag === tag;
-              return (
+          <aside className="flex w-full flex-col gap-12 lg:w-72 lg:flex-none">
+            <nav aria-label={nb.chapters} className="hidden flex-col items-end gap-2 lg:flex">
+              {TRANSIT_LINES.map((line) => (
                 <button
-                  key={tag}
+                  key={line.id}
                   type="button"
-                  onClick={() => setSelectedTag(tag)}
-                  aria-pressed={active}
-                  className={`font-mono text-xs ${
-                    active ? "text-ink underline underline-offset-4 decoration-accent" : "text-muted hover:text-ink"
-                  }`}
+                  aria-pressed={chapter === line.id}
+                  onClick={() => setChapter(chapter === line.id ? "all" : line.id)}
+                  className="chapter-tab flex min-h-11 w-60 items-center justify-between rounded-l-xl border-2 border-r-0 border-ink px-4 text-left text-ink"
+                  style={{ background: line.color }}
                 >
-                  {tag === "All" ? t.writing.allTags : tag}
+                  <span className="text-[15px] font-semibold">{vi ? line.nameVi : line.name}</span>
+                  <span className="hand text-lg">{line.stops.length}</span>
                 </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {heroArticle && (
-          <section className="mb-12" aria-label={t.writing.featuredArticle}>
-            <p className="eyebrow mb-3">{t.writing.featuredArticle}</p>
-            <Link href={`/writing/${heroArticle.slug}`} className="group block border-y border-rule py-8">
-              <p className="eyebrow mb-3">{renderMeta(heroArticle)}</p>
-              <h2 className="text-3xl sm:text-4xl max-w-3xl group-hover:text-accent">
-                {language === "vi" && heroArticle.titleVi ? heroArticle.titleVi : heroArticle.title}
-              </h2>
-              <p className="mt-4 text-muted max-w-2xl">
-                {language === "vi" && heroArticle.summaryVi ? heroArticle.summaryVi : heroArticle.summary}
-              </p>
-              <p className="mt-4 font-mono text-xs text-faint">{heroArticle.tags.join(" / ")}</p>
-              <p className="mt-4 text-sm link inline-block">{t.writing.readArticle} →</p>
-            </Link>
-          </section>
-        )}
-
-        {listArticles.length === 0 && !heroArticle && (
-          <div className="py-16 border-y border-rule">
-            <p className="font-mono text-sm text-muted">
-              {language === "vi" ? "Không tìm thấy bài viết phù hợp." : "No matching articles found."}
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedTag("All");
-              }}
-              className="mt-4 link text-sm"
-            >
-              Reset filters
-            </button>
-          </div>
-        )}
-
-        {listArticles.length > 0 && (
-          <section aria-label={t.writing.allArticles}>
-            <p className="eyebrow mb-3">
-              {t.writing.allArticles} ({listArticles.length})
-            </p>
-            <ol className="divide-y divide-rule border-y border-rule">
-              {listArticles.map((a) => (
-                <li key={a.slug}>
-                  <Link href={`/writing/${a.slug}`} className="group grid gap-1 sm:gap-6 sm:grid-cols-[13rem_1fr] py-6">
-                    <p className="eyebrow pt-1.5">{renderMeta(a)}</p>
-                    <div>
-                      <h3 className="text-xl sm:text-2xl group-hover:text-accent">
-                        {language === "vi" && a.titleVi ? a.titleVi : a.title}
-                      </h3>
-                      <p className="mt-2 text-muted max-w-2xl">
-                        {language === "vi" && a.summaryVi ? a.summaryVi : a.summary}
-                      </p>
-                      <p className="mt-3 font-mono text-xs text-faint">{a.tags.join(" / ")}</p>
-                    </div>
-                  </Link>
-                </li>
               ))}
-            </ol>
-          </section>
-        )}
+            </nav>
+            <div className="lg:sticky lg:top-24">
+              <RecruiterCard variant="compact" rotate={-2} />
+            </div>
+          </aside>
+        </div>
       </div>
     </SiteShell>
   );

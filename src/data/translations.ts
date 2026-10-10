@@ -11,6 +11,12 @@ export const UI_TRANSLATIONS = {
       letsTalk: "Let's talk"
     },
     hero: {
+      sketchHello: "page 01 — hello!",
+      headlineLead: "an engineer who likes building systems that",
+      headlineCircle: "actually run.",
+      openNote: "← open to remote / hybrid!",
+      latestNote: "new post",
+      projectsCta: "See projects",
       availableStatus: "Building enterprise workflows, products, and self-hosted systems",
       location: "Hanoi, Vietnam",
       title: "Full-stack Engineer & System Builder",
@@ -75,7 +81,40 @@ export const UI_TRANSLATIONS = {
       shareNote: "Share Note",
       nextArticle: "Next Article",
       prevArticle: "Previous Article",
-      keyInsights: "Key Insights in 30 Seconds"
+      keyInsights: "Key Insights in 30 Seconds",
+      notebook: {
+        tocLabel: "table of contents",
+        chapters: "chapters",
+        posts: "posts",
+        chapter: "chapter",
+        intro: "Case studies read from real code. Read a chapter front to back, or follow the \"see also\" arrows to a post that solves the same problem in another system.",
+        searchPlaceholder: "search posts…",
+        all: "all",
+        seeAlso: "see how {line} does it differently",
+        sameProblem: "same problem, a different answer",
+        page: "page",
+        of: "of",
+        read: "read",
+        prevPage: "previous page",
+        nextPage: "turn the page",
+        endOfChapter: "end of the chapter — back to contents",
+        onThisPage: "on this page:",
+        figure: "figure",
+        note: "note",
+        tip: "tip",
+        warning: "careful",
+        copy: "copy",
+        copied: "copied!",
+        noResults: "Nothing on these pages matches that search.",
+        reset: "clear search",
+        recruiterLabel: "hiring?",
+        recruiterTitle: "Send me an email!",
+        recruiterBody: "Full-stack engineer in Hanoi, open to remote and hybrid roles. My CV and code are linked below.",
+        recruiterCompact: "full-stack · open to remote / hybrid",
+        emailMe: "Email me",
+        copyEmail: "copy email",
+        viewCv: "CV"
+      }
     },
     about: {
       badge: "Engineering Focus",
@@ -129,6 +168,8 @@ export const UI_TRANSLATIONS = {
       builtWith: "Built with Next.js App Router, Tailwind CSS & Framer Motion."
     },
     ai: {
+      botNote: "ask anything, I'll jot it down",
+      suggestHint: "try one:",
       buttonLabel: "Ask AI",
       placeholder: "Ask anything about Hoan's experience, stack, projects...",
       suggestedTitle: "Suggested questions",
@@ -145,7 +186,9 @@ export const UI_TRANSLATIONS = {
       errorGeneric: "Something went wrong. Please try again.",
       sources: "Related",
       emptyIntro: "Ask about projects, stack, experience or background.",
-      close: "Close"
+      close: "Close",
+      expand: "Expand to full screen",
+      collapse: "Back to side panel"
     }
   },
   vi: {
@@ -160,6 +203,12 @@ export const UI_TRANSLATIONS = {
       letsTalk: "Hợp tác ngay"
     },
     hero: {
+      sketchHello: "trang 01 — xin chào!",
+      headlineLead: "kỹ sư thích làm hệ thống",
+      headlineCircle: "chạy thật.",
+      openNote: "← sẵn sàng remote / hybrid!",
+      latestNote: "bài mới",
+      projectsCta: "Xem dự án",
       availableStatus: "Xây dựng workflow enterprise, sản phẩm và hệ thống tự vận hành",
       location: "Hà Nội, Việt Nam",
       title: "Full-stack Engineer & System Builder",
@@ -224,7 +273,40 @@ export const UI_TRANSLATIONS = {
       shareNote: "Chia sẻ bài viết",
       nextArticle: "Bài viết tiếp theo",
       prevArticle: "Bài trước",
-      keyInsights: "Tóm tắt Nhanh trong 30 Giây"
+      keyInsights: "Tóm tắt Nhanh trong 30 Giây",
+      notebook: {
+        tocLabel: "mục lục",
+        chapters: "chương",
+        posts: "bài",
+        chapter: "chương",
+        intro: "Case study đọc từ code thật. Đọc một chương từ đầu đến cuối, hoặc đi theo các mũi tên \"xem thêm\" sang bài giải cùng bài toán ở hệ thống khác.",
+        searchPlaceholder: "tìm bài viết…",
+        all: "tất cả",
+        seeAlso: "xem {line} làm khác thế nào",
+        sameProblem: "cùng bài toán, một lời giải khác",
+        page: "trang",
+        of: "/",
+        read: "đã đọc",
+        prevPage: "trang trước",
+        nextPage: "lật trang",
+        endOfChapter: "hết chương — về mục lục",
+        onThisPage: "trong trang này:",
+        figure: "hình",
+        note: "ghi chú",
+        tip: "mẹo",
+        warning: "lưu ý",
+        copy: "copy",
+        copied: "đã copy!",
+        noResults: "Không trang nào khớp với tìm kiếm.",
+        reset: "xoá tìm kiếm",
+        recruiterLabel: "đang tuyển người?",
+        recruiterTitle: "Gửi mail cho mình nhé!",
+        recruiterBody: "Kỹ sư full-stack ở Hà Nội, sẵn sàng remote và hybrid. CV và code ở ngay bên dưới.",
+        recruiterCompact: "full-stack · sẵn sàng remote / hybrid",
+        emailMe: "Gửi email",
+        copyEmail: "copy email",
+        viewCv: "CV"
+      }
     },
     about: {
       badge: "Tư duy Kỹ thuật",
@@ -278,6 +360,8 @@ export const UI_TRANSLATIONS = {
       builtWith: "Xây dựng với Next.js App Router, Tailwind CSS & Framer Motion."
     },
     ai: {
+      botNote: "hỏi gì cũng được, mình ghi lại",
+      suggestHint: "thử hỏi:",
       buttonLabel: "Hỏi AI",
       placeholder: "Hỏi bất kỳ điều gì về kinh nghiệm, stack, dự án của Hoan...",
       suggestedTitle: "Câu hỏi gợi ý",
@@ -294,7 +378,9 @@ export const UI_TRANSLATIONS = {
       errorGeneric: "Có lỗi xảy ra. Vui lòng thử lại.",
       sources: "Liên quan",
       emptyIntro: "Hỏi về dự án, stack, kinh nghiệm hoặc nền tảng của Hoan.",
-      close: "Đóng"
+      close: "Đóng",
+      expand: "Phóng to giữa màn hình",
+      collapse: "Thu về bên phải"
     }
   }
 };

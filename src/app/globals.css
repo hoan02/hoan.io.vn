@@ -3,49 +3,79 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Design tokens, editorial palette.
- * Warm paper + ink, one restrained accent, hairline rules instead of cards.
+ * Design tokens, sketchbook palette.
+ * Grid paper, dark-blue ink, a yellow highlighter and blue "pen" notes.
+ * Dark mode is a black notebook with white ink.
  * Use the semantic utilities (bg-paper, text-ink, text-muted, border-rule,
- * text-accent ...) instead of raw zinc/emerald colours.
+ * text-accent, bg-marker ...) instead of raw colours.
  */
 :root {
-  --paper: #fbfaf7;
+  --paper: #fbfaf6;
   --paper-2: #f3f1ea;
-  --ink: #1b1a17;
-  --muted: #5e5a50;
-  --faint: #8c877a;
-  --rule: #e2ded2;
-  --accent: #9a3412;
-  --accent-soft: #f6e6dc;
-  --code-bg: #f1eee6;
+  --note: #fffdf2;
+  --ink: #1f2430;
+  --muted: #4a5060;
+  --faint: #7d8290;
+  --rule: #d9d5c8;
+  --grid: #ece9df;
+  --accent: #2b59c3;
+  --accent-soft: #e8eefb;
+  --marker: #ffe66d;
+  --marker-ink: #1f2430;
+  --danger: #c43c3c;
+  --code-bg: #ffffff;
+  --shadow: 0 1px 0 rgba(31, 36, 48, 0.05), 0 10px 24px rgba(31, 36, 48, 0.12);
+
+  /* Notebook chapter tabs */
+  --tab-a: #ffe66d;
+  --tab-p: #ffd8c2;
+  --tab-e: #cfe0ff;
+  --tab-s: #d4f0d8;
+  --tab-j: #e4e1d6;
 }
 
 .dark {
-  --paper: #131210;
-  --paper-2: #1b1a17;
-  --ink: #edeae2;
-  --muted: #a8a398;
-  --faint: #7a766b;
-  --rule: #2c2a26;
-  --accent: #e59a6f;
-  --accent-soft: #2a1f18;
-  --code-bg: #1b1a17;
+  --paper: #15171c;
+  --paper-2: #1c1f26;
+  --note: #22252d;
+  --ink: #eceae3;
+  --muted: #b3b6be;
+  --faint: #868a94;
+  --rule: #343843;
+  --grid: #20232a;
+  --accent: #8fb0ff;
+  --accent-soft: #1e2740;
+  --marker: rgba(232, 197, 71, 0.38);
+  --marker-ink: #15171c;
+  --danger: #ff8a8a;
+  --code-bg: #1c1f26;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 12px 28px rgba(0, 0, 0, 0.45);
+
+  --tab-a: #5c4f1a;
+  --tab-p: #5a3a2b;
+  --tab-e: #2a3c5e;
+  --tab-s: #2d4a33;
+  --tab-j: #33363f;
 }
 
 @theme inline {
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
+  --color-note: var(--note);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-faint: var(--faint);
   --color-rule: var(--rule);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-marker: var(--marker);
+  --color-danger: var(--danger);
   --color-code: var(--code-bg);
 
-  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-sans: var(--font-vn-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-vn-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jb-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-hand: var(--font-hand-face), "Comic Sans MS", cursive;
 }
 
 @layer base {
@@ -58,6 +88,10 @@
 
   body {
     background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
     color: var(--ink);
     font-family: var(--font-sans);
     font-size: 1rem;
@@ -67,17 +101,17 @@
   }
 
   ::selection {
-    background: var(--accent);
-    color: var(--paper);
+    background: var(--marker);
+    color: var(--ink);
   }
 
   h1,
   h2,
   h3 {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    letter-spacing: -0.015em;
-    line-height: 1.15;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
     text-wrap: balance;
   }
 
@@ -86,38 +120,175 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px dashed var(--accent);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 }
 
-/* Small mono label used above sections and in metadata rows */
+/* Handwritten note in blue pen, used above sections and in margins */
+.eyebrow,
+.hand {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  line-height: 1.25;
+  color: var(--accent);
+}
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--faint);
+  display: inline-block;
 }
 
-/* Text link with an underline that only shows the accent on hover */
+/* Text link: a highlighter swipe appears on hover */
 .link {
   color: var(--ink);
   text-decoration: underline;
   text-decoration-color: var(--rule);
-  text-decoration-thickness: 1px;
-  transition: text-decoration-color 0.15s ease, color 0.15s ease;
+  text-decoration-thickness: 1.5px;
+  background: linear-gradient(transparent 58%, var(--marker) 58%, var(--marker) 92%, transparent 92%) no-repeat 0 0 / 0% 100%;
+  transition: background-size 0.25s ease, text-decoration-color 0.2s ease;
 }
 .link:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
+  background-size: 100% 100%;
+  text-decoration-color: transparent;
+}
+
+/* Highlighter. Add .mark-draw to sweep it in on load. */
+.mark {
+  background: linear-gradient(transparent 56%, var(--marker) 56%, var(--marker) 92%, transparent 92%) no-repeat 0 0 / 100% 100%;
+  padding: 0 0.08em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.mark-draw {
+  background-size: 0% 100%;
+  animation: mark-sweep 0.9s 0.4s cubic-bezier(0.6, 0, 0.2, 1) forwards;
+}
+@keyframes mark-sweep {
+  to { background-size: 100% 100%; }
+}
+
+/* Hand-drawn box edge: uneven radii read as a pen outline */
+.sketch {
+  border: 2px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+.sketch-alt {
+  border: 2px solid var(--ink);
+  border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px;
+}
+
+/* Button drawn with a pen; .btn-ink is the filled variant, .btn-marker the yellow one */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: transparent;
+  border: 2px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.btn:hover { transform: translateY(-2px) rotate(-0.6deg); }
+.btn:active { transform: translateY(1px); }
+.btn-ink { background: var(--ink); color: var(--paper); }
+.btn-marker { background: var(--marker); color: var(--ink); }
+.dark .btn-marker { background: #e8c547; color: #15171c; }
+
+/* Sticky note with a strip of tape. Rotate it with an inline style. */
+.note {
+  position: relative;
+  background: var(--note);
+  box-shadow: var(--shadow);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.note::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 72px;
+  height: 20px;
+  margin-left: -36px;
+  background: rgba(255, 230, 109, 0.7);
+  transform: rotate(-3deg);
+}
+.dark .note::before { background: rgba(232, 197, 71, 0.45); }
+a.note:hover,
+.note-hover:hover {
+  transform: rotate(0deg) translateY(-5px) scale(1.015) !important;
+}
+
+/* Pen strokes that draw themselves (on SVG paths/ellipses) */
+.draw path,
+.draw ellipse,
+.draw line {
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  animation: pen-draw 1.3s 1s ease-out forwards;
+}
+@keyframes pen-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* "Writing…" scribble used while the AI answers */
+.scribble {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.scribble span {
+  display: block;
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: scribble 1.2s ease-in-out infinite;
+}
+.scribble span:nth-child(2) { animation-delay: 0.2s; }
+.scribble span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes scribble {
+  0%, 100% { transform: scaleX(0.2); }
+  50% { transform: scaleX(1); }
+}
+
+/* Lined notebook page with a red margin rule */
+.lined {
+  background-color: var(--code-bg);
+  background-image: linear-gradient(transparent 31px, var(--accent-soft) 31px, var(--accent-soft) 32px, transparent 32px);
+  background-size: 100% 32px;
+}
+.margin-rule {
+  position: relative;
+}
+.margin-rule::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2.5rem;
+  width: 1.5px;
+  background: #f2b8b5;
+}
+.dark .margin-rule::before { background: #6b3b3b; }
+
+/* Index tab that sticks out of the notebook edge */
+.chapter-tab {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.chapter-tab:hover,
+.chapter-tab[aria-pressed="true"] {
+  transform: translateX(-6px);
 }
 
 /* Layout widths: wide for lists, narrow reading column for articles */
 .page-wrap {
   width: 100%;
-  max-width: 68rem;
+  max-width: 72rem;
   margin-inline: auto;
   padding-inline: 1.25rem;
 }
@@ -136,7 +307,7 @@
 /* Long-form article typography */
 .prose-editorial {
   font-size: 1.0625rem;
-  line-height: 1.75;
+  line-height: 1.8;
   color: var(--ink);
 }
 .prose-editorial > * + * {
@@ -154,6 +325,10 @@
   color: var(--accent);
   text-decoration: underline;
 }
+.prose-editorial strong {
+  background: linear-gradient(transparent 60%, var(--marker) 60%, var(--marker) 92%, transparent 92%);
+  font-weight: 600;
+}
 .prose-editorial ul,
 .prose-editorial ol {
   padding-left: 1.25em;
@@ -167,34 +342,50 @@
 .prose-editorial li + li {
   margin-top: 0.4em;
 }
+.prose-editorial li::marker {
+  color: var(--accent);
+}
 .prose-editorial blockquote {
-  border-left: 2px solid var(--accent);
+  border-left: 3px solid var(--marker);
   padding-left: 1em;
   color: var(--muted);
-  font-family: var(--font-serif);
-  font-size: 1.15em;
+  font-family: var(--font-hand);
+  font-size: 1.3em;
+  line-height: 1.4;
 }
-.prose-editorial code {
+/* Long inline paths may break so they never widen the page */
+.prose-editorial :not(pre) > code {
   font-family: var(--font-mono);
-  font-size: 0.88em;
-  background: var(--code-bg);
-  padding: 0.1em 0.35em;
-  border-radius: 3px;
-}
-.prose-editorial pre {
-  background: var(--code-bg);
+  font-size: 0.86em;
+  background: var(--paper-2);
   border: 1px solid var(--rule);
+  padding: 0.05em 0.35em;
   border-radius: 4px;
-  padding: 1em 1.1em;
+  overflow-wrap: anywhere;
+}
+/* Code blocks look like a printout taped into the notebook */
+.prose-editorial pre,
+.code-paper {
+  position: relative;
+  background: var(--code-bg);
+  box-shadow: var(--shadow);
+  border-radius: 2px;
+  padding: 1.25em 1.1em 1em;
   overflow-x: auto;
+  font-family: var(--font-mono);
   font-size: 0.85rem;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 .prose-editorial pre code {
   background: none;
+  border: 0;
   padding: 0;
 }
 .prose-editorial table {
+  /* Wide tables scroll inside the column instead of widening the page */
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
@@ -207,12 +398,10 @@
   vertical-align: top;
 }
 .prose-editorial th {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--faint);
-  font-weight: 500;
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  color: var(--accent);
+  font-weight: 400;
 }
 
 /* Scrollbar: quiet */
@@ -235,4 +424,8 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .mark-draw { background-size: 100% 100%; }
+  .draw path,
+  .draw ellipse,
+  .draw line { stroke-dashoffset: 0; }
 }

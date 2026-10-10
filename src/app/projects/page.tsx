@@ -56,10 +56,10 @@ function ProjectsContent() {
   return (
     <SiteShell>
       <div className="page-wrap pt-16 pb-24">
-        <header className="border-t border-ink pt-4 mb-10 max-w-3xl">
+        <header className="mb-10 max-w-3xl">
           <p className="eyebrow mb-3">{t.selectedWork.badge}</p>
           <h1 className="text-4xl sm:text-5xl mb-4">
-            {vi ? "Dự án & Case Study Kỹ thuật" : "Engineering Projects & Case Studies"}
+            <span className="mark mark-draw">{vi ? "Dự án & Case Study Kỹ thuật" : "Engineering Projects & Case Studies"}</span>
           </h1>
           <p className="text-muted">
             {vi
@@ -69,14 +69,14 @@ function ProjectsContent() {
         </header>
 
         <div className="space-y-6 mb-12">
-          <div className="flex items-end gap-4 max-w-xl border-b border-ink">
+          <div className="flex items-end gap-4 max-w-xl border-b-2 border-ink">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t.selectedWork.searchPlaceholder}
               aria-label={t.selectedWork.searchPlaceholder}
-              className="flex-1 bg-transparent py-2 font-mono text-sm text-ink placeholder:text-faint"
+              className="hand flex-1 bg-transparent py-2 text-xl text-ink placeholder:text-faint focus:outline-none"
             />
             {searchQuery && (
               <button
@@ -99,8 +99,8 @@ function ProjectsContent() {
                   type="button"
                   onClick={() => setSelectedCategory(category)}
                   aria-pressed={active}
-                  className={`font-mono text-xs pb-0.5 border-b ${
-                    active ? "text-ink border-ink" : "text-muted border-transparent hover:text-ink"
+                  className={`hand sketch min-h-10 px-3.5 text-lg ${
+                    active ? "bg-ink text-paper" : "text-ink hover:bg-marker/50"
                   }`}
                 >
                   {category === "All" ? t.selectedWork.allCategories : category}
@@ -130,10 +130,10 @@ function ProjectsContent() {
           <div className="space-y-14">
             {groups.map((group) => (
               <section key={group.key} aria-labelledby={`group-${group.key}`}>
-                <h2 id={`group-${group.key}`} className="eyebrow font-sans font-normal mb-4">
+                <h2 id={`group-${group.key}`} className="eyebrow mb-6 text-xl">
                   {group.label}
                 </h2>
-                <ul className="divide-y divide-rule border-y border-rule">
+                <ul className="grid gap-8 pt-2 sm:grid-cols-2">
                   {group.items.map((project) => {
                     const title = vi && project.titleVi ? project.titleVi : project.title;
                     const subtitle = vi && project.subtitleVi ? project.subtitleVi : project.subtitle;
@@ -142,14 +142,15 @@ function ProjectsContent() {
                       <li key={project.id}>
                         <Link
                           href={`/projects/${project.id}`}
-                          className="group grid gap-2 sm:gap-6 sm:grid-cols-[9rem_1fr] py-7"
+                          className="note group flex h-full flex-col px-6 pb-6 pt-8"
+                          style={{ transform: `rotate(${(project.id.length % 3) - 1}deg)` }}
                         >
-                          <div className="eyebrow pt-1.5 space-y-1">
+                          <div className="hand space-y-0.5 text-lg">
                             <p>{project.year}</p>
-                            <p className="normal-case tracking-normal">{role}</p>
+                            <p className="text-base text-faint">{role}</p>
                           </div>
-                          <div>
-                            <h3 className="text-2xl group-hover:text-accent transition-colors">{title}</h3>
+                          <div className="mt-2">
+                            <h3 className="text-2xl">{title}</h3>
                             <p className="mt-2 text-muted max-w-2xl">{subtitle}</p>
                             <p className="mt-4 font-mono text-xs text-faint">
                               {project.techStack.slice(0, 7).join(" · ")}
