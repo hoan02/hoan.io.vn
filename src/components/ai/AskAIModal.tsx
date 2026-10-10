@@ -5,6 +5,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { UI_TRANSLATIONS } from "@/data/translations";
 import { ChatMessageRenderer } from "@/components/ai/ChatMessageRenderer";
 import { readDataStream } from "@/lib/streamHelper";
+import { BotFace } from "@/components/common/Doodles";
 
 interface AskAIModalProps {
   isOpen: boolean;
@@ -335,64 +336,70 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="ask-ai-title"
-        className="relative flex h-full w-full flex-col border-l border-rule bg-paper text-ink md:max-w-md"
+        className="relative flex h-full w-full flex-col bg-[var(--code-bg)] text-ink shadow-[var(--shadow)] md:max-w-md"
       >
-        <header className="flex items-start justify-between gap-4 border-b border-rule px-5 py-4">
-          <div>
-            <h2 id="ask-ai-title" className="font-serif text-2xl leading-tight">
+        <header className="flex items-center gap-3 border-b-2 border-dashed border-rule px-5 py-3.5">
+          <BotFace />
+          <div className="min-w-0 flex-1">
+            <h2 id="ask-ai-title" className="text-lg leading-tight">
               {t.ai.title}
             </h2>
-            <p className="eyebrow mt-1">{t.ai.subtitle}</p>
+            <p className="hand text-base">{t.ai.botNote}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label={t.ai.close}
-            className="eyebrow text-muted hover:text-ink"
+            className="hand flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-ink text-xl text-ink hover:bg-marker"
           >
-            {t.ai.close} ✕
+            ×
           </button>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-5 py-5" aria-live="polite">
+        <div className="lined margin-rule flex-1 overflow-y-auto py-2 pl-14 pr-5" aria-live="polite">
           {messages.length === 0 ? (
             <div>
-              <p className="font-serif text-lg text-muted">{t.ai.emptyIntro}</p>
-              <p className="eyebrow mt-6">{t.ai.suggestedTitle}</p>
-              <ul className="mt-3 space-y-3">
+              <p className="hand text-xl leading-8 text-ink">{t.ai.emptyIntro}</p>
+              <p className="hand mt-8 text-lg leading-8 text-faint">{t.ai.suggestHint}</p>
+              <ul>
                 {SUGGESTED[language].map((q) => (
                   <li key={q}>
                     <button
                       type="button"
                       onClick={() => handleSearch(q)}
-                      className="text-left text-[15px] text-ink underline decoration-rule underline-offset-4 hover:decoration-accent"
+                      className="flex gap-2 py-1 text-left text-[15px] leading-6 text-ink hover:text-accent"
                     >
-                      {q}
+                      <span aria-hidden="true" className="hand text-lg text-faint">☐</span>
+                      <span>{q}</span>
                     </button>
                   </li>
                 ))}
               </ul>
             </div>
           ) : (
-            <div className="space-y-7">
+            <div className="space-y-6 pt-1">
               {messages.map((m) =>
                 m.role === "user" ? (
-                  <div key={m.id} className="text-right">
-                    <p className="eyebrow">{t.ai.you}</p>
-                    <p className="mt-1 whitespace-pre-wrap text-[15px]">{m.content}</p>
+                  <div key={m.id}>
+                    <p className="hand whitespace-pre-wrap text-xl leading-8">
+                      {t.ai.you}: {m.content}
+                    </p>
                   </div>
                 ) : (
-                  <div key={m.id} className="border-t border-rule pt-4">
-                    <p className="eyebrow">{t.ai.assistantLabel}</p>
-                    <div className="mt-2">
+                  <div key={m.id}>
+                    <p className="sr-only">{t.ai.assistantLabel}</p>
+                    <div className="text-[15px] leading-8">
                       {m.content && (
                         <ChatMessageRenderer content={m.content} isStreaming={m.isStreaming} />
                       )}
                       {m.isStreaming && !m.content && (
-                        <p className="font-mono text-xs text-muted">{t.ai.sending}</p>
+                        <p className="hand flex items-center gap-3 text-lg text-faint">
+                          {t.ai.sending}
+                          <span className="scribble" aria-hidden="true"><span /><span /><span /></span>
+                        </p>
                       )}
                       {m.error && (
-                        <p role="alert" className="mt-2 text-[15px] text-accent">
+                        <p role="alert" className="hand mt-2 text-lg text-danger">
                           {m.error}{" "}
                           {m.question && (
                             <button
@@ -408,8 +415,8 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                       )}
                     </div>
                     {m.relevantLinks && (
-                      <p className="mt-3 font-mono text-xs text-muted">
-                        {t.ai.sources}:{" "}
+                      <p className="hand mt-2 text-lg leading-8">
+                        → {t.ai.sources}:{" "}
                         {m.relevantLinks.map((l, i) => (
                           <React.Fragment key={l.url}>
                             {i > 0 && " · "}
@@ -427,15 +434,16 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
                       </p>
                     )}
                     {m.followUps && !loading && (
-                      <ul className="mt-3 space-y-1.5">
+                      <ul className="mt-2">
                         {m.followUps.map((f) => (
                           <li key={f}>
                             <button
                               type="button"
                               onClick={() => handleSearch(f)}
-                              className="text-left text-sm text-muted underline decoration-rule underline-offset-4 hover:text-ink"
+                              className="flex gap-2 py-1 text-left text-sm leading-6 text-muted hover:text-accent"
                             >
-                              {f}
+                              <span aria-hidden="true" className="hand text-lg text-faint">☐</span>
+                              <span>{f}</span>
                             </button>
                           </li>
                         ))}
@@ -450,7 +458,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
         </div>
 
         <form
-          className="border-t border-rule px-5 py-3"
+          className="border-t-2 border-dashed border-rule px-5 py-3"
           onSubmit={(e) => {
             e.preventDefault();
             handleSearch(query);
@@ -466,17 +474,17 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
               maxLength={800}
               placeholder={t.ai.placeholder}
               aria-label={t.ai.placeholder}
-              className="min-h-[3rem] flex-1 resize-none bg-transparent text-[15px] text-ink placeholder:text-faint focus:outline-none"
+              className="hand min-h-[3rem] flex-1 resize-none border-0 border-b-2 border-ink bg-transparent text-xl text-ink placeholder:text-faint focus:border-accent focus:outline-none"
             />
             <button
               type="submit"
               disabled={loading || !query.trim()}
-              className="eyebrow pb-1 text-ink underline underline-offset-4 disabled:text-faint disabled:no-underline"
+              className="btn btn-marker min-h-11 px-4 disabled:opacity-50"
             >
               {loading ? t.ai.sending : t.ai.send}
             </button>
           </div>
-          <p className="mt-2 font-mono text-[11px] leading-snug text-faint">{t.ai.disclaimer}</p>
+          <p className="hand mt-2 text-sm leading-snug text-faint">{t.ai.disclaimer}</p>
         </form>
       </div>
     </div>

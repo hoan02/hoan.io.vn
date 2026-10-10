@@ -1,9 +1,9 @@
 import { Article } from "@/types";
 import { ARTICLES_DATA } from "./portfolioData";
 
-// The writing index is drawn as a transit map: each series is a line, each
-// article a stop. Interchanges join stops where two systems solve the same
-// problem differently. Flows are short request/data paths taken from each
+// The writing index is a notebook: each series is a chapter (a "line" here),
+// each article a page. Interchanges link pages where two systems solve the same
+// problem differently ("see also"). Flows are short request/data paths from each
 // article's own summary.
 
 export type LineId = "A" | "P" | "E" | "S" | "J";
@@ -32,7 +32,7 @@ export const TRANSIT_LINES: TransitLine[] = [
     nameVi: "Xây dựng Arda",
     meta: "Arda Labs · financial operations platform",
     metaVi: "Arda Labs · nền tảng vận hành tài chính",
-    color: "var(--line-a)",
+    color: "var(--tab-a)",
     stops: [
       "designing-arda-cloud-native-finops-platform",
       "authentication-beyond-jwt-arda-identity-architecture",
@@ -49,7 +49,7 @@ export const TRANSIT_LINES: TransitLine[] = [
     nameVi: "Xây dựng Puchi",
     meta: "Puchidemy · language learning PWA",
     metaVi: "Puchidemy · PWA học ngôn ngữ",
-    color: "var(--line-p)",
+    color: "var(--tab-p)",
     stops: [
       "building-puchi-product-idea-to-service-architecture",
       "why-puchi-uses-opaque-sessions-over-jwt",
@@ -63,7 +63,7 @@ export const TRANSIT_LINES: TransitLine[] = [
     nameVi: "EPAS thực chiến",
     meta: "Enterprise lending & operations",
     metaVi: "Tín dụng & vận hành doanh nghiệp",
-    color: "var(--line-e)",
+    color: "var(--tab-e)",
     stops: [
       "epas-transaction-inbox-and-compliance-boundaries",
       "angular-microfrontend-architecture",
@@ -77,7 +77,7 @@ export const TRANSIT_LINES: TransitLine[] = [
     nameVi: "Hệ thống & field notes",
     meta: "Homelab, Rust, hardware",
     metaVi: "Homelab, Rust, phần cứng",
-    color: "var(--line-s)",
+    color: "var(--tab-s)",
     stops: [
       "homelab-thinkcentre-proxmox-k3s",
       "camrelay-from-proprietary-p2p-to-private-rtsp",
@@ -90,7 +90,7 @@ export const TRANSIT_LINES: TransitLine[] = [
     nameVi: "Nhật ký",
     meta: "Career & frontend notes",
     metaVi: "Sự nghiệp & ghi chép frontend",
-    color: "var(--line-j)",
+    color: "var(--tab-j)",
     stops: ["from-utc-engineer-to-production-systems", "mochimochi-performance-and-seo"]
   }
 ];

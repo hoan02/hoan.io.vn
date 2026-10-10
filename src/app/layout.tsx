@@ -1,24 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Be_Vietnam_Pro, Patrick_Hand, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import "./globals.css";
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+// Sketchbook faces; all three ship a Vietnamese subset.
+const vnSans = Be_Vietnam_Pro({
+  variable: "--font-vn-sans",
   subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "800"],
   display: "swap",
 });
 
-const plexSans = IBM_Plex_Sans({
-  variable: "--font-plex-sans",
+const hand = Patrick_Hand({
+  variable: "--font-hand-face",
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600"],
+  weight: "400",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
+const jbMono = JetBrains_Mono({
+  variable: "--font-jb-mono",
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500"],
   display: "swap",
@@ -68,8 +70,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf7" },
-    { media: "(prefers-color-scheme: dark)", color: "#131210" },
+    { media: "(prefers-color-scheme: light)", color: "#fbfaf6" },
+    { media: "(prefers-color-scheme: dark)", color: "#15171c" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -135,7 +137,7 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       data-scroll-behavior="smooth"
-      className={`${newsreader.variable} ${plexSans.variable} ${plexMono.variable} scroll-smooth antialiased`}
+      className={`${vnSans.variable} ${hand.variable} ${jbMono.variable} scroll-smooth antialiased`}
     >
       <head>
         <script

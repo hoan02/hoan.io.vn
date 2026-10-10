@@ -12,11 +12,16 @@ const FEATURED_IDS = [
   "epas-enterprise-process-automation",
   "arda-finops-platform",
   "puchi-language-platform",
+  "camrelay-p2p-rtsp-bridge",
 ];
+
+const TILTS = [-2, 1.5, -1, 2];
+const TINTS = ["var(--note)", "var(--accent-soft)", "var(--paper-2)", "var(--note)"];
 
 export function SelectedWork() {
   const { language } = useLanguage();
   const t = UI_TRANSLATIONS[language];
+  const vi = language === "vi";
 
   const projects = FEATURED_IDS.map((id) => PROJECTS_DATA.find((p) => p.id === id)).filter(
     (p): p is Project => Boolean(p)
@@ -31,27 +36,24 @@ export function SelectedWork() {
         action={<Link href="/projects" className="link">{t.selectedWork.viewAll} →</Link>}
       />
 
-      <ul className="divide-y divide-rule border-y border-rule">
-        {projects.map((p) => (
+      <ul className="grid grid-cols-1 gap-8 pt-2 sm:grid-cols-2 lg:grid-cols-4">
+        {projects.map((p, i) => (
           <li key={p.id}>
-            <Link href={`/projects/${p.id}`} className="group grid gap-2 sm:gap-6 sm:grid-cols-[9rem_1fr] py-7">
-              <div className="eyebrow pt-1.5 space-y-1">
-                <p>{p.year}</p>
-                <p className="normal-case tracking-normal">
-                  {language === "vi" && p.roleVi ? p.roleVi : p.role}
-                </p>
-              </div>
-              <div>
-                <h3 className="text-2xl group-hover:text-accent transition-colors">
-                  {language === "vi" && p.titleVi ? p.titleVi : p.title}
-                </h3>
-                <p className="mt-2 text-muted max-w-2xl">
-                  {language === "vi" && p.subtitleVi ? p.subtitleVi : p.subtitle}
-                </p>
-                <p className="mt-4 font-mono text-xs text-faint">
-                  {p.techStack.slice(0, 7).join(" · ")}
-                </p>
-              </div>
+            <Link
+              href={`/projects/${p.id}`}
+              className="note flex h-full flex-col px-5 pb-5 pt-7"
+              style={{ transform: `rotate(${TILTS[i % 4]}deg)`, background: TINTS[i % 4] }}
+            >
+              <span className="hand text-lg">{p.year}</span>
+              <span className="mt-1 text-xl font-extrabold leading-tight text-ink">
+                {vi && p.titleVi ? p.titleVi : p.title}
+              </span>
+              <span className="mt-2 text-sm leading-relaxed text-muted">
+                {vi && p.subtitleVi ? p.subtitleVi : p.subtitle}
+              </span>
+              <span className="mt-auto pt-4 font-mono text-[11px] leading-relaxed text-faint">
+                {p.techStack.slice(0, 5).join(" · ")}
+              </span>
             </Link>
           </li>
         ))}

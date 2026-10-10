@@ -1,4 +1,5 @@
 import React from "react";
+import { Squiggle } from "@/components/common/Doodles";
 
 interface SectionHeaderProps {
   id?: string;
@@ -8,16 +9,17 @@ interface SectionHeaderProps {
   action?: React.ReactNode;
 }
 
-/** Editorial section opener: mono label, serif title, optional intro and action. */
+/** Notebook section opener: handwritten label, bold title, optional intro and action. */
 export function SectionHeader({ label, title, intro, action }: Omit<SectionHeaderProps, "id">) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between border-t border-ink pt-4 mb-10">
-      <div className="space-y-3 max-w-2xl">
-        <p className="eyebrow">{label}</p>
+    <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="max-w-2xl space-y-2">
+        <p className="eyebrow -rotate-1">{label}</p>
+        <Squiggle />
         <h2 className="text-3xl sm:text-4xl">{title}</h2>
         {intro && <p className="text-muted">{intro}</p>}
       </div>
-      {action && <div className="text-sm shrink-0">{action}</div>}
+      {action && <div className="hand shrink-0 text-lg">{action}</div>}
     </div>
   );
 }
