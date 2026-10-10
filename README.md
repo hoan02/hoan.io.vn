@@ -65,14 +65,11 @@ npm install
 ```
 
 ### 2. Configure environment variables
-Create `.env.local`:
+Copy the template and fill in `OPENROUTER_API_KEY` (the other two are optional):
 ```bash
-OPENROUTER_API_KEY=your_openrouter_api_key_here
-# optional, defaults to anthropic/claude-haiku-5.5
-OPENROUTER_MODEL=anthropic/claude-haiku-5.5
-# optional daily request ceiling (cost circuit breaker), default 1000
-AI_DAILY_REQUEST_LIMIT=1000
+cp .env.example .env.local
 ```
+See [`.env.example`](.env.example) for what each variable does.
 
 ### 3. Run development server
 ```bash
