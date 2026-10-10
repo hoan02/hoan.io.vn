@@ -283,7 +283,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: q, history: historyForRequest }),
+          body: JSON.stringify({ query: q, history: historyForRequest, lang: language }),
           signal: controller.signal,
         });
         if (!res.ok) {
@@ -336,7 +336,7 @@ export function AskAIModal({ isOpen, onClose }: AskAIModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="ask-ai-title"
-        className="relative flex h-full w-full flex-col bg-[var(--code-bg)] text-ink shadow-[var(--shadow)] md:max-w-md"
+        className="relative flex h-full w-full flex-col bg-[var(--code-bg)] text-ink shadow-[var(--shadow)] md:max-w-xl lg:max-w-2xl"
       >
         <header className="flex items-center gap-3 border-b-2 border-dashed border-rule px-5 py-3.5">
           <BotFace />
