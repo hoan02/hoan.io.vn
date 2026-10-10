@@ -13,8 +13,10 @@ const MAX_QUERY_CHARS = 800;
 const MAX_HISTORY_MESSAGES = 6;
 const MAX_HISTORY_CHARS = 1500;
 // Vietnamese costs roughly 2–3x the tokens of English, so small caps cut answers mid-sentence.
-// Claude Haiku 5.5 allows up to 128K output tokens; answers stream, so a high cap is safe.
-const MAX_OUTPUT_TOKENS = Number(process.env.AI_MAX_OUTPUT_TOKENS) || 128_000;
+// OpenRouter reserves credits for the full cap before each call, so a 128K cap fails
+// (402) on a small balance even when the answer is short. 32K is still ~10k Vietnamese
+// words; raise it with AI_MAX_OUTPUT_TOKENS (Claude Haiku 5.5 allows up to 128K).
+const MAX_OUTPUT_TOKENS = Number(process.env.AI_MAX_OUTPUT_TOKENS) || 32_000;
 
 // Appended to the text stream so the reader knows the answer did not end naturally.
 const NOTES = {
