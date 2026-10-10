@@ -22,7 +22,10 @@
   ],
   "observability": {
     "enabled": true
-  }
+  },
+  // Keep plain-text variables set in the dashboard (e.g. OPENROUTER_MODEL) across deploys.
+  // Secrets survive deploys regardless.
+  "keep_vars": true
   // Secrets (OPENROUTER_API_KEY) are set with `npx wrangler secret put`, never here.
   // The custom domain hoan.io.vn is attached after the workers.dev deploy is verified.
 }
